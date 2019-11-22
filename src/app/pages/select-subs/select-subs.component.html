@@ -1,0 +1,20 @@
+<nb-card accent="info" size="small">
+  <nb-card-header>
+    Asignar tarea a subordinado(s)
+  </nb-card-header>
+  <nb-card-body>
+    <div class="form-group">
+      <label class="mr-2">Seleccione los subordinados:</label>
+      <nb-select (selectedChange)="subordinados_change()" multiple placeholder="----" [status]="sub_status" [(ngModel)]="seleccionados">
+        <nb-option *ngFor="let subordinado of subordinados" [value]="subordinado.id">{{subordinado.user}}</nb-option>
+      </nb-select>
+      <small class="form-text text-muted">Se asignará la tarea de forma individual para cada usuario seleccionado.</small>
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+    <div style="margin-top: 20px" class="float-right row">
+      <button (click)="save()" hero nbButton status="success" shape="semi-round" size="small">Asignar</button>
+      <button (click)="close()" hero style="margin-left: 10px" nbButton status="danger" shape="semi-round" size="small">Cancelar</button>
+    </div>
+  </nb-card-footer>
+</nb-card>

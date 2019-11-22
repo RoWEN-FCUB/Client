@@ -1,0 +1,35 @@
+<nb-card fullwidth accent="info">
+  <nb-card-header>
+    <div class="row fullWidth">
+      <div class="col col-8 text-left">Notificaciones</div>
+      <div class="col text-right" *ngIf="hay_nuevas"><span (click)="notificationsReaded()" class="btn-link" style="cursor: pointer;" nbTooltip="Marcar todas como leídas" nbTooltipIcon="checkmark-outline" nbTooltipStatus="success">Marcar como leídas</span></div>
+      <div class="col text-right ml-2" *ngIf="notificaciones.length > 0"><span nbTooltip="Eliminar todas las notificaciones" nbTooltipIcon="close-outline" nbTooltipStatus="danger" class="btn-link" style="cursor: pointer;">Borrar todas</span></div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="table-responsive">
+      <table id="tablePreview" class="table table-hover table-borderless table-sm">
+        <thead>
+          <tr>
+            <th width="2%">#</th>
+            <th width="68%">NOTIFICACION</th>
+            <th width="25%">FECHA</th>
+            <th width="5%">ACCION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let notificacion of notificaciones; let i = index" class="table-{{notificacion.estatus}}">
+            <th scope="row">{{i+1}}</th>
+            <td><div style="cursor: pointer" (click)="clickNotification(notificacion.vinculo)"><span [innerHTML]="notificacion.notificacion"></span><span *ngIf="!notificacion.leida" class="badge badge-success">Nueva!!</span></div></td>
+            <td>{{formatDate(notificacion.fecha)}}</td>
+            <td align="right">
+              <nb-icon (click)="notificationReaded(i)" *ngIf="!notificacion.leida" style="cursor: pointer" [options]="{animation:{type: 'zoom'}}" nbTooltip="Leída" nbTooltipIcon="checkmark-outline" nbTooltipStatus="success" icon="checkmark-outline"></nb-icon>
+              <nb-icon (click)="deleteNotification(i)" style="cursor: pointer" icon="close-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar notificación" nbTooltipIcon="close-outline" nbTooltipStatus="danger"></nb-icon>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </nb-card-body>
+  <nb-card-footer></nb-card-footer>
+</nb-card>

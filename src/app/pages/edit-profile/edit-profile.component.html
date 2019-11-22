@@ -1,0 +1,40 @@
+<div class="mx-auto col-md-6">
+<nb-card accent="info" size="large">
+  <nb-card-header style="text-align: center">
+    Editar perfil de {{user.name}}
+    <div class="mx-auto">
+      <a (click)="open()" style="cursor: pointer" >
+        <img width="100px" height="100px" [src]="userpicture" class="rounded-circle img-fluid img-thumbnail">
+      </a>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="form-group">
+      <label>Usuario:</label>
+      <input (input)="nick_change()" type="text" nbInput fullWidth [status]="nick_status" placeholder="Usuario" [(ngModel)]="bd_user.user" class="form-control" aria-describedby="usrHelp">
+      <small id="usrHelp" class="form-text text-muted">Apodo (Nickname) del usuario. Solo letras en 4 y 20 caracteres.</small>
+    </div>
+    <div class="form-group">
+      <label>Nombre completo:</label>
+      <input (input)="name_change()" type="text" nbInput fullWidth [status]="name_status" placeholder="Nombre" [(ngModel)]="bd_user.fullname" class="form-control" aria-describedby="namHelp">
+      <small id="namHelp" class="form-text text-muted">Nombre(s) y Apellidos del usuario</small>
+    </div>
+    <div class="form-group">
+      <label>E-mail:</label>
+      <input (input)="email_change()" type="text" nbInput fullWidth [status]="email_status" placeholder="emai@server.dom" [(ngModel)]="bd_user.email" class="form-control" aria-describedby="emailHelp">
+      <small id="emailHelp" class="form-text text-muted">La dirección de correo que usará para el acceso al sistema.</small>
+    </div>
+    <div class="form-group">
+      <label>Contraseña:</label>
+      <input (input)="pass_change()" type="password" nbInput fullWidth [status]="pass_status" placeholder="Contraseña" [(ngModel)]="bd_user.pass" class="form-control" aria-describedby="passHelp">
+      <small id="passHelp" class="form-text text-muted">Contraseña para el acceso al sistema. Entre 4 y 25 caracteres, permite @ . *</small>
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+    <div class="float-right row">
+      <a nbButton status="success" hero (click)="validate_user()">Guardar</a>
+      <a style="margin-left: 10px" hero nbButton status="danger" [routerLink]="['/']" routerLinkActive="router-link-active">Cancelar</a>
+    </div>
+  </nb-card-footer>
+</nb-card>
+</div>

@@ -1,0 +1,51 @@
+<div class="header-container">
+  <div class="logo-container">
+    <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
+      <nb-icon icon="menu-2-outline"></nb-icon>
+    </a>
+    <a class="logo" href="#" (click)="navigateHome()"><img src="assets/images/logo_3.png" width="168px" height="60px"></a>
+  </div>
+  <a class="logo" href="#" (click)="navigateHome()"><h1 class="text-muted">SISTEMA DE GESTION INTERNA</h1></a>
+</div>
+
+<div class="header-container">
+  <nb-actions size="small" *nbIsGranted="['view', 'profile']">
+    <nb-action class="control-item">
+      <nb-search type="rotate-layout"></nb-search>
+    </nb-action>
+    <nb-action class="control-item" icon="email-outline"></nb-action>
+    <nb-action link="/pages/notifications" [nbPopover]="new_notifications.length > 0 ? newnotif : null" nbPopoverPlacement="bottom" nbPopoverTrigger="hover" class="control-item" icon="bell-outline" badgePosition="bottom right" badgeStatus="info" [badgeText]="new_notifications.length > 0 ? new_notifications.length : null"></nb-action>
+    <nb-action class="user-action">
+      <nb-user [nbContextMenu]="userMenu"
+               onlyPicture="{{userPictureOnly}}"
+               name="{{user.name}}"
+               picture="{{userpicture}}"
+               badgeStatus="success">
+      </nb-user>
+    </nb-action>
+  </nb-actions>
+  <!--<div #popnot [nbPopover]="newnotif" nbPopoverPlacement="bottom" nbPopoverTrigger="click">AA</div>-->
+  <ng-template #newnotif>
+    <nb-card size="small" style="margin-bottom: 0;">
+      <nb-card-header>
+        <div class="row fullWidth">
+          <div class="col text-left">Notificaciones</div>
+          <div class="col text-right"><span (click)="notificationsReaded()" class="btn-link" style="cursor: pointer;">Marcar como leídas</span></div>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <nb-card *ngFor="let notification of new_notifications; let i = index" [accent]="notification.estatus">
+          <nb-card-body>
+            <div class="row" style="cursor: pointer">
+              <div class="col-10" (click)="clickNotification(notification.vinculo)" [innerHTML]="notification.notificacion"></div>
+              <div class="col-1 float-right"><nb-icon [options]="{animation:{type: 'zoom'}}" nbTooltip="Leída" (click)="notificationReaded(i)" icon="checkmark-outline"></nb-icon></div>
+          </div>
+          </nb-card-body>
+        </nb-card>
+      </nb-card-body>
+      <nb-card-footer>
+        <span (click)="viewAllNotifications()" class="btn-link" style="cursor: pointer">Ver todas</span>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>
+</div>

@@ -1,0 +1,99 @@
+<div class="text-center">
+    <img src="assets/images/logo_3.png" width="168px" height="60px">
+</div>
+<h1 id="title" class="title">Acceso al sistema</h1>
+<p class="sub-title">Hola! Accede con tu email.</p>
+<nb-alert *ngIf="showMessages.error && errors?.length && !submitted" outline="danger" role="alert">
+  <p class="alert-title"><b>Algo salió mal!</b></p>
+  <ul class="alert-message-list">
+    <li class="alert-message">Los datos introducidos no son correctos.</li>
+  </ul>
+</nb-alert>
+
+<nb-alert *ngIf="showMessages.success && messages?.length && !submitted" outline="success" role="alert">
+  <p class="alert-title"><b>Bien!</b></p>
+  <ul class="alert-message-list">
+    <li class="alert-message">Accediendo al sistema...</li>
+  </ul>
+</nb-alert>
+
+<form (ngSubmit)="login()" #form="ngForm" aria-labelledby="title">
+  <div class="form-control-group">
+    <label class="label" for="input-email">Dirección de correo:</label>
+    <input nbInput
+           fullWidth
+           [(ngModel)]="user.email"
+           #email="ngModel"
+           name="email"
+           id="input-email"
+           pattern=".+@.+\..+"
+           placeholder="Dirección de correo"
+           autofocus
+           [status]="email.dirty ? (email.invalid  ? 'danger' : 'success') : ''"
+           [required]="getConfigValue('forms.validation.email.required')"
+           [attr.aria-invalid]="email.invalid && email.touched ? true : null">
+    <ng-container *ngIf="email.invalid && email.touched">
+      <p class="error-message" *ngIf="email.errors?.required">
+        Debe escribir una dirección de correo!
+      </p>
+      <p class="error-message" *ngIf="email.errors?.pattern">
+        La dirección de correo no es válida!
+      </p>
+    </ng-container>
+  </div>
+  <div class="form-control-group">
+    <label class="label" for="input-password">Contraseña:</label>
+    <input nbInput
+           fullWidth
+           [(ngModel)]="user.password"
+           #password="ngModel"
+           name="password"
+           type="password"
+           id="input-password"
+           placeholder="Contraseña"
+           [status]="password.dirty ? (password.invalid  ? 'danger' : 'success') : ''"
+           [required]="getConfigValue('forms.validation.password.required')"
+           [minlength]="getConfigValue('forms.validation.password.minLength')"
+           [maxlength]="getConfigValue('forms.validation.password.maxLength')"
+           [attr.aria-invalid]="password.invalid && password.touched ? true : null">
+    <ng-container *ngIf="password.invalid && password.touched ">
+      <p class="error-message" *ngIf="password.errors?.required">
+        Debe escribir una contraseña!
+      </p>
+      <p class="error-message" *ngIf="password.errors?.minlength || password.errors?.maxlength">
+        La contraseña debe tener
+        de {{ getConfigValue('forms.validation.password.minLength') }}
+        a {{ getConfigValue('forms.validation.password.maxLength') }}
+        caracteres.
+      </p>
+    </ng-container>
+  </div>
+  <div class="form-control-group accept-group">
+    <nb-checkbox name="rememberMe" [(ngModel)]="user.rememberMe" *ngIf="rememberMe">Remember me</nb-checkbox>
+  </div>
+
+  <button nbButton
+          fullWidth
+          status="success"
+          [disabled]="submitted || !form.valid"
+          [class.btn-pulse]="submitted">
+    Acceder
+  </button>
+</form>
+<section *ngIf="socialLinks && socialLinks.length > 0" class="links" aria-label="Social sign in">
+  or enter with:
+  <div class="socials">
+    <ng-container *ngFor="let socialLink of socialLinks">
+      <a *ngIf="socialLink.link"
+         [routerLink]="socialLink.link"
+         [attr.target]="socialLink.target"
+         [attr.class]="socialLink.icon"
+         [class.with-icon]="socialLink.icon">{{ socialLink.title }}</a>
+      <a *ngIf="socialLink.url"
+         [attr.href]="socialLink.url"
+         [attr.target]="socialLink.target"
+         [attr.class]="socialLink.icon"
+         [class.with-icon]="socialLink.icon">{{ socialLink.title }}</a>
+    </ng-container>
+  </div>
+</section>

@@ -1,0 +1,42 @@
+<nb-card fullwidth accent="info">
+  <nb-card-header>Administración de usuarios del sistema</nb-card-header>
+  <nb-card-body>
+    <div>
+        <button (click)="openNew()" nbTooltip="Agregar un nuevo usuario" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="person-add-outline"></nb-icon>Nuevo</button>
+    </div>
+    <div class='table-responsive'>
+      <table id="tablePreview" class="table table-hover table-borderless table-striped table-sm">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>USUARIO</th>
+            <th>NOMBRE</th>
+            <th>EMAIL</th>
+            <th>ROL</th>
+            <th>SUPERIOR</th>
+            <th>ACCION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users; let i = index">
+            <th scope="row">{{i+1}}</th>
+            <td>{{user.user}}</td>
+            <td>{{user.fullname}}</td>
+            <td>{{user.email}}</td>
+            <td>
+              {{getRole(user.role)}}
+            </td>
+            <td>
+              {{superior(user.id_sup)}}
+            </td>
+            <td>
+              <nb-icon style="cursor: pointer" (click)="openEdit(i)" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar usuario" nbTooltipIcon="edit-outline" nbTooltipStatus="warning"></nb-icon>
+              <nb-icon style="cursor: pointer" (click)="deleteUser(user.id, user.user)" icon="person-delete-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar usuario" nbTooltipIcon="close-outline" nbTooltipStatus="danger"></nb-icon>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </nb-card-body>
+  <nb-card-footer></nb-card-footer>
+</nb-card>

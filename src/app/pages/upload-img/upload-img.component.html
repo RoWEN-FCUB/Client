@@ -1,0 +1,18 @@
+<div class="mx-auto">
+    <nb-card accent="info" size="medium">
+        <nb-card-header style="text-align: center">
+        Seleccione su avatar            
+        </nb-card-header>
+        <nb-card-body>
+            <div class="mx-auto col-md-4">
+                <img class="rounded-circle img-fluid img-thumbnail" [src]="imgURL" height="100px" width="100px" *ngIf="imgURL">
+            </div>
+            <div style="margin-top: 50px">
+                <input nbInput fullWidth status="info" #file type="file" accept='image/*' (change)="preview(file.files)">            
+            </div>            
+            <div style="margin-top: 20px" class="float-right row">
+                <div class="col"><a nbButton status="success" (click)="close()">Cerrar</a> </div>            
+            </div>  
+        </nb-card-body>
+    </nb-card>
+</div>
