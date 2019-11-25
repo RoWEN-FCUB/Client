@@ -48,7 +48,7 @@ import { SelectSubsComponent } from './pages/select-subs/select-subs.component';
 import { NbAlertModule, NbCheckboxModule} from '@nebular/theme';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { AuthGuard } from './services/auth-guard.service';
-import { ExportAsModule } from 'ngx-export-as';
+//import { ExportAsModule } from 'ngx-export-as';
 //import { DayOfWeekPipe } from './pipes/day-of-week.pipe';
 //import { FormatDateHumanPipe } from './pipes/format-date-human.pipe';
 //import { GetObservTextPipe } from './pipes/get-observ-text.pipe';
@@ -62,7 +62,7 @@ import { ExportAsModule } from 'ngx-export-as';
     AppComponent, UploadImgComponent, NewTaskComponent, NewObsComponent,
     LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent],
   imports: [
-    ExportAsModule,
+  //  ExportAsModule,
     NbSecurityModule,
     NbBadgeModule,
     NbListModule,
