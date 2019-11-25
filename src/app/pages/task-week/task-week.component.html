@@ -13,7 +13,7 @@
     <div>
       <button *ngIf="!vista_impresion" nbTooltip="Agregar una nueva tarea" (click)="openNew()" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
       <button (click)="tooglePrintEdit()" class="ml-1" nbTooltip="{{tooltip_boton_impresion}}" nbButton hero status="primary" shape="semi-round"size="small"><nb-icon icon="{{icono_boton_impresion}}"></nb-icon>{{texto_boton_impresion}}</button>
-      <button *ngIf="vista_impresion" class="ml-1" nbTooltip="Exportar a hoja de Excel" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
+      <button (click)="export()" *ngIf="vista_impresion" class="ml-1" nbTooltip="Exportar a hoja de Excel" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
       <label *ngIf="subordinados.length > 0" class="ml-5 mr-2">Mostrar tareas de: </label>
         <nb-select *ngIf="subordinados.length > 0" (selectedChange)="getTaskinRange()" placeholder="----" status="info" [(ngModel)]="usuario_a_mostrar">
           <nb-option *ngFor="let subordinado of subordinados" [value]="subordinado.id">{{subordinado.user}}</nb-option>
@@ -92,9 +92,8 @@
         </nb-accordion-item>
       </nb-accordion>
     </div>
-    <div class="mt-5 container" *ngIf="vista_impresion">
-
-      <table border="1" width="100%">
+    <div class="mt-5 container" *ngIf="vista_impresion"> <!--VISTA DE IMPRESION-->
+      <table border="1" width="100%" id="tabla-imprimir">
         <tr *ngFor="let row of numero_filas; let i = index;">
           <td *ngIf="i * 7 < tareas_por_dias.length" width="14.28%" valign="top">
             <table width="100%">
