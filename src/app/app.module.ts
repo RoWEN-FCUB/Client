@@ -165,7 +165,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     [{
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
+      multi: true,
     }],
     UserService,
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'es'},
