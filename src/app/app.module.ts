@@ -37,7 +37,7 @@ import {
 } from '@nebular/theme';
 import { FormsModule } from '@angular/forms';
 import { NumberPickerModule } from 'ng-number-picker';
-import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
+import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE, OwlDateTimeIntl } from 'ng-pick-datetime';
 import { UserService } from './services/user.service';
 import { AuthInterceptor } from './services/authInterceptor';
 import { UploadImgComponent } from './pages/upload-img/upload-img.component';
@@ -56,6 +56,68 @@ import { AuthGuard } from './services/auth-guard.service';
 //import { FormatStatePipe } from './pipes/format-state.pipe';
 //import { FormatTimePipe } from './pipes/format-time.pipe';
 
+// here is the default text string
+export class DefaultIntl extends OwlDateTimeIntl {
+  /** A label for the up second button (used by screen readers).  */
+  upSecondLabel = 'Añadir un segundo';
+
+  /** A label for the down second button (used by screen readers).  */
+  downSecondLabel = 'Disminuir un segundo';
+
+  /** A label for the up minute button (used by screen readers).  */
+  upMinuteLabel = 'Añadir un minuto';
+
+  /** A label for the down minute button (used by screen readers).  */
+  downMinuteLabel = 'Disminuir un minuto';
+
+  /** A label for the up hour button (used by screen readers).  */
+  upHourLabel = 'Añadir una hora';
+
+  /** A label for the down hour button (used by screen readers).  */
+  downHourLabel = 'Disminuir una hora';
+
+  /** A label for the previous month button (used by screen readers). */
+  prevMonthLabel = 'Mes anterior';
+
+  /** A label for the next month button (used by screen readers). */
+  nextMonthLabel = 'Mes siguiente';
+
+  /** A label for the previous year button (used by screen readers). */
+  prevYearLabel = 'Año anterior';
+
+  /** A label for the next year button (used by screen readers). */
+  nextYearLabel = 'Siguiente año';
+
+  /** A label for the previous multi-year button (used by screen readers). */
+  prevMultiYearLabel = 'Anteriores 21 años';
+
+  /** A label for the next multi-year button (used by screen readers). */
+  nextMultiYearLabel = 'Siguientes 21 años';
+
+  /** A label for the 'switch to month view' button (used by screen readers). */
+  switchToMonthViewLabel = 'Cambiar a vista de meses';
+
+  /** A label for the 'switch to year view' button (used by screen readers). */
+  switchToMultiYearViewLabel = 'Seleccionar mes y año';
+
+  /** A label for the cancel button */
+  cancelBtnLabel = 'Cancelar';
+
+  /** A label for the set button */
+  setBtnLabel = 'Aceptar';
+
+  /** A label for the range 'from' in picker info */
+  rangeFromLabel = 'Desde';
+
+  /** A label for the range 'to' in picker info */
+  rangeToLabel = 'Hasta';
+
+  /** A label for the hour12 button (AM) */
+  hour12AMLabel = 'AM';
+
+  /** A label for the hour12 button (PM) */
+  hour12PMLabel = 'PM';
+}
 
 @NgModule({
   declarations: [
@@ -107,6 +169,7 @@ import { AuthGuard } from './services/auth-guard.service';
     }],
     UserService,
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'es'},
+    {provide: OwlDateTimeIntl, useClass: DefaultIntl},
     AuthGuard,
   ],
   exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent],
