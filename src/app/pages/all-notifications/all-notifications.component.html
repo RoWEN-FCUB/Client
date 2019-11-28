@@ -3,7 +3,7 @@
     <div class="row fullWidth">
       <div class="col col-8 text-left">Notificaciones</div>
       <div class="col text-right" *ngIf="hay_nuevas"><span (click)="notificationsReaded()" class="btn-link" style="cursor: pointer;" nbTooltip="Marcar todas como leídas" nbTooltipIcon="checkmark-outline" nbTooltipStatus="success">Marcar como leídas</span></div>
-      <div class="col text-right ml-2" *ngIf="notificaciones.length > 0"><span nbTooltip="Eliminar todas las notificaciones" nbTooltipIcon="close-outline" nbTooltipStatus="danger" class="btn-link" style="cursor: pointer;">Borrar todas</span></div>
+      <div class="col text-right ml-2" *ngIf="notificaciones.length > 0"><span (click)="deleteAllNotifications()" nbTooltip="Eliminar todas las notificaciones" nbTooltipIcon="close-outline" nbTooltipStatus="danger" class="btn-link" style="cursor: pointer;">Borrar todas</span></div>
     </div>
   </nb-card-header>
   <nb-card-body>

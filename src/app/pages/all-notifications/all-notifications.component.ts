@@ -14,6 +14,7 @@ export class AllNotificationsComponent implements OnInit {
   constructor(private authService: NbAuthService, private notificationService: NotificationService, private router: Router) { }
   notificaciones: Notification[] = [];
   hay_nuevas: boolean = false;
+  
   ngOnInit() {
     this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();

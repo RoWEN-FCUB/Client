@@ -15,7 +15,7 @@ import { TaskByDay } from '../../models/TasksByDay';
 import { UserService } from '../../services/user.service';
 import { SelectSubsComponent } from '../select-subs/select-subs.component';
 import { ActivatedRoute } from '@angular/router';
-//import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
+import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
 @Component({
   selector: 'task-week',
   templateUrl: './task-week.component.html',
@@ -40,16 +40,16 @@ export class TaskWeekComponent implements OnInit {
   tooltip_boton_impresion: string = 'Mostrar vista de impresión';
   icono_boton_impresion: string = 'printer-outline';
   numero_filas: number[] = [];
-  /*exportAsConfig: ExportAsConfig = {
-    type: 'xls', // the type you want to download
+  exportAsConfig: ExportAsConfig = {
+    type: 'xlsx', // the type you want to download
     elementId: 'tabla-imprimir', // the id of html/table element
-  };*/
+  };
   constructor(private userService: UserService,
     private taskService: TaskService,
     private authService: NbAuthService,
     private dialogService: NbDialogService,
     private route: ActivatedRoute,
-    //private exportAsService: ExportAsService,
+    private exportAsService: ExportAsService,
     ) {
   }
 
@@ -76,9 +76,9 @@ export class TaskWeekComponent implements OnInit {
   }
 
   export() {
-    /*this.exportAsService.save(this.exportAsConfig, 'Plan de trabajo').subscribe(() => {
+    this.exportAsService.save(this.exportAsConfig, 'Plan de trabajo').subscribe(() => {
       // save started
-    });*/
+    });
   }
 
   tooglePrintEdit() {
