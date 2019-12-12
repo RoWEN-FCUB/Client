@@ -10,9 +10,6 @@
 
 <div class="header-container">
   <nb-actions size="small" *nbIsGranted="['view', 'profile']">
-    <nb-action class="control-item">
-      <nb-search type="rotate-layout"></nb-search>
-    </nb-action>
     <nb-action href="http://webmail.ltunas.inf.cu" class="control-item" icon="email-outline"></nb-action>
     <nb-action link="/pages/notifications" [nbPopover]="new_notifications.length > 0 ? newnotif : null" nbPopoverPlacement="bottom" nbPopoverTrigger="hover" class="control-item" icon="bell-outline" badgePosition="bottom right" badgeStatus="info" [badgeText]="new_notifications.length > 0 ? new_notifications.length : null"></nb-action>
     <nb-action class="user-action">

@@ -41,7 +41,7 @@ export class TaskWeekComponent implements OnInit {
   icono_boton_impresion: string = 'printer-outline';
   numero_filas: number[] = [];
   exportAsConfig: ExportAsConfig = {
-    type: 'xlsx', // the type you want to download
+    type: 'pdf', // the type you want to download
     elementId: 'tabla-imprimir', // the id of html/table element
   };
   constructor(private userService: UserService,
