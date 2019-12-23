@@ -20,6 +20,7 @@ import { GetObservationsPipe } from '../pipes/get-observations.pipe';
 import { GetObservTextPipe } from '../pipes/get-observ-text.pipe';
 import { FormatDateHumanPipe } from '../pipes/format-date-human.pipe';
 import { DayOfWeekPipe } from '../pipes/day-of-week.pipe';
+import { UserNamePipe } from '../pipes/user-name.pipe';
 @NgModule({
   imports: [
     NbSecurityModule,
@@ -58,6 +59,7 @@ import { DayOfWeekPipe } from '../pipes/day-of-week.pipe';
     GetObservTextPipe,
     FormatDateHumanPipe,
     DayOfWeekPipe,
+    UserNamePipe,
     //SelectSubsComponent,
     //NewUserComponent,
     //NewObsComponent,

@@ -94,6 +94,16 @@
     </div>
     <div class="mt-5 container" *ngIf="vista_impresion"> <!--VISTA DE IMPRESION-->
       <table border="1" width="100%" id="tabla-imprimir">
+        <tr>
+          <td colspan="7" align="left">
+            <table>
+              <tr>
+                <td><img src="assets/images/logo_3.png" width="168px" height="60px"></td>
+                <td valign="bottom">Plan de trabajo de <b>{{usuario_a_mostrar | userName:subordinados}}</b> para el período del <b>{{dia_inicio | formatDateHuman}}</b> al <b>{{dia_fin | formatDateHuman}}</b></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
         <tr *ngFor="let row of numero_filas; let i = index;">
           <td *ngIf="i * 7 < tareas_por_dias.length" width="14.28%" valign="top">
             <table width="100%">
@@ -278,84 +288,16 @@
             </table>
           </td>
         </tr>
-      </table>
-
-      <!--
-      <table id="tabla-prueba">
-        <tr *ngFor="let row of numero_filas; let i = index;">
-          <td border-bottom *ngIf="i * 7 < tareas_por_dias.length" width="14.28%" valign="top">
-            <span class="label label-default text-uppercase" style="font-size: 12px;text-align: center;">{{tareas_por_dias[i * 7].day | dayOfWeek: true}}</span>
-            <hr>
-            <ol>
-              <li *ngFor="let task of tareas_por_dias[i * 7].tasks; let i = index;">
-                <span style="text-align: left;font-weight: bold;">{{task.fecha_inicio | formatTime: task.duracion}}</span>
-                <p style="text-align: justify;">{{task.resumen}}</p>
-              </li>
-            </ol>
-          </td>
-          <td border-bottom *ngIf="i * 7 + 1 < tareas_por_dias.length" width="14.28%" valign="top">
-            <span class="label label-default text-uppercase" style="font-size: 12px;text-align: center;">{{tareas_por_dias[i * 7 + 1].day | dayOfWeek: true}}</span>
-            <hr>
-            <ol>
-              <li *ngFor="let task of tareas_por_dias[i * 7 + 1].tasks; let i = index;">
-                <span style="text-align: left;font-weight: bold;">{{task.fecha_inicio | formatTime: task.duracion}}</span>
-                <p style="text-align: justify;">{{task.resumen}}</p>
-              </li>
-            </ol>
-          </td>
-          <td border-bottom *ngIf="i * 7 + 2 < tareas_por_dias.length" width="14.28%" valign="top">
-            <span class="label label-default text-uppercase" style="font-size: 12px;text-align: center;">{{tareas_por_dias[i * 7 + 2].day | dayOfWeek: true}}</span>
-            <hr>
-            <ol>
-              <li *ngFor="let task of tareas_por_dias[i * 7 + 2].tasks; let i = index;">
-                <span style="text-align: left;font-weight: bold;">{{task.fecha_inicio | formatTime: task.duracion}}</span>
-                <p style="text-align: justify;">{{task.resumen}}</p>
-              </li>
-            </ol>
-          </td>
-          <td border-bottom *ngIf="i * 7 + 3 < tareas_por_dias.length" width="14.28%" valign="top">
-            <span class="label label-default text-uppercase" style="font-size: 12px;text-align: center;">{{tareas_por_dias[i * 7 + 3].day | dayOfWeek: true}}</span>
-            <hr>
-            <ol>
-              <li *ngFor="let task of tareas_por_dias[i * 7 + 3].tasks; let i = index;">
-                <span style="text-align: left;font-weight: bold;">{{task.fecha_inicio | formatTime: task.duracion}}</span>
-                <p style="text-align: justify;">{{task.resumen}}</p>
-              </li>
-            </ol>
-          </td>
-          <td border-bottom *ngIf="i * 7 + 4 < tareas_por_dias.length" width="14.28%" valign="top">
-            <span class="label label-default text-uppercase" style="font-size: 12px;text-align: center;">{{tareas_por_dias[i * 7 + 4].day | dayOfWeek: true}}</span>
-            <hr>
-            <ol>
-              <li *ngFor="let task of tareas_por_dias[i * 7 + 4].tasks; let i = index;">
-                <span style="text-align: left;font-weight: bold;">{{task.fecha_inicio | formatTime: task.duracion}}</span>
-                <p style="text-align: justify;">{{task.resumen}}</p>
-              </li>
-            </ol>
-          </td>
-          <td border-bottom *ngIf="i * 7 + 5 < tareas_por_dias.length" width="14.28%" valign="top">
-            <span class="label label-default text-uppercase" style="font-size: 12px;text-align: center;">{{tareas_por_dias[i * 7 + 5].day | dayOfWeek: true}}</span>
-            <hr>
-            <ol>
-              <li *ngFor="let task of tareas_por_dias[i * 7 + 5].tasks; let i = index;">
-                <span style="text-align: left;font-weight: bold;">{{task.fecha_inicio | formatTime: task.duracion}}</span>
-                <p style="text-align: justify;">{{task.resumen}}</p>
-              </li>
-            </ol>
-          </td>
-          <td border-bottom *ngIf="i * 7 + 6 < tareas_por_dias.length" width="14.28%" valign="top">
-            <span class="label label-default text-uppercase" style="font-size: 12px;text-align: center;">{{tareas_por_dias[i * 7 + 6].day | dayOfWeek: true}}</span>
-            <hr>
-            <ol>
-              <li *ngFor="let task of tareas_por_dias[i * 7 + 6].tasks; let i = index;">
-                <span style="text-align: left;font-weight: bold;">{{task.fecha_inicio | formatTime: task.duracion}}</span>
-                <p style="text-align: justify;">{{task.resumen}}</p>
-              </li>
-            </ol>
+        <tr>
+          <td colspan="7" align="left">
+            <table>
+              <tr>
+                <td>Total de tareas planificadas para el período: <b>{{tasks.length}}</b></td>
+              </tr>
+            </table>
           </td>
         </tr>
       </table>
-      -->
     </div>
   </nb-card-body>
 </nb-card>

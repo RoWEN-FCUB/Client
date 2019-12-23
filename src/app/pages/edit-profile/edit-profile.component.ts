@@ -20,7 +20,7 @@ export class EditProfileComponent implements OnInit {
   name_status: string = 'info';
   email_status: string = 'info';
   pass_status: string = 'info';
-  user = {name: '', picture: '', id: 0, role: ''};
+  user = {name: '', picture: '', id: 0, role: '', fullname: ''};
   bd_user: User = {
     id: 0,
     user: '',

@@ -28,7 +28,7 @@ export class TaskWeekComponent implements OnInit {
   rango_dias: Date[]; // dias que se encuentran entre el dia inicio y dia fin
   tareas_por_dias: TaskByDay[];
   @ViewChild('range', {static: false}) range: ElementRef;
-  user = {name: '', picture: '', id: 0, role: ''};
+  user = {name: '', picture: '', id: 0, role: '', fullname: ''};
   tasks: Task[] = []; // lista de tareas
   states = []; // lista de estados de las tareas
   tarea_a_posponer: number;
