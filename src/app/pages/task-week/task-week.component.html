@@ -63,11 +63,11 @@
                             </ng-template>
                           </td>
                           <td width="15%">
-                            <nb-icon *ngIf="task.estado==='Pendiente' || user.role==='admin'" (click)="setTaskState(i,'Cumplida')" icon="checkmark-circle-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Completar tarea" nbTooltipIcon="checkmark-outline" nbTooltipStatus="success"></nb-icon>
-                            <nb-icon *ngIf="task.estado==='Pendiente' || user.role==='admin'" (click)="clickposponer(i)" [owlDateTimeTrigger]="dt" icon="clock-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Posponer tarea" nbTooltipIcon="clock-outline" nbTooltipStatus="info"></nb-icon>
-                            <nb-icon (click)="clickrepetir(i)" icon="copy-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Repetir tarea" nbTooltipIcon="clock-outline" nbTooltipStatus="info"></nb-icon>
-                            <nb-icon *ngIf="subordinados.length > 0" (click)="openSelectSubs(i)" icon="person-done-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Asignar también a otro usuario" nbTooltipIcon="person-done-outline" nbTooltipStatus="info"></nb-icon>
-                            <nb-icon *ngIf="task.estado==='Pendiente' || user.role==='admin'" (click)="setTaskState(i,'Cancelada')" icon="close-circle-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Cancelar tarea" nbTooltipIcon="close-outline" nbTooltipStatus="warning"></nb-icon>
+                            <nb-icon *ngIf="task.estado==='Pendiente' || user.role==='admin'" (click)="setTaskState(task.id,'Cumplida')" icon="checkmark-circle-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Completar tarea" nbTooltipIcon="checkmark-outline" nbTooltipStatus="success"></nb-icon>
+                            <nb-icon *ngIf="task.estado==='Pendiente' || user.role==='admin'" (click)="clickposponer(task.id)" [owlDateTimeTrigger]="dt" icon="clock-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Posponer tarea" nbTooltipIcon="clock-outline" nbTooltipStatus="info"></nb-icon>
+                            <nb-icon (click)="clickrepetir(task.id)" icon="copy-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Repetir tarea" nbTooltipIcon="clock-outline" nbTooltipStatus="info"></nb-icon>
+                            <nb-icon *ngIf="subordinados.length > 0" (click)="openSelectSubs(task.id)" icon="person-done-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Asignar también a otro usuario" nbTooltipIcon="person-done-outline" nbTooltipStatus="info"></nb-icon>
+                            <nb-icon *ngIf="task.estado==='Pendiente' || user.role==='admin'" (click)="setTaskState(task.id,'Cancelada')" icon="close-circle-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Cancelar tarea" nbTooltipIcon="close-outline" nbTooltipStatus="warning"></nb-icon>
                           </td>
                         </tr>
                       </table>
@@ -99,7 +99,7 @@
             <table>
               <tr>
                 <td><img src="assets/images/logo_3.png" width="168px" height="60px"></td>
-                <td valign="bottom">Plan de trabajo de <b>{{usuario_a_mostrar | userName:subordinados}}</b> para el período del <b>{{dia_inicio | formatDateHuman}}</b> al <b>{{dia_fin | formatDateHuman}}</b></td>
+                <td valign="bottom">Plan de trabajo de <b>{{subordinados.length > 0 ? (usuario_a_mostrar | userName:subordinados) : user.fullname}}</b> para el período del <b>{{dia_inicio | formatDateHuman}}</b> al <b>{{dia_fin | formatDateHuman}}</b></td>
               </tr>
             </table>
           </td>

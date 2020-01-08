@@ -283,6 +283,12 @@ export class TaskWeekComponent implements OnInit {
 
   /// ASIGNAR TAREA A UN SUBORDINADO
   openSelectSubs(id: number) {
+    for (let i = 0; i < this.tasks.length; i++) {
+      if (this.tasks[i].id === id) {
+        id = i;
+        break;
+      }
+    }
     this.dialogService.open(SelectSubsComponent, {context: {subordinados: this.subordinados, task: this.tasks[id]}}).onClose.subscribe(
       (newTask) => {
         if (newTask) {
@@ -332,11 +338,23 @@ export class TaskWeekComponent implements OnInit {
   }
 
   clickposponer(id: number) {// guardo la posicion de la tarea q se va a posponer
+    for (let i = 0; i < this.tasks.length; i++) {
+      if (this.tasks[i].id === id) {
+        id = i;
+        break;
+      }
+    }
     this.tarea_a_posponer = id;
     // console.log(this.tarea_a_posponer);
   }
 
   clickrepetir(id: number) {
+    for (let i = 0; i < this.tasks.length; i++) {
+      if (this.tasks[i].id === id) {
+        id = i;
+        break;
+      }
+    }
     this.tarea_a_repetir = id;
     let picked_range: HTMLElement = this.range.nativeElement;
     picked_range.click();
@@ -369,6 +387,12 @@ export class TaskWeekComponent implements OnInit {
   }
 
   setTaskState(id: number, state: string) {
+    for (let i = 0; i < this.tasks.length; i++) {
+      if (this.tasks[i].id === id) {
+        id = i;
+        break;
+      }
+    }
     Swal.fire({
       title: 'Confirma que desea cambiar el estado de la tarea a ' + state + '?',
       text: 'Una vez cambiado el estado de la tarea no se podrá actualizar!!',
