@@ -93,12 +93,12 @@
       </nb-accordion>
     </div>
     <div class="mt-5 container" *ngIf="vista_impresion"> <!--VISTA DE IMPRESION-->
-      <table border="1" width="100%" id="tabla-imprimir">
+      <table border="1" width="900" id="tabla-imprimir">
         <tr>
           <td colspan="7" align="left">
             <table>
               <tr>
-                <td><img src="assets/images/logo_3.png" width="168px" height="60px"></td>
+                <td><img id="imgToExport" src="assets/images/logo_3.png" width="168px" height="60px"></td>
                 <td valign="bottom">Plan de trabajo de <b>{{subordinados.length > 0 ? (usuario_a_mostrar | userName:subordinados) : user.fullname}}</b> para el período del <b>{{dia_inicio | formatDateHuman}}</b> al <b>{{dia_fin | formatDateHuman}}</b></td>
               </tr>
             </table>

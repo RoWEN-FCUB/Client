@@ -50,6 +50,7 @@
     "classlist.js": "1.1.20150312",
     "core-js": "3.3.2",
     "eva-icons": "^1.1.1",
+    "html-to-pdfmake": "^1.2.1",
     "intl": "1.2.5",
     "ionicons": "4.6.3",
     "jquery": "^3.4.1",
@@ -62,6 +63,7 @@
     "node-sass": "^4.12.0",
     "normalize.css": "8.0.1",
     "pace-js": "1.0.2",
+    "pdfmake": "^0.1.63",
     "popper.js": "^1.15.0",
     "roboto-fontface": "0.10.0",
     "rxjs": "6.5.3",
@@ -73,7 +75,7 @@
     "zone.js": "^0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.803.9",
+    "@angular-devkit/build-angular": "^0.803.22",
     "@angular/cli": "^8.3.19",
     "@angular/compiler-cli": "^8.2.10",
     "@angular/language-service": "8.2.10",
