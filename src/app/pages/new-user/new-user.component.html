@@ -12,6 +12,11 @@
             <small id="namHelp" class="form-text text-muted">Nombre(s) y Apellidos del usuario</small>
           </div>
           <div class="form-group">
+            <label>Cargo:</label>
+            <input (input)="position_change()" type="text" nbInput fullWidth [status]="position_status" placeholder="Cargo" [(ngModel)]="newUser.position" class="form-control" aria-describedby="carHelp">
+            <small id="carHelp" class="form-text text-muted">Cargo que ocupa el usuario</small>
+          </div>
+          <div class="form-group">
             <label>E-mail:</label>
             <input (input)="email_change()" type="text" nbInput fullWidth [status]="email_status" placeholder="emai@server.dom" [(ngModel)]="newUser.email" class="form-control" aria-describedby="emailHelp">
             <small id="emailHelp" class="form-text text-muted">La dirección de correo que usará para el acceso al sistema.</small>

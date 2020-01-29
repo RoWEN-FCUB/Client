@@ -7,4 +7,5 @@ export interface User {
   email?: string;
   picture?: string;
   id_sup?: number;
+  position?: string;
 }

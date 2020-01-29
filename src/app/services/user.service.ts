@@ -23,6 +23,10 @@ export class UserService {
     return this.http.get(ipserver + 'user/sub/' + id, {responseType: 'json'});
   }
 
+  getSup(id: number) {
+    return this.http.get(ipserver + 'user/sup/' + id, {responseType: 'json'});
+  }
+
   saveUser(user: User) {
     return this.http.post(ipserver + 'user', user);
   }

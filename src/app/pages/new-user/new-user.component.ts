@@ -18,6 +18,7 @@ export class NewUserComponent implements OnInit {
     email: '',
     picture: 'empty.png',
     id_sup: 0,
+    position: '',
   };
   users: User[] = [];
   urole: string = ''; // rol del usuario en string
@@ -26,6 +27,7 @@ export class NewUserComponent implements OnInit {
   reppass: string = '';
   nick_status: string = 'info';
   name_status: string = 'info';
+  position_status: string = 'info';
   email_status: string = 'info';
   pass_status: string = 'info';
   rpass_status: string = 'info';
@@ -54,6 +56,14 @@ export class NewUserComponent implements OnInit {
       this.name_status = 'success';
     } else {
       this.name_status = 'danger';
+    }
+  }
+
+  position_change() {
+    if (this.newUser.position === '') {
+      this.position_status = 'danger';
+    } else {
+      this.position_status = 'success';
     }
   }
 
@@ -135,6 +145,11 @@ export class NewUserComponent implements OnInit {
       Toast.fire({
         type: 'error',
         title: 'Debe escribir un nombre válido.',
+      });
+    } else if (this.position_status === 'danger' || this.newUser.position === '') {
+      Toast.fire({
+        type: 'error',
+        title: 'Debe escribir un cargo válido.',
       });
     } else if (this.email_status === 'danger' || this.newUser.email === '') {
       Toast.fire({
