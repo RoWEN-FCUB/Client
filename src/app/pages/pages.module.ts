@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbBadgeModule, NbAccordionModule, NbIconModule , NbActionsModule, NbTooltipModule, NbPopoverModule, NbMenuModule, NbCardModule, NbInputModule, NbSelectModule, NbButtonModule, NbDialogModule, NbTabsetModule, NbDatepickerModule } from '@nebular/theme';
+import { NbCheckboxModule, NbBadgeModule, NbAccordionModule, NbIconModule , NbActionsModule, NbTooltipModule, NbPopoverModule, NbMenuModule, NbCardModule, NbInputModule, NbSelectModule, NbButtonModule, NbDialogModule, NbTabsetModule, NbDatepickerModule } from '@nebular/theme';
 import { FormsModule } from '@angular/forms';
 
 import { ThemeModule } from '../@theme/theme.module';
@@ -46,6 +46,7 @@ import { UserNamePipe } from '../pipes/user-name.pipe';
     NbDatepickerModule,
     NbAccordionModule,
     NbBadgeModule,
+    NbCheckboxModule,
   ],
   declarations: [
     PagesComponent,

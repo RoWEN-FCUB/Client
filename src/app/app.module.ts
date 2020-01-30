@@ -5,6 +5,10 @@ import { LogoutComponent } from './@theme/components/logout/logout.component';
  * Copyright Akveo. All Rights Reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+registerLocaleData(localeEs);
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -172,6 +176,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'es'},
     {provide: OwlDateTimeIntl, useClass: DefaultIntl},
     AuthGuard,
+    {provide: LOCALE_ID, useValue: 'es'},
   ],
   exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent],
   entryComponents: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent],

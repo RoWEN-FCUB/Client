@@ -39,17 +39,10 @@ export class TaskWeekComponent implements OnInit {
   tarea_a_repetir: number;
   @Input() usuario_a_mostrar: number = 0;
   subordinados: User[] = [];
-  vista_impresion: boolean = false;
-  texto_boton_impresion: string = 'Vista de impresión';
-  tooltip_boton_impresion: string = 'Mostrar vista de impresión';
-  icono_boton_impresion: string = 'printer-outline';
   numero_filas: number[] = [];
-  exportAsConfig: ExportAsConfig = {
-    type: 'pdf', // the type you want to download
-    elementId: 'tabla-imprimir', // the id of html/table element
-  };
   docDefinition = {};
   table_to_print = [];
+  expandir_todas: boolean = true;
 
   constructor(private userService: UserService,
     private taskService: TaskService,
@@ -82,32 +75,13 @@ export class TaskWeekComponent implements OnInit {
     });
   }
 
-  export() {
-    /*this.exportAsService.save(this.exportAsConfig, 'Plan de trabajo').subscribe(() => {
-      // save started
-    });*/
-    //const text = document.getElementById('tabla-imprimir').innerHTML;
-    //console.log(text);
-    //const html = htmlToPdfmake(text);
-    //console.log(html);
-    //this.docDefinition = {content: [html]};
-    pdfMake.createPdf(this.docDefinition).open();
+  expand_tasks(checked: boolean) {
+    this.expandir_todas = checked;
   }
 
-  tooglePrintEdit() {
-    this.vista_impresion = !this.vista_impresion;
-    if (!this.vista_impresion) {
-      this.texto_boton_impresion = 'Vista de impresión';
-      this.tooltip_boton_impresion = 'Mostrar vista de impresión';
-      this.icono_boton_impresion = 'printer-outline';
-      this.eliminar_dias_relleno();
-    } else {
-      this.ajustar_perido();
-      this.generateTableToPrint();
-      this.texto_boton_impresion = 'Vista de trabajo';
-      this.tooltip_boton_impresion = 'Mostrar vista de trabajo';
-      this.icono_boton_impresion = 'browser-outline';
-    }
+  export() {
+    this.ajustar_perido();
+    this.generateTableToPrint();
   }
 
   generateTableToPrint() {
@@ -118,7 +92,7 @@ export class TaskWeekComponent implements OnInit {
         if (this.usuario_a_mostrar === this.subordinados[i].id) {
           usrtoprint.id = this.subordinados[i].id;
           usrtoprint.fullname = this.subordinados[i].fullname;
-          usrtoprint.position = this.subordinados[i].position;          
+          usrtoprint.position = this.subordinados[i].position;
           break;
         }
       }
@@ -164,6 +138,7 @@ export class TaskWeekComponent implements OnInit {
           }
           this.table_to_print.push(row);
         }
+        //console.log(usrtoprint);
         //console.log(this.table_to_print);
         this.docDefinition = {
           footer: function(currentPage, pageCount) {
@@ -269,9 +244,11 @@ export class TaskWeekComponent implements OnInit {
           ],
           pageMargins: [5, 25, 5, 25],
         };
+        this.eliminar_dias_relleno();
+        pdfMake.createPdf(this.docDefinition).open();
     });
     //console.log(usrtoprint);
-    
+
   }
 
   ajustar_perido() { // ajusta el rango de dias para que empiece un lunes
@@ -335,9 +312,6 @@ export class TaskWeekComponent implements OnInit {
       diaD = moment(diaD).add(1, 'days').toDate();
     } while (moment(diaD).isSameOrBefore(this.dia_fin, 'day'));
     this.calcular_filas();
-    if (this.vista_impresion) {
-      this.ajustar_perido();
-    }
   }
 
   isInConflict(id: number) {
