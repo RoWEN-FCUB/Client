@@ -4,6 +4,7 @@ import { User } from '../../models/User';
 import { NbDialogRef } from '@nebular/theme';
 import Swal from 'sweetalert2';
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'select-subs',
   templateUrl: './select-subs.component.html',
   styleUrls: ['./select-subs.component.scss'],

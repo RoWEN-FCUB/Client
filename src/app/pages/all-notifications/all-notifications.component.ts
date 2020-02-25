@@ -5,6 +5,7 @@ import { Notification } from '../../models/Notification';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'all-notifications',
   templateUrl: './all-notifications.component.html',
   styleUrls: ['./all-notifications.component.scss'],

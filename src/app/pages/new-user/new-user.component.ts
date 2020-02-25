@@ -4,6 +4,7 @@ import { User } from '../../models/User';
 import { UserService } from '../../services/user.service';
 import Swal from 'sweetalert2';
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'new-user',
   templateUrl: './new-user.component.html',
   styleUrls: ['./new-user.component.scss'],

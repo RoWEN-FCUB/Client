@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'new-obs',
   templateUrl: './new-obs.component.html',
   styleUrls: ['./new-obs.component.scss'],

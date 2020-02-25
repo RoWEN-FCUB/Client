@@ -21,6 +21,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 const htmlToPdfmake = require('html-to-pdfmake');
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'task-week',
   templateUrl: './task-week.component.html',
   styleUrls: ['./task-week.component.scss'],
@@ -181,6 +182,7 @@ export class TaskWeekComponent implements OnInit {
                   {
                     columns: [
                       {text: 'Período:', fontSize: 15, width: 'auto'},
+                      // tslint:disable-next-line: max-line-length
                       {text: moment(this.dia_inicio).locale('es').format('LL'), fontSize: 15, width: 'auto', style: {bold: true}, decoration: 'underline'},
                       {text: 'al', fontSize: 15, width: 'auto'},
                       {text: moment(this.dia_fin).locale('es').format('LL'), fontSize: 15, width: 'auto', style: {bold: true}, decoration: 'underline'},
@@ -385,6 +387,7 @@ export class TaskWeekComponent implements OnInit {
     if (e.start && e.end) {
       Swal.fire({
         title: 'Confirma que desea repetir la tarea "' + this.tasks[this.tarea_a_repetir].resumen + '"?',
+        // tslint:disable-next-line: max-line-length
         text: 'Se crearán nuevas tareas desde el ' + moment(e.start).locale('es').format('LL') + ' hasta el ' + moment(e.end).locale('es').format('LL'),
         type: 'warning',
         showCancelButton: true,
@@ -413,6 +416,7 @@ export class TaskWeekComponent implements OnInit {
   }
 
   openNew() {
+    // tslint:disable-next-line: max-line-length
     this.dialogService.open(NewTaskComponent, {context: {subordinados: this.subordinados, id_creador: this.user.id, id_usuario: this.usuario_a_mostrar}}).onClose.subscribe(
       (newTask) => {
         if (newTask) {
@@ -601,6 +605,7 @@ export class TaskWeekComponent implements OnInit {
   public getTaskinRange() {
     const diai =  this.formatDate(this.dia_inicio);
     const diaf =  this.formatDate(this.dia_fin);
+    // tslint:disable-next-line: max-line-length
     const tareas = this.taskService.getTasksinRange(this.usuario_a_mostrar, diai, diaf).subscribe(// obtener las tareas del usuario en el rango
       res => {
         // console.log(res);

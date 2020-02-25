@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'edit-profile',
   templateUrl: './edit-profile.component.html',
   styleUrls: ['./edit-profile.component.scss'],
@@ -31,6 +32,7 @@ export class EditProfileComponent implements OnInit {
     picture: 'empty.png',
   };
   userpicture = ipserver + 'public/' + this.bd_user.picture;
+  // tslint:disable-next-line: max-line-length
   constructor(private router: Router, private authService: NbAuthService, private userService: UserService, private dialogService: NbDialogService) {
   }
 

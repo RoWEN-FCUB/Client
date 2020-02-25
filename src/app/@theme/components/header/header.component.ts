@@ -46,6 +46,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   new_notifications: Notification[] = [];
   notif: Subscription = new Subscription();
   updating_notif: boolean = true; // no recargar notificaciones cuando este marcando una como leida
+  // tslint:disable-next-line: max-line-length
   userMenu = [ { title: 'Perfil', icon: 'person-outline', link: '/pages/editProfile' }, { title: 'Cerrar sesión', icon: 'power-outline', link: '/auth/logout'} ];
 
   constructor(private sidebarService: NbSidebarService,

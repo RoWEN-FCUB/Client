@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+// tslint:disable-next-line: max-line-length
 import { NbCheckboxModule, NbBadgeModule, NbAccordionModule, NbIconModule , NbActionsModule, NbTooltipModule, NbPopoverModule, NbMenuModule, NbCardModule, NbInputModule, NbSelectModule, NbButtonModule, NbDialogModule, NbTabsetModule, NbDatepickerModule } from '@nebular/theme';
 import { FormsModule } from '@angular/forms';
 

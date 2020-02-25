@@ -7,6 +7,7 @@ import { NbDialogService } from '@nebular/theme';
 import Swal from 'sweetalert2';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'admin-users',
   templateUrl: './admin-users.component.html',
   styleUrls: ['./admin-users.component.scss'],

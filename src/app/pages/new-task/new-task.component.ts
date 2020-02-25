@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { User } from '../../models/User';
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'new-task',
   templateUrl: './new-task.component.html',
   styleUrls: ['./new-task.component.scss'],

@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'upload-img',
   templateUrl: './upload-img.component.html',
   styleUrls: ['./upload-img.component.scss'],
