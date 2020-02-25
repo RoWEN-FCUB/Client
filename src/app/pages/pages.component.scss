@@ -1,5 +1,5 @@
 @import '../@theme/styles/themes';
-@import "~ng-pick-datetime/assets/style/picker.min.css";
+@import '~ng-pick-datetime/assets/style/picker.min.css';
 
 @include nb-install-component() {
   ::ng-deep router-outlet + * {
