@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'new-user',
   templateUrl: './new-user.component.html',
-  styleUrls: ['./new-user.component.scss']
+  styleUrls: ['./new-user.component.scss'],
 })
 export class NewUserComponent implements OnInit {
   saving: boolean = false;

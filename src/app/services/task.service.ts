@@ -24,7 +24,7 @@ export class TaskService {
 
   countTaskbyState(id: number, day: string, state: string) {
     const onlydate = day.split(' '); // separa la fecha de la hora
-    return this.http.get(ipserver + 'task/count/' + id + '&' + onlydate[0]+'&'+state, {responseType: 'json'});
+    return this.http.get(ipserver + 'task/count/' + id + '&' + onlydate[0] + '&' + state, {responseType: 'json'});
   }
 
   saveTask(task) {

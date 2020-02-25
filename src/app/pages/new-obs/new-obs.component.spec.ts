@@ -8,7 +8,7 @@ describe('NewObsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NewObsComponent ]
+      declarations: [ NewObsComponent ],
     })
     .compileComponents();
   }));

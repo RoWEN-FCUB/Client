@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
 @Pipe({
-  name: 'formatDateHuman'
+  name: 'formatDateHuman',
 })
 export class FormatDateHumanPipe implements PipeTransform {
 

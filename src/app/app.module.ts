@@ -53,13 +53,13 @@ import { NbAlertModule, NbCheckboxModule} from '@nebular/theme';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { AuthGuard } from './services/auth-guard.service';
 import { ExportAsModule } from 'ngx-export-as';
-//import { UserNamePipe } from './pipes/user-name.pipe';
-//import { DayOfWeekPipe } from './pipes/day-of-week.pipe';
-//import { FormatDateHumanPipe } from './pipes/format-date-human.pipe';
-//import { GetObservTextPipe } from './pipes/get-observ-text.pipe';
-//import { GetObservationsPipe } from './pipes/get-observations.pipe';
-//import { FormatStatePipe } from './pipes/format-state.pipe';
-//import { FormatTimePipe } from './pipes/format-time.pipe';
+// import { UserNamePipe } from './pipes/user-name.pipe';
+// import { DayOfWeekPipe } from './pipes/day-of-week.pipe';
+// import { FormatDateHumanPipe } from './pipes/format-date-human.pipe';
+// import { GetObservTextPipe } from './pipes/get-observ-text.pipe';
+// import { GetObservationsPipe } from './pipes/get-observations.pipe';
+// import { FormatStatePipe } from './pipes/format-state.pipe';
+// import { FormatTimePipe } from './pipes/format-time.pipe';
 
 // here is the default text string
 export class DefaultIntl extends OwlDateTimeIntl {

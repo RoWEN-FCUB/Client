@@ -9,8 +9,8 @@ import { NbAccessChecker } from '@nebular/security';
   styleUrls: ['pages.component.scss'],
   templateUrl: 'pages.component.html',
 })
-export class PagesComponent implements OnInit{
-  constructor(private accessChecker: NbAccessChecker, private menuService: NbMenuService, private authService: NbAuthService,) {
+export class PagesComponent implements OnInit {
+  constructor(private accessChecker: NbAccessChecker, private menuService: NbMenuService, private authService: NbAuthService) {
 
   }
   menu = MENU_ITEMS;
@@ -73,10 +73,10 @@ export class PagesComponent implements OnInit{
                 {
                   title: 'Usuarios',
                   icon: 'people-outline',
-                  link: '/pages/admin/users'
-                }
-              ]
-            }
+                  link: '/pages/admin/users',
+                },
+              ],
+            },
           );
         }
       });

@@ -8,7 +8,7 @@ describe('NewUserComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NewUserComponent ]
+      declarations: [ NewUserComponent ],
     })
     .compileComponents();
   }));

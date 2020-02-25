@@ -98,8 +98,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   clickNotification(link: string) {
-    //console.log(link);
-    this.router.navigate(['pages/'+link]);
+    // console.log(link);
+    this.router.navigate(['pages/' + link]);
   }
 
   notificationReaded(id: number) {

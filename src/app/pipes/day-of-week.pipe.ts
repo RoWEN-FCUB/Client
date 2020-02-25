@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
 @Pipe({
-  name: 'dayOfWeek'
+  name: 'dayOfWeek',
 })
 export class DayOfWeekPipe implements PipeTransform {
 

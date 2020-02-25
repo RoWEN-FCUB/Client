@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'select-subs',
   templateUrl: './select-subs.component.html',
-  styleUrls: ['./select-subs.component.scss']
+  styleUrls: ['./select-subs.component.scss'],
 })
 export class SelectSubsComponent implements OnInit {
   task: Task;

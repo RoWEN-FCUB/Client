@@ -8,7 +8,7 @@ import { User } from '../../models/User';
 @Component({
   selector: 'new-task',
   templateUrl: './new-task.component.html',
-  styleUrls: ['./new-task.component.scss']
+  styleUrls: ['./new-task.component.scss'],
 })
 export class NewTaskComponent implements OnInit {
   @ViewChild('text_muted', {static: false}) text_muted: ElementRef;
@@ -122,7 +122,7 @@ export class NewTaskComponent implements OnInit {
   }
 
   save() {
-    //console.log( this.sub_seleccionados);
+    // console.log( this.sub_seleccionados);
     if (this.validate_task()) {
       this.parseTime();
       const newTask = {task: this.task, subs: this.sub_seleccionados};

@@ -9,7 +9,7 @@ import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 @Component({
   selector: 'admin-users',
   templateUrl: './admin-users.component.html',
-  styleUrls: ['./admin-users.component.scss']
+  styleUrls: ['./admin-users.component.scss'],
 })
 export class AdminUsersComponent implements OnInit {
   users: User[] = [];

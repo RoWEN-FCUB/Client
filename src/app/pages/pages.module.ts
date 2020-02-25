@@ -61,11 +61,11 @@ import { UserNamePipe } from '../pipes/user-name.pipe';
     FormatDateHumanPipe,
     DayOfWeekPipe,
     UserNamePipe,
-    //SelectSubsComponent,
-    //NewUserComponent,
-    //NewObsComponent,
-    //NewTaskComponent,
-    //UploadImgComponent,
+    // SelectSubsComponent,
+    // NewUserComponent,
+    // NewObsComponent,
+    // NewTaskComponent,
+    // UploadImgComponent,
   ],
 })
 export class PagesModule {

@@ -8,7 +8,7 @@ describe('TaskWeekComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TaskWeekComponent ]
+      declarations: [ TaskWeekComponent ],
     })
     .compileComponents();
   }));

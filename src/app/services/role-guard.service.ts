@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot } from '@angular/router';
-//import { UserService } from './user.service';
+// import { UserService } from './user.service';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 
 
@@ -8,7 +8,7 @@ import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RoleGuardService implements CanActivate {
 

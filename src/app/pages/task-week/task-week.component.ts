@@ -19,12 +19,12 @@ import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-let htmlToPdfmake = require('html-to-pdfmake');
+const htmlToPdfmake = require('html-to-pdfmake');
 @Component({
   selector: 'task-week',
   templateUrl: './task-week.component.html',
   styleUrls: ['./task-week.component.scss'],
-  //changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskWeekComponent implements OnInit {
   @Input() dia_inicio: Date;
@@ -56,7 +56,7 @@ export class TaskWeekComponent implements OnInit {
   ngOnInit() {
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
-      //console.log(this.route.snapshot.paramMap);
+      // console.log(this.route.snapshot.paramMap);
       if (this.route.snapshot.paramMap.get('id')) {
         this.usuario_a_mostrar = Number(this.route.snapshot.paramMap.get('id'));
       }
@@ -71,7 +71,7 @@ export class TaskWeekComponent implements OnInit {
       if (this.usuario_a_mostrar === 0) {
         this.usuario_a_mostrar = this.user.id;
       }
-      //usr.unsubscribe();
+      // usr.unsubscribe();
     });
   }
 
@@ -86,7 +86,7 @@ export class TaskWeekComponent implements OnInit {
 
   generateTableToPrint() {
     this.table_to_print = []; // tabla final a imprimir
-    let usrtoprint = this.user;
+    const usrtoprint = this.user;
     if (this.subordinados.length > 0) {
       for (let i = 0; i < this.subordinados.length; i++) {
         if (this.usuario_a_mostrar === this.subordinados[i].id) {
@@ -104,7 +104,7 @@ export class TaskWeekComponent implements OnInit {
         for (let i = 0; i < this.numero_filas.length; i++) {
           row = [];
           for (let j = 0; j < 7; j++) {
-            //row.push(i * 7 + j);
+            // row.push(i * 7 + j);
             let day = {};
             if ((i * 7 + j) < this.tareas_por_dias.length) {
               if (this.tareas_por_dias[i * 7 + j].day) {
@@ -116,7 +116,7 @@ export class TaskWeekComponent implements OnInit {
                 }
                 day = {
                   table: {
-                    //headerRows: 1,
+                    // headerRows: 1,
                     widths: ['*'],
                     body: [[{
                       text: dsemana,
@@ -142,8 +142,8 @@ export class TaskWeekComponent implements OnInit {
           }
           this.table_to_print.push(row);
         }
-        //console.log(usrtoprint);
-        //console.log(this.table_to_print);
+        // console.log(usrtoprint);
+        // console.log(this.table_to_print);
         this.docDefinition = {
           footer: function(currentPage, pageCount) {
             return {
@@ -181,7 +181,7 @@ export class TaskWeekComponent implements OnInit {
                   {
                     columns: [
                       {text: 'Período:', fontSize: 15, width: 'auto'},
-                      {text: moment(this.dia_inicio).locale('es').format('LL'), fontSize: 15,width: 'auto', style: {bold: true}, decoration: 'underline'},
+                      {text: moment(this.dia_inicio).locale('es').format('LL'), fontSize: 15, width: 'auto', style: {bold: true}, decoration: 'underline'},
                       {text: 'al', fontSize: 15, width: 'auto'},
                       {text: moment(this.dia_fin).locale('es').format('LL'), fontSize: 15, width: 'auto', style: {bold: true}, decoration: 'underline'},
                     ],
@@ -251,7 +251,7 @@ export class TaskWeekComponent implements OnInit {
         this.eliminar_dias_relleno();
         pdfMake.createPdf(this.docDefinition).open();
     });
-    //console.log(usrtoprint);
+    // console.log(usrtoprint);
 
   }
 
@@ -278,7 +278,7 @@ export class TaskWeekComponent implements OnInit {
     }
   }
 
-  calcular_filas() { //calcula la cantidad de semanas a mostrar
+  calcular_filas() { // calcula la cantidad de semanas a mostrar
     this.numero_filas = new Array<number>(Math.trunc(this.tareas_por_dias.length / 7));
     if (this.tareas_por_dias.length % 7 > 0) {
       this.numero_filas = new Array<number>(this.numero_filas.length + 1);
@@ -290,7 +290,7 @@ export class TaskWeekComponent implements OnInit {
     this.tareas_por_dias = [];
     let diaD = moment(this.dia_inicio).toDate();
     do {
-      let tareasDia: TaskByDay = {
+      const tareasDia: TaskByDay = {
         tasks: [],
         tasks_successful: 0,
         tasks_canceled: 0,
@@ -413,7 +413,7 @@ export class TaskWeekComponent implements OnInit {
   }
 
   openNew() {
-    this.dialogService.open(NewTaskComponent, {context: {subordinados:this.subordinados, id_creador: this.user.id, id_usuario: this.usuario_a_mostrar}}).onClose.subscribe(
+    this.dialogService.open(NewTaskComponent, {context: {subordinados: this.subordinados, id_creador: this.user.id, id_usuario: this.usuario_a_mostrar}}).onClose.subscribe(
       (newTask) => {
         if (newTask) {
           newTask.task.nombre_creador = this.user.name;
@@ -448,7 +448,7 @@ export class TaskWeekComponent implements OnInit {
     this.dialogService.open(SelectSubsComponent, {context: {subordinados: this.subordinados, task: this.tasks[id]}}).onClose.subscribe(
       (newTask) => {
         if (newTask) {
-          //console.log(newTask);
+          // console.log(newTask);
           newTask.task.id_creador = this.user.id;
           newTask.task.nombre_creador = this.user.name;
           this.taskService.saveTask(newTask).subscribe(
@@ -512,7 +512,7 @@ export class TaskWeekComponent implements OnInit {
       }
     }
     this.tarea_a_repetir = id;
-    let picked_range: HTMLElement = this.range.nativeElement;
+    const picked_range: HTMLElement = this.range.nativeElement;
     picked_range.click();
   }
 
@@ -521,7 +521,7 @@ export class TaskWeekComponent implements OnInit {
     this.tasks[this.tarea_a_posponer].fecha_inicio = event.value; // nueva fecha
     this.tasks[this.tarea_a_posponer].fecha_fin = event.value; // nueva fecha
     this.tasks[this.tarea_a_posponer].estado = 'Pendiente';
-    //console.log(this.tasks[this.tarea_a_posponer]);
+    // console.log(this.tasks[this.tarea_a_posponer]);
     this.taskService.updateTask(this.tasks[this.tarea_a_posponer].id, this.tasks[this.tarea_a_posponer]).subscribe(res => {
       this.generar_rango_dias();
       const Toast = Swal.mixin({
@@ -591,9 +591,9 @@ export class TaskWeekComponent implements OnInit {
     if (value <= 0) { return 0; }
     const hours = Math.floor(value / 60);
     const minutes = value % 60;
-    const hour = (hours > 1) ? hours + " hrs " : hours + " hr ";
-    const min = (minutes > 0) ? minutes + " mins" : "";
-    //console.log(hour + min);
+    const hour = (hours > 1) ? hours + ' hrs ' : hours + ' hr ';
+    const min = (minutes > 0) ? minutes + ' mins' : '';
+    // console.log(hour + min);
     return hour + min;
   }
 
@@ -603,10 +603,10 @@ export class TaskWeekComponent implements OnInit {
     const diaf =  this.formatDate(this.dia_fin);
     const tareas = this.taskService.getTasksinRange(this.usuario_a_mostrar, diai, diaf).subscribe(// obtener las tareas del usuario en el rango
       res => {
-        //console.log(res);
+        // console.log(res);
         this.tasks = res as Task[];
         this.generar_rango_dias();
-        //tareas.unsubscribe();
+        // tareas.unsubscribe();
       },
     );
   }

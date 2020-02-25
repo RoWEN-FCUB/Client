@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { UserService } from '../../services/user.service';
-//import { User } from '../../@core/data/users';
+// import { User } from '../../@core/data/users';
 import { User } from '../../models/User';
 import { NbDialogService } from '@nebular/theme';
 import { UploadImgComponent } from '../upload-img/upload-img.component';
@@ -148,7 +148,7 @@ export class EditProfileComponent implements OnInit {
       this.userService.getUser(this.user.id).subscribe(
         resp => {
           this.bd_user = resp as User;
-          //console.log(this.bd_user.role);
+          // console.log(this.bd_user.role);
           this.userpicture = ipserver + 'public/' + this.bd_user.picture;
         },
       );

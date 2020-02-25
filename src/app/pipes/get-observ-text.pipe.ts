@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'getObservText'
+  name: 'getObservText',
 })
 export class GetObservTextPipe implements PipeTransform {
 

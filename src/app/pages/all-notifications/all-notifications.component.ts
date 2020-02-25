@@ -7,14 +7,14 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'all-notifications',
   templateUrl: './all-notifications.component.html',
-  styleUrls: ['./all-notifications.component.scss']
+  styleUrls: ['./all-notifications.component.scss'],
 })
 export class AllNotificationsComponent implements OnInit {
   user = {name: '', picture: '', id: 0, role: ''};
   constructor(private authService: NbAuthService, private notificationService: NotificationService, private router: Router) { }
   notificaciones: Notification[] = [];
   hay_nuevas: boolean = false;
-  
+
   ngOnInit() {
     this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
@@ -26,7 +26,7 @@ export class AllNotificationsComponent implements OnInit {
     const idnotif = this.notificaciones[id].id;
     this.notificaciones[id].leida = true;
     this.notificationService.notificationReaded(idnotif).subscribe(res => {
-      //this.getNotifications();
+      // this.getNotifications();
     });
   }
 
@@ -42,7 +42,7 @@ export class AllNotificationsComponent implements OnInit {
     const idnotif = this.notificaciones[id].id;
     this.notificaciones.splice(id, 1);
     this.notificationService.deleteNotification(idnotif).subscribe(res => {
-      //this.getNotifications();
+      // this.getNotifications();
     });
   }
 
@@ -68,8 +68,8 @@ export class AllNotificationsComponent implements OnInit {
   }
 
   clickNotification(link: string) {
-    //console.log(link);
-    this.router.navigate(['pages/'+link]);
+    // console.log(link);
+    this.router.navigate(['pages/' + link]);
   }
 
   formatDate(date: Date) {
