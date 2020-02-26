@@ -1,3 +1,3 @@
-const ipserver = 'http://169.158.137.125:3000/';
+const ipserver = 'http://127.0.0.1:3000/';
 export default ipserver;
 
