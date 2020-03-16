@@ -96,9 +96,15 @@ export const NB_CORE_PROVIDERS = [
         edit: '*',
         remove: '*',*/
       },
-      admin: {
+      tec: {
         parent: 'user',
-        view: ['change_role', 'admin_menu'],
+        view: ['workshop'], /*
+        create: '*',
+        edit: '*',
+        remove: '*',*/
+      },
+      admin: {
+        view: '*',
       },
     },
   }).providers,

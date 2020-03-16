@@ -22,6 +22,7 @@ import { GetObservTextPipe } from '../pipes/get-observ-text.pipe';
 import { FormatDateHumanPipe } from '../pipes/format-date-human.pipe';
 import { DayOfWeekPipe } from '../pipes/day-of-week.pipe';
 import { UserNamePipe } from '../pipes/user-name.pipe';
+import { TallerComponent } from './taller/taller.component';
 @NgModule({
   imports: [
     NbSecurityModule,
@@ -62,6 +63,7 @@ import { UserNamePipe } from '../pipes/user-name.pipe';
     FormatDateHumanPipe,
     DayOfWeekPipe,
     UserNamePipe,
+    TallerComponent,
     // SelectSubsComponent,
     // NewUserComponent,
     // NewObsComponent,

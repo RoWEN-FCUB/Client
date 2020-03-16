@@ -8,6 +8,8 @@ import {RoleGuardService as RoleGuard} from '../services/role-guard.service';
 import { AdminUsersComponent } from './admin-users/admin-users.component';
 import { TaskWeekComponent } from './task-week/task-week.component';
 import { AllNotificationsComponent } from './all-notifications/all-notifications.component';
+import { TallerComponent } from './taller/taller.component';
+import { from } from 'rxjs';
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
@@ -25,19 +27,25 @@ const routes: Routes = [{
       path: 'editProfile',
       component: EditProfileComponent,
       canActivate: [RoleGuard],
-      data: {role: ['user', 'admin']},
+      data: {role: ['user', 'tec', 'admin']},
     },
     {
       path: 'tasks',
       component: TaskWeekComponent,
       canActivate: [RoleGuard],
-      data: {role: ['user', 'admin']},
+      data: {role: ['user', 'tec', 'admin']},
+    },
+    {
+      path: 'workshop',
+      component: TallerComponent,
+      canActivate: [RoleGuard],
+      data: {role: ['tec', 'admin']},
     },
     {
       path: 'tasks/:id/:fecha_inicio/:fecha_fin',
       component: TaskWeekComponent,
       canActivate: [RoleGuard],
-      data: {role: ['user', 'admin']},
+      data: {role: ['user', 'tec', 'admin']},
     },
     {
       path: 'admin/users',
@@ -49,7 +57,7 @@ const routes: Routes = [{
       path: 'notifications',
       component: AllNotificationsComponent,
       canActivate: [RoleGuard],
-      data: {role: ['user', 'admin']},
+      data: {role: ['user', 'tec', 'admin']},
     },
   ],
 }];

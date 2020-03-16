@@ -146,6 +146,9 @@ export class TaskWeekComponent implements OnInit {
         // console.log(usrtoprint);
         // console.log(this.table_to_print);
         this.docDefinition = {
+          info: {
+            title: 'Plan de trabajo de ' + this.user.fullname,
+          },
           footer: function(currentPage, pageCount) {
             return {
               text: 'Página ' + currentPage.toString() + ' de ' + pageCount,
@@ -251,7 +254,9 @@ export class TaskWeekComponent implements OnInit {
           pageMargins: [5, 25, 5, 25],
         };
         this.eliminar_dias_relleno();
-        pdfMake.createPdf(this.docDefinition).open();
+        const inicio = moment(this.dia_inicio).format('DD/MM/YYYY').toString();
+        const fin = moment(this.dia_fin).format('DD/MM/YYYY').toString();
+        pdfMake.createPdf(this.docDefinition).download('PT ' + this.user.fullname + ' ' + inicio + '-' + fin);
     });
     // console.log(usrtoprint);
 

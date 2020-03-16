@@ -52,13 +52,13 @@ export class PagesComponent implements OnInit {
           );
         }
       });
-      this.accessChecker.isGranted('view', 'energy').subscribe(granted => {
+      this.accessChecker.isGranted('view', 'workshop').subscribe(granted => {
         if (granted) {
           this.menu.push(
             {
-              title: 'Energía',
-              icon: 'calendar-outline',
-              link: '/pages/dashboard',
+              title: 'Taller',
+              icon: 'monitor-outline',
+              link: '/pages/workshop',
             },
           );
         }
