@@ -8,7 +8,7 @@ describe('NewWRecordComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NewWRecordComponent ]
+      declarations: [ NewWRecordComponent ],
     })
     .compileComponents();
   }));
