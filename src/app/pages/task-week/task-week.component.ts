@@ -15,11 +15,9 @@ import { TaskByDay } from '../../models/TasksByDay';
 import { UserService } from '../../services/user.service';
 import { SelectSubsComponent } from '../select-subs/select-subs.component';
 import { ActivatedRoute } from '@angular/router';
-import { ExportAsService, ExportAsConfig } from 'ngx-export-as';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-const htmlToPdfmake = require('html-to-pdfmake');
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'task-week',
@@ -50,7 +48,6 @@ export class TaskWeekComponent implements OnInit {
     private authService: NbAuthService,
     private dialogService: NbDialogService,
     private route: ActivatedRoute,
-    private exportAsService: ExportAsService,
     ) {
   }
 

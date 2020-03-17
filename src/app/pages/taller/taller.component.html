@@ -1,8 +1,49 @@
 <nb-card fullwidth accent="info">
-  <nb-card-header>
-    Gestión del Taller
-  </nb-card-header>
+  <nb-card-header>Registro de entradas y salidas del taller</nb-card-header>
   <nb-card-body>
-    <p>taller works!</p>
+    <div>
+        <button (click)="openNew()" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+    </div>
+    <div class='table-responsive'>
+      <table id="tablePreview" class="table table-hover table-borderless table-striped table-sm">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>CLIENTE</th>
+            <th>EQUIPO</th>
+            <th>MARCA</th>
+            <th>MODELO</th>
+            <th>INV</th>
+            <th>#SERIE</th>
+            <th>ENTRADA</th>
+            <th>ENTREGA</th>
+            <th>OT</th>
+            <th>ESTADO</th>
+            <th>ESPEC</th>
+            <th>SALIDA</th>
+            <th>RECOGE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let wrecord of wrecords; let i = index">
+            <th scope="row">{{wrecord.cod}}</th>
+            <td>{{wrecord.cliente}}</td>
+            <td>{{wrecord.equipo}}</td>
+            <td>{{wrecord.marca}}</td>
+            <td>{{wrecord.modelo}}</td>
+            <td>{{wrecord.inventario}}</td>
+            <td nbTooltip="{{wrecord.serie}}">{{wrecord.serie | shortSerial}}</td>
+            <td>{{wrecord.fecha_entrada | onlyDate}}</td>
+            <td nbTooltip="{{wrecord.entregado}}">{{wrecord.entregado | shortName}}</td>
+            <td>{{wrecord.ot}}</td>
+            <td>{{wrecord.estado}}</td>
+            <td nbTooltip="{{wrecord.especialista}}">{{wrecord.especialista | shortName}}</td>
+            <td>{{wrecord.fecha_salida | onlyDate}}</td>
+            <td nbTooltip="{{wrecord.recogido}}">{{wrecord.recogido | shortName}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </nb-card-body>
+  <nb-card-footer></nb-card-footer>
 </nb-card>

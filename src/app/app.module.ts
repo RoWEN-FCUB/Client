@@ -53,6 +53,10 @@ import { NbAlertModule, NbCheckboxModule} from '@nebular/theme';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { AuthGuard } from './services/auth-guard.service';
 import { ExportAsModule } from 'ngx-export-as';
+import { NewWRecordComponent } from './pages/new-wrecord/new-wrecord.component';
+// import { ShortSerialPipe } from './pipes/short-serial.pipe';
+// import { ShortNamePipe } from './pipes/short-name.pipe';
+// import { OnlyDatePipe } from './pipes/only-date.pipe';
 // import { UserNamePipe } from './pipes/user-name.pipe';
 // import { DayOfWeekPipe } from './pipes/day-of-week.pipe';
 // import { FormatDateHumanPipe } from './pipes/format-date-human.pipe';
@@ -127,7 +131,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
 @NgModule({
   declarations: [
     AppComponent, UploadImgComponent, NewTaskComponent, NewObsComponent,
-    LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent],
+    LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent],
   imports: [
     ExportAsModule,
     NbSecurityModule,
@@ -178,8 +182,8 @@ export class DefaultIntl extends OwlDateTimeIntl {
     AuthGuard,
     {provide: LOCALE_ID, useValue: 'es'},
   ],
-  exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent],
-  entryComponents: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent],
+  exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent],
+  entryComponents: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {

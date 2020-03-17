@@ -23,6 +23,10 @@ import { FormatDateHumanPipe } from '../pipes/format-date-human.pipe';
 import { DayOfWeekPipe } from '../pipes/day-of-week.pipe';
 import { UserNamePipe } from '../pipes/user-name.pipe';
 import { TallerComponent } from './taller/taller.component';
+import { OnlyDatePipe } from '../pipes/only-date.pipe';
+import { ShortSerialPipe } from '../pipes/short-serial.pipe';
+import { ShortNamePipe } from '../pipes/short-name.pipe';
+// import { NewWRecordComponent } from './new-wrecord/new-wrecord.component';
 @NgModule({
   imports: [
     NbSecurityModule,
@@ -64,6 +68,8 @@ import { TallerComponent } from './taller/taller.component';
     DayOfWeekPipe,
     UserNamePipe,
     TallerComponent,
+    OnlyDatePipe,
+    ShortSerialPipe, ShortNamePipe, // NewWRecordComponent,
     // SelectSubsComponent,
     // NewUserComponent,
     // NewObsComponent,
