@@ -28,6 +28,8 @@ export class NewWRecordComponent implements OnInit {
   device_status: string = 'info';
   marc_status: string = 'info';
   model_status: string = 'info';
+
+
   constructor(protected dialogRef: NbDialogRef<any>, private workshopService: WorkshopService) { }
 
   ngOnInit() {
