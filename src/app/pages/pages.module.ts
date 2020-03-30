@@ -10,7 +10,7 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { NumberPickerModule } from 'ng-number-picker';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+// import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { AdminUsersComponent } from './admin-users/admin-users.component';
 import { TaskWeekComponent } from './task-week/task-week.component';
@@ -30,7 +30,7 @@ import { ShortNamePipe } from '../pipes/short-name.pipe';
 @NgModule({
   imports: [
     NbSecurityModule,
-    NgxMaterialTimepickerModule,
+    // NgxMaterialTimepickerModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     PagesRoutingModule,

@@ -1,34 +1,93 @@
 <nb-card accent="info" size="large">
   <nb-card-header><div class="text-center">Nuevo registro</div></nb-card-header>
   <nb-card-body>
-    <div class="form-group">
-      <label>Cliente:</label>
-      <input type="text" [(ngModel)]="newrecord.cliente" [status]="client_status" list="dynamicClients" nbInput autofocus fullWidth placeholder="Cliente" class="form-control" aria-describedby="clienteHelp">
-      <small id="clienteHelp" class="form-text text-muted">Siglas del Cliente</small>
-      <datalist id="dynamicClients">
-        <option *ngFor="let client of clients" [value]="client.siglas">{{client.siglas}}</option>
-      </datalist>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label>Cliente:</label>
+          <input type="text" (input)="clientChange()" [(ngModel)]="newrecord.cliente" [status]="client_status" list="dynamicClients" nbInput autofocus fullWidth placeholder="Cliente" class="form-control" aria-describedby="clienteHelp">
+          <small id="clienteHelp" class="form-text text-muted">Siglas del Cliente</small>
+          <datalist id="dynamicClients">
+            <option *ngFor="let client of clients" [value]="client.siglas">{{client.siglas}}</option>
+          </datalist>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label>Equipo:</label>
+          <input type="text" (input)="deviceChange()" [(ngModel)]="newrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput autofocus fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
+          <small id="equipoHelp" class="form-text text-muted">Equipo a registrar</small>
+          <datalist id="dynamicDevices">
+            <option *ngFor="let device of devs" [value]="device">{{device}}</option>
+          </datalist>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Equipo:</label>
-      <input type="text" (input)="deviceChange()" [(ngModel)]="newrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput autofocus fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
-      <small id="equipoHelp" class="form-text text-muted">Equipo a dar entrada</small>
-      <datalist id="dynamicDevices">
-        <option *ngFor="let device of devs" [value]="device">{{device}}</option>
-      </datalist>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label>Marca:</label>
+          <input type="text" (input)="marcChange()" [(ngModel)]="newrecord.marca" [status]="marc_status" list="dynamicMarcs" nbInput fullWidth placeholder="Marca" class="form-control" aria-describedby="marcaHelp">
+          <small id="marcaHelp" class="form-text text-muted">Marca del equipo a registrar</small>
+          <datalist id="dynamicMarcs">
+            <option *ngFor="let marc of marcs" [value]="marc">{{marc}}</option>
+          </datalist>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label>Modelo:</label>
+          <input type="text" (input)="modelChange()" [(ngModel)]="newrecord.modelo" [status]="model_status" list="dynamicModels" nbInput fullWidth placeholder="Modelo" class="form-control" aria-describedby="modelHelp">
+          <small id="modelHelp" class="form-text text-muted">Modelo del equipo a registrar</small>
+          <datalist id="dynamicModels">
+            <option *ngFor="let model of models" [value]="model">{{model}}</option>
+          </datalist>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Marca:</label>
-      <input type="text" (input)="marcChange()" [(ngModel)]="newrecord.marca" [status]="marc_status" list="dynamicMarcs" nbInput autofocus fullWidth placeholder="Marca" class="form-control" aria-describedby="marcaHelp">
-      <small id="marcaHelp" class="form-text text-muted">Marca del equipo a registrar</small>
-      <datalist id="dynamicMarcs">
-        <option *ngFor="let marc of marcs" [value]="marc">{{marc}}</option>
-      </datalist>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label>Inventario:</label>
+          <input type="text" (input)="invChange()" [(ngModel)]="newrecord.inventario" [status]="inv_status" nbInput fullWidth placeholder="Inventario" class="form-control" aria-describedby="invHelp">
+          <small id="invHelp" class="form-text text-muted">Inventario del equipo a registrar</small>      
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label>Serie:</label>
+          <input type="text" (input)="serialChange()" [(ngModel)]="newrecord.serie" [status]="serial_status" list="dynamicSerials" nbInput fullWidth placeholder="Serie" class="form-control" aria-describedby="serialHelp">
+          <small id="serialHelp" class="form-text text-muted">Número de serie del equipo a registrar</small>
+          <datalist id="dynamicSerials">
+            <option *ngFor="let serial of serials" [value]="serial">{{serial}}</option>
+          </datalist>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label>Fecha de entrada:</label>
+          <input type="text" [nbDatepicker]="datepicker" [(ngModel)]="newrecord.fecha_entrada" [status]="date_received_status" nbInput fullWidth placeholder="Fecha entrada" class="form-control" aria-describedby="dateHelp">
+          <small id="dateHelp" class="form-text text-muted">Fecha en la que se le da entrada al equipo</small>   
+          <nb-datepicker #datepicker></nb-datepicker>   
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label>Entrega:</label>
+          <input type="text" (input)="nameChange()" [(ngModel)]="newrecord.entregado" [status]="deliver_status" list="dynamicNames" nbInput fullWidth placeholder="Nombre" class="form-control" aria-describedby="nameHelp">
+          <small id="nameHelp" class="form-text text-muted">Nombre de la persona que entrega el equipo</small>
+          <datalist id="dynamicNames">
+            <option *ngFor="let name of names" [value]="name">{{name}}</option>
+          </datalist>
+        </div>
+      </div>
     </div>
   </nb-card-body>
   <nb-card-footer>
     <div class="float-right row">
-      <button nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+      <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
       <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
     </div>
   </nb-card-footer>

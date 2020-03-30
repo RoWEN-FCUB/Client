@@ -50,7 +50,7 @@ import { NewObsComponent } from './pages/new-obs/new-obs.component';
 import { NewUserComponent } from './pages/new-user/new-user.component';
 import { SelectSubsComponent } from './pages/select-subs/select-subs.component';
 import { NbAlertModule, NbCheckboxModule} from '@nebular/theme';
-import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+// import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { AuthGuard } from './services/auth-guard.service';
 import { ExportAsModule } from 'ngx-export-as';
 import { NewWRecordComponent } from './pages/new-wrecord/new-wrecord.component';
@@ -148,7 +148,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     OwlNativeDateTimeModule,
     NbAlertModule,
     NbCheckboxModule,
-    NgxMaterialTimepickerModule,
+    // NgxMaterialTimepickerModule,
     ThemeModule.forRoot(),
     NbCardModule,
     NbInputModule,

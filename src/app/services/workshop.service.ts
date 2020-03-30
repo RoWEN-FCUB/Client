@@ -22,4 +22,8 @@ export class WorkshopService {
   getWDevices() {
     return this.http.get(ipserver + 'workshop/devices', {responseType: 'json'});
   }
+
+  getWNames() {
+    return this.http.get(ipserver + 'workshop/names', {responseType: 'json'});
+  }
 }
