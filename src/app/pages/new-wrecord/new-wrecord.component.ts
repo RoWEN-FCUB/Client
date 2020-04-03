@@ -5,13 +5,14 @@ import { WClient } from '../../models/WClient';
 import { WDevice } from '../../models/WDevice';
 import { WorkshopService } from '../../services/workshop.service';
 import Swal from 'sweetalert2';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'new-wrecord',
   templateUrl: './new-wrecord.component.html',
   styleUrls: ['./new-wrecord.component.scss'],
 })
-export class NewWRecordComponent implements OnInit {
+export class NewWRecordComponent implements OnInit {  
 
   clients: WClient[];
   devices: WDevice[];
@@ -29,6 +30,7 @@ export class NewWRecordComponent implements OnInit {
     serie: '',
     fecha_entrada: new Date(),
     entregado: '',
+    especialista: '',
   };
   client_status: string = 'info';
   device_status: string = 'info';
@@ -38,14 +40,18 @@ export class NewWRecordComponent implements OnInit {
   serial_status: string = 'info';
   date_received_status: string = 'info';
   deliver_status: string = 'info';
+  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: ''};
 
-
-  constructor(protected dialogRef: NbDialogRef<any>, private workshopService: WorkshopService) { }
+  constructor(protected dialogRef: NbDialogRef<any>, private workshopService: WorkshopService, private authService: NbAuthService) { }
 
   ngOnInit() {
     this.workshopService.getWClients().subscribe((res: WClient[]) => {
       this.clients = res;
       // console.log(this.clients);
+    });
+    const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
+      this.user = token.getPayload();
+      this.newrecord.especialista = this.user.fullname;
     });
     this.workshopService.getWDevices().subscribe((res: WDevice[]) => {
       this.devices = res;
@@ -175,9 +181,37 @@ export class NewWRecordComponent implements OnInit {
     } else if (this.marc_status === 'danger' || this.newrecord.marca === '') {
       Toast.fire({
         type: 'error',
-        title: 'Debe escribir una marca válido.',
+        title: 'Debe escribir una marca válida.',
       });
       this.marc_status = 'danger';
+      return false;
+    } else if (this.model_status === 'danger' || this.newrecord.modelo === '') {
+      Toast.fire({
+        type: 'error',
+        title: 'Debe escribir una modelo válido.',
+      });
+      this.model_status = 'danger';
+      return false;
+    } else if (this.inv_status === 'danger' || this.newrecord.inventario === '') {
+      Toast.fire({
+        type: 'error',
+        title: 'Debe escribir un número de inventario válido.',
+      });
+      this.inv_status = 'danger';
+      return false;
+    } else if (this.serial_status === 'danger' || this.newrecord.serie === '') {
+      Toast.fire({
+        type: 'error',
+        title: 'Debe escribir un número de serie válido.',
+      });
+      this.serial_status = 'danger';
+      return false;
+    } else if (this.deliver_status === 'danger' || this.newrecord.entregado === '') {
+      Toast.fire({
+        type: 'error',
+        title: 'Debe escribir correctamente el nombre de la persona que entrega el equipo.',
+      });
+      this.deliver_status = 'danger';
       return false;
     }
     return true;
