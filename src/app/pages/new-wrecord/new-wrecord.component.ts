@@ -12,7 +12,7 @@ import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
   templateUrl: './new-wrecord.component.html',
   styleUrls: ['./new-wrecord.component.scss'],
 })
-export class NewWRecordComponent implements OnInit {  
+export class NewWRecordComponent implements OnInit {
 
   clients: WClient[];
   devices: WDevice[];
