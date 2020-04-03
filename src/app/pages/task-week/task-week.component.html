@@ -42,7 +42,7 @@
                   <div class="table-responsive">
                       <table id="tablePreview" class="table-borderless" width="100%">
                         <tr>
-                          <td width="5%" scope="row">{{i+1}} - </td>
+                          <td width="5%" scope="row" nbTooltip="ID:{{task.id}}">{{i+1}} - </td>
                           <td width="35%">{{task.resumen}}</td>
                           <td width="20%">
                             <span>{{task.fecha_inicio | formatTime: task.duracion}}</span>
