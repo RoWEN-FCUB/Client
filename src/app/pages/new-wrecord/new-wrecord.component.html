@@ -5,23 +5,43 @@
       <div class="col">
         <div class="form-group">
           <label>Cliente:</label>
-          <input type="text" (input)="clientChange()" [(ngModel)]="newrecord.cliente" [status]="client_status" list="dynamicClients" nbInput autofocus fullWidth placeholder="Cliente" class="form-control" aria-describedby="clienteHelp">
+          <input type="text" (input)="clientChange()" [(ngModel)]="newrecord.cliente" [status]="client_status" list="dynamicClients" nbInput autofocus fullWidth placeholder="Siglas" class="form-control" aria-describedby="clienteHelp">
           <small id="clienteHelp" class="form-text text-muted">Siglas del Cliente.</small>
           <datalist id="dynamicClients">
             <option *ngFor="let client of clients" [value]="client.siglas">{{client.siglas}}</option>
           </datalist>
         </div>
       </div>
-      <div class="col">
+      <div class="col" *ngIf="show_client_name">
+        <div class="form-group">
+          <label>Nombre del cliente:</label>
+          <input type="text" (input)="clientNameChange()" [(ngModel)]="newrecord.cliente_nombre" [status]="client_name_status" nbInput fullWidth placeholder="Nombre del cliente" class="form-control" aria-describedby="clienteNHelp">
+          <small id="clienteNHelp" class="form-text text-muted">Nombre del Cliente.</small>          
+        </div>
+      </div>
+      <div class="col" *ngIf="!show_client_name">
         <div class="form-group">
           <label>Equipo:</label>
-          <input type="text" (input)="deviceChange()" [(ngModel)]="newrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput autofocus fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
+          <input type="text" (input)="deviceChange()" [(ngModel)]="newrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
           <small id="equipoHelp" class="form-text text-muted">Equipo a registrar.</small>
           <datalist id="dynamicDevices">
             <option *ngFor="let device of devs" [value]="device">{{device}}</option>
           </datalist>
         </div>
       </div>
+    </div>
+    <div class="row" *ngIf="show_client_name">
+      <div class="col">
+        <div class="form-group">
+          <label>Equipo:</label>
+          <input type="text" (input)="deviceChange()" [(ngModel)]="newrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
+          <small id="equipoHelp" class="form-text text-muted">Equipo a registrar.</small>
+          <datalist id="dynamicDevices">
+            <option *ngFor="let device of devs" [value]="device">{{device}}</option>
+          </datalist>
+        </div>
+      </div>
+      <div class="col"></div>
     </div>
     <div class="row">
       <div class="col">
@@ -49,8 +69,11 @@
       <div class="col">
         <div class="form-group">
           <label>Inventario:</label>
-          <input type="text" (input)="invChange()" [(ngModel)]="newrecord.inventario" [status]="inv_status" nbInput fullWidth placeholder="Inventario" class="form-control" aria-describedby="invHelp">
-          <small id="invHelp" class="form-text text-muted">Inventario del equipo a registrar.</small>      
+          <input type="text" (input)="invChange()" [(ngModel)]="newrecord.inventario" [status]="inv_status" list="dynamicInventaries" nbInput fullWidth placeholder="Inventario" class="form-control" aria-describedby="invHelp">
+          <small id="invHelp" class="form-text text-muted">Inventario del equipo a registrar.</small> 
+          <datalist id="dynamicInventaries">
+            <option *ngFor="let inv of inventaries" [value]="inv">{{inv}}</option>
+          </datalist>     
         </div>
       </div>
       <div class="col">

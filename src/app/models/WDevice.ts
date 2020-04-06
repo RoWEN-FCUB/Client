@@ -4,4 +4,5 @@ export interface WDevice {
   marca?: string;
   modelo?: string;
   serie?: string;
+  inventario?: string;
 }

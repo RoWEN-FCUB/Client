@@ -48,22 +48,7 @@ export class TallerComponent implements OnInit {
     this.dialogService.open(NewWRecordComponent).onClose.subscribe(
       (newWRecord) => {
         if (newWRecord) {
-          /*newTask.task.nombre_creador = this.user.name;
-          this.taskService.saveTask(newTask).subscribe(
-            res => {
-              this.getTaskinRange();
-              const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-              });
-              Toast.fire({
-                type: 'success',
-                title: 'Tarea creada.',
-              });
-            },
-          );*/
+          this.getAllWRecords();
         }
       },
     );

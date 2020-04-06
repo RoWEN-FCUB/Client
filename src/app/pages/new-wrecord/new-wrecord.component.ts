@@ -20,6 +20,7 @@ export class NewWRecordComponent implements OnInit {
   marcs: string[];
   models: string[];
   serials: string[];
+  inventaries: string[];
   names: string[];
   newrecord: WRecord = {
     cliente: '',
@@ -31,8 +32,10 @@ export class NewWRecordComponent implements OnInit {
     fecha_entrada: new Date(),
     entregado: '',
     especialista: '',
+    cliente_nombre: '',
   };
   client_status: string = 'info';
+  client_name_status: string = 'info';
   device_status: string = 'info';
   marc_status: string = 'info';
   model_status: string = 'info';
@@ -41,7 +44,7 @@ export class NewWRecordComponent implements OnInit {
   date_received_status: string = 'info';
   deliver_status: string = 'info';
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: ''};
-
+  show_client_name: boolean = false;
   constructor(protected dialogRef: NbDialogRef<any>, private workshopService: WorkshopService, private authService: NbAuthService) { }
 
   ngOnInit() {
@@ -71,11 +74,28 @@ export class NewWRecordComponent implements OnInit {
   }
 
   clientChange() {
-    const regexp = new RegExp(/^[A-Z]{4,20}$/);
+    const regexp = new RegExp(/^[A-Z]{2,20}$/);
     if (regexp.test(this.newrecord.cliente)) {
       this.client_status = 'success';
     } else {
       this.client_status = 'danger';
+    }
+    this.show_client_name = true;
+    for (let i = 0; i < this.clients.length; i++) {
+      if (this.clients[i].siglas === this.newrecord.cliente) {
+        this.show_client_name = false;
+        this.newrecord.cliente_nombre = '';
+        break;
+      }
+    }
+  }
+
+  clientNameChange() {
+    const nameregexp = new RegExp(/^([A-ZÑ]{1}[a-záéíóúñ]+\s?)+$/);
+    if (nameregexp.test(this.newrecord.cliente_nombre)) {
+      this.client_name_status = 'success';
+    } else {
+      this.client_name_status = 'danger';
     }
   }
 
@@ -88,7 +108,7 @@ export class NewWRecordComponent implements OnInit {
         }
       }
     }
-    const regexp = new RegExp(/^[a-zA-Z]{4,20}$/);
+    const regexp = new RegExp(/^([A-ZÑ]{1}[a-záéíóúñ]+\s?)+$/);
     if (regexp.test(this.newrecord.equipo)) {
       this.device_status = 'success';
     } else {
@@ -99,7 +119,7 @@ export class NewWRecordComponent implements OnInit {
   marcChange() {
     this.models = [];
     for (let i = 0; i < this.devices.length; i++) {
-      if (this.devices[i].marca === this.newrecord.marca) {
+      if (this.devices[i].marca === this.newrecord.marca && this.devices[i].equipo === this.newrecord.equipo) {
         if (!this.models.includes(this.devices[i].modelo)) {
           this.models.push(this.devices[i].modelo);
         }
@@ -115,10 +135,14 @@ export class NewWRecordComponent implements OnInit {
 
   modelChange() {
     this.serials = [];
+    this.inventaries = [];
     for (let i = 0; i < this.devices.length; i++) {
       if (this.devices[i].modelo === this.newrecord.modelo) {
         if (!this.serials.includes(this.devices[i].serie)) {
           this.serials.push(this.devices[i].serie);
+        }
+        if (!this.inventaries.includes(this.devices[i].inventario)) {
+          this.inventaries.push(this.devices[i].inventario);
         }
       }
     }
@@ -171,6 +195,13 @@ export class NewWRecordComponent implements OnInit {
       });
       this.client_status = 'danger';
       return false;
+    } else if (this.show_client_name && (this.client_name_status === 'danger' || this.newrecord.cliente_nombre === '')) {
+      Toast.fire({
+        type: 'error',
+        title: 'Debe escribir un nombre de cliente válido.',
+      });
+      this.client_name_status = 'danger';
+      return false;
     } else if (this.device_status === 'danger' || this.newrecord.equipo === '') {
       Toast.fire({
         type: 'error',
@@ -219,7 +250,20 @@ export class NewWRecordComponent implements OnInit {
 
   save() {
     if (this.validate()) {
-
+      // console.log(this.newrecord);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+      });
+      this.workshopService.saveRecord(this.newrecord).subscribe(res => {
+        Toast.fire({
+          type: 'success',
+          title: 'Registro guardado correctamente.',
+        });
+        this.dialogRef.close(this.newrecord);
+      });
     }
   }
 

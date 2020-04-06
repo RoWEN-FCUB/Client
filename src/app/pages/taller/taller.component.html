@@ -27,7 +27,7 @@
         <tbody>
           <tr *ngFor="let wrecord of wrecords; let i = index">
             <th scope="row">{{wrecord.cod}}</th>
-            <td>{{wrecord.cliente}}</td>
+            <td nbTooltip="{{wrecord.cliente_nombre}}">{{wrecord.cliente}}</td>
             <td>{{wrecord.equipo}}</td>
             <td>{{wrecord.marca}}</td>
             <td>{{wrecord.modelo}}</td>

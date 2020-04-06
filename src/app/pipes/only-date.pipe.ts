@@ -6,8 +6,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class OnlyDatePipe implements PipeTransform {
 
   transform(value: Date): string {
-    const d = value.toString();
-    return d.substr(0, d.indexOf('T'));
+    if (value) {
+      const d = value.toString();
+      return d.substr(0, d.indexOf('T'));
+    }
+    return '';
   }
-
 }

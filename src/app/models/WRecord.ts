@@ -14,4 +14,5 @@ export interface WRecord {
   especialista?: string;
   fecha_salida?: Date;
   recogido?: string;
+  cliente_nombre?: string;
 }

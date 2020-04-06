@@ -26,4 +26,8 @@ export class WorkshopService {
   getWNames() {
     return this.http.get(ipserver + 'workshop/names', {responseType: 'json'});
   }
+
+  saveRecord(record: WRecord) {
+    return this.http.post(ipserver + 'workshop', record);
+  }
 }
