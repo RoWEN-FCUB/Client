@@ -8,7 +8,7 @@ describe('UpdtWRecordComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UpdtWRecordComponent ]
+      declarations: [ UpdtWRecordComponent ],
     })
     .compileComponents();
   }));
