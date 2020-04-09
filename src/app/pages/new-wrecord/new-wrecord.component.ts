@@ -33,6 +33,7 @@ export class NewWRecordComponent implements OnInit {
     entregado: '',
     especialista: '',
     cliente_nombre: '',
+    estado: 'P',
   };
   client_status: string = 'info';
   client_name_status: string = 'info';

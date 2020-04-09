@@ -25,7 +25,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let wrecord of wrecords; let i = index">
+          <tr *ngFor="let wrecord of wrecords; let i = index" (click)="openUpdt(i)">
             <th scope="row">{{wrecord.cod}}</th>
             <td nbTooltip="{{wrecord.cliente_nombre}}">{{wrecord.cliente}}</td>
             <td>{{wrecord.equipo}}</td>
@@ -36,7 +36,7 @@
             <td>{{wrecord.fecha_entrada | onlyDate}}</td>
             <td nbTooltip="{{wrecord.entregado}}">{{wrecord.entregado | shortName}}</td>
             <td>{{wrecord.ot}}</td>
-            <td>{{wrecord.estado}}</td>
+            <td nbTooltip="{{wrecord.estado | stateDescription}}"><span [ngStyle]="wrecord.estado | deviceState">{{wrecord.estado}}</span></td>
             <td nbTooltip="{{wrecord.especialista}}">{{wrecord.especialista | shortName}}</td>
             <td>{{wrecord.fecha_salida | onlyDate}}</td>
             <td nbTooltip="{{wrecord.recogido}}">{{wrecord.recogido | shortName}}</td>

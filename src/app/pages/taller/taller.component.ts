@@ -14,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { NewWRecordComponent } from '../new-wrecord/new-wrecord.component';
+import { UpdtWRecordComponent } from '../updt-wrecord/updt-wrecord.component';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -48,6 +49,16 @@ export class TallerComponent implements OnInit {
     this.dialogService.open(NewWRecordComponent).onClose.subscribe(
       (newWRecord) => {
         if (newWRecord) {
+          this.getAllWRecords();
+        }
+      },
+    );
+  }
+
+  openUpdt(i: number) {
+    this.dialogService.open(UpdtWRecordComponent, {context: {wrecord: Object.assign({}, this.wrecords[i])}}).onClose.subscribe(
+      (updtrecord) => {
+        if (updtrecord) {
           this.getAllWRecords();
         }
       },

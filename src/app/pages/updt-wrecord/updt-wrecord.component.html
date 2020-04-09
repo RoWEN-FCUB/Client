@@ -1,0 +1,55 @@
+<nb-card accent="info" size="large">
+    <nb-card-header><div class="text-center">Actualizar datos de: {{wrecord.equipo}} {{wrecord.marca}} {{wrecord.modelo}}</div></nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>Orden de trabajo:</label>
+                <input type="text" (input)="otChange()" [(ngModel)]="wrecord.ot" [status]="ot_status" nbInput autofocus fullWidth placeholder="Orden de trabajo" class="form-control" aria-describedby="otHelp">
+                <small id="otHelp" class="form-text text-muted">Número de la orden de trabajo.</small>            
+            </div>
+        </div>        
+      </div>
+      <div class="row">
+          <div class="col">
+            <div class="form-group">
+                <label style="margin-right: 2px;">Estado:</label>
+                <nb-select (selectedChange)="updtDeviceStatus()" hero placeholder="----" [status]="state_status" [selected]="wrecord.estado" [(ngModel)]="wrecord.estado">
+                    <nb-option value="P">Pendiente</nb-option>
+                    <nb-option value="R">Reparado</nb-option>
+                    <nb-option value="D">Diagnosticado</nb-option>
+                </nb-select>
+                <small id="stateHelp" class="form-text text-muted">Estado del equipo.</small>            
+            </div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col">
+            <div class="form-group">
+              <label>Fecha de salida:</label>
+              <input type="text" [nbDatepicker]="datepicker" [(ngModel)]="wrecord.fecha_salida" nbInput fullWidth placeholder="Fecha salida" class="form-control" aria-describedby="dateHelp">
+              <small id="dateHelp" class="form-text text-muted">Fecha en la que se le da salida al equipo.</small>   
+              <nb-datepicker #datepicker></nb-datepicker>   
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>Recoge:</label>
+                <input type="text" [(ngModel)]="wrecord.recogido" list="dynamicNames" nbInput fullWidth placeholder="Nombre" class="form-control" aria-describedby="nameHelp">
+                <small id="nameHelp" class="form-text text-muted">Nombre de la persona que recoge el equipo.</small>
+                <datalist id="dynamicNames">
+                    <option *ngFor="let name of names" [value]="name">{{name}}</option>
+                </datalist>
+            </div>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="float-right row">
+        <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Actualizar</button>
+        <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+      </div>
+    </nb-card-footer>
+  </nb-card>

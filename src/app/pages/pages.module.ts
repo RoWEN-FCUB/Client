@@ -26,6 +26,9 @@ import { TallerComponent } from './taller/taller.component';
 import { OnlyDatePipe } from '../pipes/only-date.pipe';
 import { ShortSerialPipe } from '../pipes/short-serial.pipe';
 import { ShortNamePipe } from '../pipes/short-name.pipe';
+import { DeviceStatePipe } from '../pipes/device-state.pipe';
+import { StateDescriptionPipe } from '../pipes/state-description.pipe';
+// import { UpdtWRecordComponent } from './updt-wrecord/updt-wrecord.component';
 // import { NewWRecordComponent } from './new-wrecord/new-wrecord.component';
 @NgModule({
   imports: [
@@ -69,7 +72,9 @@ import { ShortNamePipe } from '../pipes/short-name.pipe';
     UserNamePipe,
     TallerComponent,
     OnlyDatePipe,
-    ShortSerialPipe, ShortNamePipe, // NewWRecordComponent,
+    DeviceStatePipe,
+    StateDescriptionPipe,
+    ShortSerialPipe, ShortNamePipe, // UpdtWRecordComponent, // NewWRecordComponent,
     // SelectSubsComponent,
     // NewUserComponent,
     // NewObsComponent,
