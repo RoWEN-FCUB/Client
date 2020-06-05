@@ -124,12 +124,14 @@ export class TaskWeekComponent implements OnInit {
                     }],
                     [{
                       border: [false, false, false, false],
-                      ol: this.tareas_por_dias[i * 7 + j].tasks.map(function(task) {
+                      ol: this.tareas_por_dias[i * 7 + j].tasks.filter(function(task) {
                         if (task.estado !== 'Cancelada') {
-                          return task.resumen;
+                          return true;
                         } else {
-                          return null;
+                          return false;
                         }
+                      }).map(function(task) {
+                        return task.resumen;
                       }),
                     }]],
                   },
