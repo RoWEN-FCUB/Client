@@ -38,6 +38,8 @@ import {
   NbAccordionModule,
   NbBadgeModule,
   NbListModule,
+  NbCheckboxModule,
+  NbAlertModule,
 } from '@nebular/theme';
 import { FormsModule } from '@angular/forms';
 import { NumberPickerModule } from 'ng-number-picker';
@@ -49,12 +51,12 @@ import { NewTaskComponent } from './pages/new-task/new-task.component';
 import { NewObsComponent } from './pages/new-obs/new-obs.component';
 import { NewUserComponent } from './pages/new-user/new-user.component';
 import { SelectSubsComponent } from './pages/select-subs/select-subs.component';
-import { NbAlertModule, NbCheckboxModule} from '@nebular/theme';
 // import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { AuthGuard } from './services/auth-guard.service';
 import { ExportAsModule } from 'ngx-export-as';
 import { NewWRecordComponent } from './pages/new-wrecord/new-wrecord.component';
 import { UpdtWRecordComponent } from './pages/updt-wrecord/updt-wrecord.component';
+import { AnalyticsService } from './@core/utils/analytics.service';
 // import { StateDescriptionPipe } from './pipes/state-description.pipe';
 // import { DeviceStatePipe } from './pipes/device-state.pipe';
 // import { ShortSerialPipe } from './pipes/short-serial.pipe';
@@ -151,7 +153,6 @@ export class DefaultIntl extends OwlDateTimeIntl {
     OwlNativeDateTimeModule,
     NbAlertModule,
     NbCheckboxModule,
-    // NgxMaterialTimepickerModule,
     ThemeModule.forRoot(),
     NbCardModule,
     NbInputModule,
@@ -184,6 +185,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     {provide: OwlDateTimeIntl, useClass: DefaultIntl},
     AuthGuard,
     {provide: LOCALE_ID, useValue: 'es'},
+    // AnalyticsService,
   ],
   exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
             NewWRecordComponent, UpdtWRecordComponent],

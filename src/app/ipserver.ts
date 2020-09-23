@@ -1,3 +1,5 @@
-const ipserver = 'http://127.0.0.1:3000/';
+// const ipserver = 'http://app-f2a3c51f-6e3a-4980-a984-74bda65da601.cleverapps.io/';
+const ipserver = 'http://104.207.147.123:3128/';
+// const ipserver = 'http://localhost:3128/';
 export default ipserver;
 

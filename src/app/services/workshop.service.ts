@@ -30,4 +30,8 @@ export class WorkshopService {
   saveRecord(record: WRecord) {
     return this.http.post(ipserver + 'workshop', record);
   }
+
+  updateRecord(id: number, record: WRecord) {
+    return this.http.put(ipserver + 'workshop/' + id, record);
+  }
 }

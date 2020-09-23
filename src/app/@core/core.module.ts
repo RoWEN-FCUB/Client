@@ -46,12 +46,13 @@ export const NB_CORE_PROVIDERS = [
         name: 'email',
         token: {
           class: NbAuthJWTToken,
-          key: 'token',
+          // key: 'token',
         },
-        baseEndpoint: '',
+        // baseEndpoint: 'http://app-f2a3c51f-6e3a-4980-a984-74bda65da601.cleverapps.io/',
+        baseEndpoint: 'http://104.207.147.123:3128/',
+        // baseEndpoint: 'http://localhost:3128/',
         login: {
-          // ...
-          endpoint: ipserver + 'user/login',
+          endpoint: 'user/login',
           method: 'post',
           redirect: {
             success: '/',

@@ -41,6 +41,15 @@ export class UpdtWRecordComponent implements OnInit {
     }
   }
 
+  receiverChange() {
+    const nameregexp = new RegExp(/^([A-ZÑ]{1}[a-záéíóúñ]+\s?)+$/);
+    if (nameregexp.test(this.wrecord.recogido)) {
+      this.receiver_status = 'success';
+    } else {
+      this.receiver_status = 'danger';
+    }
+  }
+
   updtDeviceStatus() {
     switch (this.wrecord.estado) {
       case 'P':
@@ -55,8 +64,47 @@ export class UpdtWRecordComponent implements OnInit {
     }
   }
 
-  save() {
+  validate() {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+    });
+    if (this.ot_status === 'danger' || this.wrecord.ot === '') {
+      Toast.fire({
+        type: 'error',
+        title: 'Debe escribir una orden de trabajo válida.',
+      });
+      this.ot_status = 'danger';
+      return false;
+    } else if (this.receiver_status === 'danger' || this.wrecord.recogido === '') {
+      Toast.fire({
+        type: 'error',
+        title: 'Debe escribir correctamente el nombre de la persona que recoge el equipo.',
+      });
+      this.receiver_status = 'danger';
+      return false;
+    }
+    return true;
+  }
 
+  save() {
+    if (this.validate()) {
+      this.workshopService.updateRecord(this.wrecord.id, this.wrecord).subscribe(res => {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+        });
+        Toast.fire({
+          type: 'success',
+          title: 'Registro actualizado correctamente.',
+        });
+        this.dialogRef.close(this.wrecord);
+      });
+    }
   }
 
   close() {

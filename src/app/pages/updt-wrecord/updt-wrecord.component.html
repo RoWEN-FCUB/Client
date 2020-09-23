@@ -37,7 +37,7 @@
         <div class="col">
             <div class="form-group">
                 <label>Recoge:</label>
-                <input type="text" [(ngModel)]="wrecord.recogido" list="dynamicNames" nbInput fullWidth placeholder="Nombre" class="form-control" aria-describedby="nameHelp">
+                <input type="text" (input)="receiverChange()" [(ngModel)]="wrecord.recogido" list="dynamicNames" nbInput fullWidth placeholder="Nombre" class="form-control" aria-describedby="nameHelp">
                 <small id="nameHelp" class="form-text text-muted">Nombre de la persona que recoge el equipo.</small>
                 <datalist id="dynamicNames">
                     <option *ngFor="let name of names" [value]="name">{{name}}</option>
