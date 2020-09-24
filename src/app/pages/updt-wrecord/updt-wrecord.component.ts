@@ -18,6 +18,7 @@ export class UpdtWRecordComponent implements OnInit {
   names: string[];
   ot_status: string = 'info';
   receiver_status: string = 'info';
+  status_description: string = '';
 
   constructor(protected dialogRef: NbDialogRef<any>, private workshopService: WorkshopService, private authService: NbAuthService) { }
 
@@ -54,12 +55,15 @@ export class UpdtWRecordComponent implements OnInit {
     switch (this.wrecord.estado) {
       case 'P':
         this.state_status = 'info';
+        this.status_description = 'El equipo aún no se diagnostica.';
         break;
       case 'R':
         this.state_status = 'success';
+        this.status_description = 'El equipo está reparado.';
         break;
       case 'D':
         this.state_status = 'danger';
+        this.status_description = 'El equipo no se pudo reparar.';
         break;
     }
   }
@@ -71,14 +75,14 @@ export class UpdtWRecordComponent implements OnInit {
       showConfirmButton: false,
       timer: 3000,
     });
-    if (this.ot_status === 'danger' || this.wrecord.ot === '') {
+    if (this.ot_status !== 'success' || this.wrecord.ot === '') {
       Toast.fire({
         type: 'error',
         title: 'Debe escribir una orden de trabajo válida.',
       });
       this.ot_status = 'danger';
       return false;
-    } else if (this.receiver_status === 'danger' || this.wrecord.recogido === '') {
+    } else if (this.receiver_status !== 'success' || this.wrecord.recogido === '') {
       Toast.fire({
         type: 'error',
         title: 'Debe escribir correctamente el nombre de la persona que recoge el equipo.',

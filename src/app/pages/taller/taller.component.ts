@@ -26,6 +26,8 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export class TallerComponent implements OnInit {
 
   wrecords: WRecord[];
+  search_status: string = 'info';
+  search_string: string = '';
 
   constructor(private userService: UserService,
     private workshopService: WorkshopService,
@@ -42,6 +44,21 @@ export class TallerComponent implements OnInit {
       this.wrecords = res;
       // console.log(this.wrecords);
     });
+  }
+
+  search() {
+    // console.log(this.search_string);
+    if (this.search_string !== '') {
+      this.workshopService.searchRecord(this.search_string).subscribe((res: WRecord[]) => {
+        this.wrecords = res;
+        // console.log(this.wrecords);
+      });
+    } else {
+      this.workshopService.getWRecords().subscribe((res: WRecord[]) => {
+        this.wrecords = res;
+        // console.log(this.wrecords);
+      });
+    }
   }
 
   openNew() {

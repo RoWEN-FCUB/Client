@@ -15,4 +15,5 @@ export interface WRecord {
   fecha_salida?: Date;
   recogido?: string;
   cliente_nombre?: string;
+  id_superior?: number;
 }

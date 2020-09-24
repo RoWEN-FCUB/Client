@@ -34,4 +34,8 @@ export class WorkshopService {
   updateRecord(id: number, record: WRecord) {
     return this.http.put(ipserver + 'workshop/' + id, record);
   }
+
+  searchRecord(strtofind: string) {
+    return this.http.get(ipserver + 'workshop/search/' + strtofind);
+  }
 }
