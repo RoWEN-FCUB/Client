@@ -1,14 +1,11 @@
 import {
-  Component, OnInit, Input, ViewChild, ElementRef,
+  Component, OnInit,
 } from '@angular/core';
 import { WorkshopService } from '../../services/workshop.service';
-import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { NbAuthService } from '@nebular/auth';
 import { WRecord } from '../../models/WRecord';
 import { NbDialogService } from '@nebular/theme';
-import * as moment from 'moment';
 import 'moment/min/locales';
-import Swal from 'sweetalert2';
-import { User } from '../../models/User';
 import { UserService } from '../../services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import pdfMake from 'pdfmake/build/pdfmake';
@@ -25,40 +22,43 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 })
 export class TallerComponent implements OnInit {
 
-  wrecords: WRecord[];
+  wrecords: WRecord[] = [];
   search_status: string = 'info';
   search_string: string = '';
+  config: any;
 
   constructor(private userService: UserService,
     private workshopService: WorkshopService,
     private authService: NbAuthService,
     private dialogService: NbDialogService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute) {
+      this.config = {
+        itemsPerPage: 10,
+        currentPage: 1,
+        totalItems: 0,
+      };
+    }
 
   ngOnInit() {
-    this.getAllWRecords();
+    this.search();
   }
 
-  getAllWRecords() {
-    this.workshopService.getWRecords().subscribe((res: WRecord[]) => {
-      this.wrecords = res;
-      // console.log(this.wrecords);
-    });
+  pageChanged(event) {
+    this.config.currentPage = event;
+    this.search();
   }
 
   search() {
     // console.log(this.search_string);
+    let strtosearch = 'null';
     if (this.search_string !== '') {
-      this.workshopService.searchRecord(this.search_string).subscribe((res: WRecord[]) => {
-        this.wrecords = res;
-        // console.log(this.wrecords);
-      });
-    } else {
-      this.workshopService.getWRecords().subscribe((res: WRecord[]) => {
-        this.wrecords = res;
-        // console.log(this.wrecords);
-      });
+      strtosearch = this.search_string;
     }
+    this.workshopService.searchRecord(strtosearch, this.config.currentPage).subscribe((res: {total, wrecords}) => {
+      this.config.totalItems = res.total;
+      this.wrecords = res.wrecords;
+      // console.log(this.wrecords);
+    });
   }
 
   openNew() {
@@ -66,7 +66,7 @@ export class TallerComponent implements OnInit {
     this.dialogService.open(NewWRecordComponent).onClose.subscribe(
       (newWRecord) => {
         if (newWRecord) {
-          this.getAllWRecords();
+          this.search();
         }
       },
     );
@@ -76,7 +76,7 @@ export class TallerComponent implements OnInit {
     this.dialogService.open(UpdtWRecordComponent, {context: {wrecord: Object.assign({}, this.wrecords[i])}}).onClose.subscribe(
       (updtrecord) => {
         if (updtrecord) {
-          this.getAllWRecords();
+          this.search();
         }
       },
     );

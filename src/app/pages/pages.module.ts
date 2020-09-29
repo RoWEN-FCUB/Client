@@ -30,6 +30,7 @@ import { DeviceStatePipe } from '../pipes/device-state.pipe';
 import { StateDescriptionPipe } from '../pipes/state-description.pipe';
 // import { UpdtWRecordComponent } from './updt-wrecord/updt-wrecord.component';
 // import { NewWRecordComponent } from './new-wrecord/new-wrecord.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 @NgModule({
   imports: [
     NbSecurityModule,
@@ -56,6 +57,7 @@ import { StateDescriptionPipe } from '../pipes/state-description.pipe';
     NbAccordionModule,
     NbBadgeModule,
     NbCheckboxModule,
+    NgxPaginationModule,
   ],
   declarations: [
     PagesComponent,

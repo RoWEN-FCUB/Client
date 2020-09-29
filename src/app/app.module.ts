@@ -56,7 +56,8 @@ import { AuthGuard } from './services/auth-guard.service';
 import { ExportAsModule } from 'ngx-export-as';
 import { NewWRecordComponent } from './pages/new-wrecord/new-wrecord.component';
 import { UpdtWRecordComponent } from './pages/updt-wrecord/updt-wrecord.component';
-import { AnalyticsService } from './@core/utils/analytics.service';
+// import { AnalyticsService } from './@core/utils/analytics.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { StateDescriptionPipe } from './pipes/state-description.pipe';
 // import { DeviceStatePipe } from './pipes/device-state.pipe';
 // import { ShortSerialPipe } from './pipes/short-serial.pipe';
@@ -69,6 +70,7 @@ import { AnalyticsService } from './@core/utils/analytics.service';
 // import { GetObservationsPipe } from './pipes/get-observations.pipe';
 // import { FormatStatePipe } from './pipes/format-state.pipe';
 // import { FormatTimePipe } from './pipes/format-time.pipe';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 // here is the default text string
 export class DefaultIntl extends OwlDateTimeIntl {
@@ -173,6 +175,8 @@ export class DefaultIntl extends OwlDateTimeIntl {
       messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
     }),
     CoreModule.forRoot(),
+    NgbModule,
+    NgxPaginationModule,
   ],
   providers: [
     [{

@@ -6,6 +6,7 @@ import { WDevice } from '../../models/WDevice';
 import { WorkshopService } from '../../services/workshop.service';
 import Swal from 'sweetalert2';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { resourceUsage } from 'process';
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'new-wrecord',
@@ -14,14 +15,14 @@ import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 })
 export class NewWRecordComponent implements OnInit {
 
-  clients: WClient[];
-  devices: WDevice[];
-  devs: string[];
-  marcs: string[];
-  models: string[];
-  serials: string[];
-  inventaries: string[];
-  names: string[];
+  clients: WClient[] = [];
+  devices: WDevice[] = [];
+  devs: string[] = [];
+  marcs: string[] = [];
+  models: string[] = [];
+  serials: string[] = [];
+  inventaries: string[] = [];
+  names: string[] = [];
   newrecord: WRecord = {
     cliente: '',
     equipo: '',
@@ -52,7 +53,6 @@ export class NewWRecordComponent implements OnInit {
   ngOnInit() {
     this.workshopService.getWClients().subscribe((res: WClient[]) => {
       this.clients = res;
-      // console.log(this.clients);
     });
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
@@ -94,7 +94,7 @@ export class NewWRecordComponent implements OnInit {
   }
 
   clientNameChange() {
-    const nameregexp = new RegExp(/^([A-ZÑ]{1}[a-záéíóúñ]+\s?)+$/);
+    const nameregexp = new RegExp(/^([A-Za-záéíóúñÑ]+\s?)+$/);
     if (nameregexp.test(this.newrecord.cliente_nombre)) {
       this.client_name_status = 'success';
     } else {
@@ -176,7 +176,7 @@ export class NewWRecordComponent implements OnInit {
   }
 
   nameChange() {
-    const nameregexp = new RegExp(/^([A-ZÑ]{1}[a-záéíóúñ]+\s?)+$/);
+    const nameregexp = new RegExp(/^([A-Za-záéíóúñ]+\s?)+$/);
     if (nameregexp.test(this.newrecord.entregado)) {
       this.deliver_status = 'success';
     } else {
