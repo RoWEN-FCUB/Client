@@ -229,6 +229,18 @@ export class TaskWeekComponent implements OnInit {
               columns: [
                 {
                   width: 'auto',
+                  text: 'Elaborado por:',
+                  fontSize: 14,
+                },
+                {
+                  width: 300,
+                  text: usrtoprint.fullname,
+                  fontSize: 14,
+                  style: {bold: true},
+                  decoration: 'overline',
+                },
+                {
+                  width: 'auto',
                   text: 'Apobado por: ',
                   fontSize: 14,
                 },
@@ -240,15 +252,28 @@ export class TaskWeekComponent implements OnInit {
                   decoration: 'overline',
                 },
               ],
-              columnGap: 10,
+              columnGap: 8,
               margin: [0, 30, 0, 0],
             },
             {
-              text: usrtoprint.supposition,
-              fontSize: 14,
-              style: {bold: true},
-              margin: [93, 5],
-            },
+              alignment: 'left',
+              columns: [
+                {
+                  width: 485,
+                  text: usrtoprint.position,
+                  fontSize: 14,
+                  style: {bold: true},
+                  margin: [98, 5],
+                },
+                {
+                  width: 'auto',
+                  text: usrtoprint.supposition,
+                  fontSize: 14,
+                  style: {bold: true},
+              },
+              ],
+              columnGap: 10,
+            }
           ],
           pageMargins: [5, 25, 5, 25],
         };
@@ -618,5 +643,40 @@ export class TaskWeekComponent implements OnInit {
         // tareas.unsubscribe();
       },
     );
+  }
+
+  deleteTask(id: number) {
+    for (let i = 0; i < this.tasks.length; i++) {
+      if (this.tasks[i].id === id) {
+        id = i;
+        break;
+      }
+    }
+    Swal.fire({
+      title: '¿Confirma que desea eliminar la tarea ' + this.tasks[id].resumen + '?',
+      text: 'Una vez eliminada la tarea no se podrá recuperar!!',
+      type: 'error',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí­',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.value) {
+        this.taskService.deleteTask(this.tasks[id].id).subscribe(res => {
+          this.getTaskinRange();
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+          });
+          Toast.fire({
+            type: 'success',
+            title: 'Tarea eliminada.',
+          });
+        });
+      }
+    });
   }
 }

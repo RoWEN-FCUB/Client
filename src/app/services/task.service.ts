@@ -43,5 +43,9 @@ export class TaskService {
     delete updatedTask.observaciones;
     return this.http.put(ipserver + 'task/' + id, updatedTask);
   }
+
+  deleteTask(id: number) {
+    return this.http.delete(ipserver + 'task/' + id);
+  }
 }
 
