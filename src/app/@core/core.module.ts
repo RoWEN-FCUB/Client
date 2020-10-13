@@ -30,15 +30,13 @@ const socialLinks = [
   },
 ];
 
-const DATA_SERVICES = [
+/*const DATA_SERVICES = [
   { provide: UserData, useClass: UserService },
-];
-
-
+];*/
 
 export const NB_CORE_PROVIDERS = [
-  ...MockDataModule.forRoot().providers,
-  ...DATA_SERVICES,
+  // ...MockDataModule.forRoot().providers,
+  // ...DATA_SERVICES,
   ...NbAuthModule.forRoot({
 
     strategies: [
@@ -50,8 +48,8 @@ export const NB_CORE_PROVIDERS = [
         },
         // baseEndpoint: 'http://app-f2a3c51f-6e3a-4980-a984-74bda65da601.cleverapps.io/',
         // baseEndpoint: 'http://104.207.147.123:3128/',
-        baseEndpoint: 'http://localhost:3128/',
-        // baseEndpoint: 'http://169.158.137.126:3128/',
+        baseEndpoint: 'https://localhost:3128/',
+        // baseEndpoint: 'https://169.158.137.126:3128/',
         login: {
           endpoint: 'user/login',
           method: 'post',
@@ -93,7 +91,7 @@ export const NB_CORE_PROVIDERS = [
       },
       user: {
         parent: 'guest',
-        view: ['profile', 'tasks', 'notifications'], /*
+        view: ['profile', 'tasks', 'notifications', 'energy'], /*
         create: '*',
         edit: '*',
         remove: '*',*/
@@ -112,7 +110,13 @@ export const NB_CORE_PROVIDERS = [
   }).providers,
 
   {
-    provide: NbRoleProvider, useClass: RoleProvider,
+    provide: NbRoleProvider,
+    useClass: RoleProvider,
+    /*useValue: {
+      getRole: () => {
+        return observableOf('user');
+      },
+    },*/
   },
   AnalyticsService,
 ];
@@ -131,8 +135,8 @@ export class CoreModule {
     throwIfAlreadyLoaded(parentModule, 'CoreModule');
   }
 
-  static forRoot(): ModuleWithProviders {
-    return <ModuleWithProviders>{
+  static forRoot(): ModuleWithProviders<CoreModule> {
+    return {
       ngModule: CoreModule,
       providers: [
         ...NB_CORE_PROVIDERS,

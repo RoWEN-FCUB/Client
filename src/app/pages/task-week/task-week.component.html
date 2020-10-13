@@ -1,97 +1,105 @@
 <nb-card fullwidth accent="info">
-  <nb-card-header>
-    <span class="mr-2">Período:</span>
-    <input nbTooltip="Click para seleccionar un periodo de tiempo" nbInput status="info" id="rangodias" #rangodias type="text" [nbDatepicker]="diaspicker">
-    <nb-rangepicker #diaspicker (rangeChange)="cambiarRango($event)"></nb-rangepicker>
+  <nb-card-header>    
     <nb-icon class="ml-2" style="cursor: pointer" (click)="prevDay()" icon="arrow-ios-back-outline" status="info" [options]="{animation:{type: 'zoom'}}" nbTooltip="Día anterior"></nb-icon>
     <button (click)="today()" nbTooltip="Mostrar las tareas de hoy" nbButton hero status="primary" shape="semi-round"size="small"><nb-icon icon="calendar-outline"></nb-icon>Hoy</button>
     <nb-icon style="cursor: pointer" (click)="nextDay()" icon="arrow-ios-forward-outline" status="info" [options]="{animation:{type: 'zoom'}}" nbTooltip="Día siguiente"></nb-icon>
     <button (click)="thisWeek()" class="ml-2" nbTooltip="Mostrar las tareas de la semana" nbButton hero status="primary" shape="semi-round"size="small"><nb-icon icon="grid-outline"></nb-icon>Esta semana</button>
     <button (click)="thisMonth()" class="ml-2" nbTooltip="Mostrar las tareas del mes" nbButton hero status="primary" shape="semi-round"size="small"><nb-icon icon="keypad-outline"></nb-icon>Este mes</button>
+    <button class="ml-2" (click)="clickShowRange()" nbTooltip="Seleccionar un rango de días específico" nbButton hero status="primary" shape="semi-round"size="small"><nb-icon icon="expand-outline"></nb-icon>Rango específico</button>    
+    <input nbInput style="visibility: hidden !important; background-color:transparent !important;border:none !important;" id="rangodias" #rangodias type="text" [nbDatepicker]="diaspicker">
+    <nb-rangepicker #diaspicker (rangeChange)="cambiarRango($event)"></nb-rangepicker>
   </nb-card-header>
   <nb-card-body>
     <div class="align-middle">
       <button nbTooltip="Agregar una nueva tarea" (click)="openNew()" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
+      <button *ngIf="user.role==='admin' && tasktovalidate > 0" class="ml-1" (click)="validateAllTasks()" nbTooltip="Validar todas las tareas del período seleccionado" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="done-all-outline"></nb-icon>Validar todas</button>
       <button (click)="export()" class="ml-1" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>      
-      <label *ngIf="subordinados.length > 0" class="ml-2 mr-2">Mostrar tareas de: </label>
-        <nb-select *ngIf="subordinados.length > 0" (selectedChange)="getTaskinRange()" placeholder="----" status="info" [(ngModel)]="usuario_a_mostrar">
-          <nb-option *ngFor="let subordinado of subordinados" [value]="subordinado.id">{{subordinado.user}}</nb-option>
-        </nb-select>
-      <input type="text" style="visibility: hidden" [owlDateTime]="dt" (dateTimeChange)="posponer($event)">
-      <input id="range" #range type="text" [nbDatepicker]="rangepicker" style="visibility: hidden">
-      <nb-rangepicker #rangepicker (rangeChange)="copytask($event)"></nb-rangepicker>
-      <owl-date-time #dt></owl-date-time>
+      <label *ngIf="subordinados.length > 1" class="ml-2 mr-2">Mostrar tareas de: </label>
+      <nb-select *ngIf="subordinados.length > 1" (selectedChange)="getTaskinRange()" placeholder="----" status="info" [(ngModel)]="usuario_a_mostrar">
+        <nb-option *ngFor="let subordinado of subordinados" [value]="subordinado.id">{{subordinado.user}}</nb-option>
+      </nb-select>
+      <span class="ml-2">Período mostrado:</span>
+      <span class="ml-2">{{periodoamostrar}}</span>
     </div>
     <div><nb-checkbox style="vertical-align: middle;" status="primary" [checked]="expandir_todas" (checkedChange)="expand_tasks($event)">Expandir todos</nb-checkbox></div>
-    <div class='table-responsive'>
-      <nb-accordion multi>
-        <nb-accordion-item #accitem *ngFor="let day of tareas_por_dias" [expanded]="expandir_todas">
-          <nb-accordion-item-header>
-            <div class="label label-default ml-1 text-uppercase" style="font-size: 15px">
-              {{day.day | dayOfWeek}}
-            </div>
-            <div *ngIf="day.tasks_successful > 0"><nb-badge nbTooltip="Tareas cumplidas {{day.tasks_successful}}"  [text]="day.tasks_successful" status="success" position="top start"></nb-badge></div>
-            <div *ngIf="day.tasks_pendent > 0"><nb-badge nbTooltip="Tareas pendientes {{day.tasks_pendent}}"  [text]="day.tasks_pendent" status="info" position="bottom start"></nb-badge></div>
-            <div *ngIf="day.tasks_canceled > 0"><nb-badge nbTooltip="Tareas canceladas {{day.tasks_canceled}}"  [text]="day.tasks_canceled" status="warning" position="top end"></nb-badge></div>
-            <div *ngIf="day.tasks_failed > 0"><nb-badge nbTooltip="Tareas incumplidas {{day.tasks_failed}}"  [text]="day.tasks_failed" status="danger" position="bottom end"></nb-badge></div>
-          </nb-accordion-item-header>
-          <nb-accordion-item-body>
-            <nb-accordion>
-              <nb-accordion-item *ngFor="let task of day.tasks; let i = index" style="cursor: pointer">
-                <nb-accordion-item-header>
-                  <div class="table-responsive">
-                      <table id="tablePreview" class="table-borderless" width="100%">
-                        <tr>
-                          <td width="5%" scope="row" nbTooltip="ID:{{task.id}}">{{i+1}} - </td>
-                          <td width="35%">{{task.resumen}}</td>
-                          <td width="20%">
-                            <span>{{task.fecha_inicio | formatTime: task.duracion}}</span>
-                            <span nbTooltip="Tarea superpuesta" nbTooltipIcon="alert-circle-outline" nbTooltipStatus="danger" *ngIf="isInConflict(i)" class="badge badge-danger">!!</span>
-                          </td>
-                          <td width="10%"><span [ngStyle]="task.estado | formatState">{{task.estado}}</span></td>
-                          <td width="15%">
-                            <span (click)="openNewObs(task.id)" [nbPopover]="(task.observaciones | getObservations).length > 0 ? observaciones : null" nbPopoverPlacement="top" nbPopoverTrigger="hover">{{task.observaciones | getObservations | getObservText}}</span>
-                            <ng-template #observaciones>
-                              <nb-card accent="info">
-                                <nb-card-header>{{task.observaciones | getObservations | getObservText}}</nb-card-header>
-                                <nb-card-body>
-                                  <ul *ngFor="let o of (task.observaciones | getObservations)">
-                                    <li>{{o}}</li>
-                                  </ul>
-                                </nb-card-body>
-                              </nb-card>
-                            </ng-template>
-                          </td>
-                          <td width="15%">
-                            <nb-icon *ngIf="task.estado==='Pendiente' || user.role==='admin'" (click)="setTaskState(task.id,'Cumplida')" icon="checkmark-circle-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Completar tarea" nbTooltipIcon="checkmark-outline" nbTooltipStatus="success"></nb-icon>
-                            <nb-icon *ngIf="task.estado==='Pendiente' || user.role==='admin'" (click)="clickposponer(task.id)" [owlDateTimeTrigger]="dt" icon="clock-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Posponer tarea" nbTooltipIcon="clock-outline" nbTooltipStatus="info"></nb-icon>
-                            <nb-icon (click)="clickrepetir(task.id)" icon="copy-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Repetir tarea" nbTooltipIcon="clock-outline" nbTooltipStatus="info"></nb-icon>
-                            <nb-icon *ngIf="subordinados.length > 0" (click)="openSelectSubs(task.id)" icon="person-done-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Asignar también a otro usuario" nbTooltipIcon="person-done-outline" nbTooltipStatus="info"></nb-icon>
-                            <nb-icon *ngIf="task.estado==='Pendiente' || user.role==='admin'" (click)="setTaskState(task.id,'Cancelada')" icon="close-circle-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Cancelar tarea" nbTooltipIcon="close-outline" nbTooltipStatus="warning"></nb-icon>
-                            <nb-icon *ngIf="user.role==='admin'" icon="trash-2-outline" (click)="deleteTask(task.id)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar tarea" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
-                          </td>
-                        </tr>
-                      </table>
-                  </div>
-                </nb-accordion-item-header>
-                <nb-accordion-item-body>
-                  <nb-card fullwidth>
-                    <nb-card-body>
-                        {{task.descripcion}}
-                    </nb-card-body>
-                    <nb-card-footer>
-                      <b>Estado: </b> <span [ngStyle]="task.estado | formatState">{{task.estado}}</span>
-                      <b class="ml-2">Creada por: </b> {{task.nombre_creador}}
-                      <b class="ml-2">Inicia: </b> {{task.fecha_inicio | formatDateHuman}}
-                      <b class="ml-2">Termina: </b> {{task.fecha_fin | formatDateHuman}}
-                    </nb-card-footer>
-                  </nb-card>
-                </nb-accordion-item-body>
-              </nb-accordion-item>
-            </nb-accordion>
-          </nb-accordion-item-body>
-        </nb-accordion-item>
-      </nb-accordion>
+    <div class='table-responsive'>      
+        <nb-accordion multi>
+          <nb-accordion-item #accitem *ngFor="let day of tareas_por_dias" [expanded]="expandir_todas">
+            <nb-accordion-item-header>
+              <div class="label label-default ml-1 text-uppercase" style="font-size: 15px">
+                {{day.day | dayOfWeek}}
+              </div>
+              <div *ngIf="day.tasks_successful > 0"><nb-badge nbTooltip="Tareas cumplidas {{day.tasks_successful}}"  [text]="day.tasks_successful" status="success" position="top start"></nb-badge></div>
+              <div *ngIf="day.tasks_pendent > 0"><nb-badge nbTooltip="Tareas pendientes {{day.tasks_pendent}}"  [text]="day.tasks_pendent" status="info" position="bottom start"></nb-badge></div>
+              <div *ngIf="day.tasks_canceled > 0"><nb-badge nbTooltip="Tareas canceladas {{day.tasks_canceled}}"  [text]="day.tasks_canceled" status="warning" position="top end"></nb-badge></div>
+              <div *ngIf="day.tasks_failed > 0"><nb-badge nbTooltip="Tareas incumplidas {{day.tasks_failed}}"  [text]="day.tasks_failed" status="danger" position="bottom end"></nb-badge></div>
+            </nb-accordion-item-header>
+            <nb-accordion-item-body>            
+              <nb-accordion style ="z-index: 998!important;">
+                <nb-accordion-item *ngFor="let task of day.tasks; let i = index" style="cursor: pointer">
+                  <nb-accordion-item-header>
+                    <div class="table-responsive">
+                        <table id="tablePreview" class="table-borderless" width="100%">
+                          <tr [className]="!task.validada ? 'text-secondary' : 'text-dark'">
+                            <td width="5%" scope="row" nbTooltip="ID:{{task.id}}">{{i+1}} - </td>
+                            <td width="30%">
+                              {{task.resumen}}
+                              <span nbTooltip="Tarea no validada" nbTooltipIcon="alert-circle-outline" nbTooltipStatus="warning" *ngIf="!task.validada" class="badge badge-warning">!!</span>
+                            </td>
+                            <td width="20%">
+                              <span>{{task.fecha_inicio | formatTime: task.duracion}}</span>
+                              <span nbTooltip="Tarea superpuesta" nbTooltipIcon="alert-circle-outline" nbTooltipStatus="danger" *ngIf="isInConflict(i)" class="badge badge-danger">!!</span>
+                            </td>
+                            <td width="10%"><span [ngStyle]="task.estado | formatState">{{task.estado}}</span></td>
+                            <td width="15%">
+                              <span (click)="openNewObs(task.id)" [nbPopover]="(task.observaciones | getObservations).length > 0 ? observaciones : null" nbPopoverPlacement="top" nbPopoverTrigger="hover">{{task.observaciones | getObservations | getObservText}}</span>
+                              <ng-template #observaciones>
+                                <nb-card accent="info">
+                                  <nb-card-header>{{task.observaciones | getObservations | getObservText}}</nb-card-header>
+                                  <nb-card-body>
+                                    <ul *ngFor="let o of (task.observaciones | getObservations)">
+                                      <li>{{o}}</li>
+                                    </ul>
+                                  </nb-card-body>
+                                </nb-card>
+                              </ng-template>
+                            </td>
+                            <td width="20%">
+                              <nb-icon *ngIf="(task.estado==='Pendiente' && task.validada) || (user.role==='admin' && task.validada)" (click)="setTaskState(task.id,'Cumplida')" icon="checkmark-circle-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Completar tarea" nbTooltipIcon="checkmark-outline" nbTooltipStatus="success"></nb-icon>
+                              <nb-icon *ngIf="user.role==='admin' && !task.validada" icon="done-all-outline" (click)="validateTask(i)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Validar tarea" nbTooltipIcon="done-all-outline" nbTooltipStatus="info"></nb-icon>
+                              <nb-icon *ngIf="(task.estado==='Pendiente' && !task.validada) || user.role==='admin'" (click)="openEdit(i)" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Editar tarea" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                              <nb-icon *ngIf="(task.estado==='Pendiente' && task.validada) || user.role==='admin'" (click)="clickposponer(task.id)" [owlDateTimeTrigger]="dt" icon="clock-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Posponer tarea" nbTooltipIcon="clock-outline" nbTooltipStatus="info"></nb-icon>
+                              <input type="hidden" style="visibility: hidden" [owlDateTime]="dt" (dateTimeChange)="posponer($event)">      
+                              <owl-date-time hour12Timer="true" #dt></owl-date-time>
+                              <input id="range" #range type="hidden" [nbDatepicker]="rangepicker" style="visibility: hidden">
+                              <nb-rangepicker #rangepicker (rangeChange)="copytask($event)"></nb-rangepicker>
+                              <nb-icon (click)="clickrepetir(task.id)" icon="copy-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Repetir tarea" nbTooltipIcon="clock-outline" nbTooltipStatus="info"></nb-icon>
+                              <nb-icon *ngIf="subordinados.length > 0" (click)="openSelectSubs(task.id)" icon="person-done-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Asignar también a otro usuario" nbTooltipIcon="person-done-outline" nbTooltipStatus="info"></nb-icon>
+                              <nb-icon *ngIf="(task.estado==='Pendiente' && task.validada) || user.role==='admin'" (click)="setTaskState(task.id,'Cancelada')" icon="close-circle-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Cancelar tarea" nbTooltipIcon="close-outline" nbTooltipStatus="warning"></nb-icon>
+                              <nb-icon *ngIf="user.role==='admin' || !task.validada" icon="trash-2-outline" (click)="deleteTask(task.id)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar tarea" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                            </td>
+                          </tr>
+                        </table>
+                    </div>
+                  </nb-accordion-item-header>
+                  <nb-accordion-item-body>
+                    <nb-card fullwidth>
+                      <nb-card-body>
+                          {{task.descripcion}}
+                      </nb-card-body>
+                      <nb-card-footer>
+                        <b>Estado: </b> <span [ngStyle]="task.estado | formatState">{{task.estado}}</span>
+                        <b class="ml-2">Creada por: </b> {{task.nombre_creador}}
+                        <b class="ml-2">Inicia: </b> {{task.fecha_inicio | formatDateHuman}}
+                        <b class="ml-2">Termina: </b> {{task.fecha_fin | formatDateHuman}}
+                      </nb-card-footer>
+                    </nb-card>
+                  </nb-accordion-item-body>
+                </nb-accordion-item>
+              </nb-accordion>
+            </nb-accordion-item-body>
+          </nb-accordion-item>
+        </nb-accordion>      
     </div>
   </nb-card-body>
 </nb-card>

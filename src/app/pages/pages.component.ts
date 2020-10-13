@@ -63,6 +63,17 @@ export class PagesComponent implements OnInit {
           );
         }
       });
+      this.accessChecker.isGranted('view', 'energy').subscribe(granted => {
+        if (granted) {
+          this.menu.push(
+            {
+              title: 'Energía',
+              icon: 'flash-outline',
+              link: '/pages/energy',
+            },
+          );
+        }
+      });
       this.accessChecker.isGranted('view', 'admin_menu').subscribe( granted => {
         if (granted) {
           this.menu.push(

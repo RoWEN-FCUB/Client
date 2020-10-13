@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Task } from '../../models/Task';
 import { User } from '../../models/User';
 import { NbDialogRef } from '@nebular/theme';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'select-subs',
@@ -36,6 +36,7 @@ export class SelectSubsComponent implements OnInit {
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
+      timerProgressBar: true,
       timer: 3000,
     });
     if (this.sub_status === 'success') {
@@ -43,9 +44,9 @@ export class SelectSubsComponent implements OnInit {
       this.dialogRef.close(newTask);
     } else {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe seleccionar para que usuario(s) será la tarea.',
-      });
+      } as SweetAlertOptions);
       this.sub_status = 'danger';
     }
   }

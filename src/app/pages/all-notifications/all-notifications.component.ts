@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { NotificationService } from '../../services/notification.service';
 import { Notification } from '../../models/Notification';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { Router } from '@angular/router';
 @Component({
   // tslint:disable-next-line: component-selector
@@ -51,13 +51,13 @@ export class AllNotificationsComponent implements OnInit {
     Swal.fire({
       title: 'Confirma que desea eliminar todas las notificaciones?',
       text: 'Después de eliminadas no se podrán recuperar.',
-      type: 'warning',
+      icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sí­',
       cancelButtonText: 'No',
-    }).then((result) => {
+    } as SweetAlertOptions).then((result) => {
       if (result.value) {
         this.notificaciones = [];
         this.notificationService.deleteAllNotifications(this.user.id).subscribe(res => {

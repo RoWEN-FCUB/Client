@@ -6,7 +6,7 @@ import { User } from '../../models/User';
 import { NbDialogService } from '@nebular/theme';
 import { UploadImgComponent } from '../upload-img/upload-img.component';
 import ipserver from '../../ipserver';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { Router } from '@angular/router';
 
 @Component({
@@ -94,7 +94,7 @@ export class EditProfileComponent implements OnInit {
       Toast.fire({
         type: 'success',
         title: 'Datos guardados correctamente.',
-      });
+      } as SweetAlertOptions);
       this.router.navigate(['/auth/logout']);
     });
   }
@@ -104,37 +104,38 @@ export class EditProfileComponent implements OnInit {
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
+      timerProgressBar: true,
       timer: 3000,
     });
     if (this.nick_status === 'danger'  || this.bd_user.user === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir un apodo válido.',
-      });
+      } as SweetAlertOptions);
     } else if (this.name_status === 'danger' || this.bd_user.fullname === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir un nombre válido.',
-      });
+      } as SweetAlertOptions);
     } else if (this.email_status === 'danger' || this.bd_user.email === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir una dirección email válido.',
-      });
+      } as SweetAlertOptions);
     } else if (this.pass_status === 'danger' || this.bd_user.pass === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir una contraseña válida.',
-      });
+      } as SweetAlertOptions);
     } else {
       if (!this.saving) {
         this.saving = true;
         this.userService.validUser(this.bd_user).subscribe( res => {
           if (!res['valid']) {
             Toast.fire({
-              type: 'error',
+              icon: 'error',
               title: 'El apodo o el email ya está en uso.',
-            });
+            } as SweetAlertOptions);
             this.saving = false;
           } else {
             this.save();

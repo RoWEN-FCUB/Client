@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { WRecord } from '../../models/WRecord';
 import { WorkshopService } from '../../services/workshop.service';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 
 @Component({
@@ -73,20 +73,21 @@ export class UpdtWRecordComponent implements OnInit {
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
+      timerProgressBar: true,
       timer: 3000,
     });
     if (this.ot_status !== 'success' || this.wrecord.ot === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir una orden de trabajo válida.',
-      });
+      } as SweetAlertOptions);
       this.ot_status = 'danger';
       return false;
     } else if (this.receiver_status !== 'success' || this.wrecord.recogido === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir correctamente el nombre de la persona que recoge el equipo.',
-      });
+      } as SweetAlertOptions);
       this.receiver_status = 'danger';
       return false;
     }
@@ -100,12 +101,13 @@ export class UpdtWRecordComponent implements OnInit {
           toast: true,
           position: 'top-end',
           showConfirmButton: false,
+          timerProgressBar: true,
           timer: 3000,
         });
         Toast.fire({
-          type: 'success',
+          icon: 'success',
           title: 'Registro actualizado correctamente.',
-        });
+        } as SweetAlertOptions);
         this.dialogRef.close(this.wrecord);
       });
     }

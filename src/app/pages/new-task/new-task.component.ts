@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { Task } from '../../models/Task';
 import * as moment from 'moment';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { User } from '../../models/User';
 
 @Component({
@@ -11,7 +11,7 @@ import { User } from '../../models/User';
   templateUrl: './new-task.component.html',
   styleUrls: ['./new-task.component.scss'],
 })
-export class NewTaskComponent implements OnInit {
+export class NewTaskComponent implements OnInit, AfterViewInit {
   @ViewChild('text_muted', {static: false}) text_muted: ElementRef;
   resumen_status: string = 'info';
   descripcion_status: string = 'info';
@@ -20,6 +20,7 @@ export class NewTaskComponent implements OnInit {
   id_usuario: any; // id del usuario q va a realizar la tarea
   minutos: number = 0;
   horas: number = 0;
+  checked: Boolean = false;
   fecha;
   hora;
   rango: string = 'single';
@@ -37,7 +38,6 @@ export class NewTaskComponent implements OnInit {
   subordinados: User[] = [];
   sub_seleccionados: any[] = [];
   constructor(protected dialogRef: NbDialogRef<any>) {
-
   }
 
   resumen_change() {
@@ -70,6 +70,17 @@ export class NewTaskComponent implements OnInit {
     this.sub_seleccionados.push(this.task.id_usuario);
   }
 
+  ngAfterViewInit() {
+    const picked_range: HTMLElement = this.text_muted.nativeElement;
+    if (this.rango === 'range') {
+      picked_range.setAttribute('class', '');
+      this.checked = true;
+    } else {
+      picked_range.setAttribute('class', 'text-muted');
+      this.checked = false;
+    }
+  }
+
   select_range(e) {
     this.fecha = '';
     const picked_range: HTMLElement = this.text_muted.nativeElement;
@@ -100,6 +111,8 @@ export class NewTaskComponent implements OnInit {
 
   parseTime() {
     if (this.hora) {
+      this.hora[0] = new Date(this.hora[0]);
+      this.hora[1] = new Date(this.hora[1]);
       this.hora[0] = this.convertUTCDateToLocalDate(this.hora[0]);
       this.hora[1] = this.convertUTCDateToLocalDate(this.hora[1]);
       const tduracion = moment(this.hora[1]).diff(moment(this.hora[0]), 'minutes');
@@ -136,46 +149,47 @@ export class NewTaskComponent implements OnInit {
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
+      timerProgressBar: true,
       timer: 3000,
     });
     if (this.sub_seleccionados.length === 0 && this.subordinados.length > 0) {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe seleccionar para que usuario(s) será la tarea.',
-      });
+      } as SweetAlertOptions);
       this.sub_status = 'danger';
       return false;
     } else if (this.task.resumen === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir un resumen.',
-      });
+      } as SweetAlertOptions);
       this.resumen_status = 'danger';
       return false;
     } else if (this.task.descripcion === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir una descripción.',
-      });
+      } as SweetAlertOptions);
       this.descripcion_status = 'danger';
       return false;
     } else if (!this.fecha) {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe especificar una fecha.',
-      });
+      } as SweetAlertOptions);
       return false;
     } else if (!this.hora) {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe especificar una hora.',
-      });
+      } as SweetAlertOptions);
       return false;
     } else if (this.hora.length < 2) {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe especificar una hora.',
-      });
+      } as SweetAlertOptions);
       return false;
     }
     return true;

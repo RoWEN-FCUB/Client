@@ -4,7 +4,7 @@ import { User } from '../../models/User';
 import { Role } from '../../models/Role';
 import { NewUserComponent } from '../new-user/new-user.component';
 import { NbDialogService } from '@nebular/theme';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 @Component({
   // tslint:disable-next-line: component-selector
@@ -82,35 +82,37 @@ export class AdminUsersComponent implements OnInit {
           toast: true,
           position: 'top-end',
           showConfirmButton: false,
+          timerProgressBar: true,
           timer: 3000,
         });
         Toast.fire({
-          type: 'error',
+          icon: 'error',
           title: 'No se puede eliminar el usario con el que se ha autenticado.',
-        });
+        } as SweetAlertOptions);
       } else {
         Swal.fire({
           title: 'Confirma que desea eliminar al usuario "' + name + '"?',
           text: 'Se eliminarán todos sus datos del sistema.',
-          type: 'warning',
+          icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
           confirmButtonText: 'Sí­',
           cancelButtonText: 'No',
-        }).then((result) => {
+        } as SweetAlertOptions).then((result) => {
           if (result.value) {
             this.userService.deleteUser(id).subscribe(res => {
               const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
+                timerProgressBar: true,
                 timer: 3000,
               });
               Toast.fire({
-                type: 'success',
+                icon: 'success',
                 title: 'Usuario eliminado correctamente.',
-              });
+              } as SweetAlertOptions);
               this.getUsers();
             });
           }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { User } from '../../models/User';
 import { UserService } from '../../services/user.service';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'new-user',
@@ -109,22 +109,23 @@ export class NewUserComponent implements OnInit {
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
+      timerProgressBar: true,
       timer: 3000,
     });
     if (this.newUser.id) {
       this.userService.updateUser(this.newUser.id, this.newUser).subscribe(res => {
         Toast.fire({
-          type: 'success',
+          icon: 'success',
           title: 'Usuario editado correctamente.',
-        });
+        } as SweetAlertOptions);
         this.close();
       });
     } else {
       this.userService.saveUser(this.newUser).subscribe(res => {
         Toast.fire({
-          type: 'success',
+          icon: 'success',
           title: 'Usuario creado correctamente.',
-        });
+        } as SweetAlertOptions);
         this.close();
       });
     }
@@ -135,53 +136,54 @@ export class NewUserComponent implements OnInit {
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
+      timerProgressBar: true,
       timer: 3000,
     });
     if (this.nick_status === 'danger' || this.newUser.user === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir un apodo válido.',
-      });
+      } as SweetAlertOptions);
     } else if (this.name_status === 'danger' || this.newUser.fullname === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir un nombre válido.',
-      });
+      } as SweetAlertOptions);
     } else if (this.position_status === 'danger' || this.newUser.position === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir un cargo válido.',
-      });
+      } as SweetAlertOptions);
     } else if (this.email_status === 'danger' || this.newUser.email === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir una dirección email válida.',
-      });
+      } as SweetAlertOptions);
     } else if (this.usup_status === 'danger' || this.usup === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe seleccionar de quien será subordinado el usuario.',
-      });
+      } as SweetAlertOptions);
       this.usup_status = 'danger';
     } else  if (this.pass_status === 'danger' || this.newUser.pass === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir una contraseña válida.',
-      });
+      } as SweetAlertOptions);
     } else if (this.rpass_status === 'danger' || this.reppass !== this.newUser.pass) {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Las contraseñas no coinciden.',
-      });
+      } as SweetAlertOptions);
     } else {
       if (!this.saving) {
         this.saving = true;
         this.userService.validUser(this.newUser).subscribe( res => {
           if (!res['valid']) {
             Toast.fire({
-              type: 'error',
+              icon: 'error',
               title: 'El apodo o el email ya está en uso.',
-            });
+            } as SweetAlertOptions);
             this.saving = false;
           } else {
             this.save();

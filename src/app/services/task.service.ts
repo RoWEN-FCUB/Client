@@ -27,12 +27,16 @@ export class TaskService {
     return this.http.get(ipserver + 'task/count/' + id + '&' + onlydate[0] + '&' + state, {responseType: 'json'});
   }
 
-  saveTask(task) {
+  saveTask(task: any) {
     return this.http.post(ipserver + 'task', task);
   }
 
-  copyTask(data) {
+  copyTask(data: any) {
     return this.http.post(ipserver + 'task/copy', data);
+  }
+
+  validateTask(data: any) {
+    return this.http.post(ipserver + 'task/validate', data);
   }
 
   saveObserv(obs: any) {

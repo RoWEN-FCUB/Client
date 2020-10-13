@@ -4,12 +4,12 @@ import {
 import { TaskService } from '../../services/task.service';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { Task } from '../../models/Task';
-import { NbDialogService } from '@nebular/theme';
+import { NbDatepicker, NbDatepickerAdapter, NbDialogService} from '@nebular/theme';
 import { NewTaskComponent } from '../new-task/new-task.component';
 import { NewObsComponent } from '../new-obs/new-obs.component';
 import * as moment from 'moment';
 import 'moment/min/locales';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { User } from '../../models/User';
 import { TaskByDay } from '../../models/TasksByDay';
 import { UserService } from '../../services/user.service';
@@ -31,6 +31,7 @@ export class TaskWeekComponent implements OnInit {
   rango_dias: Date[]; // dias que se encuentran entre el dia inicio y dia fin
   tareas_por_dias: TaskByDay[];
   @ViewChild('range', {static: false}) range: ElementRef;
+  @ViewChild('rangodias', {static: false}) rangodias: ElementRef;
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: ''};
   tasks: Task[] = []; // lista de tareas
   states = []; // lista de estados de las tareas
@@ -42,6 +43,8 @@ export class TaskWeekComponent implements OnInit {
   docDefinition = {};
   table_to_print = [];
   expandir_todas: boolean = true;
+  tasktovalidate: number = 0;
+  periodoamostrar: string = '';
 
   constructor(private userService: UserService,
     private taskService: TaskService,
@@ -49,6 +52,11 @@ export class TaskWeekComponent implements OnInit {
     private dialogService: NbDialogService,
     private route: ActivatedRoute,
     ) {
+  }
+
+  clickShowRange() {
+    const picked_range: HTMLElement = this.rangodias.nativeElement;
+    picked_range.click();
   }
 
   ngOnInit() {
@@ -125,7 +133,7 @@ export class TaskWeekComponent implements OnInit {
                     [{
                       border: [false, false, false, false],
                       ol: this.tareas_por_dias[i * 7 + j].tasks.filter(function(task) {
-                        if (task.estado !== 'Cancelada') {
+                        if (task.estado !== 'Cancelada' && task.estado !== 'Pospuesta') {
                           return true;
                         } else {
                           return false;
@@ -398,6 +406,9 @@ export class TaskWeekComponent implements OnInit {
   getSub() {
     this.userService.getSub(this.user.id).subscribe((res: User[]) => {
       this.subordinados = res;
+      if (this.subordinados.length > 0) {
+        this.subordinados.splice(0, 0, {id: this.user.id, user: this.user.name});
+      }
       if (!this.route.snapshot.paramMap.get('id')) {
         this.today();
       }
@@ -418,25 +429,26 @@ export class TaskWeekComponent implements OnInit {
         title: 'Confirma que desea repetir la tarea "' + this.tasks[this.tarea_a_repetir].resumen + '"?',
         // tslint:disable-next-line: max-line-length
         text: 'Se crearán nuevas tareas desde el ' + moment(e.start).locale('es').format('LL') + ' hasta el ' + moment(e.end).locale('es').format('LL'),
-        type: 'warning',
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sí­',
         cancelButtonText: 'No',
-      }).then((result) => {
+      } as SweetAlertOptions).then((result) => {
         if (result.value) {
           this.taskService.copyTask({id: this.tasks[this.tarea_a_repetir].id, startD: e.start, endD: e.end}).subscribe(res => {
             const Toast = Swal.mixin({
               toast: true,
               position: 'top-end',
               showConfirmButton: false,
+              timerProgressBar: true,
               timer: 3000,
             });
             Toast.fire({
-              type: 'success',
+              icon: 'success',
               title: 'Tarea copiada.',
-            });
+            } as SweetAlertOptions);
             this.getTaskinRange();
           });
         }
@@ -457,17 +469,124 @@ export class TaskWeekComponent implements OnInit {
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
+                timerProgressBar: true,
                 timer: 3000,
               });
               Toast.fire({
-                type: 'success',
+                icon: 'success',
                 title: 'Tarea creada.',
-              });
+              } as SweetAlertOptions);
             },
           );
         }
       },
     );
+  }
+
+  openEdit(id: number) {
+    let range = 'range';
+    let date;
+    // console.log(moment(this.tasks[id].fecha_inicio).toLocaleString());
+    // tslint:disable-next-line: max-line-length
+    const hour = [moment.parseZone(this.tasks[id].fecha_inicio).local(true).format(), moment.parseZone(this.tasks[id].fecha_inicio).local(true).add(this.tasks[id].duracion, 'minutes').format()];
+    // console.log(hour);
+    if (moment(this.tasks[id].fecha_inicio).isSame(this.tasks[id].fecha_fin)) {
+      range = 'single';
+      date = this.tasks[id].fecha_inicio;
+    } else {
+      date = [this.tasks[id].fecha_inicio, this.tasks[id].fecha_fin];
+    }
+    // tslint:disable-next-line: max-line-length
+    this.dialogService.open(NewTaskComponent, {context: {subordinados: this.subordinados, id_creador: this.user.id, id_usuario: this.usuario_a_mostrar, task: this.tasks[id], fecha: date, rango: range, hora: hour}}).onClose.subscribe(
+      (newTask) => {
+        if (newTask) {
+          // newTask.task.nombre_creador = this.user.name;
+          this.taskService.updateTask(this.tasks[id].id, newTask.task).subscribe(
+            res => {
+              this.getTaskinRange();
+              const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timerProgressBar: true,
+                timer: 3000,
+              });
+              Toast.fire({
+                icon: 'success',
+                title: 'Tarea actualizada.',
+              } as SweetAlertOptions);
+            },
+          );
+        }
+      },
+    );
+  }
+
+  validateTask(id: number) {
+    this.tasks[id].validada = true;
+    this.taskService.updateTask(this.tasks[id].id, this.tasks[id]).subscribe(
+      res => {
+        this.getTaskinRange();
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 3000,
+        });
+        Toast.fire({
+          icon: 'success',
+          title: 'Tarea validada.',
+        } as SweetAlertOptions);
+      },
+    );
+  }
+
+  countTaskToValidate() {
+    let count = 0;
+    for (let i = 0; i < this.tasks.length; i++) {
+      if (!this.tasks[i].validada) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  validateAllTasks() {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timerProgressBar: true,
+      timer: 3000,
+    });
+    if (this.tasktovalidate === 0) {
+      Toast.fire({
+        icon: 'error',
+        title: 'No existen tareas para validar en el período seleccionado.',
+      } as SweetAlertOptions);
+    } else {
+      Swal.fire({
+        title: '¿Confirma que validar todas las tareas del período seleccionado?',
+        text: 'Se validarán ' + this.tasktovalidate + ' tareas.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí­',
+        cancelButtonText: 'No',
+      } as SweetAlertOptions).then((result) => {
+        if (result.value) {
+          this.taskService.validateTask({userid: this.usuario_a_mostrar, startD: this.dia_inicio, endD: this.dia_fin}).subscribe(res => {
+            this.getTaskinRange();
+            Toast.fire({
+              icon: 'success',
+              title: 'Tareas validadas.',
+            } as SweetAlertOptions);
+          });
+        }
+      });
+    }
   }
 
   /// ASIGNAR TAREA A UN SUBORDINADO
@@ -491,12 +610,13 @@ export class TaskWeekComponent implements OnInit {
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
+                timerProgressBar: true,
                 timer: 3000,
               });
               Toast.fire({
-                type: 'success',
+                icon: 'success',
                 title: 'Tarea asignada.',
-              });
+              } as SweetAlertOptions);
             },
           );
         }
@@ -551,21 +671,28 @@ export class TaskWeekComponent implements OnInit {
 
   posponer(event) {// cambiarle la fecha a la tarea
     event.value = this.convertUTCDateToLocalDate(event.value);
-    this.tasks[this.tarea_a_posponer].fecha_inicio = event.value; // nueva fecha
-    this.tasks[this.tarea_a_posponer].fecha_fin = event.value; // nueva fecha
-    this.tasks[this.tarea_a_posponer].estado = 'Pendiente';
-    // console.log(this.tasks[this.tarea_a_posponer]);
+    const olddate = this.tasks[this.tarea_a_posponer].fecha_inicio;
+    this.tasks[this.tarea_a_posponer].fecha_inicio = event.value;
+    this.tasks[this.tarea_a_posponer].fecha_fin = event.value;
+    this.tasks[this.tarea_a_posponer].estado = 'Pospuesta';
     this.taskService.updateTask(this.tasks[this.tarea_a_posponer].id, this.tasks[this.tarea_a_posponer]).subscribe(res => {
-      this.generar_rango_dias();
-      const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-      });
-      Toast.fire({
-        type: 'success',
-        title: 'Tarea pospuesta para el ' + moment(event.value).locale('es').format('LLL'),
+      this.taskService.copyTask({id: this.tasks[this.tarea_a_posponer].id, startD: event.value, endD: event.value}).subscribe(resp => {
+        this.tasks[this.tarea_a_posponer].fecha_inicio = olddate;
+        this.tasks[this.tarea_a_posponer].fecha_fin = olddate;
+        this.taskService.updateTask(this.tasks[this.tarea_a_posponer].id, this.tasks[this.tarea_a_posponer]).subscribe(respo => {
+          this.getTaskinRange();
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 3000,
+          });
+          Toast.fire({
+            icon: 'success',
+            title: 'Tarea pospuesta para el ' + moment(event.value).locale('es').format('LLL'),
+          } as SweetAlertOptions);
+        });
       });
     });
   }
@@ -585,13 +712,13 @@ export class TaskWeekComponent implements OnInit {
     Swal.fire({
       title: 'Confirma que desea cambiar el estado de la tarea a ' + state + '?',
       text: 'Una vez cambiado el estado de la tarea no se podrá actualizar!!',
-      type: 'warning',
+      icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sí­',
       cancelButtonText: 'No',
-    }).then((result) => {
+    } as SweetAlertOptions).then((result) => {
       if (result.value) {
         this.tasks[id].estado = state;
         this.taskService.updateTask(this.tasks[id].id, this.tasks[id]).subscribe(res => {
@@ -600,12 +727,13 @@ export class TaskWeekComponent implements OnInit {
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
+            timerProgressBar: true,
             timer: 3000,
           });
           Toast.fire({
-            type: 'success',
+            icon: 'success',
             title: 'Tarea ' + state,
-          });
+          } as SweetAlertOptions);
         });
       }
     });
@@ -634,12 +762,17 @@ export class TaskWeekComponent implements OnInit {
   public getTaskinRange() {
     const diai =  this.formatDate(this.dia_inicio);
     const diaf =  this.formatDate(this.dia_fin);
+    this.periodoamostrar = diai.substr(0, diai.indexOf(' '));
+    if (diai !== diaf) {
+      this.periodoamostrar += ' ~ ' + diaf.substr(0, diaf.indexOf(' '));
+    }
     // tslint:disable-next-line: max-line-length
     const tareas = this.taskService.getTasksinRange(this.usuario_a_mostrar, diai, diaf).subscribe(// obtener las tareas del usuario en el rango
       res => {
         // console.log(res);
         this.tasks = res as Task[];
         this.generar_rango_dias();
+        this.tasktovalidate = this.countTaskToValidate();
         // tareas.unsubscribe();
       },
     );
@@ -655,13 +788,13 @@ export class TaskWeekComponent implements OnInit {
     Swal.fire({
       title: '¿Confirma que desea eliminar la tarea ' + this.tasks[id].resumen + '?',
       text: 'Una vez eliminada la tarea no se podrá recuperar!!',
-      type: 'error',
+      icon: 'error',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sí­',
       cancelButtonText: 'No',
-    }).then((result) => {
+    } as SweetAlertOptions).then((result) => {
       if (result.value) {
         this.taskService.deleteTask(this.tasks[id].id).subscribe(res => {
           this.getTaskinRange();
@@ -669,12 +802,13 @@ export class TaskWeekComponent implements OnInit {
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
+            timerProgressBar: true,
             timer: 3000,
           });
           Toast.fire({
-            type: 'success',
+            icon: 'success',
             title: 'Tarea eliminada.',
-          });
+          } as SweetAlertOptions);
         });
       }
     });

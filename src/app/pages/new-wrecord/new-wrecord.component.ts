@@ -4,7 +4,7 @@ import { WRecord } from '../../models/WRecord';
 import { WClient } from '../../models/WClient';
 import { WDevice } from '../../models/WDevice';
 import { WorkshopService } from '../../services/workshop.service';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { resourceUsage } from 'process';
 @Component({
@@ -189,62 +189,63 @@ export class NewWRecordComponent implements OnInit {
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
+      timerProgressBar: true,
       timer: 3000,
     });
     if (this.client_status === 'danger' || this.newrecord.cliente === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir un cliente válido.',
-      });
+      } as SweetAlertOptions);
       this.client_status = 'danger';
       return false;
     } else if (this.show_client_name && (this.client_name_status === 'danger' || this.newrecord.cliente_nombre === '')) {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir un nombre de cliente válido.',
-      });
+      } as SweetAlertOptions);
       this.client_name_status = 'danger';
       return false;
     } else if (this.device_status === 'danger' || this.newrecord.equipo === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir un equipo válido.',
-      });
+      } as SweetAlertOptions);
       this.device_status = 'danger';
       return false;
     } else if (this.marc_status === 'danger' || this.newrecord.marca === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir una marca válida.',
-      });
+      } as SweetAlertOptions);
       this.marc_status = 'danger';
       return false;
     } else if (this.model_status === 'danger' || this.newrecord.modelo === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir una modelo válido.',
-      });
+      } as SweetAlertOptions);
       this.model_status = 'danger';
       return false;
     } else if (this.inv_status === 'danger' || this.newrecord.inventario === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir un número de inventario válido.',
-      });
+      } as SweetAlertOptions);
       this.inv_status = 'danger';
       return false;
     } else if (this.serial_status === 'danger' || this.newrecord.serie === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir un número de serie válido.',
-      });
+      } as SweetAlertOptions);
       this.serial_status = 'danger';
       return false;
     } else if (this.deliver_status === 'danger' || this.newrecord.entregado === '') {
       Toast.fire({
-        type: 'error',
+        icon: 'error',
         title: 'Debe escribir correctamente el nombre de la persona que entrega el equipo.',
-      });
+      } as SweetAlertOptions);
       this.deliver_status = 'danger';
       return false;
     }
@@ -258,13 +259,14 @@ export class NewWRecordComponent implements OnInit {
         toast: true,
         position: 'top-end',
         showConfirmButton: false,
+        timerProgressBar: true,
         timer: 3000,
       });
       this.workshopService.saveRecord(this.newrecord).subscribe(res => {
         Toast.fire({
-          type: 'success',
+          icon: 'success',
           title: 'Registro guardado correctamente.',
-        });
+        } as SweetAlertOptions);
         this.dialogRef.close(this.newrecord);
       });
     }

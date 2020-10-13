@@ -4,7 +4,7 @@
     <div>
       <label>Buscar:</label><input nbTooltip="Escriba uno o varios parámetros separados por espacio y presione enter." (keyup.enter)="search()" [(ngModel)]="search_string" [status]="search_status" class="ml-2" type="text" nbInput fieldSize="small" placeholder="Escriba el valor...">
       <button class="ml-4" (click)="openNew()" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
-      <button class="ml-2" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
+      <button class="ml-2" (click)="generateTableToPrint()" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
     </div>
     <div class='table-responsive'>
       <table id="tablePreview" class="table table-hover table-borderless table-striped table-sm">
