@@ -71,6 +71,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { FormatStatePipe } from './pipes/format-state.pipe';
 // import { FormatTimePipe } from './pipes/format-time.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { NewErecordComponent } from './pages/new-erecord/new-erecord.component';
 
 // here is the default text string
 export class DefaultIntl extends OwlDateTimeIntl {
@@ -137,7 +138,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
 
 @NgModule({
   declarations: [
-    AppComponent, UploadImgComponent, NewTaskComponent, NewObsComponent,
+    AppComponent, UploadImgComponent, NewTaskComponent, NewObsComponent, NewErecordComponent,
     LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent, UpdtWRecordComponent],
   imports: [
     ExportAsModule,
@@ -192,9 +193,9 @@ export class DefaultIntl extends OwlDateTimeIntl {
     // AnalyticsService,
   ],
   exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
-            NewWRecordComponent, UpdtWRecordComponent],
+            NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent],
   entryComponents: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
-                    NewWRecordComponent, UpdtWRecordComponent],
+                    NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {

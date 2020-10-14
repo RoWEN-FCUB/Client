@@ -1,7 +1,52 @@
 <nb-card fullwidth accent="info">
     <nb-card-header>Control de energía eléctrica</nb-card-header>
     <nb-card-body>
-      
+        <div>
+        </div>
+        <div class='table-responsive'>
+            <table id="tablePreview" class="table table-hover table-sm">                
+                <thead>
+                    <tr>
+                        <th style="border: none !important;"></th>
+                        <th colspan="6" style="border: none !important;">Desglose Plan de Energía CITMATEL {{currentYear}}</th>                        
+                    </tr>
+                    <tr>
+                        <th style="border: none !important;"></th>
+                        <th colspan="6"  style="border: none !important;">
+                            Plan para el mes de {{currentMonth}}: {{totalPlan}} KW
+                            <span class="ml-3">Real consumido: {{totalConsume}} KW</span>
+                            <span class="ml-3" *ngIf="totalPlan >= totalConsume">Ahorro: {{totalPlan-totalConsume}} KW</span>
+                            <span class="ml-3" *ngIf="totalConsume > totalPlan">Sobregiro: {{totalConsume-totalPlan}} KW</span>
+                        </th>                        
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>DIA</th>
+                        <th>PLAN</th>
+                        <th>REAL</th>
+                        <th>PLAN ACUMULADO</th>
+                        <th>REAL ACUMULADO</th>
+                        <th>LECTURA</th>
+                    </tr>
+                </thead>
+                <tbody>          
+                    <tr *ngFor="let erecord of erecords; let i = index" (click)="openNew(i)" [ngClass]="erecord.fecha | dayOfWeek:3">
+                        <th scope="row">{{erecord.fecha | dayOfWeek:2}}</th>
+                        <td>{{i+1}}</td>
+                        <td><span *ngIf="erecord.consumo > 0">{{erecord.plan}}</span></td>
+                        <td>
+                            <span *ngIf="erecord.consumo > 0">
+                                {{erecord.consumo}}
+                                <span nbTooltip="Consumo sobregirado" nbTooltipIcon="alert-circle-outline" nbTooltipStatus="danger" *ngIf="erecord.consumo > erecord.plan" class="badge badge-danger">!!</span>
+                            </span>
+                        </td>
+                        <td><span *ngIf="erecord.consumo > 0">{{erecord.planacumulado}}</span></td>
+                        <td><span *ngIf="erecord.consumo > 0">{{erecord.realacumulado}}</span></td>
+                        <td><span *ngIf="erecord.consumo > 0">{{erecord.lectura}}</span></td>
+                    </tr>
+                </tbody>
+            </table>            
+        </div>
     </nb-card-body>
     <nb-card-footer></nb-card-footer>
   </nb-card>

@@ -32,6 +32,7 @@ import { StateDescriptionPipe } from '../pipes/state-description.pipe';
 // import { NewWRecordComponent } from './new-wrecord/new-wrecord.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { EnergyComponent } from './energy/energy.component';
+import { NewErecordComponent } from './new-erecord/new-erecord.component';
 
 export class DefaultIntl extends OwlDateTimeIntl {
   /** A label for the up second button (used by screen readers).  */
@@ -141,7 +142,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     OnlyDatePipe,
     DeviceStatePipe,
     StateDescriptionPipe,
-    ShortSerialPipe, ShortNamePipe, EnergyComponent, // UpdtWRecordComponent, // NewWRecordComponent,
+    ShortSerialPipe, ShortNamePipe, EnergyComponent, // NewErecordComponent, // UpdtWRecordComponent, // NewWRecordComponent,
     // SelectSubsComponent,
     // NewUserComponent,
     // NewObsComponent,

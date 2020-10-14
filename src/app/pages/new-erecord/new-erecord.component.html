@@ -1,0 +1,24 @@
+<nb-card accent="info">
+  <nb-card-header><div class="text-center">{{newERecord.fecha | date:'dd/MM/yyyy':'+0000'}}</div></nb-card-header>
+  <nb-card-body>
+    <div class="form-group">
+      <label>Plan:</label>
+      <input (input)="plan_change()" autofocus type="text" [(ngModel)]="newERecord.plan" #plan fullWidth nbInput [status]="plan_status" class="form-control" aria-describedby="planHelp" placeholder="0">
+      <small id="planHelp" class="form-text text-muted">Plan de energía para el día.</small>
+    </div>
+    <div class="form-group">
+      <label>Lectura:</label>
+      <input (input)="lectura_change()" type="text" [(ngModel)]="newERecord.lectura" #lectura fullWidth nbInput [status]="lectura_status" class="form-control" aria-describedby="resHelp" placeholder="0">
+      <small id="lecturaHelp" class="form-text text-muted">Lectura del metro contador.</small>
+    </div>
+    <div class="form-group">
+      <label>Consumo del día: <span [ngClass]="(newERecord.plan >= newERecord.consumo && newERecord.consumo >= 0)?'text-success font-weight-bold':'text-danger font-weight-bold'">{{newERecord.consumo}}</span></label>      
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+    <div class="float-right row">
+      <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+      <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+    </div>
+  </nb-card-footer>
+</nb-card>
