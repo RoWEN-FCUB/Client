@@ -12,7 +12,7 @@ export class EnergyService {
   constructor(private http: HttpClient) { }
 
   getERecords(year: number, month: number) {
-    return this.http.get(ipserver + 'energy/' + year + '&' + month, {responseType: 'json'});
+    return this.http.get(ipserver + 'energy/list/' + year + '&' + month, {responseType: 'json'});
   }
 
   getEReading(date: string) {
@@ -20,6 +20,14 @@ export class EnergyService {
   }
 
   saveERecord(newrecord: ERecord) {
-    return this.http.post(ipserver + 'energy', newrecord);
+    return this.http.post(ipserver + 'energy/create', newrecord);
+  }
+
+  updateERecord(id: number, newrecord: ERecord) {
+    return this.http.put(ipserver + 'energy/update/' + id, newrecord);
+  }
+
+  updateAllERecord(newrecords: ERecord[]) {
+    return this.http.put(ipserver + 'energy/updateAll', newrecords);
   }
 }

@@ -48,10 +48,12 @@ export class NewErecordComponent implements OnInit {
       } as SweetAlertOptions);
     } else {
       if (this.newERecord.id) {
-
+        this.energyService.updateERecord(this.newERecord.id, this.newERecord).subscribe(res => {
+          this.dialogRef.close(this.newERecord);
+        });
       } else {
         this.energyService.saveERecord(this.newERecord).subscribe(res => {
-          this.dialogRef.close(res);
+          this.dialogRef.close(this.newERecord);
         });
       }
     }

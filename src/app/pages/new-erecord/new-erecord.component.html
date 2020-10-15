@@ -1,7 +1,7 @@
 <nb-card accent="info">
   <nb-card-header><div class="text-center">{{newERecord.fecha | date:'dd/MM/yyyy':'+0000'}}</div></nb-card-header>
   <nb-card-body>
-    <div class="form-group">
+    <div class="form-group" *ngIf="!newERecord.id">
       <label>Plan:</label>
       <input (input)="plan_change()" autofocus type="text" [(ngModel)]="newERecord.plan" #plan fullWidth nbInput [status]="plan_status" class="form-control" aria-describedby="planHelp" placeholder="0">
       <small id="planHelp" class="form-text text-muted">Plan de energía para el día.</small>

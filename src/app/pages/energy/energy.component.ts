@@ -69,7 +69,7 @@ export class EnergyComponent implements OnInit {
         this.totalPlan += this.erecords[i].plan;
         this.erecords[i].realacumulado = this.erecords[i].consumo + this.erecords[last].realacumulado;
         this.erecords[i].planacumulado = this.erecords[i].plan + this.erecords[last].planacumulado;
-        if (this.erecords[i].id) {
+        if (this.erecords[i].lectura) {
           last = i;
         }
       }
@@ -87,12 +87,56 @@ export class EnergyComponent implements OnInit {
       // tslint:disable-next-line: max-line-length
       const newe = Object.assign({}, this.erecords[i]);
       this.dialogService.open(NewErecordComponent, {context: {newERecord: newe, prev_reading: prev}}).onClose.subscribe(
-        (newWRecord) => {
+        (newWRecord: ERecord) => {
           if (newWRecord) {
             this.generar_rango_inicial();
+            this.consume_adjust();
           }
         },
       );
+    });
+  }
+
+  consume_adjust() { // AJUSTA LOS CONSUMOS POR SI CAMBIO ALGUNA LECTURA INTERMEDIA
+    let last = 0;
+    this.totalConsume = 0;
+    this.totalPlan = 0;
+    let prev: number = 0;
+    let bd_update: ERecord[] = [];
+    // tslint:disable-next-line: max-line-length
+    this.energyService.getEReading(moment.utc(this.erecords[0].fecha).format('YYYY-MM-DD')).subscribe((res: ERecord[]) => {
+      if (res.length > 0) {
+        prev = res[0].lectura;
+      }
+      for (let i = 0; i < this.erecords.length; i++) {
+        if (i === 0) {
+          this.erecords[i].realacumulado = 0;
+          this.erecords[i].planacumulado = 0;
+          if (this.erecords[i].id) {
+            this.erecords[i].consumo = this.erecords[i].lectura - prev;
+          } else {
+            this.erecords[i].consumo = 0;
+          }
+        } else {
+          if (this.erecords[i].id) {
+            this.erecords[i].consumo = this.erecords[i].lectura - this.erecords[last].lectura;
+          } else {
+            this.erecords[i].consumo = 0;
+          }
+        }
+        this.totalConsume += this.erecords[i].consumo;
+        this.totalPlan += this.erecords[i].plan;
+        this.erecords[i].realacumulado = this.erecords[i].consumo + this.erecords[last].realacumulado;
+        this.erecords[i].planacumulado = this.erecords[i].plan + this.erecords[last].planacumulado;
+        if (this.erecords[i].lectura) {
+          last = i;
+          bd_update.push(this.erecords[i]);
+        }
+      }
+      // console.log(bd_update);
+      this.energyService.updateAllERecord(bd_update).subscribe(res => {
+
+      });
     });
   }
 
