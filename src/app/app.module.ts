@@ -41,9 +41,10 @@ import {
   NbCheckboxModule,
   NbAlertModule,
 } from '@nebular/theme';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormsModule } from '@angular/forms';
 import { NumberPickerModule } from 'ng-number-picker';
-import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE, OwlDateTimeIntl } from 'ng-pick-datetime';
+import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE, OwlDateTimeIntl } from '@danielmoncada/angular-datetime-picker';
 import { UserService } from './services/user.service';
 import { AuthInterceptor } from './services/authInterceptor';
 import { UploadImgComponent } from './pages/upload-img/upload-img.component';
@@ -72,6 +73,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { FormatTimePipe } from './pipes/format-time.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NewErecordComponent } from './pages/new-erecord/new-erecord.component';
+import { EnergyPlansComponent } from './pages/energy-plans/energy-plans.component';
 
 // here is the default text string
 export class DefaultIntl extends OwlDateTimeIntl {
@@ -139,7 +141,8 @@ export class DefaultIntl extends OwlDateTimeIntl {
 @NgModule({
   declarations: [
     AppComponent, UploadImgComponent, NewTaskComponent, NewObsComponent, NewErecordComponent,
-    LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent, UpdtWRecordComponent],
+    LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
+     UpdtWRecordComponent, EnergyPlansComponent],
   imports: [
     ExportAsModule,
     NbSecurityModule,
@@ -178,6 +181,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     CoreModule.forRoot(),
     NgbModule,
     NgxPaginationModule,
+    NgxChartsModule,
   ],
   providers: [
     [{
@@ -193,9 +197,9 @@ export class DefaultIntl extends OwlDateTimeIntl {
     // AnalyticsService,
   ],
   exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
-            NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent],
+            NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent],
   entryComponents: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
-                    NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent],
+                    NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {

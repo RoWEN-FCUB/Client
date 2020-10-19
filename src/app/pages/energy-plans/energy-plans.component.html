@@ -1,0 +1,19 @@
+<nb-card accent="info">
+    <nb-card-header><div class="text-center">Establecer planes diarios</div></nb-card-header>
+    <nb-card-body>
+        <div class="form-group">
+            <label>Plan:</label>
+            <input [(ngModel)]="plan_establecido" (input)="plan_change()" autofocus type="text" #plan fullWidth nbInput [status]="plan_status" class="form-control" aria-describedby="planHelp" placeholder="0">
+            <small id="planHelp" class="form-text text-muted">Plan de energía a establecer.</small>
+        </div>
+        <div>            
+            <owl-date-time-inline [(ngModel)]="dates" [pickerType]="'calendar'" [selectMode]="'range'"></owl-date-time-inline>
+        </div>
+    </nb-card-body>
+    <nb-card-footer>
+        <div class="float-right row">
+        <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+        <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+        </div>
+    </nb-card-footer>
+</nb-card>

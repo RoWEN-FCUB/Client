@@ -2,14 +2,14 @@ import { NgModule } from '@angular/core';
 // tslint:disable-next-line: max-line-length
 import { NbCheckboxModule, NbBadgeModule, NbAccordionModule, NbIconModule , NbActionsModule, NbTooltipModule, NbPopoverModule, NbMenuModule, NbCardModule, NbInputModule, NbSelectModule, NbButtonModule, NbDialogModule, NbTabsetModule, NbDatepickerModule, NbLayoutModule } from '@nebular/theme';
 import { FormsModule } from '@angular/forms';
-
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { NumberPickerModule } from 'ng-number-picker';
-import { OwlDateTimeIntl, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE } from 'ng-pick-datetime';
+import { OwlDateTimeIntl, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE } from '@danielmoncada/angular-datetime-picker';
 // import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { AdminUsersComponent } from './admin-users/admin-users.component';
@@ -32,7 +32,8 @@ import { StateDescriptionPipe } from '../pipes/state-description.pipe';
 // import { NewWRecordComponent } from './new-wrecord/new-wrecord.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { EnergyComponent } from './energy/energy.component';
-import { NewErecordComponent } from './new-erecord/new-erecord.component';
+// import { NewErecordComponent } from './new-erecord/new-erecord.component';
+// import { EnergyPlansComponent } from './energy-plans/energy-plans.component';
 
 export class DefaultIntl extends OwlDateTimeIntl {
   /** A label for the up second button (used by screen readers).  */
@@ -124,6 +125,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     NbCheckboxModule,
     NgxPaginationModule,
     NbLayoutModule,
+    NgxChartsModule,
   ],
   declarations: [
     PagesComponent,
@@ -142,7 +144,8 @@ export class DefaultIntl extends OwlDateTimeIntl {
     OnlyDatePipe,
     DeviceStatePipe,
     StateDescriptionPipe,
-    ShortSerialPipe, ShortNamePipe, EnergyComponent, // NewErecordComponent, // UpdtWRecordComponent, // NewWRecordComponent,
+    // tslint:disable-next-line: max-line-length
+    ShortSerialPipe, ShortNamePipe, EnergyComponent, // EnergyPlansComponent, // NewErecordComponent, // UpdtWRecordComponent, // NewWRecordComponent,
     // SelectSubsComponent,
     // NewUserComponent,
     // NewObsComponent,

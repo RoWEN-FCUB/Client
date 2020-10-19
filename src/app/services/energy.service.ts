@@ -30,4 +30,12 @@ export class EnergyService {
   updateAllERecord(newrecords: ERecord[]) {
     return this.http.put(ipserver + 'energy/updateAll', newrecords);
   }
+
+  updateAllPlans(plan: number, inicio: Date, fin: Date) {
+    return this.http.put(ipserver + 'energy/updatePlans', {plan: plan, start: inicio, end: fin});
+  }
+
+  deleteERecord(id: number) {
+    return this.http.delete(ipserver + 'energy/' + id);
+  }
 }
