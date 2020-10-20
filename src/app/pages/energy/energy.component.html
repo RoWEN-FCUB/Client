@@ -4,13 +4,13 @@
         <button class="ml-2" (click)="openPlans()" nbTooltip="Establecer planes diarios." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="browser-outline"></nb-icon>Planes</button>
         <button class="ml-2" (click)="toogleGraph()" nbTooltip="Establecer planes diarios." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="activity-outline"></nb-icon>Gráfica</button>
         <button class="ml-2" nbTooltip="Exportar a PDF." nbButton hero status="success" shape="semi-round" size="tiny"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
-        <button class="ml-2" (click)="changeMonth()" nbTooltip="Seleccionar mes a mostrar." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="keypad-outline"></nb-icon>Mes</button>
-        <input type="text" nbInput #mes [owlDateTime]="month">      
-        <owl-date-time #month></owl-date-time>
+        <button class="ml-2" [owlDateTimeTrigger]="dt" nbTooltip="Seleccionar mes a mostrar." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="keypad-outline"></nb-icon>Mes</button>
+        <input [owlDateTime]="dt" #mes [owlDateTimeTrigger]="dt" nbInput status="info" style="visibility: hidden">
+        <owl-date-time #dt="owlDateTime" [startView]="'year'" (monthSelected)="chosenMonthHandler($event, dt)" [pickerType]="'calendar'"></owl-date-time>
     </nb-card-header>
     <nb-card-body>
         <div style="width: fit-content; height: 250px;" *ngIf="showgraph" class="mb-2">
-            <ngx-charts-line-chart                
+            <ngx-charts-line-chart
                 [scheme]="colorScheme"
                 [results]="multi"
                 [gradient]="gradient"

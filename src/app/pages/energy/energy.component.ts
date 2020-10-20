@@ -1,9 +1,8 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ERecord } from '../../models/ERecord';
 import { NbDialogService } from '@nebular/theme';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import 'moment/min/locales';
-import { UserService } from '../../services/user.service';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as moment from 'moment';
@@ -12,7 +11,9 @@ import { EnergyService } from '../../services/energy.service';
 import { NewErecordComponent } from '../new-erecord/new-erecord.component';
 import { EnergyPlansComponent } from '../energy-plans/energy-plans.component';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
+import { OwlDateTimeComponent, OwlDateTimeIntl, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE } from '@danielmoncada/angular-datetime-picker';
+import { Moment } from 'moment';
+// const moment = (_moment as any).default ? (_moment as any).default : _moment;
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'energy',
@@ -20,14 +21,14 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
   styleUrls: ['./energy.component.css'],
 })
 export class EnergyComponent implements OnInit {
-
-  @ViewChild('mes', {static: false}) mes: ElementRef;
   erecords: ERecord[];
   currentMonth: string;
   currentYear: string;
   totalPlan: number = 0;
   totalConsume: number = 0;
   promConsume: number = 0;
+  selectedMonth: number;
+  selectedYear: number;
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: ''};
   // opciones de la grafica
   showgraph: boolean = false;
@@ -55,21 +56,30 @@ export class EnergyComponent implements OnInit {
       this.user = token.getPayload();
       this.currentYear = moment().get('year').toString();
       this.currentMonth = moment().locale('es').format('MMMM');
+      this.selectedYear = moment().get('year');
+      this.selectedMonth = moment().get('month');
       this.generar_rango_inicial();
     });
   }
 
   onSelect(event) {
     // console.log(event);
+    const i: number = Number(event.name) - 1;
+    this.openNew(i);
   }
 
   toogleGraph() {
     this.showgraph = !this.showgraph;
   }
 
-  changeMonth() {
-    const picked_range: HTMLElement = this.mes.nativeElement;
-    picked_range.click();
+  chosenMonthHandler( normalizedMonth: Moment, datepicker: OwlDateTimeComponent<Moment> ) {
+    // console.log(normalizedMonth);
+    this.currentYear = moment(normalizedMonth).get('year').toString();
+    this.currentMonth = moment(normalizedMonth).locale('es').format('MMMM');
+    this.selectedYear = moment(normalizedMonth).get('year');
+    this.selectedMonth = moment(normalizedMonth).get('month');
+    datepicker.close();
+    this.generar_rango_inicial();
   }
 
   deleteERecord(id: number) {
@@ -93,9 +103,9 @@ export class EnergyComponent implements OnInit {
     this.totalPlan = 0;
     this.totalConsume = 0;
     this.erecords = [];
-    let fday = moment().startOf('month').toDate();
+    let fday = moment().set('year', this.selectedYear).set('month', this.selectedMonth).startOf('month').toDate();
     // fday.setTime(fday.getTime() + fday.getTimezoneOffset() * 60 * 1000);
-    const lday = moment().endOf('month').toDate();
+    const lday = moment().set('year', this.selectedYear).set('month', this.selectedMonth).endOf('month').toDate();
     while (moment(fday).isSameOrBefore(lday, 'day')) {
       const erecord: ERecord = {
         fecha: fday,
@@ -108,7 +118,7 @@ export class EnergyComponent implements OnInit {
       this.erecords.push(erecord);
       fday = moment(fday).locale('es').add(1, 'days').toDate();
     }
-    this.energyService.getERecords(moment().get('year'), moment().get('month') + 1).subscribe((res: ERecord[]) => {
+    this.energyService.getERecords(this.selectedYear, this.selectedMonth + 1).subscribe((res: ERecord[]) => {
       // console.log(res);
       // console.log(this.erecords);
       let last = 0;

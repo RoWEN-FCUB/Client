@@ -6,7 +6,7 @@ import { WDevice } from '../../models/WDevice';
 import { WorkshopService } from '../../services/workshop.service';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
-import { resourceUsage } from 'process';
+
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'new-wrecord',

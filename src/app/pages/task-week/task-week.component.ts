@@ -4,7 +4,7 @@ import {
 import { TaskService } from '../../services/task.service';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { Task } from '../../models/Task';
-import { NbDatepicker, NbDatepickerAdapter, NbDialogService} from '@nebular/theme';
+import { NbDialogService} from '@nebular/theme';
 import { NewTaskComponent } from '../new-task/new-task.component';
 import { NewObsComponent } from '../new-obs/new-obs.component';
 import * as moment from 'moment';
