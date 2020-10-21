@@ -244,4 +244,94 @@ export class EnergyComponent implements OnInit {
     });
   }
 
+  export() {
+    const table_to_print = []; // tabla final a imprimir
+    // tslint:disable-next-line: max-line-length
+    const head = [
+      '',
+      'Día',
+      'Plan',
+      'Real',
+      'Plan acumulado',
+      'Real acumulado',
+      'Lectura']; // cada fila
+    table_to_print.push(head);
+    for (let i = 0; i < this.erecords.length; i++) {
+      // tslint:disable-next-line: max-line-length
+      const dia = moment.utc(this.erecords[i].fecha).locale('es').format('dddd').toUpperCase();
+      let bgcolor = '';
+      if  (dia === 'SÁBADO' || dia === 'DOMINGO') {
+        bgcolor = '#CCCCCC';
+      }
+      const row = [
+        {text: dia, fillColor: bgcolor},
+        {text: (i + 1).toString(), fillColor: bgcolor},
+        {text: (this.erecords[i].plan > 0) ? this.erecords[i].plan.toString() : '', fillColor: bgcolor},
+        {text: (this.erecords[i].consumo > 0) ? this.erecords[i].consumo.toString() : '', fillColor: bgcolor},
+        {text: this.erecords[i].planacumulado.toString(), fillColor: bgcolor},
+        {text: this.erecords[i].realacumulado.toString(), fillColor: bgcolor},
+        {text: (this.erecords[i].lectura > 0) ? this.erecords[i].lectura.toString() : '', fillColor: bgcolor}];
+      table_to_print.push(row);
+    }
+    const docDefinition = {
+      info: {
+        title: 'Consumo de energía de ' + this.currentMonth + ' del ' + this.currentYear,
+      },
+      footer: function(currentPage, pageCount) {
+        return {
+          text: 'Página ' + currentPage.toString() + ' de ' + pageCount,
+          alignment: 'right',
+          margin: [2, 2, 5, 2],
+          fontSize: 10,
+        };
+      },
+      pageSize: 'LETTER',
+      // pageOrientation: 'landscape',
+      content: [
+        {
+          text: 'Desglose Plan de Energía CITMATEL ' + this.currentYear, fontSize: 15, width: 'auto',
+        },
+        {
+          text: 'Plan para el mes de ' + this.currentMonth + ' ' + this.totalPlan + ' KW', fontSize: 15, width: 'auto',
+        },
+        {
+          table: {
+            widths: [70, 50, 50, 50, 90, 90, 70],
+            body: table_to_print,
+            fontSize: 12,
+          },
+          layout: {
+            paddingLeft: function(i, node) { return 3; },
+            paddingRight: function(i, node) { return 3; },
+            paddingTop: function(i, node) { return 1; },
+            paddingBottom: function(i, node) { return 1; },
+            hLineWidth: function (i, node) {
+              return (i < 2 || i === node.table.body.length) ? 2 : 1;
+            },
+            vLineWidth: function (i, node) {
+              return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+            },
+            hLineColor: function (i, node) {
+              return (i < 2 || i === node.table.body.length) ? 'black' : 'gray';
+            },
+            vLineColor: function (i, node) {
+              return (i === 0 || i === node.table.widths.length) ? 'black' : 'gray';
+            },
+          },
+        },
+        {
+          table: {
+            body: [{text: ' '}],
+            heights: [100],
+          },
+        },
+        {
+          text: 'Elaborado por:_______________________________________________________', fontSize: 12, width: 'auto',
+        },
+      ],
+      pageMargins: [25, 35, 15, 5],
+    };
+    pdfMake.createPdf(docDefinition).download('Control de energía de ' + this.currentMonth + ' del ' + this.currentYear);
+  }
+
 }
