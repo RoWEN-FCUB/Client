@@ -326,7 +326,7 @@ export class EnergyComponent implements OnInit {
           },
         },
         {
-          text: 'Elaborado por:_______________________________________________________', fontSize: 12, width: 'auto',
+          text: 'Elaborado por: ' + this.user.fullname, fontSize: 12, width: 'auto',
         },
       ],
       pageMargins: [25, 35, 15, 5],
