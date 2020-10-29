@@ -18,6 +18,7 @@ export class EnergyPlansComponent implements OnInit {
   dates = [];
   fecha_inicio: Date = new Date();
   fecha_fin: Date = new Date();
+  startDate: Date; // fecha inicial en la que abre el selector de fecha
   constructor(private energyService: EnergyService, protected dialogRef: NbDialogRef<any>) { }
 
   ngOnInit(): void {

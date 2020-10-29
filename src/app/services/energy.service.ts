@@ -15,6 +15,10 @@ export class EnergyService {
     return this.http.get(ipserver + 'energy/list/' + year + '&' + month, {responseType: 'json'});
   }
 
+  getMonths(year: number) {
+    return this.http.get(ipserver + 'energy/months/' + year, {responseType: 'json'});
+  }
+
   getEReading(date: string) {
     return this.http.get(ipserver + 'energy/reading/' + date, {responseType: 'json'});
   }

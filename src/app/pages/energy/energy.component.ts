@@ -29,7 +29,10 @@ export class EnergyComponent implements OnInit {
   promConsume: number = 0;
   selectedMonth: number;
   selectedYear: number;
+  show: boolean = false;
+  showstring: string[] = ['Mes', 'Año'];
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: ''};
+  months: {Mes: number, Plan: number, Consumo: number}[];
   // opciones de la grafica
   showgraph: boolean = false;
   multi: any[] = [];
@@ -58,7 +61,8 @@ export class EnergyComponent implements OnInit {
       this.currentMonth = moment().locale('es').format('MMMM');
       this.selectedYear = moment().get('year');
       this.selectedMonth = moment().get('month');
-      this.generar_rango_inicial();
+      this.generar_rango_inicial(false);
+      this.consumo_por_meses();
     });
   }
 
@@ -72,6 +76,10 @@ export class EnergyComponent implements OnInit {
     this.showgraph = !this.showgraph;
   }
 
+  toogleShow(event) {
+    this.show = !this.show;
+  }
+
   chosenMonthHandler( normalizedMonth: Moment, datepicker: OwlDateTimeComponent<Moment> ) {
     // console.log(normalizedMonth);
     this.currentYear = moment(normalizedMonth).get('year').toString();
@@ -79,7 +87,7 @@ export class EnergyComponent implements OnInit {
     this.selectedYear = moment(normalizedMonth).get('year');
     this.selectedMonth = moment(normalizedMonth).get('month');
     datepicker.close();
-    this.generar_rango_inicial();
+    this.generar_rango_inicial(false);
   }
 
   deleteERecord(id: number) {
@@ -95,11 +103,18 @@ export class EnergyComponent implements OnInit {
         icon: 'success',
         title: 'Registro eliminado.',
       } as SweetAlertOptions);
-      this.generar_rango_inicial();
+      this.generar_rango_inicial(false);
     });
   }
 
-  generar_rango_inicial() {
+  consumo_por_meses() {
+    this.energyService.getMonths(this.selectedYear).subscribe(res => {
+      this.months = res as {Mes: number, Plan: number, Consumo: number}[];
+      // console.log(this.months);
+    });
+  }
+
+  generar_rango_inicial(adjust: boolean) {
     this.totalPlan = 0;
     this.totalConsume = 0;
     this.erecords = [];
@@ -157,6 +172,9 @@ export class EnergyComponent implements OnInit {
       }
       // tslint:disable-next-line: max-line-length
       this.multi = [{name: 'Plan ' + this.totalPlan + ' KW', series: planes}, {name: 'Consumo ' + this.totalConsume + ' KW', series: consumos}];
+      if (adjust) {
+        this.consume_adjust();
+      }
     });
   }
 
@@ -173,8 +191,7 @@ export class EnergyComponent implements OnInit {
       this.dialogService.open(NewErecordComponent, {context: {newERecord: newe, prev_reading: prev}}).onClose.subscribe(
         (newWRecord: ERecord) => {
           if (newWRecord) {
-            this.generar_rango_inicial();
-            this.consume_adjust();
+            this.generar_rango_inicial(true);
           }
         },
       );
@@ -182,10 +199,11 @@ export class EnergyComponent implements OnInit {
   }
 
   openPlans() {
-    this.dialogService.open(EnergyPlansComponent).onClose.subscribe(
+    // tslint:disable-next-line: max-line-length
+    this.dialogService.open(EnergyPlansComponent, {context: {startDate: new Date(this.selectedYear, this.selectedMonth)}}).onClose.subscribe(
       (newWRecord: ERecord) => {
         if (newWRecord) {
-          this.generar_rango_inicial();
+          this.generar_rango_inicial(false);
         }
       },
     );
@@ -209,6 +227,7 @@ export class EnergyComponent implements OnInit {
       if (res.length > 0) {
         prev = res[0].lectura;
       }
+      // console.log(this.erecords);
       for (let i = 0; i < this.erecords.length; i++) {
         if (i === 0) {
           this.erecords[i].realacumulado = 0;
@@ -225,7 +244,9 @@ export class EnergyComponent implements OnInit {
             this.erecords[i].consumo = 0;
           }
         }
+        console.log(this.erecords[i].consumo);
         this.totalConsume += this.erecords[i].consumo;
+        console.log(this.totalConsume);
         this.totalPlan += this.erecords[i].plan;
         this.erecords[i].realacumulado = this.erecords[i].consumo + this.erecords[last].realacumulado;
         this.erecords[i].planacumulado = this.erecords[i].plan + this.erecords[last].planacumulado;

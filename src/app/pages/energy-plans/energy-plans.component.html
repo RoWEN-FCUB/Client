@@ -7,7 +7,7 @@
             <small id="planHelp" class="form-text text-muted">Plan de energía a establecer.</small>
         </div>
         <div>            
-            <owl-date-time-inline [(ngModel)]="dates" [pickerType]="'calendar'" [selectMode]="'range'"></owl-date-time-inline>
+            <owl-date-time-inline [(ngModel)]="dates" [startAt]="startDate" [pickerType]="'calendar'" [selectMode]="'range'"></owl-date-time-inline>
         </div>
     </nb-card-body>
     <nb-card-footer>
