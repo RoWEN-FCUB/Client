@@ -26,16 +26,19 @@ export class EnergyComponent implements OnInit {
   currentYear: string;
   totalPlan: number = 0;
   totalConsume: number = 0;
+  totalYearPlan: number = 0;
+  totalYearConsume: number = 0;
   promConsume: number = 0;
   selectedMonth: number;
   selectedYear: number;
   show: boolean = false;
   showstring: string[] = ['Mes', 'Año'];
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: ''};
-  months: {Mes: number, Plan: number, Consumo: number}[];
+  months: {Mes: number, Plan: number, Consumo: number, PlanAcumulado?: number, RealAcumulado?: number}[] = [];
   // opciones de la grafica
   showgraph: boolean = false;
   multi: any[] = [];
+  multi2: any[] = [];
   view: any[] = [900, 250];
   showXAxis = true;
   showYAxis = true;
@@ -90,6 +93,16 @@ export class EnergyComponent implements OnInit {
     this.generar_rango_inicial(false);
   }
 
+  chosenYearHandler( normalizedMonth: Moment, datepicker: OwlDateTimeComponent<Moment> ) {
+    // console.log(normalizedMonth);
+    if (this.show) {
+      this.currentYear = moment(normalizedMonth).get('year').toString();
+      this.selectedYear = moment(normalizedMonth).get('year');
+      datepicker.close();
+      this.consumo_por_meses();
+    }
+  }
+
   deleteERecord(id: number) {
     const Toast = Swal.mixin({
       toast: true,
@@ -110,6 +123,27 @@ export class EnergyComponent implements OnInit {
   consumo_por_meses() {
     this.energyService.getMonths(this.selectedYear).subscribe(res => {
       this.months = res as {Mes: number, Plan: number, Consumo: number}[];
+      this.totalYearPlan = 0;
+      this.totalYearConsume = 0;
+      const consumos = [];
+      const planes = [];
+      for (let i = 0; i < this.months.length; i++) {
+        if (i === 0) {
+          this.months[i].PlanAcumulado = this.months[i].Plan;
+          this.months[i].RealAcumulado = this.months[i].Consumo;
+        } else {
+          this.months[i].PlanAcumulado = this.months[i].Plan + this.months[i - 1].PlanAcumulado;
+          this.months[i].RealAcumulado = this.months[i].Consumo + this.months[i - 1].RealAcumulado;
+        }
+        // tslint:disable-next-line: max-line-length
+        consumos.push({name : moment().locale('es').set('month', this.months[i].Mes - 1).format('MMMM').toUpperCase(), value : this.months[i].Consumo});
+        // tslint:disable-next-line: max-line-length
+        planes.push({name : moment().locale('es').set('month', this.months[i].Mes - 1).format('MMMM').toUpperCase(), value : this.months[i].Plan});
+        this.totalYearPlan += this.months[i].Plan;
+        this.totalYearConsume += this.months[i].Consumo;
+      }
+      // tslint:disable-next-line: max-line-length
+      this.multi2 = [{name: 'Plan ' + this.totalYearPlan + ' KW', series: planes}, {name: 'Consumo ' + this.totalYearConsume + ' KW', series: consumos}];
       // console.log(this.months);
     });
   }
@@ -168,7 +202,7 @@ export class EnergyComponent implements OnInit {
         }
       }
       if (consumos.length > 0) {
-        this.promConsume = Math.round(this.totalConsume / consumos.length);
+        this.promConsume = Math.round(this.totalConsume / (last + 1));
       }
       // tslint:disable-next-line: max-line-length
       this.multi = [{name: 'Plan ' + this.totalPlan + ' KW', series: planes}, {name: 'Consumo ' + this.totalConsume + ' KW', series: consumos}];
@@ -186,15 +220,29 @@ export class EnergyComponent implements OnInit {
       if (res.length > 0) {
         prev = res[0].lectura;
       }
-      // tslint:disable-next-line: max-line-length
-      const newe = Object.assign({}, this.erecords[i]);
-      this.dialogService.open(NewErecordComponent, {context: {newERecord: newe, prev_reading: prev}}).onClose.subscribe(
-        (newWRecord: ERecord) => {
-          if (newWRecord) {
-            this.generar_rango_inicial(true);
-          }
-        },
-      );
+      if (i > 0 && this.erecords[i - 1].plan > 0 && !this.erecords[i - 1].consumo) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 3000,
+        });
+        Toast.fire({
+          icon: 'error',
+          title: 'Debe llenar el registro anterior.',
+        } as SweetAlertOptions);
+      } else {
+        // tslint:disable-next-line: max-line-length
+        const newe = Object.assign({}, this.erecords[i]);
+        this.dialogService.open(NewErecordComponent, {context: {newERecord: newe, prev_reading: prev}}).onClose.subscribe(
+          (newWRecord: ERecord) => {
+            if (newWRecord) {
+              this.generar_rango_inicial(true);
+            }
+          },
+        );
+      }
     });
   }
 
@@ -244,9 +292,9 @@ export class EnergyComponent implements OnInit {
             this.erecords[i].consumo = 0;
           }
         }
-        console.log(this.erecords[i].consumo);
+        // console.log(this.erecords[i].consumo);
         this.totalConsume += this.erecords[i].consumo;
-        console.log(this.totalConsume);
+        // console.log(this.totalConsume);
         this.totalPlan += this.erecords[i].plan;
         this.erecords[i].realacumulado = this.erecords[i].consumo + this.erecords[last].realacumulado;
         this.erecords[i].planacumulado = this.erecords[i].plan + this.erecords[last].planacumulado;
@@ -266,93 +314,176 @@ export class EnergyComponent implements OnInit {
   }
 
   export() {
-    const table_to_print = []; // tabla final a imprimir
-    // tslint:disable-next-line: max-line-length
-    const head = [
-      '',
-      'Día',
-      'Plan',
-      'Real',
-      'Plan acumulado',
-      'Real acumulado',
-      'Lectura']; // cada fila
-    table_to_print.push(head);
-    for (let i = 0; i < this.erecords.length; i++) {
+    if (!this.show) {
+      const table_to_print = []; // tabla final a imprimir
       // tslint:disable-next-line: max-line-length
-      const dia = moment.utc(this.erecords[i].fecha).locale('es').format('dddd').toUpperCase();
-      let bgcolor = '';
-      if  (dia === 'SÁBADO' || dia === 'DOMINGO') {
-        bgcolor = '#CCCCCC';
+      const head = [
+        '',
+        'Día',
+        'Plan',
+        'Real',
+        'Plan acumulado',
+        'Real acumulado',
+        'Lectura']; // cada fila
+      table_to_print.push(head);
+      for (let i = 0; i < this.erecords.length; i++) {
+        // tslint:disable-next-line: max-line-length
+        const dia = moment.utc(this.erecords[i].fecha).locale('es').format('dddd').toUpperCase();
+        let bgcolor = '';
+        if  (dia === 'SÁBADO' || dia === 'DOMINGO') {
+          bgcolor = '#CCCCCC';
+        }
+        const row = [
+          {text: dia, fillColor: bgcolor},
+          {text: (i + 1).toString(), fillColor: bgcolor},
+          {text: (this.erecords[i].plan > 0) ? this.erecords[i].plan.toString() : '', fillColor: bgcolor},
+          {text: (this.erecords[i].consumo > 0) ? this.erecords[i].consumo.toString() : '', fillColor: bgcolor},
+          {text: this.erecords[i].planacumulado.toString(), fillColor: bgcolor},
+          {text: this.erecords[i].realacumulado.toString(), fillColor: bgcolor},
+          {text: (this.erecords[i].lectura > 0) ? this.erecords[i].lectura.toString() : '', fillColor: bgcolor}];
+        table_to_print.push(row);
       }
-      const row = [
-        {text: dia, fillColor: bgcolor},
-        {text: (i + 1).toString(), fillColor: bgcolor},
-        {text: (this.erecords[i].plan > 0) ? this.erecords[i].plan.toString() : '', fillColor: bgcolor},
-        {text: (this.erecords[i].consumo > 0) ? this.erecords[i].consumo.toString() : '', fillColor: bgcolor},
-        {text: this.erecords[i].planacumulado.toString(), fillColor: bgcolor},
-        {text: this.erecords[i].realacumulado.toString(), fillColor: bgcolor},
-        {text: (this.erecords[i].lectura > 0) ? this.erecords[i].lectura.toString() : '', fillColor: bgcolor}];
-      table_to_print.push(row);
+      const docDefinition = {
+        info: {
+          title: 'Consumo de energía de ' + this.currentMonth + ' del ' + this.currentYear,
+        },
+        footer: function(currentPage, pageCount) {
+          return {
+            text: 'Página ' + currentPage.toString() + ' de ' + pageCount,
+            alignment: 'right',
+            margin: [2, 2, 5, 2],
+            fontSize: 10,
+          };
+        },
+        pageSize: 'LETTER',
+        // pageOrientation: 'landscape',
+        content: [
+          {
+            text: 'Desglose Plan de Energía CITMATEL ' + this.currentYear, fontSize: 15, width: 'auto',
+          },
+          {
+            text: 'Plan para el mes de ' + this.currentMonth + ' ' + this.totalPlan + ' KW', fontSize: 15, width: 'auto',
+          },
+          {
+            table: {
+              widths: [70, 50, 50, 50, 90, 90, 70],
+              body: table_to_print,
+              fontSize: 12,
+            },
+            layout: {
+              paddingLeft: function(i, node) { return 3; },
+              paddingRight: function(i, node) { return 3; },
+              paddingTop: function(i, node) { return 1; },
+              paddingBottom: function(i, node) { return 1; },
+              hLineWidth: function (i, node) {
+                return (i < 2 || i === node.table.body.length) ? 2 : 1;
+              },
+              vLineWidth: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+              },
+              hLineColor: function (i, node) {
+                return (i < 2 || i === node.table.body.length) ? 'black' : 'gray';
+              },
+              vLineColor: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 'black' : 'gray';
+              },
+            },
+          },
+          {
+            table: {
+              body: [{text: ' '}],
+              heights: [100],
+            },
+          },
+          {
+            text: 'Elaborado por: ' + this.user.fullname, fontSize: 12, width: 'auto',
+          },
+        ],
+        pageMargins: [25, 35, 15, 5],
+      };
+      pdfMake.createPdf(docDefinition).download('Control de energía de ' + this.currentMonth + ' del ' + this.currentYear);
+    } else {
+      const table_to_print = []; // tabla final a imprimir
+      // tslint:disable-next-line: max-line-length
+      const head = [
+        'Mes',
+        'Plan',
+        'Real',
+        'Plan acumulado',
+        'Real acumulado']; // cada fila
+      table_to_print.push(head);
+      for (let i = 0; i < this.months.length; i++) {
+        // tslint:disable-next-line: max-line-length
+        const mes = moment().set('month', this.months[i].Mes - 1).locale('es').format('MMMM').toUpperCase();
+        const row = [
+          {text: mes},
+          {text: this.months[i].Plan.toString()},
+          {text: this.months[i].Consumo.toString()},
+          {text: this.months[i].PlanAcumulado.toString()},
+          {text: this.months[i].RealAcumulado.toString()},
+          ];
+        table_to_print.push(row);
+      }
+      const docDefinition = {
+        info: {
+          title: 'Consumo de energía del ' + this.currentYear,
+        },
+        footer: function(currentPage, pageCount) {
+          return {
+            text: 'Página ' + currentPage.toString() + ' de ' + pageCount,
+            alignment: 'right',
+            margin: [2, 2, 5, 2],
+            fontSize: 10,
+          };
+        },
+        pageSize: 'LETTER',
+        // pageOrientation: 'landscape',
+        content: [
+          {
+            text: 'Desglose Plan de Energía CITMATEL ' + this.currentYear, fontSize: 15, width: 'auto',
+          },
+          {
+            text: 'Plan para el año ' + this.totalYearPlan + ' KW', fontSize: 15, width: 'auto',
+          },
+          {
+            table: {
+              widths: [90, 70, 70, 100, 100],
+              body: table_to_print,
+              fontSize: 12,
+            },
+            layout: {
+              paddingLeft: function(i, node) { return 3; },
+              paddingRight: function(i, node) { return 3; },
+              paddingTop: function(i, node) { return 1; },
+              paddingBottom: function(i, node) { return 1; },
+              hLineWidth: function (i, node) {
+                return (i < 2 || i === node.table.body.length) ? 2 : 1;
+              },
+              vLineWidth: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+              },
+              hLineColor: function (i, node) {
+                return (i < 2 || i === node.table.body.length) ? 'black' : 'gray';
+              },
+              vLineColor: function (i, node) {
+                return (i === 0 || i === node.table.widths.length) ? 'black' : 'gray';
+              },
+            },
+          },
+          {
+            table: {
+              body: [{text: ' '}],
+              heights: [100],
+            },
+          },
+          {
+            text: 'Elaborado por: ' + this.user.fullname, fontSize: 12, width: 'auto',
+          },
+        ],
+        pageMargins: [25, 35, 15, 5],
+      };
+      pdfMake.createPdf(docDefinition).download('Control de energía del ' + this.currentYear);
     }
-    const docDefinition = {
-      info: {
-        title: 'Consumo de energía de ' + this.currentMonth + ' del ' + this.currentYear,
-      },
-      footer: function(currentPage, pageCount) {
-        return {
-          text: 'Página ' + currentPage.toString() + ' de ' + pageCount,
-          alignment: 'right',
-          margin: [2, 2, 5, 2],
-          fontSize: 10,
-        };
-      },
-      pageSize: 'LETTER',
-      // pageOrientation: 'landscape',
-      content: [
-        {
-          text: 'Desglose Plan de Energía CITMATEL ' + this.currentYear, fontSize: 15, width: 'auto',
-        },
-        {
-          text: 'Plan para el mes de ' + this.currentMonth + ' ' + this.totalPlan + ' KW', fontSize: 15, width: 'auto',
-        },
-        {
-          table: {
-            widths: [70, 50, 50, 50, 90, 90, 70],
-            body: table_to_print,
-            fontSize: 12,
-          },
-          layout: {
-            paddingLeft: function(i, node) { return 3; },
-            paddingRight: function(i, node) { return 3; },
-            paddingTop: function(i, node) { return 1; },
-            paddingBottom: function(i, node) { return 1; },
-            hLineWidth: function (i, node) {
-              return (i < 2 || i === node.table.body.length) ? 2 : 1;
-            },
-            vLineWidth: function (i, node) {
-              return (i === 0 || i === node.table.widths.length) ? 2 : 1;
-            },
-            hLineColor: function (i, node) {
-              return (i < 2 || i === node.table.body.length) ? 'black' : 'gray';
-            },
-            vLineColor: function (i, node) {
-              return (i === 0 || i === node.table.widths.length) ? 'black' : 'gray';
-            },
-          },
-        },
-        {
-          table: {
-            body: [{text: ' '}],
-            heights: [100],
-          },
-        },
-        {
-          text: 'Elaborado por: ' + this.user.fullname, fontSize: 12, width: 'auto',
-        },
-      ],
-      pageMargins: [25, 35, 15, 5],
-    };
-    pdfMake.createPdf(docDefinition).download('Control de energía de ' + this.currentMonth + ' del ' + this.currentYear);
   }
 
 }

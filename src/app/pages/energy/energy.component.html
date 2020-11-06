@@ -2,15 +2,15 @@
     <nb-card-header>
         Control de energía eléctrica
         <button class="ml-2" (click)="openPlans()" nbTooltip="Establecer planes diarios." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="browser-outline"></nb-icon>Planes</button>
-        <button class="ml-2" (click)="toogleGraph()" nbTooltip="Establecer planes diarios." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="activity-outline"></nb-icon>Gráfica</button>
+        <button class="ml-2" (click)="toogleGraph()" nbTooltip="Mostrar gráfico de consumo." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="activity-outline"></nb-icon>Gráfica</button>
         <button class="ml-2" (click)="export()" nbTooltip="Exportar a PDF." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
-        <button class="ml-2" [owlDateTimeTrigger]="dt" nbTooltip="Seleccionar {{show}} a mostrar." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="keypad-outline"></nb-icon>Seleccionar {{showstring[show ? 1 : 0]}}</button>
+        <button class="ml-2" [owlDateTimeTrigger]="dt" nbTooltip="Seleccionar {{showstring[show ? 1 : 0]}} a mostrar." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="keypad-outline"></nb-icon>Seleccionar {{showstring[show ? 1 : 0]}}</button>
         <input [owlDateTime]="dt" #mes [owlDateTimeTrigger]="dt" nbInput status="info" style="visibility: hidden">
-        <owl-date-time #dt="owlDateTime" [startView]="'year'" (monthSelected)="chosenMonthHandler($event, dt)" [pickerType]="'calendar'"></owl-date-time>
+        <owl-date-time #dt="owlDateTime" [startView]="!show ? 'year' : 'multi-years'" (yearSelected)="chosenYearHandler($event, dt)" (monthSelected)="chosenMonthHandler($event, dt)" [pickerType]="'calendar'"></owl-date-time>
     </nb-card-header>
     <nb-card-body>
         <div class="row">
-            <nb-toggle (checkedChange)="toogleShow($event)" status="info" labelPosition="right"><span class="text-muted" #text_muted>{{showstring[show ? 1 : 0]}}</span></nb-toggle>
+            <label class="mr-2" style="font-family: Open Sans, sans-serif; font-size: 0.8125rem; font-weight: 600; margin-top: 0.38rem;">Mes</label><nb-toggle (checkedChange)="toogleShow($event)" status="info" labelPosition="right"><span #text_muted>Año</span></nb-toggle>
         </div>
         <div style="width: fit-content; height: 250px;" *ngIf="showgraph && !show" class="mb-2">
             <ngx-charts-line-chart
@@ -75,6 +75,23 @@
                 </tbody>
             </table>            
         </div>
+        <div style="width: fit-content; height: 250px;" *ngIf="showgraph && show" class="mb-2">
+            <ngx-charts-line-chart
+                [scheme]="colorScheme"
+                [results]="multi2"
+                [gradient]="gradient"
+                [xAxis]="showXAxis"
+                [yAxis]="showYAxis"
+                [legend]="showLegend"
+                [showXAxisLabel]="showXAxisLabel"
+                [showYAxisLabel]="showYAxisLabel"
+                [xAxisLabel]="'Meses'"
+                [yAxisLabel]="yAxisLabel"
+                [autoScale]="autoScale"
+                [timeline]="timeline"
+                [legendTitle]="'Leyenda'">
+            </ngx-charts-line-chart>
+        </div>
         <div class='table-responsive mt-2' *ngIf="show">
             <table id="tablePreview" class="table table-hover table-sm">                
                 <thead>
@@ -84,11 +101,11 @@
                     </tr>
                     <tr>
                         <th colspan="7"  style="border: none !important;">
-                            Plan para el año {{currentYear}}: {{totalPlan}} KW
-                            <span class="ml-3">Real consumido: {{totalConsume}} KW</span>
-                            <span class="ml-3" *ngIf="totalPlan >= totalConsume">Ahorro: {{totalPlan-totalConsume}} KW</span>
-                            <span class="ml-3" *ngIf="totalConsume > totalPlan">Sobregiro: {{totalConsume-totalPlan}} KW</span>
-                            <span class="ml-3">Consumo promedio: {{promConsume}} KW</span>
+                            Plan para el año {{currentYear}}: {{totalYearPlan}} KW
+                            <span class="ml-3">Real consumido: {{totalYearConsume}} KW</span>
+                            <span class="ml-3" *ngIf="totalYearPlan >= totalYearConsume">Ahorro: {{totalYearPlan-totalYearConsume}} KW</span>
+                            <span class="ml-3" *ngIf="totalYearConsume > totalYearPlan">Sobregiro: {{totalYearConsume-totalYearPlan}} KW</span>
+                            <span class="ml-3">Consumo promedio: {{totalYearConsume / months.length}} KW</span>
                         </th>                        
                     </tr>
                     <tr>                        
@@ -110,9 +127,9 @@
                                 {{month.Consumo}}
                             </span>
                         </td>
-                        <td><span *ngIf="month.Consumo > 0"></span></td>
-                        <td><span *ngIf="month.Consumo > 0"></span></td>
-                        <td><span *ngIf="month.Consumo > 0"></span></td>
+                        <td><span *ngIf="month.Consumo > 0">{{month.PlanAcumulado}}</span></td>
+                        <td><span *ngIf="month.Consumo > 0">{{month.RealAcumulado}}</span></td>
+                        <td><span *ngIf="month.Consumo > 0">{{month.PlanAcumulado - month.RealAcumulado}}</span></td>
                         <td><nb-icon *ngIf="user.role==='admin' && month.Consumo > 0" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar registro del mes" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon></td>
                     </tr>
                 </tbody>
