@@ -9,6 +9,9 @@
       ],
       "@nebular/*": [
         "../node_modules/@nebular/*"
+      ],
+      "exceljs": [
+        "node_modules/exceljs/dist/exceljs.min"
       ]
     }
   },

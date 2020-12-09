@@ -13,6 +13,11 @@ import { EnergyPlansComponent } from '../energy-plans/energy-plans.component';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import { OwlDateTimeComponent, OwlDateTimeIntl, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE } from '@danielmoncada/angular-datetime-picker';
 import { Moment } from 'moment';
+import { Workbook } from 'exceljs';
+import * as fsaver from 'file-saver';
+import ipserver from '../../ipserver';
+import {HttpClient} from '@angular/common/http';
+
 // const moment = (_moment as any).default ? (_moment as any).default : _moment;
 @Component({
   // tslint:disable-next-line: component-selector
@@ -24,7 +29,7 @@ export class EnergyComponent implements OnInit {
   erecords: ERecord[];
   currentMonth: string;
   currentYear: string;
-  totalPlan: number = 0;
+  public totalPlan: number = 0;
   totalConsume: number = 0;
   totalYearPlan: number = 0;
   totalYearConsume: number = 0;
@@ -55,7 +60,8 @@ export class EnergyComponent implements OnInit {
   };
   // // //
 
-  constructor(private energyService: EnergyService, private dialogService: NbDialogService, private authService: NbAuthService) { }
+  // tslint:disable-next-line: max-line-length
+  constructor(private http: HttpClient, private energyService: EnergyService, private dialogService: NbDialogService, private authService: NbAuthService) { }
 
   ngOnInit(): void {
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
@@ -67,6 +73,60 @@ export class EnergyComponent implements OnInit {
       this.generar_rango_inicial(false);
       this.consumo_por_meses();
     });
+  }
+
+  async exportLocalXlsx(index: number) {
+    const { value: consumopico } = await Swal.fire({
+      title: 'Introduzca el consumo del horario pico',
+      input: 'text',
+      inputLabel: 'Consumo:',
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Debe escribir un número!';
+        }
+      },
+    });
+    if (consumopico) {
+      const workBook: Workbook = new Workbook();
+      const subscription = this.http.get('./assets/Modelo5.xlsx', { responseType: 'blob' })
+      .subscribe(value => {
+      const blob: Blob = value;
+      const reader = new FileReader();
+      const tplan = this.totalPlan;
+      const ac_plan = this.erecords[index].planacumulado;
+      const ac_real = this.erecords[index].realacumulado;
+      const d_plan = this.erecords[index].plan;
+      const d_real = this.erecords[index].consumo;
+      const edate = this.erecords[index].fecha.toString().substr(0, this.erecords[index].fecha.toString().indexOf('T'));
+      const month = moment(edate).locale('es').format('MMMM').toUpperCase();
+      const fdate = moment(edate).format('DD/MM/YYYY');
+      reader.onload = function (e: any) {
+        const contents = e.target.result;
+        workBook.xlsx.load(contents).then(data => {
+          workBook.worksheets[0].getCell(1, 6).value = month;
+          workBook.worksheets[0].getCell(1, 8).value = fdate;
+          workBook.worksheets[0].getCell(3, 14).value = tplan;
+          workBook.worksheets[0].getCell(3, 15).value = ac_plan;
+          workBook.worksheets[0].getCell(3, 16).value = ac_real;
+          workBook.worksheets[0].getCell(3, 17).model.result = undefined; // para que recalcule las formulas
+          workBook.worksheets[0].getCell(3, 18).model.result = undefined;
+          workBook.worksheets[0].getCell(3, 19).value = d_plan;
+          workBook.worksheets[0].getCell(3, 20).value = d_real;
+          workBook.worksheets[0].getCell(3, 21).model.result = undefined;
+          workBook.worksheets[0].getCell(3, 22).model.result = undefined;
+          workBook.worksheets[0].getCell(3, 27).value = Number.parseFloat(consumopico);
+          workBook.worksheets[0].getCell(3, 28).model.result = undefined;
+          workBook.worksheets[0].getCell(3, 29).model.result = undefined;
+          workBook.xlsx.writeBuffer().then(data1 => {
+            const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            fsaver.saveAs(blobUpdate, 'Modelo5 ' + edate + '.xlsx');
+          });
+        });
+      };
+      reader.readAsArrayBuffer(blob);
+      });
+    }
   }
 
   onSelect(event) {

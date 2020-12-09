@@ -1,7 +1,7 @@
 <nb-card fullwidth accent="info">
     <nb-card-header>
-        Control de energía eléctrica
-        <button class="ml-2" (click)="openPlans()" nbTooltip="Establecer planes diarios." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="browser-outline"></nb-icon>Planes</button>
+        Control de energía eléctrica        
+        <button *ngIf="user.role==='admin'" class="ml-2" (click)="openPlans()" nbTooltip="Establecer planes diarios." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="browser-outline"></nb-icon>Planes</button>
         <button class="ml-2" (click)="toogleGraph()" nbTooltip="Mostrar gráfico de consumo." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="activity-outline"></nb-icon>Gráfica</button>
         <button class="ml-2" (click)="export()" nbTooltip="Exportar a PDF." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
         <button class="ml-2" [owlDateTimeTrigger]="dt" nbTooltip="Seleccionar {{showstring[show ? 1 : 0]}} a mostrar." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="keypad-outline"></nb-icon>Seleccionar {{showstring[show ? 1 : 0]}}</button>
@@ -38,7 +38,7 @@
                         <th colspan="6" style="border: none !important;">Desglose Plan de Energía CITMATEL {{currentYear}}</th>                        
                     </tr>
                     <tr>
-                        <th colspan="6"  style="border: none !important;">
+                        <th colspan="7"  style="border: none !important;">
                             Plan para el mes de {{currentMonth}}: {{totalPlan}} KW
                             <span class="ml-3">Real consumido: {{totalConsume}} KW</span>
                             <span class="ml-3" *ngIf="totalPlan >= totalConsume">Ahorro: {{totalPlan-totalConsume}} KW</span>
@@ -48,28 +48,30 @@
                     </tr>
                     <tr>
                         <th></th>
-                        <th>DIA</th>
-                        <th>PLAN</th>
-                        <th>REAL</th>
+                        <th>DIA</th>                        
                         <th>PLAN ACUMULADO</th>
                         <th>REAL ACUMULADO</th>
+                        <th>PLAN</th>
+                        <th>REAL</th>
                         <th>LECTURA</th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>          
                     <tr *ngFor="let erecord of erecords; let i = index" [ngClass]="erecord.fecha | dayOfWeek:3" style="cursor: pointer">
                         <th scope="row" (click)="openNew(i)">{{erecord.fecha | dayOfWeek:2}}</th>
-                        <td (click)="openNew(i)">{{i+1}}</td>
+                        <td (click)="openNew(i)">{{i+1}}</td>                        
+                        <td (click)="openNew(i)"><span *ngIf="erecord.consumo > 0">{{erecord.planacumulado}}</span></td>
+                        <td (click)="openNew(i)"><span *ngIf="erecord.consumo > 0">{{erecord.realacumulado}}</span></td>
                         <td (click)="openNew(i)"><span *ngIf="erecord.plan > 0">{{erecord.plan}}</span></td>
                         <td (click)="openNew(i)">
                             <span *ngIf="erecord.consumo > 0" [ngClass]="(erecord.plan < erecord.consumo)?'text-danger font-weight-bold':''">
                                 {{erecord.consumo}}
                             </span>
                         </td>
-                        <td (click)="openNew(i)"><span *ngIf="erecord.consumo > 0">{{erecord.planacumulado}}</span></td>
-                        <td (click)="openNew(i)"><span *ngIf="erecord.consumo > 0">{{erecord.realacumulado}}</span></td>
                         <td (click)="openNew(i)"><span *ngIf="erecord.consumo > 0">{{erecord.lectura}}</span></td>
+                        <td><nb-icon *ngIf="erecord.consumo > 0" icon="file-text-outline" (click)="exportLocalXlsx(i)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Exportar a Modelo 5" nbTooltipIcon="file-text-outline" nbTooltipStatus="info"></nb-icon></td>
                         <td><nb-icon *ngIf="user.role==='admin' && erecord.id" icon="trash-2-outline" (click)="deleteERecord(erecord.id)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar registro" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon></td>
                     </tr>
                 </tbody>
