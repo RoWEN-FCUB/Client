@@ -456,9 +456,9 @@ export class TaskWeekComponent implements OnInit {
     }
   }
 
-  openNew() {
+  openNew(fecha_i?: Date) {
     // tslint:disable-next-line: max-line-length
-    this.dialogService.open(NewTaskComponent, {context: {subordinados: this.subordinados, id_creador: this.user.id, id_usuario: this.usuario_a_mostrar}}).onClose.subscribe(
+    this.dialogService.open(NewTaskComponent, {context: {subordinados: this.subordinados, id_creador: this.user.id, id_usuario: this.usuario_a_mostrar, fecha: fecha_i}}).onClose.subscribe(
       (newTask) => {
         if (newTask) {
           newTask.task.nombre_creador = this.user.name;

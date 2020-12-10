@@ -98,7 +98,7 @@ export class EnergyComponent implements OnInit {
       const ac_real = this.erecords[index].realacumulado;
       const d_plan = this.erecords[index].plan;
       const d_real = this.erecords[index].consumo;
-      const edate = this.erecords[index].fecha.toString().substr(0, this.erecords[index].fecha.toString().indexOf('T'));
+      const edate = moment(this.erecords[index].fecha.toString().substr(0, this.erecords[index].fecha.toString().indexOf('T'))).format('DD-MM-YYYY');
       const month = moment(edate).locale('es').format('MMMM').toUpperCase();
       const fdate = moment(edate).format('DD/MM/YYYY');
       reader.onload = function (e: any) {
@@ -120,7 +120,7 @@ export class EnergyComponent implements OnInit {
           workBook.worksheets[0].getCell(3, 29).model.result = undefined;
           workBook.xlsx.writeBuffer().then(data1 => {
             const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            fsaver.saveAs(blobUpdate, 'Modelo5 ' + edate + '.xlsx');
+            fsaver.saveAs(blobUpdate, 'Modelo 5 DST Las Tunas ' + edate + '.xlsx');
           });
         });
       };
@@ -245,9 +245,9 @@ export class EnergyComponent implements OnInit {
       for (let i = 0; i < this.erecords.length; i++) {
         this.totalConsume += this.erecords[i].consumo;
         this.totalPlan += this.erecords[i].plan;
-        this.erecords[i].realacumulado = this.erecords[i].consumo + this.erecords[last].realacumulado;
-        this.erecords[i].planacumulado = this.erecords[i].plan + this.erecords[last].planacumulado;
         if (this.erecords[i].lectura) {
+          this.erecords[i].realacumulado = this.erecords[i].consumo + this.erecords[last].realacumulado;
+          this.erecords[i].planacumulado = this.erecords[i].plan + this.erecords[last].planacumulado;
           last = i;
         }
       }
@@ -380,10 +380,10 @@ export class EnergyComponent implements OnInit {
       const head = [
         '',
         'Día',
-        'Plan',
-        'Real',
         'Plan acumulado',
         'Real acumulado',
+        'Plan',
+        'Real',
         'Lectura']; // cada fila
       table_to_print.push(head);
       for (let i = 0; i < this.erecords.length; i++) {
@@ -396,10 +396,10 @@ export class EnergyComponent implements OnInit {
         const row = [
           {text: dia, fillColor: bgcolor},
           {text: (i + 1).toString(), fillColor: bgcolor},
+          {text: (this.erecords[i].planacumulado > 0) ? this.erecords[i].planacumulado.toString() : '', fillColor: bgcolor},
+          {text: (this.erecords[i].realacumulado > 0) ? this.erecords[i].realacumulado.toString() : '', fillColor: bgcolor},
           {text: (this.erecords[i].plan > 0) ? this.erecords[i].plan.toString() : '', fillColor: bgcolor},
           {text: (this.erecords[i].consumo > 0) ? this.erecords[i].consumo.toString() : '', fillColor: bgcolor},
-          {text: this.erecords[i].planacumulado.toString(), fillColor: bgcolor},
-          {text: this.erecords[i].realacumulado.toString(), fillColor: bgcolor},
           {text: (this.erecords[i].lectura > 0) ? this.erecords[i].lectura.toString() : '', fillColor: bgcolor}];
         table_to_print.push(row);
       }
@@ -426,7 +426,7 @@ export class EnergyComponent implements OnInit {
           },
           {
             table: {
-              widths: [70, 50, 50, 50, 90, 90, 70],
+              widths: [70, 50, 90, 90, 50, 50, 70],
               body: table_to_print,
               fontSize: 12,
             },

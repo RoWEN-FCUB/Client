@@ -10,7 +10,7 @@
     <nb-rangepicker #diaspicker (rangeChange)="cambiarRango($event)"></nb-rangepicker>
   </nb-card-header>
   <nb-card-body>
-    <div class="align-middle">
+    <div class="align-middle mb-2">
       <button nbTooltip="Agregar una nueva tarea" (click)="openNew()" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
       <button *ngIf="user.role==='admin' && tasktovalidate > 0" class="ml-1" (click)="validateAllTasks()" nbTooltip="Validar todas las tareas del período seleccionado" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="done-all-outline"></nb-icon>Validar todas</button>
       <button (click)="export()" class="ml-1" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>      
@@ -21,8 +21,83 @@
       <span class="ml-2">Período mostrado:</span>
       <span class="ml-2">{{periodoamostrar}}</span>
     </div>
-    <div><nb-checkbox style="vertical-align: middle;" status="primary" [checked]="expandir_todas" (checkedChange)="expand_tasks($event)">Expandir todos</nb-checkbox></div>
-    <div class='table-responsive'>      
+    <!-- <div><nb-checkbox style="vertical-align: middle;" status="primary" [checked]="expandir_todas" (checkedChange)="expand_tasks($event)">Expandir todos</nb-checkbox></div> -->
+    <div class='table-responsive'>
+      <nb-card *ngFor="let day of tareas_por_dias" [accent]="day.tasks_failed === 0 ? 'info' : 'danger'">
+        <nb-card-header>
+          <div class="label label-default ml-1 text-uppercase" style="font-size: 15px">
+            <span (click)="openNew(day.day)" style="cursor: pointer;" nbTooltip="Agregar una nueva tarea" nbTooltipIcon="plus-outline" nbTooltipStatus="success">{{day.day | dayOfWeek}}</span>
+            <!--<span style="cursor: pointer;" class="ml-2"><nb-icon (click)="openNew(day.day)" icon="plus-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Agregar una nueva tarea" nbTooltipIcon="plus-outline" nbTooltipStatus="success"></nb-icon></span>-->
+          </div>          
+          <!--
+          <div *ngIf="day.tasks_successful > 0"><nb-badge nbTooltip="Tareas cumplidas {{day.tasks_successful}}"  [text]="day.tasks_successful" status="success" position="top start"></nb-badge></div>
+          <div *ngIf="day.tasks_pendent > 0"><nb-badge nbTooltip="Tareas pendientes {{day.tasks_pendent}}"  [text]="day.tasks_pendent" status="info" position="bottom start"></nb-badge></div>
+          <div *ngIf="day.tasks_canceled > 0"><nb-badge nbTooltip="Tareas canceladas {{day.tasks_canceled}}"  [text]="day.tasks_canceled" status="warning" position="top end"></nb-badge></div>
+          <div *ngIf="day.tasks_failed > 0"><nb-badge nbTooltip="Tareas incumplidas {{day.tasks_failed}}"  [text]="day.tasks_failed" status="danger" position="bottom end"></nb-badge></div>
+          -->
+        </nb-card-header>
+        <nb-card-body>
+          <nb-card *ngFor="let task of day.tasks; let i = index" [accent]="task.estado === 'Pendiente' ? 'info' : (task.estado === 'Cumplida' ? 'success' : (task.estado === 'Incumplida' ? 'danger' : 'warning'))">
+            <nb-card-header>
+              <div class="table-responsive">
+                <table id="tablePreview" class="table-borderless" width="100%">
+                  <tr [className]="!task.validada ? 'text-secondary' : 'text-dark'">
+                    <td width="2%" scope="row" nbTooltip="ID:{{task.id}}">{{i+1}} - </td>
+                    <td width="48%">
+                      {{task.resumen}}
+                      <span nbTooltip="Tarea no validada" nbTooltipIcon="alert-circle-outline" nbTooltipStatus="warning" *ngIf="!task.validada" class="badge badge-warning">!!</span>
+                    </td>
+                    <td width="20%">
+                      <span>{{task.fecha_inicio | formatTime: task.duracion}}</span>
+                      <span nbTooltip="Tarea superpuesta" nbTooltipIcon="alert-circle-outline" nbTooltipStatus="danger" *ngIf="isInConflict(i)" class="badge badge-danger">!!</span>
+                    </td>
+                    <td width="10%"><span [ngStyle]="task.estado | formatState">{{task.estado}}</span></td>
+                    <td width="10%" style="cursor: pointer">
+                      <span (click)="openNewObs(task.id)" [nbPopover]="(task.observaciones | getObservations).length > 0 ? observaciones : null" nbPopoverPlacement="top" nbPopoverTrigger="hover">{{task.observaciones | getObservations | getObservText}}</span>
+                      <ng-template #observaciones>
+                        <nb-card accent="info">
+                          <nb-card-header>{{task.observaciones | getObservations | getObservText}}</nb-card-header>
+                          <nb-card-body>
+                            <ul *ngFor="let o of (task.observaciones | getObservations)">
+                              <li>{{o}}</li>
+                            </ul>
+                          </nb-card-body>
+                        </nb-card>
+                      </ng-template>
+                    </td>
+                    <td width="10%" align="right" style="cursor: pointer">
+                      <nb-icon *ngIf="(task.estado==='Pendiente' && task.validada) || (user.role==='admin' && task.validada)" (click)="setTaskState(task.id,'Cumplida')" icon="checkmark-circle-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Completar tarea" nbTooltipIcon="checkmark-outline" nbTooltipStatus="success"></nb-icon>
+                      <nb-icon *ngIf="user.role==='admin' && !task.validada" icon="done-all-outline" (click)="validateTask(i)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Validar tarea" nbTooltipIcon="done-all-outline" nbTooltipStatus="info"></nb-icon>
+                      <nb-icon *ngIf="(task.estado==='Pendiente' && !task.validada) || user.role==='admin'" (click)="openEdit(i)" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Editar tarea" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                      <nb-icon *ngIf="(task.estado==='Pendiente' && task.validada) || user.role==='admin'" (click)="clickposponer(task.id)" [owlDateTimeTrigger]="dt" icon="clock-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Posponer tarea" nbTooltipIcon="clock-outline" nbTooltipStatus="info"></nb-icon>
+                      <input type="hidden" style="visibility: hidden" [owlDateTime]="dt" (dateTimeChange)="posponer($event)">      
+                      <owl-date-time hour12Timer="true" #dt></owl-date-time>
+                      <input id="range" #range type="hidden" [nbDatepicker]="rangepicker" style="visibility: hidden">
+                      <nb-rangepicker #rangepicker (rangeChange)="copytask($event)"></nb-rangepicker>
+                      <nb-icon (click)="clickrepetir(task.id)" icon="copy-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Repetir tarea" nbTooltipIcon="clock-outline" nbTooltipStatus="info"></nb-icon>
+                      <nb-icon *ngIf="subordinados.length > 0" (click)="openSelectSubs(task.id)" icon="person-done-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Asignar también a otro usuario" nbTooltipIcon="person-done-outline" nbTooltipStatus="info"></nb-icon>
+                      <nb-icon *ngIf="(task.estado==='Pendiente' && task.validada) || user.role==='admin'" (click)="setTaskState(task.id,'Cancelada')" icon="close-circle-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Cancelar tarea" nbTooltipIcon="close-outline" nbTooltipStatus="warning"></nb-icon>
+                      <nb-icon *ngIf="user.role==='admin' || !task.validada" icon="trash-2-outline" (click)="deleteTask(task.id)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar tarea" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </nb-card-header>
+            <nb-card-body>
+              {{task.descripcion}}
+            </nb-card-body>
+            <nb-card-footer>
+              <!--<b>Estado: </b> <span [ngStyle]="task.estado | formatState">{{task.estado}}</span>-->
+              <b>Creada por: </b> {{task.nombre_creador}}
+              <b class="ml-2">Inicia: </b> {{task.fecha_inicio | formatDateHuman}}
+              <b class="ml-2">Termina: </b> {{task.fecha_fin | formatDateHuman}}
+            </nb-card-footer>
+          </nb-card>
+        </nb-card-body>
+      </nb-card>
+      
+      <!--
+
         <nb-accordion multi>
           <nb-accordion-item #accitem *ngFor="let day of tareas_por_dias" [expanded]="expandir_todas">
             <nb-accordion-item-header>
@@ -99,7 +174,10 @@
               </nb-accordion>
             </nb-accordion-item-body>
           </nb-accordion-item>
-        </nb-accordion>      
+        </nb-accordion> 
+        
+        -->
+
     </div>
   </nb-card-body>
 </nb-card>
