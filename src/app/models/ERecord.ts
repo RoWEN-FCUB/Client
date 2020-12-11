@@ -6,4 +6,6 @@ export interface ERecord {
     lectura?: number;
     planacumulado?: number;
     realacumulado?: number;
+    plan_hpic?: number;
+    real_hpic?: number;
   }

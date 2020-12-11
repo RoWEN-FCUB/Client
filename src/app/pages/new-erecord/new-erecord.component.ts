@@ -18,6 +18,8 @@ export class NewErecordComponent implements OnInit {
   prev_reading: number;
   plan_status: string = 'info';
   lectura_status: string = 'info';
+  ppic_status: string = 'info';
+  rpic_status: string = 'info';
 
   constructor(private energyService: EnergyService, protected dialogRef: NbDialogRef<any>) { }
 
@@ -46,6 +48,16 @@ export class NewErecordComponent implements OnInit {
         icon: 'error',
         title: 'Debe escribir una lectura válida.',
       } as SweetAlertOptions);
+    } else if (this.ppic_status === 'danger' || (!this.newERecord.plan_hpic && !this.newERecord.id)) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir una plan para el horario pico válido.',
+      } as SweetAlertOptions);
+    } else if (this.rpic_status === 'danger' || !this.newERecord.real_hpic) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir un consumo para el horario pico válido.',
+      } as SweetAlertOptions);
     } else {
       if (this.newERecord.id) {
         this.energyService.updateERecord(this.newERecord.id, this.newERecord).subscribe(res => {
@@ -60,11 +72,26 @@ export class NewErecordComponent implements OnInit {
   }
 
   plan_change() {
-    const nameregexp = new RegExp(/^[1-9]{1}[0-9]*$/);
-    if (nameregexp.test(this.newERecord.plan.toString())) {
+    if (!isNaN(this.newERecord.plan)) {
       this.plan_status = 'success';
     } else {
       this.plan_status = 'danger';
+    }
+  }
+
+  ppic_change() {
+    if (!isNaN(this.newERecord.plan_hpic)) {
+      this.ppic_status = 'success';
+    } else {
+      this.ppic_status = 'danger';
+    }
+  }
+
+  rpic_change() {
+    if (!isNaN(this.newERecord.real_hpic)) {
+      this.rpic_status = 'success';
+    } else {
+      this.rpic_status = 'danger';
     }
   }
 

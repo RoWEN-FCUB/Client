@@ -1,13 +1,24 @@
 <nb-card accent="info">
     <nb-card-header><div class="text-center">Establecer planes diarios</div></nb-card-header>
     <nb-card-body>
-        <div class="form-group">
-            <label>Plan:</label>
-            <input [(ngModel)]="plan_establecido" (input)="plan_change()" autofocus type="text" #plan fullWidth nbInput [status]="plan_status" class="form-control" aria-describedby="planHelp" placeholder="0">
-            <small id="planHelp" class="form-text text-muted">Plan de energía a establecer.</small>
-        </div>
-        <div>            
-            <owl-date-time-inline [(ngModel)]="dates" [startAt]="startDate" [pickerType]="'calendar'" [selectMode]="'range'"></owl-date-time-inline>
+        <div class="row">
+            <div class="col">
+                <div>
+                    <label>Plan día:</label>
+                    <input [(ngModel)]="plan_establecido" (input)="plan_change()" autofocus type="text" #plan fullWidth nbInput [status]="plan_status" class="form-control" aria-describedby="planHelp" placeholder="0">
+                    <small id="planHelp" class="form-text text-muted">Plan de energía para el día.</small>
+                </div>
+                <div>
+                    <label>Plan hora pico:</label>
+                    <input [(ngModel)]="plan_pico" (input)="ppic_change()" type="text" #planpico fullWidth nbInput [status]="ppic_status" class="form-control" aria-describedby="pplanHelp" placeholder="0">
+                    <small id="pplanHelp" class="form-text text-muted">Plan de energía para el horario pico.</small>
+                </div>
+            </div>
+            <div class="col">
+                <div>            
+                    <owl-date-time-inline [(ngModel)]="dates" [startAt]="startDate" [pickerType]="'calendar'" [selectMode]="'range'"></owl-date-time-inline>
+                </div>
+            </div>
         </div>
     </nb-card-body>
     <nb-card-footer>

@@ -14,6 +14,16 @@
     <div class="form-group">
       <label>Consumo del día: <span [ngClass]="(newERecord.plan >= newERecord.consumo && newERecord.consumo >= 0)?'text-success font-weight-bold':'text-danger font-weight-bold'">{{newERecord.consumo}}</span></label>      
     </div>
+    <div class="form-group" *ngIf="!newERecord.id">
+      <label>Plan Horario Pico:</label>
+      <input (input)="ppic_change()" type="text" [(ngModel)]="newERecord.plan_hpic" #plan_pic fullWidth nbInput [status]="ppic_status" class="form-control" aria-describedby="planpicHelp" placeholder="0">
+      <small id="planpicHelp" class="form-text text-muted">Plan para el horario pico del mediodía.</small>
+    </div>
+    <div class="form-group">
+      <label>Real Horario Pico:</label>
+      <input (input)="rpic_change()" type="text" [(ngModel)]="newERecord.real_hpic" #real_pic fullWidth nbInput [status]="rpic_status" class="form-control" aria-describedby="realpicHelp" placeholder="0">
+      <small id="realpicHelp" class="form-text text-muted">Consumo del horario pico del mediodía.</small>
+    </div>
   </nb-card-body>
   <nb-card-footer>
     <div class="float-right row">

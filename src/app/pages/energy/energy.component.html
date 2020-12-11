@@ -27,6 +27,8 @@
                 [autoScale]="autoScale"
                 [timeline]="timeline"
                 [legendTitle]="'Leyenda'"
+                yScaleMin = 0
+                [yScaleMax] = "yscaleMax"
                 (select)="onSelect($event)">
             </ngx-charts-line-chart>
         </div>        
@@ -51,28 +53,36 @@
                         <th>DIA</th>                        
                         <th>PLAN ACUMULADO</th>
                         <th>REAL ACUMULADO</th>
-                        <th>PLAN</th>
-                        <th>REAL</th>
+                        <th>PLAN DIA</th>
+                        <th>REAL DIA</th>
+                        <th>PLAN HORA PICO</th>
+                        <th>REAL HORA PICO</th>
                         <th>LECTURA</th>
                         <th></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>          
-                    <tr *ngFor="let erecord of erecords; let i = index" [ngClass]="erecord.fecha | dayOfWeek:3" style="cursor: pointer">
-                        <th scope="row" (click)="openNew(i)">{{erecord.fecha | dayOfWeek:2}}</th>
-                        <td (click)="openNew(i)">{{i+1}}</td>                        
-                        <td (click)="openNew(i)"><span *ngIf="erecord.consumo > 0">{{erecord.planacumulado}}</span></td>
-                        <td (click)="openNew(i)"><span *ngIf="erecord.consumo > 0">{{erecord.realacumulado}}</span></td>
-                        <td (click)="openNew(i)"><span *ngIf="erecord.plan > 0">{{erecord.plan}}</span></td>
-                        <td (click)="openNew(i)">
+                    <tr *ngFor="let erecord of erecords; let i = index" [ngClass]="erecord.fecha | dayOfWeek:3">
+                        <th scope="row">{{erecord.fecha | dayOfWeek:2}}</th>
+                        <td>{{i+1}}</td>                        
+                        <td><span *ngIf="erecord.consumo > 0">{{erecord.planacumulado}}</span></td>
+                        <td><span *ngIf="erecord.consumo > 0">{{erecord.realacumulado}}</span></td>
+                        <td><span *ngIf="erecord.plan > 0">{{erecord.plan}}</span></td>
+                        <td>
                             <span *ngIf="erecord.consumo > 0" [ngClass]="(erecord.plan < erecord.consumo)?'text-danger font-weight-bold':''">
                                 {{erecord.consumo}}
                             </span>
                         </td>
-                        <td (click)="openNew(i)"><span *ngIf="erecord.consumo > 0">{{erecord.lectura}}</span></td>
-                        <td><nb-icon *ngIf="erecord.consumo > 0" icon="file-text-outline" (click)="exportLocalXlsx(i)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Exportar a Modelo 5" nbTooltipIcon="file-text-outline" nbTooltipStatus="info"></nb-icon></td>
-                        <td><nb-icon *ngIf="user.role==='admin' && erecord.id" icon="trash-2-outline" (click)="deleteERecord(erecord.id)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar registro" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon></td>
+                        <td><span *ngIf="erecord.plan_hpic > 0">{{erecord.plan_hpic}}</span></td>
+                        <td>
+                            <span *ngIf="erecord.real_hpic > 0" [ngClass]="(erecord.plan_hpic < erecord.real_hpic)?'text-danger font-weight-bold':''">
+                                {{erecord.real_hpic}}
+                            </span>
+                        </td>
+                        <td (click)="openNew(i)" style="cursor: pointer"><span *ngIf="erecord.consumo > 0">{{erecord.lectura}}</span></td>
+                        <td style="cursor: pointer"><nb-icon *ngIf="erecord.consumo > 0" icon="file-text-outline" (click)="exportLocalXlsx(i)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Exportar a Modelo 5" nbTooltipIcon="file-text-outline" nbTooltipStatus="info"></nb-icon></td>
+                        <td style="cursor: pointer"><nb-icon *ngIf="user.role==='admin' && erecord.id" icon="trash-2-outline" (click)="deleteERecord(erecord.id)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar registro" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon></td>
                     </tr>
                 </tbody>
             </table>            
@@ -91,6 +101,7 @@
                 [yAxisLabel]="yAxisLabel"
                 [autoScale]="autoScale"
                 [timeline]="timeline"
+                yScaleMin = 0
                 [legendTitle]="'Leyenda'">
             </ngx-charts-line-chart>
         </div>

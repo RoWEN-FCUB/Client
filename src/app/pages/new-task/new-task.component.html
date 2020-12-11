@@ -29,9 +29,9 @@
     </div>
     <div class="form-group">
       <label>Hora:</label>
-      <input [owlDateTime]="dh" [selectMode]="'range'" [owlDateTimeTrigger]="dh" nbInput status="info" class="form-control" [(ngModel)]="hora">
+      <input [owlDateTime]="dh" selectMode="range" [owlDateTimeTrigger]="dh" nbInput status="info" class="form-control" [(ngModel)]="hora">
       <owl-date-time hour12Timer="true" #dh [pickerType]="'timer'"></owl-date-time>
-      <small id="dateHelp" class="form-text text-muted">Horario en el que se realizará la tarea.</small>
+      <small id="timeHelp" class="form-text text-muted">Horario en el que se realizará la tarea.</small>
     </div>
   </nb-card-body>
   <nb-card-footer>

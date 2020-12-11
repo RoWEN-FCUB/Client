@@ -54,10 +54,11 @@ export class EnergyComponent implements OnInit {
   showYAxisLabel = true;
   yAxisLabel = 'Consumo de energía (KW)';
   timeline = false;
-  autoScale = true;
+  autoScale = false;
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
   };
+  yscaleMax = 100;
   // // //
 
   // tslint:disable-next-line: max-line-length
@@ -76,57 +77,47 @@ export class EnergyComponent implements OnInit {
   }
 
   async exportLocalXlsx(index: number) {
-    const { value: consumopico } = await Swal.fire({
-      title: 'Introduzca el consumo del horario pico',
-      input: 'text',
-      inputLabel: 'Consumo:',
-      showCancelButton: true,
-      inputValidator: (value) => {
-        if (!value) {
-          return 'Debe escribir un número!';
-        }
-      },
-    });
-    if (consumopico) {
-      const workBook: Workbook = new Workbook();
-      const subscription = this.http.get('./assets/Modelo5.xlsx', { responseType: 'blob' })
-      .subscribe(value => {
-      const blob: Blob = value;
-      const reader = new FileReader();
-      const tplan = this.totalPlan;
-      const ac_plan = this.erecords[index].planacumulado;
-      const ac_real = this.erecords[index].realacumulado;
-      const d_plan = this.erecords[index].plan;
-      const d_real = this.erecords[index].consumo;
-      const edate = moment(this.erecords[index].fecha.toString().substr(0, this.erecords[index].fecha.toString().indexOf('T'))).format('DD-MM-YYYY');
-      const month = moment(edate).locale('es').format('MMMM').toUpperCase();
-      const fdate = moment(edate).format('DD/MM/YYYY');
-      reader.onload = function (e: any) {
-        const contents = e.target.result;
-        workBook.xlsx.load(contents).then(data => {
-          workBook.worksheets[0].getCell(1, 6).value = month;
-          workBook.worksheets[0].getCell(1, 8).value = fdate;
-          workBook.worksheets[0].getCell(3, 14).value = tplan;
-          workBook.worksheets[0].getCell(3, 15).value = ac_plan;
-          workBook.worksheets[0].getCell(3, 16).value = ac_real;
-          workBook.worksheets[0].getCell(3, 17).model.result = undefined; // para que recalcule las formulas
-          workBook.worksheets[0].getCell(3, 18).model.result = undefined;
-          workBook.worksheets[0].getCell(3, 19).value = d_plan;
-          workBook.worksheets[0].getCell(3, 20).value = d_real;
-          workBook.worksheets[0].getCell(3, 21).model.result = undefined;
-          workBook.worksheets[0].getCell(3, 22).model.result = undefined;
-          workBook.worksheets[0].getCell(3, 27).value = Number.parseFloat(consumopico);
-          workBook.worksheets[0].getCell(3, 28).model.result = undefined;
-          workBook.worksheets[0].getCell(3, 29).model.result = undefined;
-          workBook.xlsx.writeBuffer().then(data1 => {
-            const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            fsaver.saveAs(blobUpdate, 'Modelo 5 DST Las Tunas ' + edate + '.xlsx');
-          });
+    const workBook: Workbook = new Workbook();
+    const subscription = this.http.get('./assets/Modelo5.xlsx', { responseType: 'blob' })
+    .subscribe(value => {
+    const blob: Blob = value;
+    const reader = new FileReader();
+    const tplan = this.totalPlan;
+    const ac_plan = this.erecords[index].planacumulado;
+    const ac_real = this.erecords[index].realacumulado;
+    const d_plan = this.erecords[index].plan;
+    const d_real = this.erecords[index].consumo;
+    const pplan = this.erecords[index].plan_hpic;
+    const preal = this.erecords[index].real_hpic;
+    const edate = moment(this.erecords[index].fecha.toString().substr(0, this.erecords[index].fecha.toString().indexOf('T'))).format('DD-MM-YYYY');
+    const month = moment(edate).locale('es').format('MMMM').toUpperCase();
+    const fdate = moment(edate).format('DD/MM/YYYY');
+    reader.onload = function (e: any) {
+      const contents = e.target.result;
+      workBook.xlsx.load(contents).then(data => {
+        workBook.worksheets[0].getCell(1, 6).value = month;
+        workBook.worksheets[0].getCell(1, 8).value = fdate;
+        workBook.worksheets[0].getCell(3, 14).value = tplan;
+        workBook.worksheets[0].getCell(3, 15).value = ac_plan;
+        workBook.worksheets[0].getCell(3, 16).value = ac_real;
+        workBook.worksheets[0].getCell(3, 17).model.result = undefined; // para que recalcule las formulas
+        workBook.worksheets[0].getCell(3, 18).model.result = undefined;
+        workBook.worksheets[0].getCell(3, 19).value = d_plan;
+        workBook.worksheets[0].getCell(3, 20).value = d_real;
+        workBook.worksheets[0].getCell(3, 21).model.result = undefined;
+        workBook.worksheets[0].getCell(3, 22).model.result = undefined;
+        workBook.worksheets[0].getCell(3, 26).value = pplan;
+        workBook.worksheets[0].getCell(3, 27).value = preal;
+        workBook.worksheets[0].getCell(3, 28).model.result = undefined;
+        workBook.worksheets[0].getCell(3, 29).model.result = undefined;
+        workBook.xlsx.writeBuffer().then(data1 => {
+          const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          fsaver.saveAs(blobUpdate, 'Modelo 5 DST Las Tunas ' + edate + '.xlsx');
         });
-      };
-      reader.readAsArrayBuffer(blob);
       });
-    }
+    };
+    reader.readAsArrayBuffer(blob);
+    });
   }
 
   onSelect(event) {
@@ -245,6 +236,9 @@ export class EnergyComponent implements OnInit {
       for (let i = 0; i < this.erecords.length; i++) {
         this.totalConsume += this.erecords[i].consumo;
         this.totalPlan += this.erecords[i].plan;
+        if (this.erecords[i].consumo > this.yscaleMax) {
+          this.yscaleMax = this.erecords[i].consumo + 10;
+        }
         if (this.erecords[i].lectura) {
           this.erecords[i].realacumulado = this.erecords[i].consumo + this.erecords[last].realacumulado;
           this.erecords[i].planacumulado = this.erecords[i].plan + this.erecords[last].planacumulado;

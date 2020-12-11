@@ -14,7 +14,9 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 })
 export class EnergyPlansComponent implements OnInit {
   plan_status: string = 'info';
+  ppic_status: string = 'info';
   plan_establecido: number;
+  plan_pico: number;
   dates = [];
   fecha_inicio: Date = new Date();
   fecha_fin: Date = new Date();
@@ -30,6 +32,14 @@ export class EnergyPlansComponent implements OnInit {
       this.plan_status = 'success';
     } else {
       this.plan_status = 'danger';
+    }
+  }
+
+  ppic_change() {
+    if (!isNaN(this.plan_pico)) {
+      this.ppic_status = 'success';
+    } else {
+      this.ppic_status = 'danger';
     }
   }
 
@@ -51,6 +61,11 @@ export class EnergyPlansComponent implements OnInit {
         icon: 'error',
         title: 'Debe escribir un plan válido.',
       } as SweetAlertOptions);
+    } else if (this.ppic_status === 'danger' || !this.plan_pico) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir una plan para el horario pico válido.',
+      } as SweetAlertOptions);
     } else if (this.dates.length !== 2) {
       Toast.fire({
         icon: 'error',
@@ -63,7 +78,7 @@ export class EnergyPlansComponent implements OnInit {
       } else {
         this.fecha_fin = new Date(this.dates[1]);
       }
-      this.energyService.updateAllPlans(this.plan_establecido, this.fecha_inicio, this.fecha_fin).subscribe(res => {
+      this.energyService.updateAllPlans(this.plan_establecido, this.plan_pico, this.fecha_inicio, this.fecha_fin).subscribe(res => {
         this.dialogRef.close(res);
       });
     }
