@@ -99,7 +99,7 @@
     "@angular-devkit/build-angular": "^0.1002.0",
     "@angular/cli": "^10.2.0",
     "@angular/compiler-cli": "^10.2.0",
-    "@angular/language-service": "10.2.0",
+    "@angular/language-service": "11.0.4",
     "@compodoc/compodoc": "^1.1.11",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@types/d3-color": "2.0.0",
