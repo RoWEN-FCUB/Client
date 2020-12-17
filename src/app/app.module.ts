@@ -5,7 +5,7 @@ import { LogoutComponent } from './@theme/components/logout/logout.component';
  * Copyright Akveo. All Rights Reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
-import { Injectable, LOCALE_ID } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Injectable, LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 registerLocaleData(localeEs);
@@ -144,6 +144,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     AppComponent, UploadImgComponent, NewTaskComponent, NewObsComponent, NewErecordComponent,
     LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
      UpdtWRecordComponent, EnergyPlansComponent],
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   imports: [
     ExportAsModule,
     NbSecurityModule,
