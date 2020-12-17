@@ -65,7 +65,7 @@
     "file-saver": "^2.0.5",
     "html-to-pdfmake": "^2.1.0",
     "intl": "1.2.5",
-    "ionicons": "^2.0.1",
+    "ionicons": "^5.2.3",
     "jquery": "^3.5.1",
     "leaflet": "1.7.1",
     "moment": "^2.29.1",
