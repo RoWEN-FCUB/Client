@@ -90,8 +90,9 @@ export class EnergyComponent implements OnInit {
     const pplan = this.erecords[index].plan_hpic;
     const preal = this.erecords[index].real_hpic;
     const edate = moment(this.erecords[index].fecha.toString().substr(0, this.erecords[index].fecha.toString().indexOf('T'))).format('DD-MM-YYYY');
-    const month = moment(edate).locale('es').format('MMMM').toUpperCase();
-    const fdate = moment(edate).format('DD/MM/YYYY');
+    // tslint:disable-next-line: max-line-length
+    const fdate = moment(this.erecords[index].fecha.toString().substr(0, this.erecords[index].fecha.toString().indexOf('T'))).locale('es').format('DD/MM/YYYY');
+    const month = moment(this.erecords[index].fecha).locale('es').format('MMMM').toUpperCase();
     reader.onload = function (e: any) {
       const contents = e.target.result;
       workBook.xlsx.load(contents).then(data => {

@@ -5,7 +5,7 @@ import { LogoutComponent } from './@theme/components/logout/logout.component';
  * Copyright Akveo. All Rights Reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
-import { LOCALE_ID } from '@angular/core';
+import { Injectable, LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 registerLocaleData(localeEs);
@@ -76,6 +76,7 @@ import { NewErecordComponent } from './pages/new-erecord/new-erecord.component';
 import { EnergyPlansComponent } from './pages/energy-plans/energy-plans.component';
 
 // here is the default text string
+@Injectable()
 export class DefaultIntl extends OwlDateTimeIntl {
   /** A label for the up second button (used by screen readers).  */
   upSecondLabel = 'Añadir un segundo';

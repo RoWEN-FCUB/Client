@@ -18,7 +18,7 @@ export class NotificationService {
     });*/
     // return this.http.get(ipserver + 'notifications/news/' + id, {responseType: 'json'});
     // tslint:disable-next-line: max-line-length
-    return interval(5000).pipe(switchMap(() => this.http.get(ipserver + 'notifications/' + id, {responseType: 'json'})), map(res => res));
+    return interval(5000).pipe(switchMap(() => this.http.get(ipserver + 'notifications/news/' + id, {responseType: 'json'})), map(res => res));
   }
 
   getAllNotifications(id: number) {

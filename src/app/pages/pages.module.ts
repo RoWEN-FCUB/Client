@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 // tslint:disable-next-line: max-line-length
 import { NbCheckboxModule, NbBadgeModule, NbAccordionModule, NbIconModule , NbActionsModule, NbTooltipModule, NbPopoverModule, NbMenuModule, NbCardModule, NbInputModule, NbSelectModule, NbButtonModule, NbDialogModule, NbTabsetModule, NbDatepickerModule, NbLayoutModule, NbToggleModule } from '@nebular/theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -34,7 +34,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { EnergyComponent } from './energy/energy.component';
 // import { NewErecordComponent } from './new-erecord/new-erecord.component';
 // import { EnergyPlansComponent } from './energy-plans/energy-plans.component';
-
+@Injectable()
 export class DefaultIntl extends OwlDateTimeIntl {
   /** A label for the up second button (used by screen readers).  */
   upSecondLabel = 'Añadir un segundo';

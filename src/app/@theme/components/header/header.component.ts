@@ -70,6 +70,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.notif = this.notificationService.getNewNotifications(this.user.id).subscribe((res: Notification[]) => {
             if (this.updating_notif) {
               if (res) {
+                // console.log(res);
                 this.new_notifications = res;
                 this.cdr.detectChanges();
               } else {

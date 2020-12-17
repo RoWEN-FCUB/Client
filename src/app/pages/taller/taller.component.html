@@ -27,7 +27,7 @@
           </tr>
         </thead>
         <tbody>          
-          <tr *ngFor="let wrecord of wrecords | paginate: config; let i = index" (click)="openUpdt(i)">
+          <tr *ngFor="let wrecord of wrecords | paginate: config; let i = index" (click)="openUpdt(i)" style="cursor: pointer">
             <th scope="row">{{wrecord.cod}}</th>
             <td nbTooltip="{{wrecord.cliente_nombre}}">{{wrecord.cliente}}</td>
             <td>{{wrecord.equipo}}</td>

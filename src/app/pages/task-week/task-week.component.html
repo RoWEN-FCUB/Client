@@ -47,7 +47,7 @@
                       {{task.resumen}}
                       <span nbTooltip="Tarea no validada" nbTooltipIcon="alert-circle-outline" nbTooltipStatus="warning" *ngIf="!task.validada" class="badge badge-warning">!!</span>
                     </td>
-                    <td width="20%">
+                    <td width="15%">
                       <span>{{task.fecha_inicio | formatTime: task.duracion}}</span>
                       <span nbTooltip="Tarea superpuesta" nbTooltipIcon="alert-circle-outline" nbTooltipStatus="danger" *ngIf="isInConflict(i)" class="badge badge-danger">!!</span>
                     </td>
@@ -65,7 +65,7 @@
                         </nb-card>
                       </ng-template>
                     </td>
-                    <td width="10%" align="right" style="cursor: pointer">
+                    <td width="15%" align="right" style="cursor: pointer">
                       <nb-icon *ngIf="(task.estado==='Pendiente' && task.validada) || (user.role==='admin' && task.validada)" (click)="setTaskState(task.id,'Cumplida')" icon="checkmark-circle-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Completar tarea" nbTooltipIcon="checkmark-outline" nbTooltipStatus="success"></nb-icon>
                       <nb-icon *ngIf="user.role==='admin' && !task.validada" icon="done-all-outline" (click)="validateTask(i)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Validar tarea" nbTooltipIcon="done-all-outline" nbTooltipStatus="info"></nb-icon>
                       <nb-icon *ngIf="(task.estado==='Pendiente' && !task.validada) || user.role==='admin'" (click)="openEdit(i)" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Editar tarea" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
