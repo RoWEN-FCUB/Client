@@ -8,7 +8,6 @@ import { PagesComponent } from './pages.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
-import { NumberPickerModule } from 'ng-number-picker';
 import { OwlDateTimeIntl, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE } from '@danielmoncada/angular-datetime-picker';
 // import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
@@ -104,7 +103,6 @@ export class DefaultIntl extends OwlDateTimeIntl {
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     PagesRoutingModule,
-    NumberPickerModule,
     ThemeModule,
     NbMenuModule,
     DashboardModule,

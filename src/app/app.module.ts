@@ -43,7 +43,6 @@ import {
 } from '@nebular/theme';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormsModule } from '@angular/forms';
-import { NumberPickerModule } from 'ng-number-picker';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE, OwlDateTimeIntl } from '@danielmoncada/angular-datetime-picker';
 import { UserService } from './services/user.service';
 import { AuthInterceptor } from './services/authInterceptor';
@@ -156,7 +155,6 @@ export class DefaultIntl extends OwlDateTimeIntl {
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-    NumberPickerModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     NbAlertModule,

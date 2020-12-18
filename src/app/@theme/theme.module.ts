@@ -25,7 +25,6 @@ import {
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NbSecurityModule } from '@nebular/security';
-import { NumberPickerModule } from 'ng-number-picker';
 
 import {
   FooterComponent,
@@ -94,7 +93,7 @@ const PIPES = [
 ];
 
 @NgModule({
-  imports: [NumberPickerModule, FormsModule, CommonModule, ...NB_MODULES],
+  imports: [FormsModule, CommonModule, ...NB_MODULES],
   exports: [CommonModule, ...PIPES, ...COMPONENTS],
   declarations: [...COMPONENTS, ...PIPES],
 })
