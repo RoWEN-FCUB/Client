@@ -37,7 +37,7 @@ export class EnergyComponent implements OnInit {
   selectedMonth: number;
   selectedYear: number;
   show: boolean = false;
-  showstring: string[] = ['Mes', 'Año'];
+  showstring: string[] = ['mes', 'año'];
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: ''};
   months: {Mes: number, Plan: number, Consumo: number, PlanAcumulado?: number, RealAcumulado?: number}[] = [];
   // opciones de la grafica
@@ -59,6 +59,7 @@ export class EnergyComponent implements OnInit {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
   };
   yscaleMax = 100;
+  yscaleMax2 = 1000;
   // // //
 
   // tslint:disable-next-line: max-line-length
@@ -187,6 +188,9 @@ export class EnergyComponent implements OnInit {
           this.months[i].PlanAcumulado = this.months[i].Plan + this.months[i - 1].PlanAcumulado;
           this.months[i].RealAcumulado = this.months[i].Consumo + this.months[i - 1].RealAcumulado;
         }
+        if (this.months[i].Plan > this.yscaleMax2) {
+          this.yscaleMax2 = this.months[i].Plan + 100;
+        }
         // tslint:disable-next-line: max-line-length
         consumos.push({name : moment().locale('es').set('month', this.months[i].Mes - 1).format('MMMM').toUpperCase(), value : this.months[i].Consumo});
         // tslint:disable-next-line: max-line-length
@@ -237,8 +241,8 @@ export class EnergyComponent implements OnInit {
       for (let i = 0; i < this.erecords.length; i++) {
         this.totalConsume += this.erecords[i].consumo;
         this.totalPlan += this.erecords[i].plan;
-        if (this.erecords[i].consumo > this.yscaleMax) {
-          this.yscaleMax = this.erecords[i].consumo + 10;
+        if (this.erecords[i].plan > this.yscaleMax) {
+          this.yscaleMax = this.erecords[i].plan + 10;
         }
         if (this.erecords[i].lectura) {
           this.erecords[i].realacumulado = this.erecords[i].consumo + this.erecords[last].realacumulado;
