@@ -197,6 +197,13 @@ export class TallerComponent implements OnInit {
     this.workshopService.searchRecord(strtosearch, this.config.currentPage).subscribe((res: {total, wrecords}) => {
       this.config.totalItems = res.total;
       this.wrecords = res.wrecords;
+      if (this.wrecords.length > 0) {
+        this.search_status = 'success';
+      } else if (!this.search_string) {
+        this.search_status = 'info';
+      } else {
+        this.search_status = 'danger';
+      }
       // console.log(this.wrecords);
     });
   }
