@@ -8,4 +8,5 @@ export interface User {
   picture?: string;
   id_sup?: number;
   position?: string;
+  id_emp?: number;
 }

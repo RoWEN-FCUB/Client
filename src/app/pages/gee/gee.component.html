@@ -1,0 +1,25 @@
+<nb-card fullwidth accent="info">
+    <nb-card-header>Registro operaciones del Grupo Electrónico de Emergencia</nb-card-header>
+    <nb-card-body>
+      <div>
+        <label>Buscar:</label><input nbTooltip="Escriba uno o varios parámetros separados por espacio y presione enter." class="ml-2" type="text" nbInput fieldSize="small" placeholder="Escriba el valor...">
+        <button class="ml-4" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+        <button class="ml-2" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
+      </div>
+      <div class='table-responsive'>
+        <table id="tablePreview" class="table table-hover table-borderless table-striped table-sm">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>CLIENTE</th>
+            </tr>
+          </thead>
+          <tbody>          
+            
+          </tbody>
+        </table>
+        <pagination-controls maxSize="5" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>Total de registros: <b></b></nb-card-footer>
+  </nb-card>

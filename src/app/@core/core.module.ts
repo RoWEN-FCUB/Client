@@ -91,7 +91,7 @@ export const NB_CORE_PROVIDERS = [
       },
       user: {
         parent: 'guest',
-        view: ['profile', 'tasks', 'notifications', 'energy'], /*
+        view: ['profile', 'tasks', 'notifications', 'energy', 'gee'], /*
         create: '*',
         edit: '*',
         remove: '*',*/

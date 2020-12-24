@@ -73,6 +73,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NewErecordComponent } from './pages/new-erecord/new-erecord.component';
 import { EnergyPlansComponent } from './pages/energy-plans/energy-plans.component';
+import { NewCompanyComponent } from './pages/new-company/new-company.component';
 
 // here is the default text string
 @Injectable()
@@ -142,7 +143,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
   declarations: [
     AppComponent, UploadImgComponent, NewTaskComponent, NewObsComponent, NewErecordComponent,
     LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
-     UpdtWRecordComponent, EnergyPlansComponent],
+     UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   imports: [
     ExportAsModule,
@@ -197,9 +198,9 @@ export class DefaultIntl extends OwlDateTimeIntl {
     // AnalyticsService,
   ],
   exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
-            NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent],
+            NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent, NewCompanyComponent],
   entryComponents: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
-                    NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent],
+                    NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent, NewCompanyComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {

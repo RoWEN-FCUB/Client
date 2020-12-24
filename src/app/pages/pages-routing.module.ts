@@ -10,6 +10,8 @@ import { TaskWeekComponent } from './task-week/task-week.component';
 import { AllNotificationsComponent } from './all-notifications/all-notifications.component';
 import { TallerComponent } from './taller/taller.component';
 import { EnergyComponent } from './energy/energy.component';
+import { GeeComponent } from './gee/gee.component';
+import { AdminCompanyComponent } from './admin-company/admin-company.component';
 import { from } from 'rxjs';
 const routes: Routes = [{
   path: '',
@@ -55,6 +57,12 @@ const routes: Routes = [{
       data: {role: ['admin']},
     },
     {
+      path: 'admin/company',
+      component: AdminCompanyComponent,
+      canActivate: [RoleGuard],
+      data: {role: ['admin']},
+    },
+    {
       path: 'notifications',
       component: AllNotificationsComponent,
       canActivate: [RoleGuard],
@@ -63,6 +71,12 @@ const routes: Routes = [{
     {
       path: 'energy',
       component: EnergyComponent,
+      canActivate: [RoleGuard],
+      data: {role: ['user', 'tec', 'admin']},
+    },
+    {
+      path: 'gee',
+      component: GeeComponent,
       canActivate: [RoleGuard],
       data: {role: ['user', 'tec', 'admin']},
     },

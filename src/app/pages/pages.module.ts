@@ -31,6 +31,9 @@ import { StateDescriptionPipe } from '../pipes/state-description.pipe';
 // import { NewWRecordComponent } from './new-wrecord/new-wrecord.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { EnergyComponent } from './energy/energy.component';
+import { GeeComponent } from './gee/gee.component';
+import { AdminCompanyComponent } from './admin-company/admin-company.component';
+// import { NewCompanyComponent } from './new-company/new-company.component';
 // import { NewErecordComponent } from './new-erecord/new-erecord.component';
 // import { EnergyPlansComponent } from './energy-plans/energy-plans.component';
 @Injectable()
@@ -145,7 +148,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     DeviceStatePipe,
     StateDescriptionPipe,
     // tslint:disable-next-line: max-line-length
-    ShortSerialPipe, ShortNamePipe, EnergyComponent, // EnergyPlansComponent, // NewErecordComponent, // UpdtWRecordComponent, // NewWRecordComponent,
+    ShortSerialPipe, ShortNamePipe, EnergyComponent, GeeComponent, AdminCompanyComponent, // NewCompanyComponent, // EnergyPlansComponent, // NewErecordComponent, // UpdtWRecordComponent, // NewWRecordComponent,
     // SelectSubsComponent,
     // NewUserComponent,
     // NewObsComponent,

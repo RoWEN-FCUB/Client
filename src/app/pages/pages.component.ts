@@ -74,6 +74,17 @@ export class PagesComponent implements OnInit {
           );
         }
       });
+      this.accessChecker.isGranted('view', 'gee').subscribe(granted => {
+        if (granted) {
+          this.menu.push(
+            {
+              title: 'GEE',
+              icon: 'charging-outline',
+              link: '/pages/gee',
+            },
+          );
+        }
+      });
       this.accessChecker.isGranted('view', 'admin_menu').subscribe( granted => {
         if (granted) {
           this.menu.push(
@@ -85,6 +96,11 @@ export class PagesComponent implements OnInit {
                   title: 'Usuarios',
                   icon: 'people-outline',
                   link: '/pages/admin/users',
+                },
+                {
+                  title: 'Empresas',
+                  icon: 'globe-outline',
+                  link: '/pages/admin/company',
                 },
               ],
             },

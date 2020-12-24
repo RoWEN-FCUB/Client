@@ -14,6 +14,7 @@
             <th>EMAIL</th>
             <th>ROL</th>
             <th>SUPERIOR</th>
+            <th>EMPRESA</th>
             <th>ACCION</th>
           </tr>
         </thead>
@@ -29,6 +30,7 @@
             <td>
               {{superior(user.id_sup)}}
             </td>
+            <td>{{user.id_emp}}</td>
             <td>
               <nb-icon style="cursor: pointer" (click)="openEdit(i)" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar usuario" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
               <nb-icon style="cursor: pointer" (click)="deleteUser(user.id, user.user)" icon="person-delete-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar usuario" nbTooltipIcon="close-outline" nbTooltipStatus="danger"></nb-icon>
