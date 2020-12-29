@@ -10,4 +10,5 @@ export interface Company {
     control?: string;
     ruta?: string;
     folio?: string;
+    email?: string;
 }

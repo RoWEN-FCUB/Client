@@ -11,8 +11,31 @@ import { Company } from '../../models/Company';
 export class NewCompanyComponent implements OnInit {
 
   companies: Company[];
-  newCompany: Company;
+  newCompany: Company = {
+    siglas: '',
+    nombre: '',
+    provincia: '',
+    municipio: '',
+    oace: '',
+    osde: '',
+    codcli: '',
+    control: '',
+    ruta: '',
+    folio: '',
+    email: '',
+  };
   title: string;
+  siglas_status = 'info';
+  nombre_status = 'info';
+  provincia_status = 'info';
+  municipio_status = 'info';
+  oace_status = 'info';
+  osde_status = 'info';
+  codcli_status = 'info';
+  control_status = 'info';
+  ruta_status = 'info';
+  folio_status = 'info';
+  email_status = 'info';
   provincia_seleccionada = -1;
   municipio_seleccionado = '';
   municipios: string[] = [];

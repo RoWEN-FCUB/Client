@@ -5,14 +5,14 @@
             <div class="col">
                 <div class="form-group">
                     <label>Siglas:</label>
-                    <input type="text" nbInput autofocus fullWidth placeholder="Siglas"class="form-control" aria-describedby="siglasHelp">
+                    <input type="text" nbInput autofocus fullWidth placeholder="Siglas"class="form-control" aria-describedby="siglasHelp" [(ngModel)]="newCompany.siglas" [status]="siglas_status">
                     <small id="siglasHelp" class="form-text text-muted">Siglas de la empresa. Solo letras enntre 4 y 50 caracteres.</small>
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
                     <label>Nombre:</label>
-                    <input type="text" nbInput fullWidth placeholder="Nombre"class="form-control" aria-describedby="nombresHelp">
+                    <input type="text" nbInput fullWidth placeholder="Nombre"class="form-control" aria-describedby="nombresHelp" [(ngModel)]="newCompany.nombre" [status]="nombre_status">
                     <small id="nombreHelp" class="form-text text-muted">Nombre completo de la empresa. Entre 4 y 250 caracteres.</small>
                 </div>
             </div>            
@@ -21,7 +21,7 @@
             <div class="col">
                 <div class="form-group">
                     <label>Provincia:</label>
-                    <nb-select (selectedChange)="cambiarmunicipios()" fullWidth placeholder="----" status="info" [(ngModel)]="provincia_seleccionada">
+                    <nb-select (selectedChange)="cambiarmunicipios()" fullWidth placeholder="----" [(ngModel)]="provincia_seleccionada" [status]="provincia_status">
                         <nb-option *ngFor="let prov of provincias; let i = index" [value]="i">{{prov.nombre}}</nb-option>
                     </nb-select>
                 </div>
@@ -29,7 +29,7 @@
             <div class="col">
                 <div class="form-group">
                     <label>Municipio:</label>
-                    <nb-select fullWidth placeholder="----" status="info" [(ngModel)]="municipio_seleccionado">
+                    <nb-select fullWidth placeholder="----" [(ngModel)]="municipio_seleccionado" [status]="municipio_status">
                         <nb-option *ngFor="let mun of municipios; let i = index" [value]="i">{{mun}}</nb-option>
                     </nb-select>
                 </div>
@@ -39,14 +39,14 @@
             <div class="col">
                 <div class="form-group">
                     <label>OACE:</label>
-                    <input type="text" nbInput fullWidth placeholder="OACE"class="form-control" aria-describedby="oaceHelp">
+                    <input type="text" nbInput fullWidth placeholder="OACE"class="form-control" aria-describedby="oaceHelp" [(ngModel)]="newCompany.oace" [status]="oace_status">
                     <small id="oaceHelp" class="form-text text-muted">OACE al que pertenece la empresa. Solo letras entre 4 y 50 caracteres.</small>
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
                     <label>OSDE:</label>
-                    <input type="text" nbInput fullWidth placeholder="OSDE"class="form-control" aria-describedby="osdeHelp">
+                    <input type="text" nbInput fullWidth placeholder="OSDE"class="form-control" aria-describedby="osdeHelp" [(ngModel)]="newCompany.osde" [status]="osde_status">
                     <small id="osdeHelp" class="form-text text-muted">OSDE al que pertenece la empresa. Entre 4 y 50 caracteres.</small>
                 </div>
             </div>            
@@ -55,18 +55,28 @@
             <div class="col">
                 <div class="form-group">
                     <label>CODCLI:</label>
-                    <input type="text" nbInput fullWidth placeholder="CODCLI"class="form-control" aria-describedby="codcliHelp">
+                    <input type="text" nbInput fullWidth placeholder="CODCLI"class="form-control" aria-describedby="codcliHelp" [(ngModel)]="newCompany.codcli" [status]="codcli_status">
                     <small id="codcliHelp" class="form-text text-muted">Código de cliente de la empresa. Entre 4 y 50 caracteres.</small>
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
                     <label>Control:</label>
-                    <input type="text" nbInput fullWidth placeholder="Control"class="form-control" aria-describedby="controlHelp">
+                    <input type="text" nbInput fullWidth placeholder="Control"class="form-control" aria-describedby="controlHelp" [(ngModel)]="newCompany.control" [status]="control_status">
                     <small id="controlHelp" class="form-text text-muted">Control de la empresa. Entre 4 y 50 caracteres.</small>
                 </div>
             </div>            
         </div>  
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Servidor de correo:</label>
+                    <input type="text" nbInput fullWidth placeholder="https://webmail.server.cu" class="form-control" aria-describedby="emailHelp" [(ngModel)]="newCompany.email" [status]="email_status">
+                    <small id="emailHelp" class="form-text text-muted">Dirección web del servidor de correo.</small>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div> 
     </nb-card-body>
     <nb-card-footer>
         <div class="float-right row">
