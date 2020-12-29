@@ -100,7 +100,7 @@
     "@angular/language-service": "11.0.5",
     "@compodoc/compodoc": "^1.1.11",
     "@fortawesome/fontawesome-free": "^5.15.1",
-    "@types/d3-color": "2.0.0",
+    "@types/d3-color": "2.0.1",
     "@types/googlemaps": "^3.40.5",
     "@types/jasmine": "3.6.2",
     "@types/jasminewd2": "2.0.8",
