@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
+import { CompanyService } from '../../services/company.service';
 import { User } from '../../models/User';
 import { Role } from '../../models/Role';
+import { Company } from '../../models/Company';
 import { NewUserComponent } from '../new-user/new-user.component';
 import { NbDialogService } from '@nebular/theme';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
@@ -15,10 +17,21 @@ import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 export class AdminUsersComponent implements OnInit {
   users: User[] = [];
   roles: Role[] = [];
-  constructor(private authService: NbAuthService, private userService: UserService, private dialogService: NbDialogService) { }
+  companies: Company[] = [];
+  constructor(private authService: NbAuthService,
+    private userService: UserService,
+    private dialogService: NbDialogService,
+    private companyService: CompanyService) { }
 
   openNew() {
-    this.dialogService.open(NewUserComponent, {context: {users: this.users, title: 'Nuevo usuario'}}).onClose.subscribe(res => {
+    // tslint:disable-next-line: max-line-length
+    const context = {
+      users: this.users,
+      roles: this.roles,
+      title: 'Nuevo usuario',
+      companies: this.companies,
+    };
+    this.dialogService.open(NewUserComponent, {context: context}).onClose.subscribe(res => {
       this.getUsers();
     });
   }
@@ -32,6 +45,8 @@ export class AdminUsersComponent implements OnInit {
       reppass: this.users[id].pass,
       title: 'Editar datos de ' + this.users[id].user,
       nsup: this.superior(this.users[id].id_sup),
+      roles: this.roles,
+      companies: this.companies,
     };
     this.dialogService.open(NewUserComponent, {context: contxt}).onClose.subscribe(res => {
       this.getUsers();
@@ -51,8 +66,16 @@ export class AdminUsersComponent implements OnInit {
     });
   }
 
+  getCompanies() {
+    this.companyService.getCompanies().subscribe((res: Company[]) => {
+      this.companies = res;
+    });
+  }
+
   ngOnInit() {
     this.getUsers();
+    this.getRoles();
+    this.getCompanies();
   }
 
   superior(id: number) {

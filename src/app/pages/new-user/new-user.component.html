@@ -1,52 +1,87 @@
 <nb-card accent="info" size="large">
     <nb-card-header><div class="text-center">{{title}}</div></nb-card-header>
     <nb-card-body>
-        <div class="form-group">
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
             <label>Usuario:</label>
             <input (input)="nick_change()" type="text" nbInput autofocus fullWidth [status]="nick_status" placeholder="Usuario" [(ngModel)]="newUser.user" class="form-control" aria-describedby="usrHelp">
             <small id="usrHelp" class="form-text text-muted">Apodo (Nickname) del usuario. Solo letras en 4 y 20 caracteres.</small>
           </div>
+        </div>
+        <div class="col">
           <div class="form-group">
             <label>Nombre completo:</label>
             <input (input)="name_change()" type="text" nbInput fullWidth [status]="name_status" placeholder="Nombre" [(ngModel)]="newUser.fullname" class="form-control" aria-describedby="namHelp">
             <small id="namHelp" class="form-text text-muted">Nombre(s) y Apellidos del usuario</small>
           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
           <div class="form-group">
             <label>Cargo:</label>
             <input (input)="position_change()" type="text" nbInput fullWidth [status]="position_status" placeholder="Cargo" [(ngModel)]="newUser.position" class="form-control" aria-describedby="carHelp">
             <small id="carHelp" class="form-text text-muted">Cargo que ocupa el usuario</small>
           </div>
+        </div>
+        <div class="col">
           <div class="form-group">
             <label>E-mail:</label>
             <input (input)="email_change()" type="text" nbInput fullWidth [status]="email_status" placeholder="emai@server.dom" [(ngModel)]="newUser.email" class="form-control" aria-describedby="emailHelp">
             <small id="emailHelp" class="form-text text-muted">La dirección de correo que usará para el acceso al sistema.</small>
           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div style="margin-top: 5px" class="form-group">
+            <label style="margin-right: 5px">Empresa:</label>
+            <nb-select (selectedChange)="company_change()" placeholder="----" [(ngModel)]="selected_company" [status]="company_status" fullWidth>
+              <nb-option *ngFor="let company of companies" [value]="company.id">{{company.nombre}}</nb-option>
+            </nb-select>
+            <small id="companyHelp" class="form-text text-muted">Empresa a la que pertenece el usuario.</small>
+          </div>
+        </div>
+        </div>
+      <div class="row">
+        <div class="col">
           <div style="margin-top: 5px" class="form-group">
             <label style="margin-right: 5px">Rol:</label>
-            <nb-select hero placeholder="----" status="success" selected="1" [(ngModel)]="urole">
-              <nb-option value="1">Usuario</nb-option>
-              <nb-option value="3">Técnico Taller</nb-option>
-              <nb-option value="2">Administrador</nb-option>
+            <nb-select placeholder="----" status="success" [(ngModel)]="selected_role" fullWidth>
+              <nb-option *ngFor="let rol of roles" [value]="rol.id">{{rol.role}}</nb-option>
             </nb-select>
             <small id="rollHelp" class="form-text text-muted">Rol que desempeña el usuario.</small>
           </div>
+        </div>
+        <div class="col">
           <div style="margin-top: 5px" class="form-group">
             <label style="margin-right: 5px">Subordinado de:</label>
-            <nb-select (selectedChange)="superior_change()" hero [placeholder]="nsup" [status]="usup_status" [(ngModel)]="usup">
+            <nb-select (selectedChange)="superior_change()" [placeholder]="nsup" [status]="usup_status" [(ngModel)]="usup" fullWidth>
               <nb-option *ngFor="let user of users" [value]="user.id">{{user.user}}</nb-option>
             </nb-select>
             <small id="supHelp" class="form-text text-muted">Usuario al que se subordinará.</small>
           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
           <div class="form-group">
             <label>Contraseña:</label>
             <input (input)="pass_change()" type="password" nbInput fullWidth [status]="pass_status" placeholder="Contraseña" [(ngModel)]="newUser.pass" class="form-control" aria-describedby="passHelp">
             <small id="passHelp" class="form-text text-muted">Contraseña para el acceso al sistema. Entre 4 y 25 caracteres, permite @ . *</small>
           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
           <div class="form-group">
-              <label>Repetir:</label>
-              <input (input)="repeat_pass()" type="password" nbInput fullWidth [status]="rpass_status" placeholder="Repetir contraseña" [(ngModel)]="reppass" class="form-control" aria-describedby="rpassHelp">
-              <small id="rpassHelp" class="form-text text-muted">Repita la contraseña para comprobar que la escribió correctamente.</small>
-            </div>
+            <label>Repetir:</label>
+            <input (input)="repeat_pass()" type="password" nbInput fullWidth [status]="rpass_status" placeholder="Repetir contraseña" [(ngModel)]="reppass" class="form-control" aria-describedby="rpassHelp">
+            <small id="rpassHelp" class="form-text text-muted">Repita la contraseña para comprobar que la escribió correctamente.</small>
+          </div>
+        </div>
+      </div>
     </nb-card-body>
     <nb-card-footer>
       <div class="float-right row">

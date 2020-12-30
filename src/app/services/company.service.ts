@@ -14,4 +14,16 @@ export class CompanyService {
   getCompanies() {
     return this.http.get(ipserver + 'company/list', {responseType: 'json'});
   }
+
+  saveCompany(newCompany: Company) {
+    return this.http.post(ipserver + 'company', newCompany);
+  }
+
+  updateCompany(id: number, newCompany: Company) {
+    return this.http.put(ipserver + 'company/' + id, newCompany);
+  }
+
+  deleteCompany(id: number) {
+    return this.http.delete(ipserver + 'company/' + id);
+  }
 }

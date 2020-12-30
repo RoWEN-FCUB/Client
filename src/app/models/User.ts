@@ -9,4 +9,5 @@ export interface User {
   id_sup?: number;
   position?: string;
   id_emp?: number;
+  siglas?: string;
 }

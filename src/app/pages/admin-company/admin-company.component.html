@@ -2,7 +2,7 @@
     <nb-card-header>Administración de empresas del sistema</nb-card-header>
     <nb-card-body>
       <div>
-          <button (click)="openNew()" nbTooltip="Agregar una nueva empresas" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="person-add-outline"></nb-icon>Nueva</button>
+          <button (click)="openNew()" nbTooltip="Agregar una nueva empresas" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
       </div>
       <div class='table-responsive'>
         <table id="tablePreview" class="table table-hover table-borderless table-striped table-sm">
@@ -31,8 +31,8 @@
               <td>{{company.osde}}</td>
               <td>{{company.codcli}}</td>
               <td>
-                <nb-icon style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar empresa" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
-                <nb-icon style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar empresa" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                <nb-icon (click)="openEdit(i)" style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar empresa" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                <nb-icon (click)="deleteCompany(i)" style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar empresa" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
               </td>
             </tr>
           </tbody>

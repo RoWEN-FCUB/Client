@@ -27,9 +27,49 @@ export class AdminCompanyComponent implements OnInit {
     });
   }
 
+  openEdit(id: number) {
+    const contxt = {
+      title: 'Editar datos de ' + this.companies[id].siglas,
+      newCompany: this.companies[id],
+    };
+    this.dialogService.open(NewCompanyComponent, {context: contxt}).onClose.subscribe(res => {
+      this.getCompanies();
+    });
+  }
+
   getCompanies() {
     this.companyService.getCompanies().subscribe((res: Company[]) => {
       this.companies = res;
+    });
+  }
+
+  deleteCompany(id: number) {
+    Swal.fire({
+      title: 'Confirma que desea eliminar la empresa "' + this.companies[id].nombre + '"?',
+      text: 'Se eliminarán todos sus datos del sistema.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí­',
+      cancelButtonText: 'No',
+    } as SweetAlertOptions).then((result) => {
+      if (result.value) {
+        this.companyService.deleteCompany(this.companies[id].id).subscribe(res => {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 3000,
+          });
+          Toast.fire({
+            icon: 'success',
+            title: 'Empresa eliminada correctamente.',
+          } as SweetAlertOptions);
+          this.getCompanies();
+        });
+      }
     });
   }
 
