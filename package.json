@@ -48,7 +48,7 @@
     "@nebular/eva-icons": "6.2.1",
     "@nebular/security": "6.2.1",
     "@nebular/theme": "6.2.1",
-    "@ng-bootstrap/ng-bootstrap": "^8.0.0",
+    "@ng-bootstrap/ng-bootstrap": "^8.0.1",
     "@ngtools/webpack": "^11.0.5",
     "@swimlane/ngx-charts": "^16.0.0",
     "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git",
