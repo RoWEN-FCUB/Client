@@ -244,9 +244,13 @@ export class EnergyComponent implements OnInit {
         if (this.erecords[i].plan > this.yscaleMax) {
           this.yscaleMax = this.erecords[i].plan + 10;
         }
+        if (i > 0) {
+          this.erecords[i].planacumulado = this.erecords[i].plan + this.erecords[i - 1].planacumulado;
+        } else {
+          this.erecords[i].planacumulado = this.erecords[i].plan;
+        }
         if (this.erecords[i].lectura) {
           this.erecords[i].realacumulado = this.erecords[i].consumo + this.erecords[last].realacumulado;
-          this.erecords[i].planacumulado = this.erecords[i].plan + this.erecords[last].planacumulado;
           last = i;
         }
       }
