@@ -28,6 +28,7 @@ export class AllNotificationsComponent implements OnInit {
     this.notificaciones[id].leida = true;
     this.notificationService.notificationReaded(idnotif).subscribe(res => {
       // this.getNotifications();
+      this.notificationService.searchNewNotifications(this.user.id);
     });
   }
 
@@ -36,6 +37,7 @@ export class AllNotificationsComponent implements OnInit {
     this.notificaciones = [];
     this.notificationService.notificationsReaded(this.user.id, idnotif).subscribe(res => {
       this.getNotifications();
+      this.notificationService.searchNewNotifications(this.user.id);
     });
   }
 
@@ -44,6 +46,7 @@ export class AllNotificationsComponent implements OnInit {
     this.notificaciones.splice(id, 1);
     this.notificationService.deleteNotification(idnotif).subscribe(res => {
       // this.getNotifications();
+      this.notificationService.searchNewNotifications(this.user.id);
     });
   }
 
@@ -62,6 +65,7 @@ export class AllNotificationsComponent implements OnInit {
         this.notificaciones = [];
         this.notificationService.deleteAllNotifications(this.user.id).subscribe(res => {
           this.getNotifications();
+          this.notificationService.searchNewNotifications(this.user.id);
         });
       }
     });
@@ -99,6 +103,7 @@ export class AllNotificationsComponent implements OnInit {
     this.hay_nuevas = false;
     this.notificationService.getAllNotifications(this.user.id).subscribe((res: Notification[]) => {
       this.notificaciones = res;
+      this.notificationService.searchNewNotifications(this.user.id);
       for (let i = 0; i < this.notificaciones.length; i++) {
         if (!this.notificaciones[i].leida) {
           this.hay_nuevas = true;

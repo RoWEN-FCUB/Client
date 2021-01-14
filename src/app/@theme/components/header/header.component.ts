@@ -67,10 +67,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (token.isValid()) {
           this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
           this.userpicture = ipserver + 'public/' + this.user.picture;
-          this.notif = this.notificationService.getNewNotifications(this.user.id).subscribe((res: Notification[]) => {
+          this.notificationService.searchNewNotifications(this.user.id);
+          this.notificationService.getNotifications().subscribe((res) => {
             if (this.updating_notif) {
               if (res) {
-                // console.log(res);
                 this.new_notifications = res;
                 this.cdr.detectChanges();
               } else {
@@ -110,6 +110,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.new_notifications.splice(id, 1);
     this.notificationService.notificationReaded(idnotif).subscribe(res => {
       this.updating_notif = true;
+      this.notificationService.searchNewNotifications(this.user.id);
     });
   }
 
@@ -119,6 +120,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.new_notifications = [];
     this.notificationService.notificationsReaded(this.user.id, idnotif).subscribe(res => {
       this.updating_notif = true;
+      this.notificationService.searchNewNotifications(this.user.id);
     });
   }
 

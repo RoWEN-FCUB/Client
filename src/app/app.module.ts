@@ -45,6 +45,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormsModule } from '@angular/forms';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE, OwlDateTimeIntl } from '@danielmoncada/angular-datetime-picker';
 import { UserService } from './services/user.service';
+import { NotificationService } from './services/notification.service';
 import { AuthInterceptor } from './services/authInterceptor';
 import { UploadImgComponent } from './pages/upload-img/upload-img.component';
 import { NewTaskComponent } from './pages/new-task/new-task.component';
@@ -191,6 +192,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
       multi: true,
     }],
     UserService,
+    NotificationService,
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'es'},
     {provide: OwlDateTimeIntl, useClass: DefaultIntl},
     AuthGuard,
