@@ -25,6 +25,7 @@ export class NewCompanyComponent implements OnInit {
     ruta: '',
     folio: '',
     email: '',
+    reup: '',
   };
   title: string;
   siglas_status = 'info';
@@ -38,6 +39,7 @@ export class NewCompanyComponent implements OnInit {
   ruta_status = 'info';
   folio_status = 'info';
   email_status = 'info';
+  reup_status = 'info';
   provincia_seleccionada = -1;
   municipio_seleccionado = -1;
   municipios: string[] = [];
@@ -121,6 +123,15 @@ export class NewCompanyComponent implements OnInit {
       this.siglas_status = 'success';
     } else {
       this.siglas_status = 'danger';
+    }
+  }
+
+  reup_change() {
+    const nickregexp = new RegExp(/^[0-9]{3}\.[0-9]{1}\.[0-9]{5}$/);
+    if (nickregexp.test(this.newCompany.reup)) {
+      this.reup_status = 'success';
+    } else {
+      this.reup_status = 'danger';
     }
   }
 
@@ -322,6 +333,12 @@ export class NewCompanyComponent implements OnInit {
         title: 'Debe escribir un servidor de correo válido.',
       } as SweetAlertOptions);
       this.email_status = 'danger';
+    } else if (this.reup_status === 'danger' || this.newCompany.reup === '') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir un código REEUP válido.',
+      } as SweetAlertOptions);
+      this.reup_status = 'danger';
     } else {
       this.save();
     }

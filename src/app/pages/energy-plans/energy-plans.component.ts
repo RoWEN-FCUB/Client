@@ -21,6 +21,7 @@ export class EnergyPlansComponent implements OnInit {
   fecha_inicio: Date = new Date();
   fecha_fin: Date = new Date();
   startDate: Date; // fecha inicial en la que abre el selector de fecha
+  id_emp: number = 0;
   constructor(private energyService: EnergyService, protected dialogRef: NbDialogRef<any>) { }
 
   ngOnInit(): void {
@@ -78,7 +79,8 @@ export class EnergyPlansComponent implements OnInit {
       } else {
         this.fecha_fin = new Date(this.dates[1]);
       }
-      this.energyService.updateAllPlans(this.plan_establecido, this.plan_pico, this.fecha_inicio, this.fecha_fin).subscribe(res => {
+      // tslint:disable-next-line: max-line-length
+      this.energyService.updateAllPlans(this.plan_establecido, this.plan_pico, this.fecha_inicio, this.fecha_fin, this.id_emp).subscribe(res => {
         this.dialogRef.close(res);
       });
     }

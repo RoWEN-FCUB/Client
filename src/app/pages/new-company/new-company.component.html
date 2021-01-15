@@ -91,7 +91,13 @@
                     <small id="emailHelp" class="form-text text-muted">Dirección web del servidor de correo.</small>
                 </div>
             </div>
-            <div class="col"></div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Código REEUP:</label>
+                    <input maxlength="200" (input)="reup_change()" type="text" nbInput fullWidth placeholder="000.0.00000" class="form-control" aria-describedby="reupHelp" [(ngModel)]="newCompany.reup" [status]="reup_status">
+                    <small id="reupHelp" class="form-text text-muted">Código del Registro Estatal de Empresas y Unidades Presupuestadas (REEUP).</small>
+                </div>
+            </div>
         </div> 
     </nb-card-body>
     <nb-card-footer>

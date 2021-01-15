@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ERecord } from '../../models/ERecord';
+import { Company } from '../../models/Company';
 import { NbDialogService } from '@nebular/theme';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import 'moment/min/locales';
@@ -8,6 +9,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as moment from 'moment';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { EnergyService } from '../../services/energy.service';
+import { CompanyService } from '../../services/company.service';
 import { NewErecordComponent } from '../new-erecord/new-erecord.component';
 import { EnergyPlansComponent } from '../energy-plans/energy-plans.component';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -37,8 +39,9 @@ export class EnergyComponent implements OnInit {
   selectedMonth: number;
   selectedYear: number;
   show: boolean = false;
+  company: Company = {};
   showstring: string[] = ['mes', 'año'];
-  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: ''};
+  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0};
   months: {Mes: number, Plan: number, Consumo: number, PlanAcumulado?: number, RealAcumulado?: number}[] = [];
   // opciones de la grafica
   showgraph: boolean = false;
@@ -63,7 +66,8 @@ export class EnergyComponent implements OnInit {
   // // //
 
   // tslint:disable-next-line: max-line-length
-  constructor(private http: HttpClient, private energyService: EnergyService, private dialogService: NbDialogService, private authService: NbAuthService) { }
+  constructor(private http: HttpClient, private energyService: EnergyService, private dialogService: NbDialogService, private authService: NbAuthService,
+    private companyService: CompanyService) { }
 
   ngOnInit(): void {
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
@@ -74,6 +78,9 @@ export class EnergyComponent implements OnInit {
       this.selectedMonth = moment().get('month');
       this.generar_rango_inicial(false);
       this.consumo_por_meses();
+      this.companyService.getOne(this.user.id_emp).subscribe((res: Company) => {
+        this.company = res;
+      });
     });
   }
 
@@ -90,16 +97,28 @@ export class EnergyComponent implements OnInit {
     const d_real = this.erecords[index].consumo;
     const pplan = this.erecords[index].plan_hpic;
     const preal = this.erecords[index].real_hpic;
+    const comp = this.company;
     const edate = moment(this.erecords[index].fecha.toString().substr(0, this.erecords[index].fecha.toString().indexOf('T'))).format('DD-MM-YYYY');
     // tslint:disable-next-line: max-line-length
     const fdate = moment(this.erecords[index].fecha.toString().substr(0, this.erecords[index].fecha.toString().indexOf('T'))).locale('es').format('DD/MM/YYYY');
-    const month = moment(this.erecords[index].fecha).locale('es').format('MMMM').toUpperCase();
+    const month = moment.utc(this.erecords[index].fecha).locale('es').format('MMMM').toUpperCase();
     reader.onload = function (e: any) {
       const contents = e.target.result;
       workBook.xlsx.load(contents).then(data => {
         workBook.worksheets[0].getCell(1, 6).value = month;
         workBook.worksheets[0].getCell(1, 8).value = fdate;
         workBook.worksheets[0].getCell(3, 14).value = tplan;
+        workBook.worksheets[0].getCell(3, 2).value = comp.provincia;
+        workBook.worksheets[0].getCell(3, 3).value = comp.municipio;
+        workBook.worksheets[0].getCell(3, 4).value = comp.oace;
+        workBook.worksheets[0].getCell(3, 5).value = comp.osde;
+        workBook.worksheets[0].getCell(3, 6).value = comp.codcli;
+        workBook.worksheets[0].getCell(3, 7).value = comp.control;
+        workBook.worksheets[0].getCell(3, 8).value = comp.ruta;
+        workBook.worksheets[0].getCell(3, 9).value = comp.folio;
+        workBook.worksheets[0].getCell(3, 10).value = comp.siglas;
+        workBook.worksheets[0].getCell(3, 11).value = comp.siglas;
+        workBook.worksheets[0].getCell(3, 13).value = comp.reup;
         workBook.worksheets[0].getCell(3, 15).value = ac_plan;
         workBook.worksheets[0].getCell(3, 16).value = ac_real;
         workBook.worksheets[0].getCell(3, 17).model.result = undefined; // para que recalcule las formulas
@@ -114,7 +133,7 @@ export class EnergyComponent implements OnInit {
         workBook.worksheets[0].getCell(3, 29).model.result = undefined;
         workBook.xlsx.writeBuffer().then(data1 => {
           const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-          fsaver.saveAs(blobUpdate, 'Modelo 5 DST Las Tunas ' + edate + '.xlsx');
+          fsaver.saveAs(blobUpdate, 'Modelo 5 ' + comp.siglas + ' ' + edate + '.xlsx');
         });
       });
     };
@@ -174,7 +193,7 @@ export class EnergyComponent implements OnInit {
   }
 
   consumo_por_meses() {
-    this.energyService.getMonths(this.selectedYear).subscribe(res => {
+    this.energyService.getMonths(this.selectedYear, this.user.id_emp).subscribe(res => {
       this.months = res as {Mes: number, Plan: number, Consumo: number}[];
       this.totalYearPlan = 0;
       this.totalYearConsume = 0;
@@ -219,11 +238,12 @@ export class EnergyComponent implements OnInit {
         lectura: 0,
         planacumulado: 0,
         realacumulado: 0,
+        id_emp: this.user.id_emp,
       };
       this.erecords.push(erecord);
       fday = moment(fday).locale('es').add(1, 'days').toDate();
     }
-    this.energyService.getERecords(this.selectedYear, this.selectedMonth + 1).subscribe((res: ERecord[]) => {
+    this.energyService.getERecords(this.selectedYear, this.selectedMonth + 1, this.user.id_emp).subscribe((res: ERecord[]) => {
       // console.log(res);
       // console.log(this.erecords);
       let last = 0;
@@ -279,7 +299,7 @@ export class EnergyComponent implements OnInit {
     let prev: number = 0;
     // OBTENER LA LECTURA DEL DIA ANTERIOR
     // tslint:disable-next-line: max-line-length
-    this.energyService.getEReading(moment.utc(this.erecords[i].fecha).format('YYYY-MM-DD')).subscribe((res: ERecord[]) => {
+    this.energyService.getEReading(moment.utc(this.erecords[i].fecha).format('YYYY-MM-DD'), this.user.id_emp).subscribe((res: ERecord[]) => {
       if (res.length > 0) {
         prev = res[0].lectura;
       }
@@ -311,7 +331,7 @@ export class EnergyComponent implements OnInit {
 
   openPlans() {
     // tslint:disable-next-line: max-line-length
-    this.dialogService.open(EnergyPlansComponent, {context: {startDate: new Date(this.selectedYear, this.selectedMonth)}}).onClose.subscribe(
+    this.dialogService.open(EnergyPlansComponent, {context: {id_emp: this.user.id_emp, startDate: new Date(this.selectedYear, this.selectedMonth)}}).onClose.subscribe(
       (newWRecord: ERecord) => {
         if (newWRecord) {
           this.generar_rango_inicial(false);
@@ -334,7 +354,7 @@ export class EnergyComponent implements OnInit {
       timer: 3000,
     });
     // tslint:disable-next-line: max-line-length
-    this.energyService.getEReading(moment.utc(this.erecords[0].fecha).format('YYYY-MM-DD')).subscribe((res: ERecord[]) => {
+    this.energyService.getEReading(moment.utc(this.erecords[0].fecha).format('YYYY-MM-DD'), this.user.id_emp).subscribe((res: ERecord[]) => {
       if (res.length > 0) {
         prev = res[0].lectura;
       }
@@ -422,7 +442,7 @@ export class EnergyComponent implements OnInit {
         // pageOrientation: 'landscape',
         content: [
           {
-            text: 'Desglose Plan de Energía CITMATEL ' + this.currentYear, fontSize: 15, width: 'auto',
+            text: 'Desglose Plan de Energía ' + this.company.siglas + ' ' + this.currentYear, fontSize: 15, width: 'auto',
           },
           {
             text: 'Plan para el mes de ' + this.currentMonth + ' ' + this.totalPlan + ' KW', fontSize: 15, width: 'auto',
@@ -503,7 +523,7 @@ export class EnergyComponent implements OnInit {
         // pageOrientation: 'landscape',
         content: [
           {
-            text: 'Desglose Plan de Energía CITMATEL ' + this.currentYear, fontSize: 15, width: 'auto',
+            text: 'Desglose Plan de Energía ' + this.company.siglas + ' ' + this.currentYear, fontSize: 15, width: 'auto',
           },
           {
             text: 'Plan para el año ' + this.totalYearPlan + ' KW', fontSize: 15, width: 'auto',

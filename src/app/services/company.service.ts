@@ -15,6 +15,10 @@ export class CompanyService {
     return this.http.get(ipserver + 'company/list', {responseType: 'json'});
   }
 
+  getOne(id: number) {
+    return this.http.get(ipserver + 'company/get/' + id, {responseType: 'json'});
+  }
+
   saveCompany(newCompany: Company) {
     return this.http.post(ipserver + 'company', newCompany);
   }

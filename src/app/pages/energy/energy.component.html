@@ -37,7 +37,7 @@
                             <!--<label class="mr-2 ml-2" style="font-family: Open Sans, sans-serif; font-size: 0.8125rem; font-weight: 600; margin-top: 0.01rem;">Mes</label>-->
                             <nb-toggle (checkedChange)="toogleShow($event)" status="info" labelPosition="right"><span #text_muted>Año</span></nb-toggle>
                         </th>
-                        <th colspan="6" style="border: none !important;">Desglose Plan de Energía CITMATEL {{currentYear}}</th>                        
+                        <th colspan="6" style="border: none !important;">Desglose Plan de Energía {{company.siglas}} {{currentYear}}</th>                        
                     </tr>
                     <tr>
                         <th colspan="7"  style="border: none !important;">
@@ -114,7 +114,7 @@
                             <!--<label class="mr-2 ml-2" style="font-family: Open Sans, sans-serif; font-size: 0.8125rem; font-weight: 600; margin-top: 0.01rem;">Mes</label>-->
                             <nb-toggle [checked]="show" (checkedChange)="toogleShow($event)" status="info" labelPosition="right"><span #text_muted>Año</span></nb-toggle>
                         </th>
-                        <th colspan="7" style="border: none !important;">Desglose Plan de Energía CITMATEL {{currentYear}}</th>                        
+                        <th colspan="7" style="border: none !important;">Desglose Plan de Energía {{company.siglas}} {{currentYear}}</th>                        
                     </tr>
                     <tr>
                         <th colspan="7"  style="border: none !important;">

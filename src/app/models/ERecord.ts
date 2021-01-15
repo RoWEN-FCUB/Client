@@ -8,4 +8,5 @@ export interface ERecord {
     realacumulado?: number;
     plan_hpic?: number;
     real_hpic?: number;
+    id_emp?: number;
   }

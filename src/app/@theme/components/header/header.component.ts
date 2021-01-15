@@ -11,6 +11,8 @@ import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import ipserver from '../../../ipserver';
 import { NotificationService } from '../../../services/notification.service';
 import { Notification } from '../../../models/Notification';
+import { Company } from '../../../models/Company';
+import { CompanyService } from '../../../services/company.service';
 @Component({
   selector: 'ngx-header',
   styleUrls: ['./header.component.scss'],
@@ -21,8 +23,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
-  user = {name: '', picture: '', id: 0, role: ''};
-
+  user = {name: '', picture: '', id: 0, role: '', id_emp: 0};
+  company: Company;
   themes = [
     {
       value: 'default',
@@ -56,7 +58,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private authService: NbAuthService,
               private breakpointService: NbMediaBreakpointsService,
               private notificationService: NotificationService,
-              private cdr: ChangeDetectorRef) {
+              private cdr: ChangeDetectorRef,
+              private companyService: CompanyService) {
   }
 
   ngOnInit() {
@@ -66,6 +69,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         // console.log(token.getPayload());
         if (token.isValid()) {
           this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
+          this.companyService.getOne(this.user.id_emp).subscribe((res: Company) => {
+            this.company = res;
+          });
           this.userpicture = ipserver + 'public/' + this.user.picture;
           this.notificationService.searchNewNotifications(this.user.id);
           this.notificationService.getNotifications().subscribe((res) => {
@@ -97,6 +103,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(themeName => this.currentTheme = themeName);
+  }
+
+  clickMail() {
+    window.open(this.company.email, '_blank');
   }
 
   clickNotification(link: string) {
