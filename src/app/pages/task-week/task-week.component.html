@@ -95,7 +95,7 @@
           </nb-card>
         </nb-card-body>
       </nb-card>
-      
+      <button *ngIf="pageOffset.y > 300" nbButton id="myBtn" (click)="goTop()"><nb-icon icon="arrow-ios-upward-outline" nbTooltip="Subir" nbTooltipStatus="info"></nb-icon></button>
       <!--
 
         <nb-accordion multi>

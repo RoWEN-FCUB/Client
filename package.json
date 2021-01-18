@@ -76,6 +76,7 @@
     "ngx-export-as": "^1.5.0",
     "ngx-material-timepicker": "^5.5.3",
     "ngx-pagination": "^5.0.0",
+    "ngx-scrolltop": "^2.2.0",
     "node-sass": "^5.0.0",
     "normalize.css": "8.0.1",
     "pace-js": "1.0.2",

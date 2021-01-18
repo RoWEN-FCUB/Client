@@ -36,6 +36,7 @@ import { AdminCompanyComponent } from './admin-company/admin-company.component';
 // import { NewCompanyComponent } from './new-company/new-company.component';
 // import { NewErecordComponent } from './new-erecord/new-erecord.component';
 // import { EnergyPlansComponent } from './energy-plans/energy-plans.component';
+// import { NgxScrollTopModule } from 'ngx-scrolltop';
 @Injectable()
 export class DefaultIntl extends OwlDateTimeIntl {
   /** A label for the up second button (used by screen readers).  */
@@ -129,6 +130,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     NbLayoutModule,
     NgxChartsModule,
     NbToggleModule,
+    // NgxScrollTopModule,
   ],
   declarations: [
     PagesComponent,

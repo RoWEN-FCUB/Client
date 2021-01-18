@@ -4,7 +4,7 @@ import {
 import { TaskService } from '../../services/task.service';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { Task } from '../../models/Task';
-import { NbDialogService} from '@nebular/theme';
+import { NbDialogService, NbLayoutScrollService} from '@nebular/theme';
 import { NewTaskComponent } from '../new-task/new-task.component';
 import { NewObsComponent } from '../new-obs/new-obs.component';
 import * as moment from 'moment';
@@ -45,12 +45,15 @@ export class TaskWeekComponent implements OnInit {
   expandir_todas: boolean = true;
   tasktovalidate: number = 0;
   periodoamostrar: string = '';
+  pageOffset = {x: 0, y: 0};
+  // showbtnup: boolean = false;
 
   constructor(private userService: UserService,
     private taskService: TaskService,
     private authService: NbAuthService,
     private dialogService: NbDialogService,
     private route: ActivatedRoute,
+    private nbLayoutScrollService: NbLayoutScrollService,
     ) {
   }
 
@@ -79,6 +82,25 @@ export class TaskWeekComponent implements OnInit {
       }
       // usr.unsubscribe();
     });
+    this.nbLayoutScrollService.onScroll().subscribe(r => {
+      /*console.log(r.srcElement.scrollTop + r.srcElement.offsetHeight);
+      console.log(r.srcElement.scrollHeight);
+      if ((r.srcElement.scrollTop + r.srcElement.offsetHeight) / r.srcElement.scrollHeight > 0.3) {
+        // console.log('Mostrar');
+        this.showbtnup = true;
+      } else {
+        this.showbtnup = false;
+      }*/
+      this.nbLayoutScrollService.getPosition().subscribe(p => {
+        this.pageOffset = p;
+        //console.log(this.pageOffset.y);
+      });
+    });
+  }
+
+  goTop() {
+    this.nbLayoutScrollService.scrollTo(0, 0);
+    // this.showbtnup = false;
   }
 
   expand_tasks(checked: boolean) {

@@ -75,6 +75,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NewErecordComponent } from './pages/new-erecord/new-erecord.component';
 import { EnergyPlansComponent } from './pages/energy-plans/energy-plans.component';
 import { NewCompanyComponent } from './pages/new-company/new-company.component';
+// import { NgxScrollTopModule } from 'ngx-scrolltop';
 
 // here is the default text string
 @Injectable()
