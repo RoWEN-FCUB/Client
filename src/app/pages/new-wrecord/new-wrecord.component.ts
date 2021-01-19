@@ -36,6 +36,7 @@ export class NewWRecordComponent implements OnInit {
     cliente_nombre: '',
     estado: 'P',
     id_superior: 0,
+    id_emp: 0,
   };
   client_status: string = 'info';
   client_name_status: string = 'info';
@@ -46,7 +47,7 @@ export class NewWRecordComponent implements OnInit {
   serial_status: string = 'info';
   date_received_status: string = 'info';
   deliver_status: string = 'info';
-  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_sup: 0};
+  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_sup: 0, id_emp: 0};
   show_client_name: boolean = false;
   constructor(protected dialogRef: NbDialogRef<any>, private workshopService: WorkshopService, private authService: NbAuthService) { }
 
@@ -56,6 +57,7 @@ export class NewWRecordComponent implements OnInit {
     });
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
+      this.newrecord.id_emp = this.user.id_emp;
       this.newrecord.especialista = this.user.fullname;
       this.newrecord.id_superior = this.user.id_sup;
     });

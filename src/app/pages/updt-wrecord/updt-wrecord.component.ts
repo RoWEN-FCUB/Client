@@ -76,14 +76,14 @@ export class UpdtWRecordComponent implements OnInit {
       timerProgressBar: true,
       timer: 3000,
     });
-    if (this.ot_status !== 'success' || this.wrecord.ot === '') {
+    if (this.ot_status === 'danger' || this.wrecord.ot === '') {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir una orden de trabajo válida.',
       } as SweetAlertOptions);
       this.ot_status = 'danger';
       return false;
-    } else if (this.receiver_status !== 'success' || this.wrecord.recogido === '') {
+    } else if (this.receiver_status === 'danger' || this.wrecord.recogido === '') {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir correctamente el nombre de la persona que recoge el equipo.',

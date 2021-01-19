@@ -16,4 +16,5 @@ export interface WRecord {
   recogido?: string;
   cliente_nombre?: string;
   id_superior?: number;
+  id_emp?: number;
 }

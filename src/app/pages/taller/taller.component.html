@@ -1,5 +1,5 @@
 <nb-card fullwidth accent="info">
-  <nb-card-header>Registro de entradas y salidas del taller</nb-card-header>
+  <nb-card-header>Registro de entradas y salidas del taller {{company.siglas}}</nb-card-header>
   <nb-card-body>
     <div>
       <label>Buscar:</label><input nbTooltip="Escriba uno o varios parámetros separados por espacio y presione enter." (keyup.enter)="search()" [(ngModel)]="search_string" [status]="search_status" class="ml-2" type="text" nbInput fieldSize="small" placeholder="Escriba el valor...">

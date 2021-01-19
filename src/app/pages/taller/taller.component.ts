@@ -7,12 +7,14 @@ import { WRecord } from '../../models/WRecord';
 import { NbDialogService } from '@nebular/theme';
 import 'moment/min/locales';
 import { UserService } from '../../services/user.service';
+import { CompanyService } from '../../services/company.service';
 import { ActivatedRoute } from '@angular/router';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { NewWRecordComponent } from '../new-wrecord/new-wrecord.component';
 import { UpdtWRecordComponent } from '../updt-wrecord/updt-wrecord.component';
 import { User } from '../../models/User';
+import { Company } from '../../models/Company';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -29,12 +31,14 @@ export class TallerComponent implements OnInit {
   config: any;
   table_to_print = [];
   docDefinition = {};
-  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: ''};
+  company: Company = {};
+  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0};
 
   constructor(private userService: UserService,
     private workshopService: WorkshopService,
     private authService: NbAuthService,
     private dialogService: NbDialogService,
+    private companyService: CompanyService,
     private route: ActivatedRoute) {
       this.config = {
         itemsPerPage: 10,
@@ -44,9 +48,12 @@ export class TallerComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.search();
     const usr = this.authService.getToken().subscribe((res: NbAuthJWTToken) => {
       this.user = res.getPayload();
+      this.search();
+      this.companyService.getOne(this.user.id_emp).subscribe((comp: Company) => {
+        this.company = comp;
+      });
     });
   }
 
@@ -194,7 +201,7 @@ export class TallerComponent implements OnInit {
     if (this.search_string !== '') {
       strtosearch = this.search_string;
     }
-    this.workshopService.searchRecord(strtosearch, this.config.currentPage).subscribe((res: {total, wrecords}) => {
+    this.workshopService.searchRecord(strtosearch, this.config.currentPage, this.user.id_emp).subscribe((res: {total, wrecords}) => {
       this.config.totalItems = res.total;
       this.wrecords = res.wrecords;
       if (this.wrecords.length > 0) {

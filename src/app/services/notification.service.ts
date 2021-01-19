@@ -3,7 +3,7 @@ import {HttpClient, HttpParams, HttpHeaders} from '@angular/common/http';
 import { map, switchMap } from 'rxjs/operators';
 import { interval } from 'rxjs';
 import ipserver from '../ipserver';
-import { Observable, BehaviorSubject } from 'rxjs/Rx';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Notification } from '../models/Notification';
 @Injectable({
   providedIn: 'root',

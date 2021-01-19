@@ -11,8 +11,8 @@ export class WorkshopService {
 
   constructor(private http: HttpClient) { }
 
-  getWRecords(page: number) {
-    return this.http.get(ipserver + 'workshop/records/' + page, {responseType: 'json'});
+  getWRecords(page: number, id_emp: number) {
+    return this.http.get(ipserver + 'workshop/records/' + page + '&' + id_emp, {responseType: 'json'});
   }
 
   getWClients() {
@@ -35,7 +35,7 @@ export class WorkshopService {
     return this.http.put(ipserver + 'workshop/' + id, record);
   }
 
-  searchRecord(strtofind: string, page: number) {
-    return this.http.get(ipserver + 'workshop/search/' + strtofind + '&' + page);
+  searchRecord(strtofind: string, page: number, id_emp: number) {
+    return this.http.get(ipserver + 'workshop/search/' + strtofind + '&' + page + '&' + id_emp);
   }
 }
