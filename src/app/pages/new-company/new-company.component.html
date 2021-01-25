@@ -1,104 +1,200 @@
 <nb-card accent="info" size="large">
     <nb-card-header><div class="text-center">{{title}}</div></nb-card-header>
     <nb-card-body>
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label>Siglas:</label>
-                    <input maxlength="50" (input)="siglas_change()" type="text" nbInput autofocus fullWidth placeholder="Siglas"class="form-control" aria-describedby="siglasHelp" [(ngModel)]="newCompany.siglas" [status]="siglas_status">
-                    <small id="siglasHelp" class="form-text text-muted">Siglas de la empresa. Entre 4 y 50 caracteres.</small>
+        <nb-tabset fullWidth id="tabset" name="tabset" #tabset>
+            <nb-tab tabTitle="Datos generales" id="Tab1" name="Tab1" #Tab1>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Siglas:</label>
+                            <input maxlength="50" (input)="siglas_change()" type="text" nbInput autofocus fullWidth placeholder="Siglas"class="form-control" aria-describedby="siglasHelp" [(ngModel)]="newCompany.siglas" [status]="siglas_status">
+                            <small id="siglasHelp" class="form-text text-muted">Siglas de la empresa. Entre 2 y 50 caracteres.</small>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Nombre:</label>
+                            <input maxlength="200" (input)="nombre_change()" type="text" nbInput fullWidth placeholder="Nombre"class="form-control" aria-describedby="nombresHelp" [(ngModel)]="newCompany.nombre" [status]="nombre_status">
+                            <small id="nombreHelp" class="form-text text-muted">Nombre completo de la empresa. Entre 4 y 250 caracteres.</small>
+                        </div>
+                    </div>            
                 </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>Nombre:</label>
-                    <input maxlength="200" (input)="nombre_change()" type="text" nbInput fullWidth placeholder="Nombre"class="form-control" aria-describedby="nombresHelp" [(ngModel)]="newCompany.nombre" [status]="nombre_status">
-                    <small id="nombreHelp" class="form-text text-muted">Nombre completo de la empresa. Entre 4 y 250 caracteres.</small>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Provincia:</label>
+                            <nb-select (selectedChange)="cambiarmunicipios()" fullWidth placeholder="----" [(ngModel)]="provincia_seleccionada" [status]="provincia_status">
+                                <nb-option *ngFor="let prov of provincias; let i = index" [value]="i">{{prov.nombre}}</nb-option>
+                            </nb-select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Municipio:</label>
+                            <nb-select (selectedChange)="seleccionarMunicipio()" fullWidth placeholder="----" [(ngModel)]="municipio_seleccionado" [status]="municipio_status">
+                                <nb-option *ngFor="let mun of municipios; let i = index" [value]="i">{{mun}}</nb-option>
+                            </nb-select>
+                        </div>
+                    </div>            
                 </div>
-            </div>            
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label>Provincia:</label>
-                    <nb-select (selectedChange)="cambiarmunicipios()" fullWidth placeholder="----" [(ngModel)]="provincia_seleccionada" [status]="provincia_status">
-                        <nb-option *ngFor="let prov of provincias; let i = index" [value]="i">{{prov.nombre}}</nb-option>
-                    </nb-select>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>OACE:</label>
+                            <input maxlength="50" (input)="oace_change()" type="text" nbInput fullWidth placeholder="OACE"class="form-control" aria-describedby="oaceHelp" [(ngModel)]="newCompany.oace" [status]="oace_status">
+                            <small id="oaceHelp" class="form-text text-muted">OACE al que pertenece la empresa. Solo letras entre 4 y 50 caracteres.</small>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>OSDE:</label>
+                            <input maxlength="50" (input)="osde_change()" type="text" nbInput fullWidth placeholder="OSDE"class="form-control" aria-describedby="osdeHelp" [(ngModel)]="newCompany.osde" [status]="osde_status">
+                            <small id="osdeHelp" class="form-text text-muted">OSDE al que pertenece la empresa. Entre 4 y 50 caracteres.</small>
+                        </div>
+                    </div>            
                 </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>Municipio:</label>
-                    <nb-select (selectedChange)="seleccionarMunicipio()" fullWidth placeholder="----" [(ngModel)]="municipio_seleccionado" [status]="municipio_status">
-                        <nb-option *ngFor="let mun of municipios; let i = index" [value]="i">{{mun}}</nb-option>
-                    </nb-select>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Servidor de correo:</label>
+                            <input maxlength="200" (input)="email_change()" type="text" nbInput fullWidth placeholder="https://webmail.server.cu" class="form-control" aria-describedby="emailHelp" [(ngModel)]="newCompany.email" [status]="email_status">
+                            <small id="emailHelp" class="form-text text-muted">Dirección web del servidor de correo.</small>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Código REEUP:</label>
+                            <input maxlength="200" (input)="reup_change()" type="text" nbInput fullWidth placeholder="000.0.00000" class="form-control" aria-describedby="reupHelp" [(ngModel)]="newCompany.reup" [status]="reup_status">
+                            <small id="reupHelp" class="form-text text-muted">Código del Registro Estatal de Empresas y Unidades Presupuestadas (REEUP).</small>
+                        </div>
+                    </div>
                 </div>
-            </div>            
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label>OACE:</label>
-                    <input maxlength="50" (input)="oace_change()" type="text" nbInput fullWidth placeholder="OACE"class="form-control" aria-describedby="oaceHelp" [(ngModel)]="newCompany.oace" [status]="oace_status">
-                    <small id="oaceHelp" class="form-text text-muted">OACE al que pertenece la empresa. Solo letras entre 4 y 50 caracteres.</small>
+            </nb-tab>
+            <nb-tab tabTitle="Control eléctrico" id="Tab2" name="Tab2" #Tab2>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>CODCLI:</label>
+                            <input maxlength="50" (input)="codcli_change()" type="text" nbInput fullWidth placeholder="CODCLI"class="form-control" aria-describedby="codcliHelp" [(ngModel)]="newCompany.codcli" [status]="codcli_status">
+                            <small id="codcliHelp" class="form-text text-muted">Código de cliente de la empresa. Entre 1 y 50 caracteres.</small>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Control:</label>
+                            <input maxlength="50" (input)="control_change()" type="text" nbInput fullWidth placeholder="Control"class="form-control" aria-describedby="controlHelp" [(ngModel)]="newCompany.control" [status]="control_status">
+                            <small id="controlHelp" class="form-text text-muted">Control de la empresa. Entre 1 y 50 caracteres.</small>
+                        </div>
+                    </div>            
+                </div>  
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>RUTA:</label>
+                            <input maxlength="50" (input)="ruta_change()" type="text" nbInput fullWidth placeholder="Ruta"class="form-control" aria-describedby="rutaHelp" [(ngModel)]="newCompany.ruta" [status]="ruta_status">
+                            <small id="rutaHelp" class="form-text text-muted">Ruta de la empresa. Entre 1 y 50 caracteres.</small>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label>FOLIO:</label>
+                            <input maxlength="50" (input)="folio_change()" type="text" nbInput fullWidth placeholder="Folio"class="form-control" aria-describedby="folioHelp" [(ngModel)]="newCompany.folio" [status]="folio_status">
+                            <small id="folioHelp" class="form-text text-muted">Folio de la empresa. Entre 1 y 50 caracteres.</small>
+                        </div>
+                    </div>            
                 </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>OSDE:</label>
-                    <input maxlength="50" (input)="osde_change()" type="text" nbInput fullWidth placeholder="OSDE"class="form-control" aria-describedby="osdeHelp" [(ngModel)]="newCompany.osde" [status]="osde_status">
-                    <small id="osdeHelp" class="form-text text-muted">OSDE al que pertenece la empresa. Entre 4 y 50 caracteres.</small>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <nb-checkbox [checked]="newCompany.bitacora" (checkedChange)="bitacora_change($event)">Utiliza bitácora</nb-checkbox>                    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <nb-checkbox [checked]="newCompany.triple_registro" (checkedChange)="tripleR_change($event)">Es de triple registro</nb-checkbox>
+                        </div>
+                    </div>
                 </div>
-            </div>            
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label>CODCLI:</label>
-                    <input maxlength="50" (input)="codcli_change()" type="text" nbInput fullWidth placeholder="CODCLI"class="form-control" aria-describedby="codcliHelp" [(ngModel)]="newCompany.codcli" [status]="codcli_status">
-                    <small id="codcliHelp" class="form-text text-muted">Código de cliente de la empresa. Entre 1 y 50 caracteres.</small>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <nb-checkbox [checked]="newCompany.aplica_acomodo" (checkedChange)="acomodo_change($event)">Aplican acomodo de carga</nb-checkbox>                    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <nb-checkbox [checked]="newCompany.pico_diurno" (checkedChange)="picoD_change($event)">Registra horario pico diurno</nb-checkbox>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>Control:</label>
-                    <input maxlength="50" (input)="control_change()" type="text" nbInput fullWidth placeholder="Control"class="form-control" aria-describedby="controlHelp" [(ngModel)]="newCompany.control" [status]="control_status">
-                    <small id="controlHelp" class="form-text text-muted">Control de la empresa. Entre 1 y 50 caracteres.</small>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <nb-checkbox [checked]="newCompany.pico_nocturno" (checkedChange)="picoN_change($event)">Registra horario pico nocturno</nb-checkbox>                    
+                        </div>
+                    </div>
+                    <div class="col">
+                    </div>
                 </div>
-            </div>            
-        </div>  
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label>RUTA:</label>
-                    <input maxlength="50" (input)="ruta_change()" type="text" nbInput fullWidth placeholder="Ruta"class="form-control" aria-describedby="rutaHelp" [(ngModel)]="newCompany.ruta" [status]="ruta_status">
-                    <small id="rutaHelp" class="form-text text-muted">Ruta de la empresa. Entre 1 y 50 caracteres.</small>
+                <div class="row">
+                    <div class="col">
+                        <fieldset>
+                            <legend>Horario pico del mediodía</legend>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>Desconectivos generales abiertos:</label>
+                                        <input (input)="descGD_change()" maxlength="20" type="text" nbInput fullWidth placeholder="0" class="form-control" aria-describedby="mdescgHelp" [(ngModel)]="newCompany.desc_gen_dia" [status]="descGD_status">
+                                        <small id="mdescgHelp" class="form-text text-muted">Desconectivos generales que se abren en el horario del mediodía.</small>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>Desconectivos parciales abiertos:</label>
+                                        <input (input)="descPD_change()" maxlength="20" type="text" nbInput fullWidth placeholder="0" class="form-control" aria-describedby="mdescgHelp" [(ngModel)]="newCompany.desc_parc_dia" [status]="descPD_status">
+                                        <small id="mdescgHelp" class="form-text text-muted">Desconectivos parciales que se abren en el horario del mediodía.</small>
+                                    </div>             
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>                    
                 </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>FOLIO:</label>
-                    <input maxlength="50" (input)="folio_change()" type="text" nbInput fullWidth placeholder="Folio"class="form-control" aria-describedby="folioHelp" [(ngModel)]="newCompany.folio" [status]="folio_status">
-                    <small id="folioHelp" class="form-text text-muted">Folio de la empresa. Entre 1 y 50 caracteres.</small>
+                <div class="row">
+                    <div class="col">
+                        <fieldset>
+                            <legend>Horario pico nocturno</legend>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>Desconectivos generales abiertos:</label>
+                                        <input (input)="descGN_change()" maxlength="20" type="text" nbInput fullWidth placeholder="0" class="form-control" aria-describedby="mdescgHelp" [(ngModel)]="newCompany.desc_gen_noche" [status]="descGN_status">
+                                        <small id="mdescgHelp" class="form-text text-muted">Desconectivos generales que se abren en el horario de la noche.</small>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>Desconectivos parciales abiertos:</label>
+                                        <input (input)="descPN_change()" maxlength="20" type="text" nbInput fullWidth placeholder="0" class="form-control" aria-describedby="mdescgHelp" [(ngModel)]="newCompany.desc_parc_noche" [status]="descPN_status">
+                                        <small id="mdescgHelp" class="form-text text-muted">Desconectivos parciales que se abren en el horario de la noche.</small>
+                                    </div>             
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>                    
                 </div>
-            </div>            
-        </div>  
-        <div class="row">
-            <div class="col">
-                <div class="form-group">
-                    <label>Servidor de correo:</label>
-                    <input maxlength="200" (input)="email_change()" type="text" nbInput fullWidth placeholder="https://webmail.server.cu" class="form-control" aria-describedby="emailHelp" [(ngModel)]="newCompany.email" [status]="email_status">
-                    <small id="emailHelp" class="form-text text-muted">Dirección web del servidor de correo.</small>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Total de desconectivos:</label>
+                            <input (input)="tdesc_change()" maxlength="20" type="text" nbInput fullWidth placeholder="0" class="form-control" aria-describedby="tdescHelp" [(ngModel)]="newCompany.total_desconectivos" [status]="tdesc_status">
+                            <small id="tdescHelp" class="form-text text-muted">Número total de desconectivos que tiene la entidad.</small>
+                        </div>
+                    </div>
+                    <div class="col">                
+                    </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="form-group">
-                    <label>Código REEUP:</label>
-                    <input maxlength="200" (input)="reup_change()" type="text" nbInput fullWidth placeholder="000.0.00000" class="form-control" aria-describedby="reupHelp" [(ngModel)]="newCompany.reup" [status]="reup_status">
-                    <small id="reupHelp" class="form-text text-muted">Código del Registro Estatal de Empresas y Unidades Presupuestadas (REEUP).</small>
-                </div>
-            </div>
-        </div> 
+            </nb-tab>
+        </nb-tabset>
     </nb-card-body>
     <nb-card-footer>
         <div class="float-right row">

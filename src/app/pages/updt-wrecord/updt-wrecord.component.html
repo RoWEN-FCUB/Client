@@ -3,26 +3,130 @@
     <nb-card-body>
       <div class="row">
         <div class="col">
+          <div class="form-group">
+            <label>Cliente:</label>
+            <input type="text" (input)="clientChange()" [(ngModel)]="wrecord.cliente" [status]="client_status" list="dynamicClients" nbInput autofocus fullWidth placeholder="Siglas" class="form-control" aria-describedby="clienteHelp">
+            <small id="clienteHelp" class="form-text text-muted">Siglas del Cliente.</small>
+            <datalist id="dynamicClients">
+              <option *ngFor="let client of clients" [value]="client.siglas">{{client.siglas}}</option>
+            </datalist>
+          </div>
+        </div>
+        <div class="col" *ngIf="show_client_name">
+          <div class="form-group">
+            <label>Nombre del cliente:</label>
+            <input type="text" (input)="clientNameChange()" [(ngModel)]="wrecord.cliente_nombre" [status]="client_name_status" nbInput fullWidth placeholder="Nombre del cliente" class="form-control" aria-describedby="clienteNHelp">
+            <small id="clienteNHelp" class="form-text text-muted">Nombre del Cliente.</small>          
+          </div>
+        </div>
+        <div class="col" *ngIf="!show_client_name">
+          <div class="form-group">
+            <label>Equipo:</label>
+            <input type="text" (input)="deviceChange()" [(ngModel)]="wrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
+            <small id="equipoHelp" class="form-text text-muted">Equipo a registrar.</small>
+            <datalist id="dynamicDevices">
+              <option *ngFor="let device of devs" [value]="device">{{device}}</option>
+            </datalist>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="show_client_name">
+        <div class="col">
+          <div class="form-group">
+            <label>Equipo:</label>
+            <input type="text" (input)="deviceChange()" [(ngModel)]="wrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
+            <small id="equipoHelp" class="form-text text-muted">Equipo a registrar.</small>
+            <datalist id="dynamicDevices">
+              <option *ngFor="let device of devs" [value]="device">{{device}}</option>
+            </datalist>
+          </div>
+        </div>
+        <div class="col"></div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label>Marca:</label>
+            <input type="text" (input)="marcChange()" [(ngModel)]="wrecord.marca" [status]="marc_status" list="dynamicMarcs" nbInput fullWidth placeholder="Marca" class="form-control" aria-describedby="marcaHelp">
+            <small id="marcaHelp" class="form-text text-muted">Marca del equipo a registrar.</small>
+            <datalist id="dynamicMarcs">
+              <option *ngFor="let marc of marcs" [value]="marc">{{marc}}</option>
+            </datalist>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Modelo:</label>
+            <input type="text" (input)="modelChange()" [(ngModel)]="wrecord.modelo" [status]="model_status" list="dynamicModels" nbInput fullWidth placeholder="Modelo" class="form-control" aria-describedby="modelHelp">
+            <small id="modelHelp" class="form-text text-muted">Modelo del equipo a registrar.</small>
+            <datalist id="dynamicModels">
+              <option *ngFor="let model of models" [value]="model">{{model}}</option>
+            </datalist>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label>Inventario:</label>
+            <input type="text" (input)="invChange()" [(ngModel)]="wrecord.inventario" [status]="inv_status" list="dynamicInventaries" nbInput fullWidth placeholder="Inventario" class="form-control" aria-describedby="invHelp">
+            <small id="invHelp" class="form-text text-muted">Inventario del equipo a registrar.</small> 
+            <datalist id="dynamicInventaries">
+              <option *ngFor="let inv of inventaries" [value]="inv">{{inv}}</option>
+            </datalist>     
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Serie:</label>
+            <input type="text" (input)="serialChange()" [(ngModel)]="wrecord.serie" [status]="serial_status" list="dynamicSerials" nbInput fullWidth placeholder="Serie" class="form-control" aria-describedby="serialHelp">
+            <small id="serialHelp" class="form-text text-muted">Número de serie del equipo a registrar.</small>
+            <datalist id="dynamicSerials">
+              <option *ngFor="let serial of serials" [value]="serial">{{serial}}</option>
+            </datalist>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label>Fecha de entrada:</label>
+            <input type="text" [nbDatepicker]="datepicker" [(ngModel)]="wrecord.fecha_entrada" [status]="date_received_status" nbInput fullWidth placeholder="Fecha entrada" class="form-control" aria-describedby="dateHelp">
+            <small id="dateHelp" class="form-text text-muted">Fecha en la que se le da entrada al equipo.</small>   
+            <nb-datepicker #datepicker></nb-datepicker>   
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Entrega:</label>
+            <input type="text" (input)="nameChange()" [(ngModel)]="wrecord.entregado" [status]="deliver_status" list="dynamicNames" nbInput fullWidth placeholder="Nombre" class="form-control" aria-describedby="nameHelp">
+            <small id="nameHelp" class="form-text text-muted">Nombre de la persona que entrega el equipo.</small>
+            <datalist id="dynamicNames">
+              <option *ngFor="let name of names" [value]="name">{{name}}</option>
+            </datalist>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
             <div class="form-group">
                 <label>Orden de trabajo:</label>
                 <input type="text" (input)="otChange()" [(ngModel)]="wrecord.ot" [status]="ot_status" nbInput autofocus fullWidth placeholder="Orden de trabajo" class="form-control" aria-describedby="otHelp">
                 <small id="otHelp" class="form-text text-muted">Número de la orden de trabajo. (De 2 a 10 dígitos)</small>            
             </div>
-        </div>        
-      </div>
-      <div class="row">
-          <div class="col">
-            <div class="form-group">
-                <label style="margin-right: 2px;">Estado:</label>
-                <nb-select (selectedChange)="updtDeviceStatus()" hero placeholder="----" [status]="state_status" [selected]="wrecord.estado" [(ngModel)]="wrecord.estado">
-                    <nb-option value="P">Pendiente</nb-option>
-                    <nb-option value="R">Reparado</nb-option>
-                    <nb-option value="D">Diagnosticado</nb-option>
-                </nb-select>
-                <small id="stateHelp" class="form-text text-muted">{{status_description}}</small>            
-            </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+              <label style="margin-right: 2px;">Estado:</label>
+              <nb-select (selectedChange)="updtDeviceStatus()" fullWidth hero placeholder="----" [status]="state_status" [selected]="wrecord.estado" [(ngModel)]="wrecord.estado">
+                  <nb-option value="P">Pendiente</nb-option>
+                  <nb-option value="R">Reparado</nb-option>
+                  <nb-option value="D">Diagnosticado</nb-option>
+              </nb-select>
+              <small id="stateHelp" class="form-text text-muted">{{status_description}}</small>            
           </div>
-      </div>
+        </div>      
+      </div>      
       <div class="row">
         <div class="col">
             <div class="form-group">
@@ -32,19 +136,17 @@
               <nb-datepicker #datepicker></nb-datepicker>   
             </div>
         </div>
-      </div>
-      <div class="row">
         <div class="col">
-            <div class="form-group">
-                <label>Recoge:</label>
-                <input type="text" [status]="receiver_status" (input)="receiverChange()" [(ngModel)]="wrecord.recogido" list="dynamicNames" nbInput fullWidth placeholder="Nombre" class="form-control" aria-describedby="nameHelp">
-                <small id="nameHelp" class="form-text text-muted">Nombre de la persona que recoge el equipo.</small>
-                <datalist id="dynamicNames">
-                    <option *ngFor="let name of names" [value]="name">{{name}}</option>
-                </datalist>
-            </div>
-        </div>
+          <div class="form-group">
+              <label>Recoge:</label>
+              <input type="text" [status]="receiver_status" (input)="receiverChange()" [(ngModel)]="wrecord.recogido" list="dynamicNames" nbInput fullWidth placeholder="Nombre" class="form-control" aria-describedby="nameHelp">
+              <small id="nameHelp" class="form-text text-muted">Nombre de la persona que recoge el equipo.</small>
+              <datalist id="dynamicNames">
+                  <option *ngFor="let name of names" [value]="name">{{name}}</option>
+              </datalist>
+          </div>
       </div>
+      </div>      
     </nb-card-body>
     <nb-card-footer>
       <div class="float-right row">

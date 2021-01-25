@@ -55,7 +55,7 @@ export class NewWRecordComponent implements OnInit {
     this.workshopService.getWClients().subscribe((res: WClient[]) => {
       this.clients = res;
     });
-    const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
+    this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
       this.newrecord.id_emp = this.user.id_emp;
       this.newrecord.especialista = this.user.fullname;

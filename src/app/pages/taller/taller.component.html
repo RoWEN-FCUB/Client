@@ -24,24 +24,32 @@
             <th>ESPEC</th>
             <th>SALIDA</th>
             <th>RECOGE</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>          
-          <tr *ngFor="let wrecord of wrecords | paginate: config; let i = index" (click)="openUpdt(i)" style="cursor: pointer">
-            <th scope="row">{{wrecord.cod}}</th>
-            <td nbTooltip="{{wrecord.cliente_nombre}}">{{wrecord.cliente}}</td>
-            <td>{{wrecord.equipo}}</td>
-            <td>{{wrecord.marca}}</td>
-            <td>{{wrecord.modelo}}</td>
-            <td>{{wrecord.inventario}}</td>
-            <td nbTooltip="{{wrecord.serie}}">{{wrecord.serie | shortSerial}}</td>
-            <td>{{wrecord.fecha_entrada | onlyDate}}</td>
-            <td nbTooltip="{{wrecord.entregado}}">{{wrecord.entregado | shortName}}</td>
-            <td>{{wrecord.ot}}</td>
-            <td nbTooltip="{{wrecord.estado | stateDescription}}"><span [ngStyle]="wrecord.estado | deviceState">{{wrecord.estado}}</span></td>
-            <td nbTooltip="{{wrecord.especialista}}">{{wrecord.especialista | shortName}}</td>
-            <td>{{wrecord.fecha_salida | onlyDate}}</td>
-            <td nbTooltip="{{wrecord.recogido}}">{{wrecord.recogido | shortName}}</td>
+          <tr *ngFor="let wrecord of wrecords | paginate: config; let i = index">
+            <th (click)="openUpdt(i)" style="cursor: pointer" scope="row">{{wrecord.cod}}</th>
+            <td (click)="openUpdt(i)" style="cursor: pointer" nbTooltip="{{wrecord.cliente_nombre}}">{{wrecord.cliente}}</td>
+            <td (click)="openUpdt(i)" style="cursor: pointer">{{wrecord.equipo}}</td>
+            <td (click)="openUpdt(i)" style="cursor: pointer">{{wrecord.marca}}</td>
+            <td (click)="openUpdt(i)" style="cursor: pointer">{{wrecord.modelo}}</td>
+            <td (click)="openUpdt(i)" style="cursor: pointer">{{wrecord.inventario}}</td>
+            <td (click)="openUpdt(i)" style="cursor: pointer" nbTooltip="{{wrecord.serie}}">{{wrecord.serie | shortSerial}}</td>
+            <td (click)="openUpdt(i)" style="cursor: pointer">{{wrecord.fecha_entrada | onlyDate}}</td>
+            <td (click)="openUpdt(i)" style="cursor: pointer" nbTooltip="{{wrecord.entregado}}">{{wrecord.entregado | shortName}}</td>
+            <td (click)="openUpdt(i)" style="cursor: pointer">{{wrecord.ot}}</td>
+            <td (click)="openUpdt(i)" style="cursor: pointer" nbTooltip="{{wrecord.estado | stateDescription}}"><span [ngStyle]="wrecord.estado | deviceState">{{wrecord.estado}}</span></td>
+            <td (click)="openUpdt(i)" style="cursor: pointer" nbTooltip="{{wrecord.especialista}}">{{wrecord.especialista | shortName}}</td>
+            <td (click)="openUpdt(i)" style="cursor: pointer">{{wrecord.fecha_salida | onlyDate}}</td>
+            <td (click)="openUpdt(i)" style="cursor: pointer" nbTooltip="{{wrecord.recogido}}">{{wrecord.recogido | shortName}}</td>
+            <td style="cursor: pointer">
+             <!-- <nb-icon *ngIf="user.role==='admin'" (click)="deleteRecord(i)" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar registro" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon> -->
+              <fa-icon class="mr-1" [icon]="['far', 'id-card']" nbTooltip="Comprobante de entrega" nbTooltipStatus="info"></fa-icon>
+              <fa-icon class="mr-1" [icon]="['far', 'share-square']" nbTooltip="Acta de entrega" nbTooltipStatus="info"></fa-icon>
+              <fa-icon class="mr-1" [icon]="['far', 'file-alt']" nbTooltip="Modelo de diagnóstico" nbTooltipStatus="info"></fa-icon>
+              <fa-icon [icon]="['far', 'trash-alt']" *ngIf="user.role==='admin'" (click)="deleteRecord(i)" nbTooltip="Eliminar registro" nbTooltipStatus="danger"></fa-icon>
+            </td>
           </tr>
         </tbody>
       </table>

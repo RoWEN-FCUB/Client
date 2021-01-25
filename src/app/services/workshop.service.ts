@@ -38,4 +38,8 @@ export class WorkshopService {
   searchRecord(strtofind: string, page: number, id_emp: number) {
     return this.http.get(ipserver + 'workshop/search/' + strtofind + '&' + page + '&' + id_emp);
   }
+
+  delete(id: number) {
+    return this.http.delete(ipserver + 'workshop/' + id);
+  }
 }

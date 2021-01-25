@@ -16,6 +16,10 @@ import { UpdtWRecordComponent } from '../updt-wrecord/updt-wrecord.component';
 import { User } from '../../models/User';
 import { Company } from '../../models/Company';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import Swal, { SweetAlertOptions } from 'sweetalert2';
+
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faFilePdf, faTrashAlt, faFileAlt, faShareSquare, faIdCard } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -33,18 +37,20 @@ export class TallerComponent implements OnInit {
   docDefinition = {};
   company: Company = {};
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0};
-
   constructor(private userService: UserService,
     private workshopService: WorkshopService,
     private authService: NbAuthService,
     private dialogService: NbDialogService,
     private companyService: CompanyService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private library: FaIconLibrary,
+    ) {
       this.config = {
         itemsPerPage: 10,
         currentPage: 1,
         totalItems: 0,
-      };
+    };
+    this.library.addIcons(faFilePdf, faTrashAlt, faFileAlt, faShareSquare, faIdCard);
     }
 
   ngOnInit() {
@@ -234,6 +240,36 @@ export class TallerComponent implements OnInit {
         }
       },
     );
+  }
+
+  deleteRecord(id: number) {
+    Swal.fire({
+      title: 'Confirma que desea eliminar el registro "' + this.wrecords[id].cod + '"?',
+      text: 'Se eliminarán todos sus datos del sistema.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí­',
+      cancelButtonText: 'No',
+    } as SweetAlertOptions).then((result) => {
+      if (result.value) {
+        this.workshopService.delete(this.wrecords[id].id).subscribe(res => {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 3000,
+          });
+          Toast.fire({
+            icon: 'success',
+            title: 'Registro eliminado correctamente.',
+          } as SweetAlertOptions);
+          this.search();
+        });
+      }
+    });
   }
 
 }
