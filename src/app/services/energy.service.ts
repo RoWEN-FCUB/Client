@@ -35,8 +35,9 @@ export class EnergyService {
     return this.http.put(ipserver + 'energy/updateAll', newrecords);
   }
 
-  updateAllPlans(plan: number, plan_pico: number, inicio: Date, fin: Date, id_emp: number) {
-    return this.http.put(ipserver + 'energy/updatePlans', {plan: plan, plan_pico: plan_pico, start: inicio, end: fin, id_emp: id_emp});
+  updateAllPlans(plan: number, plan_picod: number, plan_picon: number, inicio: Date, fin: Date, id_emp: number) {
+    // tslint:disable-next-line: max-line-length
+    return this.http.put(ipserver + 'energy/updatePlans', {plan: plan, plan_picod: plan_picod, plan_picon: plan_picon, start: inicio, end: fin, id_emp: id_emp});
   }
 
   deleteERecord(id: number) {

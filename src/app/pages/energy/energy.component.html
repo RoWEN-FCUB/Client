@@ -40,7 +40,7 @@
                         <th colspan="6" style="border: none !important;">Desglose Plan de Energía {{company.siglas}} {{currentYear}}</th>                        
                     </tr>
                     <tr>
-                        <th colspan="7"  style="border: none !important;">
+                        <th colspan="17"  style="border: none !important;">
                             Plan para el mes de {{currentMonth}}: {{totalPlan}} KW
                             <span class="ml-3">Real consumido: {{totalConsume}} KW</span>
                             <span class="ml-3" *ngIf="totalPlan >= totalConsume">Ahorro: {{totalPlan-totalConsume}} KW</span>
@@ -52,12 +52,22 @@
                         <th></th>
                         <th>DIA</th>                        
                         <th>PLAN ACUMULADO</th>
-                        <th>REAL ACUMULADO</th>
+                        <th>REAL ACUMULADO</th>                        
+                        <th *ngIf="company.pico_diurno">PLAN PICO DIURNO</th>
+                        <!--
+                        <th *ngIf="company.pico_diurno">LECTURA PICO DIURNO 1</th>
+                        <th *ngIf="company.pico_diurno">LECTURA PICO DIURNO 2</th>
+                        -->
+                        <th *ngIf="company.pico_diurno">REAL PICO DIURNO</th>
+                        <th *ngIf="company.pico_nocturno">PLAN PICO NOCTURNO</th>
+                        <!--
+                        <th *ngIf="company.pico_nocturno">LECTURA PICO NOCTURNO 1</th>
+                        <th *ngIf="company.pico_nocturno">LECTURA PICO NOCTURNO 2</th>
+                        -->
+                        <th *ngIf="company.pico_nocturno">REAL PICO NOCTURNO</th>
                         <th>PLAN DIA</th>
                         <th>REAL DIA</th>
-                        <th>PLAN HORA PICO</th>
-                        <th>REAL HORA PICO</th>
-                        <th>LECTURA</th>
+                        <th>LECTURA CIERRE</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -68,16 +78,22 @@
                         <td>{{i+1}}</td>                        
                         <td><span>{{erecord.planacumulado}}</span></td>
                         <td><span *ngIf="erecord.consumo > 0">{{erecord.realacumulado}}</span></td>
+                        <td *ngIf="company.pico_diurno"><span>{{erecord.plan_hpicd}}</span></td>
+                        <!--
+                        <td *ngIf="company.pico_diurno"><span *ngIf="erecord.plan_hpicd > 0">{{erecord.lectura_hpicd1}}</span></td>
+                        <td *ngIf="company.pico_diurno"><span *ngIf="erecord.lectura_hpicd1 > 0">{{erecord.lectura_hpicd2}}</span></td>
+                        -->
+                        <td *ngIf="company.pico_diurno"><span *ngIf="erecord.lectura_hpicd2 > 0">{{erecord.lectura_hpicd2 - erecord.lectura_hpicd1}}</span></td>
+                        <td *ngIf="company.pico_nocturno"><span>{{erecord.plan_hpicn}}</span></td>
+                        <!--
+                        <td *ngIf="company.pico_nocturno"><span *ngIf="erecord.plan_hpicn > 0">{{erecord.lectura_hpicn1}}</span></td>
+                        <td *ngIf="company.pico_nocturno"><span *ngIf="erecord.lectura_hpicn1 > 0">{{erecord.lectura_hpicn2}}</span></td>
+                        -->
+                        <td *ngIf="company.pico_nocturno"><span *ngIf="erecord.lectura_hpicn2 > 0">{{erecord.lectura_hpicn2 - erecord.lectura_hpicn1}}</span></td>
                         <td><span *ngIf="erecord.plan > 0">{{erecord.plan}}</span></td>
                         <td>
                             <span *ngIf="erecord.consumo > 0" [ngClass]="(erecord.plan < erecord.consumo)?'text-danger font-weight-bold':''">
                                 {{erecord.consumo}}
-                            </span>
-                        </td>
-                        <td><span *ngIf="erecord.plan_hpic > 0">{{erecord.plan_hpic}}</span></td>
-                        <td>
-                            <span *ngIf="erecord.real_hpic > 0" [ngClass]="(erecord.plan_hpic < erecord.real_hpic)?'text-danger font-weight-bold':''">
-                                {{erecord.real_hpic}}
                             </span>
                         </td>
                         <td (click)="openNew(i)" style="cursor: pointer"><span *ngIf="erecord.consumo > 0">{{erecord.lectura}}</span></td>

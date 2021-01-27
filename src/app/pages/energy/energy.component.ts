@@ -88,6 +88,7 @@ export class EnergyComponent implements OnInit {
     const workBook: Workbook = new Workbook();
     const subscription = this.http.get('./assets/Modelo5.xlsx', { responseType: 'blob' })
     .subscribe(value => {
+    const comp = this.company;
     const blob: Blob = value;
     const reader = new FileReader();
     const tplan = this.totalPlan;
@@ -95,9 +96,28 @@ export class EnergyComponent implements OnInit {
     const ac_real = this.erecords[index].realacumulado;
     const d_plan = this.erecords[index].plan;
     const d_real = this.erecords[index].consumo;
-    const pplan = this.erecords[index].plan_hpic;
-    const preal = this.erecords[index].real_hpic;
-    const comp = this.company;
+    const ppland = this.erecords[index].plan_hpicd;
+    const pplann = this.erecords[index].plan_hpicn;
+    let preald = 0;
+    if (comp.pico_diurno) {
+      preald = this.erecords[index].lectura_hpicd2 - this.erecords[index].lectura_hpicd1;
+    }
+    let prealn = 0;
+    if (comp.pico_nocturno) {
+      prealn = this.erecords[index].lectura_hpicn2 - this.erecords[index].lectura_hpicn1;
+    }
+    let bitacora = '';
+    if (comp.bitacora) {
+      bitacora = 'X';
+    }
+    let triple_registro = '';
+    if (comp.triple_registro) {
+      triple_registro = 'X';
+    }
+    let acomodo_carga = '';
+    if (comp.aplica_acomodo) {
+      acomodo_carga = 'X';
+    }
     const edate = moment(this.erecords[index].fecha.toString().substr(0, this.erecords[index].fecha.toString().indexOf('T'))).format('DD-MM-YYYY');
     // tslint:disable-next-line: max-line-length
     const fdate = moment(this.erecords[index].fecha.toString().substr(0, this.erecords[index].fecha.toString().indexOf('T'))).locale('es').format('DD/MM/YYYY');
@@ -127,10 +147,22 @@ export class EnergyComponent implements OnInit {
         workBook.worksheets[0].getCell(3, 20).value = d_real;
         workBook.worksheets[0].getCell(3, 21).model.result = undefined;
         workBook.worksheets[0].getCell(3, 22).model.result = undefined;
-        workBook.worksheets[0].getCell(3, 26).value = pplan;
-        workBook.worksheets[0].getCell(3, 27).value = preal;
+        workBook.worksheets[0].getCell(3, 23).value = bitacora;
+        workBook.worksheets[0].getCell(3, 24).value = triple_registro;
+        workBook.worksheets[0].getCell(3, 25).value = acomodo_carga;
+        workBook.worksheets[0].getCell(3, 26).value = ppland;
+        workBook.worksheets[0].getCell(3, 27).value = preald;
         workBook.worksheets[0].getCell(3, 28).model.result = undefined;
         workBook.worksheets[0].getCell(3, 29).model.result = undefined;
+        workBook.worksheets[0].getCell(3, 30).value = pplann;
+        workBook.worksheets[0].getCell(3, 31).value = prealn;
+        workBook.worksheets[0].getCell(3, 32).model.result = undefined;
+        workBook.worksheets[0].getCell(3, 33).model.result = undefined;
+        workBook.worksheets[0].getCell(3, 34).value = comp.total_desconectivos;
+        workBook.worksheets[0].getCell(3, 35).value = comp.desc_gen_dia;
+        workBook.worksheets[0].getCell(3, 36).value = comp.desc_parc_dia;
+        workBook.worksheets[0].getCell(3, 37).value = comp.desc_gen_noche;
+        workBook.worksheets[0].getCell(3, 38).value = comp.desc_parc_noche;
         workBook.xlsx.writeBuffer().then(data1 => {
           const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
           fsaver.saveAs(blobUpdate, 'Modelo 5 ' + comp.siglas + ' ' + edate + '.xlsx');
@@ -331,7 +363,7 @@ export class EnergyComponent implements OnInit {
 
   openPlans() {
     // tslint:disable-next-line: max-line-length
-    this.dialogService.open(EnergyPlansComponent, {context: {id_emp: this.user.id_emp, startDate: new Date(this.selectedYear, this.selectedMonth)}}).onClose.subscribe(
+    this.dialogService.open(EnergyPlansComponent, {context: {company: this.company, id_emp: this.user.id_emp, startDate: new Date(this.selectedYear, this.selectedMonth)}}).onClose.subscribe(
       (newWRecord: ERecord) => {
         if (newWRecord) {
           this.generar_rango_inicial(false);
