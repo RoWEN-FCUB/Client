@@ -5,6 +5,7 @@ import 'moment/min/locales';
 import * as moment from 'moment';
 import { EnergyService } from '../../services/energy.service';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
+import { EService } from '../../models/EService';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -23,8 +24,8 @@ export class EnergyPlansComponent implements OnInit {
   fecha_inicio: Date = new Date();
   fecha_fin: Date = new Date();
   startDate: Date; // fecha inicial en la que abre el selector de fecha
-  id_emp: number = 0;
   company: Company = {};
+  service: EService;
   constructor(private energyService: EnergyService, protected dialogRef: NbDialogRef<any>) { }
 
   ngOnInit(): void {
@@ -73,13 +74,13 @@ export class EnergyPlansComponent implements OnInit {
         icon: 'error',
         title: 'Debe escribir un plan válido.',
       } as SweetAlertOptions);
-    } else if (this.ppicd_status === 'danger' || (this.company.pico_diurno && !this.plan_picod)) {
+    } else if (this.ppicd_status === 'danger' || (this.service.pico_diurno && !this.plan_picod)) {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir una plan para el horario pico diurno válido.',
       } as SweetAlertOptions);
       this.ppicd_status = 'danger';
-    } else if (this.ppicn_status === 'danger' || (this.company.pico_nocturno && !this.plan_picon)) {
+    } else if (this.ppicn_status === 'danger' || (this.service.pico_nocturno && !this.plan_picon)) {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir una plan para el horario pico nocturno válido.',
@@ -98,7 +99,7 @@ export class EnergyPlansComponent implements OnInit {
         this.fecha_fin = new Date(this.dates[1]);
       }
       // tslint:disable-next-line: max-line-length
-      this.energyService.updateAllPlans(this.plan_establecido, this.plan_picod, this.plan_picon, this.fecha_inicio, this.fecha_fin, this.id_emp).subscribe(res => {
+      this.energyService.updateAllPlans(this.plan_establecido, this.plan_picod, this.plan_picon, this.fecha_inicio, this.fecha_fin, this.service.id).subscribe(res => {
         Toast.fire({
           icon: 'success',
           title: 'Planes actualizados correctamente.',

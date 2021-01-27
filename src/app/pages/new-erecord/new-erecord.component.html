@@ -1,6 +1,7 @@
 <nb-card accent="info">
   <nb-card-header><div class="text-center">{{newERecord.fecha | date:'dd/MM/yyyy':'+0000'}}</div></nb-card-header>
   <nb-card-body>
+    <!--
     <div class="form-group" *ngIf="!newERecord.id">
       <label>Plan:</label>
       <input (input)="plan_change()" autofocus type="text" [(ngModel)]="newERecord.plan" #plan fullWidth nbInput [status]="plan_status" class="form-control" aria-describedby="planHelp" placeholder="0">
@@ -24,11 +25,14 @@
       <input (input)="rpic_change()" type="text" [(ngModel)]="newERecord.real_hpic" #real_pic fullWidth nbInput [status]="rpic_status" class="form-control" aria-describedby="realpicHelp" placeholder="0">
       <small id="realpicHelp" class="form-text text-muted">Consumo del horario pico del mediodía.</small>
     </div>
+    -->
   </nb-card-body>
   <nb-card-footer>
     <div class="float-right row">
+      <!--
       <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
       <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+      -->
     </div>
   </nb-card-footer>
 </nb-card>

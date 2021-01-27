@@ -102,6 +102,11 @@ export class PagesComponent implements OnInit {
                   icon: 'globe-outline',
                   link: '/pages/admin/company',
                 },
+                {
+                  title: 'Servicios',
+                  icon: 'layers-outline',
+                  link: '/pages/admin/service',
+                },
               ],
             },
           );

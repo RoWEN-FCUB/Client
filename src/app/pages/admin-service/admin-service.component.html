@@ -1,0 +1,45 @@
+<nb-card fullwidth accent="info">
+    <nb-card-header>Administración de servicios eléctricos del sistema</nb-card-header>
+    <nb-card-body>
+      <div>
+          <button (click)="openNew()" nbTooltip="Agregar un nuevo servicio" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+      </div>
+      <div class='table-responsive'>
+        <table id="tablePreview" class="table table-hover table-borderless table-striped table-sm">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>EMPRESA</th>              
+              <th>NOMBRE</th>
+              <th>PROVINCIA</th>
+              <th>MUNICIPIO</th>
+              <th>CODCLI</th>
+              <th>CONTROL</th>
+              <th>RUTA</th>
+              <th>FOLIO</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let service of services; let i = index">
+              <th scope="row">{{i+1}}</th>
+              <td>{{service.nombre_emp}}</td>
+              <td>{{service.nombre}}</td>
+              <td>{{service.provincia}}</td>
+              <td>{{service.municipio}}</td>
+              <td>{{service.codcli}}</td>
+              <td>{{service.control}}</td>
+              <td>{{service.ruta}}</td>
+              <td>{{service.folio}}</td>
+              <td>
+                <nb-icon (click)="openEdit(i)"  style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar empresa" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                <nb-icon (click)="deleteService(i)"  style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar empresa" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </nb-card-body>
+    <nb-card-footer></nb-card-footer>
+  </nb-card>

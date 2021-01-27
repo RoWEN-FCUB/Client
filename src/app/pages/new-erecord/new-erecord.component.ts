@@ -30,7 +30,7 @@ export class NewErecordComponent implements OnInit {
     this.dialogRef.close(null);
   }
 
-  save() {
+  /*save() {
     const Toast = Swal.mixin({
       toast: true,
       position: 'top-end',
@@ -69,7 +69,7 @@ export class NewErecordComponent implements OnInit {
         });
       }
     }
-  }
+  }*/
 
   plan_change() {
     if (!isNaN(this.newERecord.plan)) {
@@ -79,7 +79,7 @@ export class NewErecordComponent implements OnInit {
     }
   }
 
-  ppic_change() {
+  /*ppic_change() {
     if (!isNaN(this.newERecord.plan_hpic)) {
       this.ppic_status = 'success';
     } else {
@@ -105,6 +105,6 @@ export class NewErecordComponent implements OnInit {
     if (Number(this.newERecord.lectura)) {
       this.newERecord.consumo = this.newERecord.lectura - this.prev_reading;
     }
-  }
+  }*/
 
 }

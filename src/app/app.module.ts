@@ -75,6 +75,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NewErecordComponent } from './pages/new-erecord/new-erecord.component';
 import { EnergyPlansComponent } from './pages/energy-plans/energy-plans.component';
 import { NewCompanyComponent } from './pages/new-company/new-company.component';
+import { NewServiceComponent } from './pages/new-service/new-service.component';
 // import { NgxScrollTopModule } from 'ngx-scrolltop';
 
 // here is the default text string
@@ -145,7 +146,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
   declarations: [
     AppComponent, UploadImgComponent, NewTaskComponent, NewObsComponent, NewErecordComponent,
     LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
-     UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent],
+     UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   imports: [
     ExportAsModule,
@@ -201,9 +202,10 @@ export class DefaultIntl extends OwlDateTimeIntl {
     // AnalyticsService,
   ],
   exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
-            NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent, NewCompanyComponent],
+            NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent],
   entryComponents: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
-                    NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent, NewCompanyComponent],
+                    NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent, NewCompanyComponent,
+                     NewServiceComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {

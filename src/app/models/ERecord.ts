@@ -12,5 +12,5 @@ export interface ERecord {
     realacumulado?: number;
     plan_hpicd?: number;
     plan_hpicn?: number;
-    id_emp?: number;
+    id_serv?: number;
   }

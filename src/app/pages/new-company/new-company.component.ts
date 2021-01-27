@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { NbDialogRef, NbTabComponent, NbTabsetComponent } from '@nebular/theme';
+import { Component, OnInit } from '@angular/core';
+import { NbDialogRef } from '@nebular/theme';
 import { Company } from '../../models/Company';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { CompanyService } from '../../services/company.service';
@@ -20,21 +20,8 @@ export class NewCompanyComponent implements OnInit {
     municipio: '',
     oace: '',
     osde: '',
-    codcli: '',
-    control: '',
-    ruta: '',
-    folio: '',
     email: '',
     reup: '',
-    bitacora: false,
-    triple_registro: false,
-    aplica_acomodo: false,
-    pico_nocturno: false,
-    total_desconectivos: 0,
-    desc_gen_dia: 0,
-    desc_gen_noche: 0,
-    desc_parc_dia: 0,
-    desc_parc_noche: 0,
   };
   title: string;
   siglas_status = 'info';
@@ -43,17 +30,8 @@ export class NewCompanyComponent implements OnInit {
   municipio_status = 'info';
   oace_status = 'info';
   osde_status = 'info';
-  codcli_status = 'info';
-  control_status = 'info';
-  ruta_status = 'info';
-  folio_status = 'info';
   email_status = 'info';
   reup_status = 'info';
-  tdesc_status = 'info';
-  descGD_status = 'info';
-  descPD_status = 'info';
-  descGN_status = 'info';
-  descPN_status = 'info';
   provincia_seleccionada = -1;
   municipio_seleccionado = -1;
   municipios: string[] = [];
@@ -109,9 +87,6 @@ export class NewCompanyComponent implements OnInit {
     municipios: ['Baracoa', 'Caimanera', 'El Salvador', 'Guantánamo', 'Imías', 'Maisí', 'Manuel Tames', 'Niceto Pérez', 'San Antonio del Sur', 'Yateras'],
   }];
 
-  @ViewChild('tabset') tabsetEl: NbTabsetComponent;
-  @ViewChild('Tab1') Tab1El: NbTabComponent;
-  @ViewChild('Tab2') Tab2El: NbTabComponent;
   constructor(protected dialogRef: NbDialogRef<any>, private companyService: CompanyService) { }
 
   ngOnInit(): void {
@@ -134,72 +109,12 @@ export class NewCompanyComponent implements OnInit {
     }
   }
 
-  bitacora_change(e: boolean) {
-    this.newCompany.bitacora = e;
-  }
-
-  tripleR_change(e: boolean) {
-    this.newCompany.triple_registro = e;
-  }
-
-  acomodo_change(e: boolean) {
-    this.newCompany.aplica_acomodo = e;
-  }
-
-  picoN_change(e: boolean) {
-    this.newCompany.pico_nocturno = e;
-  }
-
-  picoD_change(e: boolean) {
-    this.newCompany.pico_diurno = e;
-  }
-
   siglas_change() {
     const nickregexp = new RegExp(/^[a-zA-Z0-9záéíóúñÑ\s]{2,50}$/);
     if (nickregexp.test(this.newCompany.siglas)) {
       this.siglas_status = 'success';
     } else {
       this.siglas_status = 'danger';
-    }
-  }
-
-  tdesc_change() {
-    if (!isNaN(this.newCompany.total_desconectivos)) {
-      this.tdesc_status = 'success';
-    } else {
-      this.tdesc_status = 'danger';
-    }
-  }
-
-  descGD_change() {
-    if (!isNaN(this.newCompany.desc_gen_dia)) {
-      this.descGD_status = 'success';
-    } else {
-      this.descGD_status = 'danger';
-    }
-  }
-
-  descPD_change() {
-    if (!isNaN(this.newCompany.desc_parc_dia)) {
-      this.descPD_status = 'success';
-    } else {
-      this.descPD_status = 'danger';
-    }
-  }
-
-  descGN_change() {
-    if (!isNaN(this.newCompany.desc_gen_noche)) {
-      this.descGN_status = 'success';
-    } else {
-      this.descGN_status = 'danger';
-    }
-  }
-
-  descPN_change() {
-    if (!isNaN(this.newCompany.desc_parc_noche)) {
-      this.descPN_status = 'success';
-    } else {
-      this.descPN_status = 'danger';
     }
   }
 
@@ -255,42 +170,6 @@ export class NewCompanyComponent implements OnInit {
       this.osde_status = 'success';
     } else {
       this.osde_status = 'danger';
-    }
-  }
-
-  codcli_change() {
-    const nickregexp = new RegExp(/^[a-zA-Z0-9\s]{1,50}$/);
-    if (nickregexp.test(this.newCompany.codcli)) {
-      this.codcli_status = 'success';
-    } else {
-      this.codcli_status = 'danger';
-    }
-  }
-
-  control_change() {
-    const nickregexp = new RegExp(/^[a-zA-Z0-9\s]{1,50}$/);
-    if (nickregexp.test(this.newCompany.control)) {
-      this.control_status = 'success';
-    } else {
-      this.control_status = 'danger';
-    }
-  }
-
-  ruta_change() {
-    const nickregexp = new RegExp(/^[a-zA-Z0-9\s]{1,50}$/);
-    if (nickregexp.test(this.newCompany.ruta)) {
-      this.ruta_status = 'success';
-    } else {
-      this.ruta_status = 'danger';
-    }
-  }
-
-  folio_change() {
-    const nickregexp = new RegExp(/^[a-zA-Z0-9\s]{1,50}$/);
-    if (nickregexp.test(this.newCompany.folio)) {
-      this.folio_status = 'success';
-    } else {
-      this.folio_status = 'danger';
     }
   }
 
@@ -350,119 +229,48 @@ export class NewCompanyComponent implements OnInit {
         title: 'Debe escribir siglas válidas.',
       } as SweetAlertOptions);
       this.siglas_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab1El);
     } else if (this.nombre_status === 'danger' || this.newCompany.nombre === '') {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir un nombre válido.',
       } as SweetAlertOptions);
       this.nombre_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab1El);
     } else if (this.provincia_status === 'danger' || this.provincia_seleccionada < 0) {
       Toast.fire({
         icon: 'error',
         title: 'Debe seleccionar una provincia.',
       } as SweetAlertOptions);
       this.provincia_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab1El);
     } else if (this.municipio_status === 'danger' || this.municipio_seleccionado < 0) {
       Toast.fire({
         icon: 'error',
         title: 'Debe seleccionar un municipio.',
       } as SweetAlertOptions);
       this.municipio_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab1El);
     } else if (this.oace_status === 'danger' || this.newCompany.oace === '') {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir una OACE válida.',
       } as SweetAlertOptions);
       this.oace_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab1El);
     } else if (this.osde_status === 'danger' || this.newCompany.osde === '') {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir una OSDE válido.',
       } as SweetAlertOptions);
       this.osde_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab1El);
-    } else if (this.codcli_status === 'danger' || this.newCompany.codcli === '') {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe escribir un código de cliente válido.',
-      } as SweetAlertOptions);
-      this.codcli_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab2El);
-    }  else if (this.control_status === 'danger' || this.newCompany.control === '') {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe escribir un control válido.',
-      } as SweetAlertOptions);
-      this.control_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab2El);
-    } else if (this.ruta_status === 'danger' || this.newCompany.ruta === '') {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe escribir una ruta válida.',
-      } as SweetAlertOptions);
-      this.ruta_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab2El);
-    } else if (this.folio_status === 'danger' || this.newCompany.folio === '') {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe escribir un folio válido.',
-      } as SweetAlertOptions);
-      this.folio_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab2El);
     } else if (this.email_status === 'danger' || this.newCompany.email === '') {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir un servidor de correo válido.',
       } as SweetAlertOptions);
       this.email_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab1El);
     } else if (this.reup_status === 'danger' || this.newCompany.reup === '') {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir un código REEUP válido.',
       } as SweetAlertOptions);
       this.reup_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab1El);
-    } else if (this.descGD_status === 'danger') {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe escribir un número de desconectivos generales válido para el horario diurno.',
-      } as SweetAlertOptions);
-      this.descGD_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab2El);
-    } else if (this.descPD_status === 'danger') {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe escribir un número de desconectivos parciales válido para el horario diurno.',
-      } as SweetAlertOptions);
-      this.descPD_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab2El);
-    } else if (this.descGN_status === 'danger') {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe escribir un número de desconectivos generales válido para el horario nocturno.',
-      } as SweetAlertOptions);
-      this.descGN_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab2El);
-    } else if (this.descPN_status === 'danger') {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe escribir un número de desconectivos parciales válido para el horario nocturno.',
-      } as SweetAlertOptions);
-      this.descPN_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab2El);
-    } else if (this.tdesc_status === 'danger') {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe escribir un número de desconectivos válido.',
-      } as SweetAlertOptions);
-      this.tdesc_status = 'danger';
-      this.tabsetEl.selectTab(this.Tab2El);
     } else {
       this.save();
     }

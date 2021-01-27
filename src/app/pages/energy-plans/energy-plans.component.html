@@ -8,12 +8,12 @@
                     <input [(ngModel)]="plan_establecido" (input)="plan_change()" autofocus type="text" #plan fullWidth nbInput [status]="plan_status" class="form-control" aria-describedby="planHelp" placeholder="0">
                     <small id="planHelp" class="form-text text-muted">Plan de energía para el día.</small>
                 </div>
-                <div *ngIf="company.pico_diurno" class="mt-4">
+                <div *ngIf="service.pico_diurno" class="mt-4">
                     <label>Plan horario pico diurno:</label>
                     <input [(ngModel)]="plan_picod" (input)="ppicd_change()" type="text" #planpicod fullWidth nbInput [status]="ppicd_status" class="form-control" aria-describedby="pplandHelp" placeholder="0">
                     <small id="pplandHelp" class="form-text text-muted">Plan de energía para el horario pico diurno.</small>
                 </div>
-                <div *ngIf="company.pico_nocturno" class="mt-4">
+                <div *ngIf="service.pico_nocturno" class="mt-4">
                     <label>Plan horario pico nocturno:</label>
                     <input [(ngModel)]="plan_picon" (input)="ppicn_change()" type="text" #planpicon fullWidth nbInput [status]="ppicn_status" class="form-control" aria-describedby="pplandHelp" placeholder="0">
                     <small id="pplandHelp" class="form-text text-muted">Plan de energía para el horario pico diurno.</small>

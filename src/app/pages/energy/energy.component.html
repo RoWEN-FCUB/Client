@@ -53,18 +53,18 @@
                         <th>DIA</th>                        
                         <th>PLAN ACUMULADO</th>
                         <th>REAL ACUMULADO</th>                        
-                        <th *ngIf="company.pico_diurno">PLAN PICO DIURNO</th>
+                        <th *ngIf="services.length > 0 && services[selectedService].pico_diurno">PLAN PICO DIURNO</th>
                         <!--
                         <th *ngIf="company.pico_diurno">LECTURA PICO DIURNO 1</th>
                         <th *ngIf="company.pico_diurno">LECTURA PICO DIURNO 2</th>
                         -->
-                        <th *ngIf="company.pico_diurno">REAL PICO DIURNO</th>
-                        <th *ngIf="company.pico_nocturno">PLAN PICO NOCTURNO</th>
+                        <th *ngIf="services.length > 0 && services[selectedService].pico_diurno">REAL PICO DIURNO</th>
+                        <th *ngIf="services.length > 0 && services[selectedService].pico_nocturno">PLAN PICO NOCTURNO</th>
                         <!--
                         <th *ngIf="company.pico_nocturno">LECTURA PICO NOCTURNO 1</th>
                         <th *ngIf="company.pico_nocturno">LECTURA PICO NOCTURNO 2</th>
                         -->
-                        <th *ngIf="company.pico_nocturno">REAL PICO NOCTURNO</th>
+                        <th *ngIf="services.length > 0 && services[selectedService].pico_nocturno">REAL PICO NOCTURNO</th>
                         <th>PLAN DIA</th>
                         <th>REAL DIA</th>
                         <th>LECTURA CIERRE</th>
@@ -78,18 +78,18 @@
                         <td>{{i+1}}</td>                        
                         <td><span>{{erecord.planacumulado}}</span></td>
                         <td><span *ngIf="erecord.consumo > 0">{{erecord.realacumulado}}</span></td>
-                        <td *ngIf="company.pico_diurno"><span>{{erecord.plan_hpicd}}</span></td>
+                        <td *ngIf="services.length > 0 && services[selectedService].pico_diurno"><span>{{erecord.plan_hpicd}}</span></td>
                         <!--
                         <td *ngIf="company.pico_diurno"><span *ngIf="erecord.plan_hpicd > 0">{{erecord.lectura_hpicd1}}</span></td>
                         <td *ngIf="company.pico_diurno"><span *ngIf="erecord.lectura_hpicd1 > 0">{{erecord.lectura_hpicd2}}</span></td>
                         -->
-                        <td *ngIf="company.pico_diurno"><span *ngIf="erecord.lectura_hpicd2 > 0">{{erecord.lectura_hpicd2 - erecord.lectura_hpicd1}}</span></td>
-                        <td *ngIf="company.pico_nocturno"><span>{{erecord.plan_hpicn}}</span></td>
+                        <td *ngIf="services.length > 0 && services[selectedService].pico_diurno"><span *ngIf="erecord.lectura_hpicd2 > 0">{{erecord.lectura_hpicd2 - erecord.lectura_hpicd1}}</span></td>
+                        <td *ngIf="services.length > 0 && services[selectedService].pico_nocturno"><span>{{erecord.plan_hpicn}}</span></td>
                         <!--
                         <td *ngIf="company.pico_nocturno"><span *ngIf="erecord.plan_hpicn > 0">{{erecord.lectura_hpicn1}}</span></td>
                         <td *ngIf="company.pico_nocturno"><span *ngIf="erecord.lectura_hpicn1 > 0">{{erecord.lectura_hpicn2}}</span></td>
                         -->
-                        <td *ngIf="company.pico_nocturno"><span *ngIf="erecord.lectura_hpicn2 > 0">{{erecord.lectura_hpicn2 - erecord.lectura_hpicn1}}</span></td>
+                        <td *ngIf="services.length > 0 && services[selectedService].pico_nocturno"><span *ngIf="erecord.lectura_hpicn2 > 0">{{erecord.lectura_hpicn2 - erecord.lectura_hpicn1}}</span></td>
                         <td><span *ngIf="erecord.plan > 0">{{erecord.plan}}</span></td>
                         <td>
                             <span *ngIf="erecord.consumo > 0" [ngClass]="(erecord.plan < erecord.consumo)?'text-danger font-weight-bold':''">

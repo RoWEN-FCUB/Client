@@ -12,7 +12,8 @@ import { TallerComponent } from './taller/taller.component';
 import { EnergyComponent } from './energy/energy.component';
 import { GeeComponent } from './gee/gee.component';
 import { AdminCompanyComponent } from './admin-company/admin-company.component';
-import { from } from 'rxjs';
+import { AdminServiceComponent } from './admin-service/admin-service.component';
+// import { from } from 'rxjs';
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
@@ -59,6 +60,12 @@ const routes: Routes = [{
     {
       path: 'admin/company',
       component: AdminCompanyComponent,
+      canActivate: [RoleGuard],
+      data: {role: ['admin']},
+    },
+    {
+      path: 'admin/service',
+      component: AdminServiceComponent,
       canActivate: [RoleGuard],
       data: {role: ['admin']},
     },

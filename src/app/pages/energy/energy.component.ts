@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ERecord } from '../../models/ERecord';
 import { Company } from '../../models/Company';
+import { EService } from '../../models/EService';
 import { NbDialogService } from '@nebular/theme';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import 'moment/min/locales';
@@ -10,14 +11,15 @@ import * as moment from 'moment';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { EnergyService } from '../../services/energy.service';
 import { CompanyService } from '../../services/company.service';
+import { EserviceService } from '../../services/eservice.service';
 import { NewErecordComponent } from '../new-erecord/new-erecord.component';
 import { EnergyPlansComponent } from '../energy-plans/energy-plans.component';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
-import { OwlDateTimeComponent, OwlDateTimeIntl, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE } from '@danielmoncada/angular-datetime-picker';
+import { OwlDateTimeComponent /*, OwlDateTimeIntl, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE*/ } from '@danielmoncada/angular-datetime-picker';
 import { Moment } from 'moment';
 import { Workbook } from 'exceljs';
 import * as fsaver from 'file-saver';
-import ipserver from '../../ipserver';
+// import ipserver from '../../ipserver';
 import {HttpClient} from '@angular/common/http';
 
 // const moment = (_moment as any).default ? (_moment as any).default : _moment;
@@ -40,6 +42,8 @@ export class EnergyComponent implements OnInit {
   selectedYear: number;
   show: boolean = false;
   company: Company = {};
+  services: EService[] = [];
+  selectedService: number = 0;
   showstring: string[] = ['mes', 'año'];
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0};
   months: {Mes: number, Plan: number, Consumo: number, PlanAcumulado?: number, RealAcumulado?: number}[] = [];
@@ -67,7 +71,7 @@ export class EnergyComponent implements OnInit {
 
   // tslint:disable-next-line: max-line-length
   constructor(private http: HttpClient, private energyService: EnergyService, private dialogService: NbDialogService, private authService: NbAuthService,
-    private companyService: CompanyService) { }
+    private companyService: CompanyService, private eserviceService: EserviceService) { }
 
   ngOnInit(): void {
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
@@ -76,10 +80,13 @@ export class EnergyComponent implements OnInit {
       this.currentMonth = moment().locale('es').format('MMMM');
       this.selectedYear = moment().get('year');
       this.selectedMonth = moment().get('month');
-      this.generar_rango_inicial(false);
-      this.consumo_por_meses();
       this.companyService.getOne(this.user.id_emp).subscribe((res: Company) => {
         this.company = res;
+      });
+      this.eserviceService.userServices(this.user.id).subscribe((res: EService[]) => {
+        this.services = res;
+        this.generar_rango_inicial(false);
+        this.consumo_por_meses();
       });
     });
   }
@@ -88,6 +95,7 @@ export class EnergyComponent implements OnInit {
     const workBook: Workbook = new Workbook();
     const subscription = this.http.get('./assets/Modelo5.xlsx', { responseType: 'blob' })
     .subscribe(value => {
+    const serv = this.services[this.selectedService];
     const comp = this.company;
     const blob: Blob = value;
     const reader = new FileReader();
@@ -99,23 +107,23 @@ export class EnergyComponent implements OnInit {
     const ppland = this.erecords[index].plan_hpicd;
     const pplann = this.erecords[index].plan_hpicn;
     let preald = 0;
-    if (comp.pico_diurno) {
+    if (serv.pico_diurno) {
       preald = this.erecords[index].lectura_hpicd2 - this.erecords[index].lectura_hpicd1;
     }
     let prealn = 0;
-    if (comp.pico_nocturno) {
+    if (serv.pico_nocturno) {
       prealn = this.erecords[index].lectura_hpicn2 - this.erecords[index].lectura_hpicn1;
     }
     let bitacora = '';
-    if (comp.bitacora) {
+    if (serv.bitacora) {
       bitacora = 'X';
     }
     let triple_registro = '';
-    if (comp.triple_registro) {
+    if (serv.triple_registro) {
       triple_registro = 'X';
     }
     let acomodo_carga = '';
-    if (comp.aplica_acomodo) {
+    if (serv.aplica_acomodo) {
       acomodo_carga = 'X';
     }
     const edate = moment(this.erecords[index].fecha.toString().substr(0, this.erecords[index].fecha.toString().indexOf('T'))).format('DD-MM-YYYY');
@@ -128,15 +136,15 @@ export class EnergyComponent implements OnInit {
         workBook.worksheets[0].getCell(1, 6).value = month;
         workBook.worksheets[0].getCell(1, 8).value = fdate;
         workBook.worksheets[0].getCell(3, 14).value = tplan;
-        workBook.worksheets[0].getCell(3, 2).value = comp.provincia;
-        workBook.worksheets[0].getCell(3, 3).value = comp.municipio;
+        workBook.worksheets[0].getCell(3, 2).value = serv.provincia;
+        workBook.worksheets[0].getCell(3, 3).value = serv.municipio;
         workBook.worksheets[0].getCell(3, 4).value = comp.oace;
         workBook.worksheets[0].getCell(3, 5).value = comp.osde;
-        workBook.worksheets[0].getCell(3, 6).value = comp.codcli;
-        workBook.worksheets[0].getCell(3, 7).value = comp.control;
-        workBook.worksheets[0].getCell(3, 8).value = comp.ruta;
-        workBook.worksheets[0].getCell(3, 9).value = comp.folio;
-        workBook.worksheets[0].getCell(3, 10).value = comp.siglas;
+        workBook.worksheets[0].getCell(3, 6).value = serv.codcli;
+        workBook.worksheets[0].getCell(3, 7).value = serv.control;
+        workBook.worksheets[0].getCell(3, 8).value = serv.ruta;
+        workBook.worksheets[0].getCell(3, 9).value = serv.folio;
+        workBook.worksheets[0].getCell(3, 10).value = serv.nombre;
         workBook.worksheets[0].getCell(3, 11).value = comp.siglas;
         workBook.worksheets[0].getCell(3, 13).value = comp.reup;
         workBook.worksheets[0].getCell(3, 15).value = ac_plan;
@@ -158,14 +166,14 @@ export class EnergyComponent implements OnInit {
         workBook.worksheets[0].getCell(3, 31).value = prealn;
         workBook.worksheets[0].getCell(3, 32).model.result = undefined;
         workBook.worksheets[0].getCell(3, 33).model.result = undefined;
-        workBook.worksheets[0].getCell(3, 34).value = comp.total_desconectivos;
-        workBook.worksheets[0].getCell(3, 35).value = comp.desc_gen_dia;
-        workBook.worksheets[0].getCell(3, 36).value = comp.desc_parc_dia;
-        workBook.worksheets[0].getCell(3, 37).value = comp.desc_gen_noche;
-        workBook.worksheets[0].getCell(3, 38).value = comp.desc_parc_noche;
+        workBook.worksheets[0].getCell(3, 34).value = serv.total_desconectivos;
+        workBook.worksheets[0].getCell(3, 35).value = serv.desc_gen_dia;
+        workBook.worksheets[0].getCell(3, 36).value = serv.desc_parc_dia;
+        workBook.worksheets[0].getCell(3, 37).value = serv.desc_gen_noche;
+        workBook.worksheets[0].getCell(3, 38).value = serv.desc_parc_noche;
         workBook.xlsx.writeBuffer().then(data1 => {
           const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-          fsaver.saveAs(blobUpdate, 'Modelo 5 ' + comp.siglas + ' ' + edate + '.xlsx');
+          fsaver.saveAs(blobUpdate, 'Modelo 5 ' + serv.nombre + ' ' + edate + '.xlsx');
         });
       });
     };
@@ -225,7 +233,7 @@ export class EnergyComponent implements OnInit {
   }
 
   consumo_por_meses() {
-    this.energyService.getMonths(this.selectedYear, this.user.id_emp).subscribe(res => {
+    this.energyService.getMonths(this.selectedYear, this.services[this.selectedService].id).subscribe(res => {
       this.months = res as {Mes: number, Plan: number, Consumo: number}[];
       this.totalYearPlan = 0;
       this.totalYearConsume = 0;
@@ -270,13 +278,13 @@ export class EnergyComponent implements OnInit {
         lectura: 0,
         planacumulado: 0,
         realacumulado: 0,
-        id_emp: this.user.id_emp,
+        id_serv: this.services[this.selectedService].id,
       };
       this.erecords.push(erecord);
       fday = moment(fday).locale('es').add(1, 'days').toDate();
     }
-    this.energyService.getERecords(this.selectedYear, this.selectedMonth + 1, this.user.id_emp).subscribe((res: ERecord[]) => {
-      // console.log(res);
+    // tslint:disable-next-line: max-line-length
+    this.energyService.getERecords(this.selectedYear, this.selectedMonth + 1, this.services[this.selectedService].id).subscribe((res: ERecord[]) => {
       // console.log(this.erecords);
       let last = 0;
       for (let i = 0; i < res.length; i++) {
@@ -331,7 +339,7 @@ export class EnergyComponent implements OnInit {
     let prev: number = 0;
     // OBTENER LA LECTURA DEL DIA ANTERIOR
     // tslint:disable-next-line: max-line-length
-    this.energyService.getEReading(moment.utc(this.erecords[i].fecha).format('YYYY-MM-DD'), this.user.id_emp).subscribe((res: ERecord[]) => {
+    this.energyService.getEReading(moment.utc(this.erecords[i].fecha).format('YYYY-MM-DD'), this.services[this.selectedService].id).subscribe((res: ERecord[]) => {
       if (res.length > 0) {
         prev = res[0].lectura;
       }
@@ -363,7 +371,7 @@ export class EnergyComponent implements OnInit {
 
   openPlans() {
     // tslint:disable-next-line: max-line-length
-    this.dialogService.open(EnergyPlansComponent, {context: {company: this.company, id_emp: this.user.id_emp, startDate: new Date(this.selectedYear, this.selectedMonth)}}).onClose.subscribe(
+    this.dialogService.open(EnergyPlansComponent, {context: {service: this.services[this.selectedService], company: this.company, startDate: new Date(this.selectedYear, this.selectedMonth)}}).onClose.subscribe(
       (newWRecord: ERecord) => {
         if (newWRecord) {
           this.generar_rango_inicial(false);
@@ -386,7 +394,7 @@ export class EnergyComponent implements OnInit {
       timer: 3000,
     });
     // tslint:disable-next-line: max-line-length
-    this.energyService.getEReading(moment.utc(this.erecords[0].fecha).format('YYYY-MM-DD'), this.user.id_emp).subscribe((res: ERecord[]) => {
+    this.energyService.getEReading(moment.utc(this.erecords[0].fecha).format('YYYY-MM-DD'), this.services[this.selectedService].id).subscribe((res: ERecord[]) => {
       if (res.length > 0) {
         prev = res[0].lectura;
       }

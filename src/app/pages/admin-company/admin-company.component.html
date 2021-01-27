@@ -15,7 +15,6 @@
               <th>MUNICIPIO</th>
               <th>OACE</th>
               <th>OSDE</th>
-              <th>CODCLI</th>
               <th></th>
               <th></th>
             </tr>
@@ -29,7 +28,6 @@
               <td>{{company.municipio}}</td>
               <td>{{company.oace}}</td>
               <td>{{company.osde}}</td>
-              <td>{{company.codcli}}</td>
               <td>
                 <nb-icon (click)="openEdit(i)" style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar empresa" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
                 <nb-icon (click)="deleteCompany(i)" style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar empresa" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
