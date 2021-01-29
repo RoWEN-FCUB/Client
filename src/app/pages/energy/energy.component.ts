@@ -135,7 +135,6 @@ export class EnergyComponent implements OnInit {
       workBook.xlsx.load(contents).then(data => {
         workBook.worksheets[0].getCell(1, 6).value = month;
         workBook.worksheets[0].getCell(1, 8).value = fdate;
-        workBook.worksheets[0].getCell(3, 14).value = tplan;
         workBook.worksheets[0].getCell(3, 2).value = serv.provincia;
         workBook.worksheets[0].getCell(3, 3).value = serv.municipio;
         workBook.worksheets[0].getCell(3, 4).value = comp.oace;
@@ -146,7 +145,9 @@ export class EnergyComponent implements OnInit {
         workBook.worksheets[0].getCell(3, 9).value = serv.folio;
         workBook.worksheets[0].getCell(3, 10).value = serv.nombre;
         workBook.worksheets[0].getCell(3, 11).value = comp.siglas;
-        workBook.worksheets[0].getCell(3, 13).value = comp.reup;
+        workBook.worksheets[0].getCell(3, 12).value = comp.reup;
+        workBook.worksheets[0].getCell(3, 13).value = serv.reup;
+        workBook.worksheets[0].getCell(3, 14).value = tplan;
         workBook.worksheets[0].getCell(3, 15).value = ac_plan;
         workBook.worksheets[0].getCell(3, 16).value = ac_real;
         workBook.worksheets[0].getCell(3, 17).model.result = undefined; // para que recalcule las formulas
@@ -358,10 +359,11 @@ export class EnergyComponent implements OnInit {
       } else {
         // tslint:disable-next-line: max-line-length
         const newe = Object.assign({}, this.erecords[i]);
-        this.dialogService.open(NewErecordComponent, {context: {newERecord: newe, prev_reading: prev}}).onClose.subscribe(
+        // tslint:disable-next-line: max-line-length
+        this.dialogService.open(NewErecordComponent, {context: {newERecord: newe, prev_reading: prev, service: this.services[this.selectedService]}}).onClose.subscribe(
           (newWRecord: ERecord) => {
             if (newWRecord) {
-              this.generar_rango_inicial(true);
+              this.generar_rango_inicial(false);
             }
           },
         );

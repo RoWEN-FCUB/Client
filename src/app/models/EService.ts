@@ -5,6 +5,7 @@ export interface EService {
     nombre?: string;
     provincia?: string;
     municipio?: string;
+    reup?: string;
     codcli?: string;
     control?: string;
     ruta?: string;

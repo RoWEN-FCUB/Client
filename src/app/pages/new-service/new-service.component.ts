@@ -22,6 +22,7 @@ export class NewServiceComponent implements OnInit {
     nombre_emp: '',
     provincia: '',
     municipio: '',
+    reup: '',
     codcli: '',
     control: '',
     ruta: '',
@@ -41,6 +42,7 @@ export class NewServiceComponent implements OnInit {
   nombre_status = 'info';
   provincia_status = 'info';
   municipio_status = 'info';
+  reup_status = 'info';
   codcli_status = 'info';
   control_status = 'info';
   ruta_status = 'info';
@@ -130,6 +132,15 @@ export class NewServiceComponent implements OnInit {
           }
         }
       }
+    }
+  }
+
+  reup_change() {
+    const nickregexp = new RegExp(/^[0-9]{3}\.[0-9]{1}\.[0-9]{5}$/);
+    if (nickregexp.test(this.newService.reup)) {
+      this.reup_status = 'success';
+    } else {
+      this.reup_status = 'danger';
     }
   }
 
@@ -337,7 +348,13 @@ export class NewServiceComponent implements OnInit {
       } as SweetAlertOptions);
       this.municipio_status = 'danger';
       this.tabsetEl.selectTab(this.Tab1El);
-    } else if (this.codcli_status === 'danger' || this.newService.codcli === '') {
+    } else if (this.reup_status === 'danger' || this.newService.reup === '') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir un código REEUP válido.',
+      } as SweetAlertOptions);
+      this.reup_status = 'danger';
+    }  else if (this.codcli_status === 'danger' || this.newService.codcli === '') {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir un código de cliente válido.',
