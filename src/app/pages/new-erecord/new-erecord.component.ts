@@ -30,7 +30,7 @@ export class NewErecordComponent implements OnInit {
   constructor(private energyService: EnergyService, protected dialogRef: NbDialogRef<any>) { }
 
   ngOnInit(): void {
-    console.log(this.newERecord);
+    // console.log(this.newERecord);
   }
 
   close() {
@@ -146,8 +146,8 @@ export class NewErecordComponent implements OnInit {
   }
 
   lectura_hpicd1_change() {
-    const nameregexp = new RegExp(/^[1-9]{1}[0-9]*$/);
-    if (nameregexp.test(this.newERecord.lectura_hpicd1.toString()) && this.newERecord.lectura_hpicd1 > this.prev_reading) {
+    const nameregexp = new RegExp(/^[1-9]{1}[0-9]*((\.[0-9]+)|[0-9]*)$/);
+    if (nameregexp.test(this.newERecord.lectura_hpicd1.toString()) && Number(this.newERecord.lectura_hpicd1) > Number(this.prev_reading)) {
       this.lectura_hpicd1_status = 'success';
     } else {
       this.lectura_hpicd1_status = 'danger';
@@ -155,8 +155,9 @@ export class NewErecordComponent implements OnInit {
   }
 
   lectura_hpicd2_change() {
-    const nameregexp = new RegExp(/^[1-9]{1}[0-9]*$/);
-    if (nameregexp.test(this.newERecord.lectura_hpicd2.toString()) && this.newERecord.lectura_hpicd2 > this.newERecord.lectura_hpicd1) {
+    const nameregexp = new RegExp(/^[1-9]{1}[0-9]*((\.[0-9]+)|[0-9]*)$/);
+    // tslint:disable-next-line: max-line-length
+    if (nameregexp.test(this.newERecord.lectura_hpicd2.toString()) && Number(this.newERecord.lectura_hpicd2) > Number(this.newERecord.lectura_hpicd1)) {
       this.lectura_hpicd2_status = 'success';
     } else {
       this.lectura_hpicd2_status = 'danger';
@@ -164,9 +165,9 @@ export class NewErecordComponent implements OnInit {
   }
 
   lectura_hpicn1_change() {
-    const nameregexp = new RegExp(/^[1-9]{1}[0-9]*$/);
+    const nameregexp = new RegExp(/^[1-9]{1}[0-9]*((\.[0-9]+)|[0-9]*)$/);
     // tslint:disable-next-line: max-line-length
-    if (nameregexp.test(this.newERecord.lectura_hpicn1.toString()) && this.newERecord.lectura_hpicn1 > this.prev_reading && !(this.service.pico_diurno && this.newERecord.lectura_hpicd2 > this.newERecord.lectura_hpicn1)) {
+    if (nameregexp.test(this.newERecord.lectura_hpicn1.toString()) && Number(this.newERecord.lectura_hpicn1) > Number(this.prev_reading) && (!this.service.pico_diurno || Number(this.newERecord.lectura_hpicd2) < Number(this.newERecord.lectura_hpicn1))) {
       this.lectura_hpicn1_status = 'success';
     } else {
       this.lectura_hpicn1_status = 'danger';
@@ -174,8 +175,9 @@ export class NewErecordComponent implements OnInit {
   }
 
   lectura_hpicn2_change() {
-    const nameregexp = new RegExp(/^[1-9]{1}[0-9]*$/);
-    if (nameregexp.test(this.newERecord.lectura_hpicn2.toString()) && this.newERecord.lectura_hpicn2 > this.newERecord.lectura_hpicn1) {
+    const nameregexp = new RegExp(/^[1-9]{1}[0-9]*((\.[0-9]+)|[0-9]*)$/);
+    // tslint:disable-next-line: max-line-length
+    if (nameregexp.test(this.newERecord.lectura_hpicn2.toString()) && Number(this.newERecord.lectura_hpicn2) > Number(this.newERecord.lectura_hpicn1)) {
       this.lectura_hpicn2_status = 'success';
     } else {
       this.lectura_hpicn2_status = 'danger';

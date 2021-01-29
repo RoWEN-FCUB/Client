@@ -25,7 +25,7 @@
             </div>
             <div class="col">
                 <div>            
-                    <owl-date-time-inline [(ngModel)]="dates" [startAt]="startDate" [pickerType]="'calendar'" [selectMode]="'range'"></owl-date-time-inline>
+                    <owl-date-time-inline (ngModelChange)="dayClicked($event)" [(ngModel)]="dates" [startAt]="startDate" [pickerType]="'calendar'" [selectMode]="'range'"></owl-date-time-inline>
                 </div>
             </div>
         </div>

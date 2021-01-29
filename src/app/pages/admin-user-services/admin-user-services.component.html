@@ -1,0 +1,23 @@
+<nb-card fullwidth accent="info">
+    <nb-card-header>Asignar control de servicio eléctrico</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+          <div class="col">
+              Usuario: {{user.fullname}}
+          </div>
+      </div>
+      <div class="row">
+          <div class="col">
+            <nb-select class="mt-2" multiple fullWidth placeholder="----" [(ngModel)]="markedServ" status="info">
+                <nb-option *ngFor="let serv of services; let i = index" [value]="serv.id">{{serv.nombre}}</nb-option>
+            </nb-select>
+          </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+        <div class="float-right row">      
+            <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+            <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>      
+        </div>
+    </nb-card-footer>
+  </nb-card>

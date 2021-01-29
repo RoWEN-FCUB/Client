@@ -39,6 +39,7 @@ import { AdminCompanyComponent } from './admin-company/admin-company.component';
 // import { NgxScrollTopModule } from 'ngx-scrolltop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AdminServiceComponent } from './admin-service/admin-service.component';
+// import { AdminUserServicesComponent } from './admin-user-services/admin-user-services.component';
 // import { NewServiceComponent } from './new-service/new-service.component';
 
 
@@ -157,6 +158,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     StateDescriptionPipe,
     // tslint:disable-next-line: max-line-length
     ShortSerialPipe, ShortNamePipe, EnergyComponent, GeeComponent, AdminCompanyComponent, AdminServiceComponent,
+    // AdminUserServicesComponent,
     // NewServiceComponent,
     // NewCompanyComponent, // EnergyPlansComponent, // NewErecordComponent, // UpdtWRecordComponent, // NewWRecordComponent,
     // SelectSubsComponent,

@@ -1,11 +1,14 @@
 <nb-card fullwidth accent="info">
     <nb-card-header>
         Control de energía eléctrica        
-        <button *ngIf="user.role==='admin'" class="ml-2" (click)="openPlans()" nbTooltip="Establecer planes diarios." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="browser-outline"></nb-icon>Planes</button>
-        <button class="ml-2" (click)="toogleGraph()" nbTooltip="Mostrar gráfico de consumo." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="activity-outline"></nb-icon>Gráfica</button>
-        <button class="ml-2" (click)="export()" nbTooltip="Exportar a PDF." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
-        <button class="ml-2" [owlDateTimeTrigger]="dt" nbTooltip="Seleccionar {{showstring[show ? 1 : 0]}} a mostrar." nbButton hero status="primary" shape="semi-round" size="tiny"><nb-icon icon="keypad-outline"></nb-icon>Seleccionar {{showstring[show ? 1 : 0]}}</button>
-        <input [owlDateTime]="dt" #mes [owlDateTimeTrigger]="dt" nbInput status="info" style="visibility: hidden">
+        <nb-select (selectedChange)="generar_rango_inicial(false)" class="ml-2" *ngIf="services.length > 1" placeholder="----" [(ngModel)]="selectedService" status="info">
+            <nb-option *ngFor="let serv of services; let i = index" [value]="i">{{serv.nombre}}</nb-option>
+        </nb-select>
+        <button *ngIf="user.role==='admin'" class="ml-2" (click)="openPlans()" nbTooltip="Establecer planes diarios." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="browser-outline"></nb-icon>Planes</button>
+        <button class="ml-2" (click)="toogleGraph()" nbTooltip="Mostrar gráfico de consumo." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="activity-outline"></nb-icon>Gráfica</button>
+        <button class="ml-2" (click)="export()" nbTooltip="Exportar a PDF." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
+        <button class="ml-2" [owlDateTimeTrigger]="dt" nbTooltip="Seleccionar {{showstring[show ? 1 : 0]}} a mostrar." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="keypad-outline"></nb-icon>Seleccionar {{showstring[show ? 1 : 0]}}</button>
+        <input [owlDateTime]="dt" #mes [owlDateTimeTrigger]="dt" nbInput status="info" style="visibility: hidden">        
         <owl-date-time #dt="owlDateTime" [startView]="!show ? 'year' : 'multi-years'" (yearSelected)="chosenYearHandler($event, dt)" (monthSelected)="chosenMonthHandler($event, dt)" [pickerType]="'calendar'"></owl-date-time>
     </nb-card-header>
     <nb-card-body>
@@ -68,7 +71,7 @@
                         <th>PLAN DIA</th>
                         <th>REAL DIA</th>
                         <th>LECTURA CIERRE</th>
-                        <th></th>                        
+                        <th style="width:  7%"></th>                        
                     </tr>
                 </thead>
                 <tbody>          
@@ -82,13 +85,13 @@
                         <td *ngIf="company.pico_diurno"><span *ngIf="erecord.plan_hpicd > 0">{{erecord.lectura_hpicd1}}</span></td>
                         <td *ngIf="company.pico_diurno"><span *ngIf="erecord.lectura_hpicd1 > 0">{{erecord.lectura_hpicd2}}</span></td>
                         -->
-                        <td *ngIf="services.length > 0 && services[selectedService].pico_diurno"><span *ngIf="erecord.lectura_hpicd2 > 0">{{erecord.lectura_hpicd2 - erecord.lectura_hpicd1}}</span></td>
+                        <td *ngIf="services.length > 0 && services[selectedService].pico_diurno"><span *ngIf="erecord.lectura_hpicd2 > 0">{{(erecord.lectura_hpicd2 - erecord.lectura_hpicd1).toFixed(1)}}</span></td>
                         <td *ngIf="services.length > 0 && services[selectedService].pico_nocturno"><span>{{erecord.plan_hpicn}}</span></td>
                         <!--
                         <td *ngIf="company.pico_nocturno"><span *ngIf="erecord.plan_hpicn > 0">{{erecord.lectura_hpicn1}}</span></td>
                         <td *ngIf="company.pico_nocturno"><span *ngIf="erecord.lectura_hpicn1 > 0">{{erecord.lectura_hpicn2}}</span></td>
                         -->
-                        <td *ngIf="services.length > 0 && services[selectedService].pico_nocturno"><span *ngIf="erecord.lectura_hpicn2 > 0">{{erecord.lectura_hpicn2 - erecord.lectura_hpicn1}}</span></td>
+                        <td *ngIf="services.length > 0 && services[selectedService].pico_nocturno"><span *ngIf="erecord.lectura_hpicn2 > 0">{{(erecord.lectura_hpicn2 - erecord.lectura_hpicn1).toFixed(1)}}</span></td>
                         <td><span *ngIf="erecord.plan > 0">{{erecord.plan}}</span></td>
                         <td>
                             <span *ngIf="erecord.consumo > 0" [ngClass]="(erecord.plan < erecord.consumo)?'text-danger font-weight-bold':''">

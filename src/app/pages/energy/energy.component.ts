@@ -106,13 +106,13 @@ export class EnergyComponent implements OnInit {
     const d_real = this.erecords[index].consumo;
     const ppland = this.erecords[index].plan_hpicd;
     const pplann = this.erecords[index].plan_hpicn;
-    let preald = 0;
+    let preald = '';
     if (serv.pico_diurno) {
-      preald = this.erecords[index].lectura_hpicd2 - this.erecords[index].lectura_hpicd1;
+      preald = (this.erecords[index].lectura_hpicd2 - this.erecords[index].lectura_hpicd1).toFixed(1);
     }
-    let prealn = 0;
+    let prealn = '';
     if (serv.pico_nocturno) {
-      prealn = this.erecords[index].lectura_hpicn2 - this.erecords[index].lectura_hpicn1;
+      prealn = (this.erecords[index].lectura_hpicn2 - this.erecords[index].lectura_hpicn1).toFixed(1);
     }
     let bitacora = '';
     if (serv.bitacora) {
@@ -363,7 +363,18 @@ export class EnergyComponent implements OnInit {
         this.dialogService.open(NewErecordComponent, {context: {newERecord: newe, prev_reading: prev, service: this.services[this.selectedService]}}).onClose.subscribe(
           (newWRecord: ERecord) => {
             if (newWRecord) {
-              this.generar_rango_inicial(false);
+              const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timerProgressBar: true,
+                timer: 3000,
+              });
+              Toast.fire({
+                icon: 'success',
+                title: 'Registro actualizado.',
+              } as SweetAlertOptions);
+              this.generar_rango_inicial(true);
             }
           },
         );
@@ -373,7 +384,7 @@ export class EnergyComponent implements OnInit {
 
   openPlans() {
     // tslint:disable-next-line: max-line-length
-    this.dialogService.open(EnergyPlansComponent, {context: {service: this.services[this.selectedService], company: this.company, startDate: new Date(this.selectedYear, this.selectedMonth)}}).onClose.subscribe(
+    this.dialogService.open(EnergyPlansComponent, {context: {erecords: this.erecords, service: this.services[this.selectedService], company: this.company, startDate: new Date(this.selectedYear, this.selectedMonth)}}).onClose.subscribe(
       (newWRecord: ERecord) => {
         if (newWRecord) {
           this.generar_rango_inicial(false);

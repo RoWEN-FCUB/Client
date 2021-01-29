@@ -3,8 +3,11 @@ import { UserService } from '../../services/user.service';
 import { CompanyService } from '../../services/company.service';
 import { User } from '../../models/User';
 import { Role } from '../../models/Role';
+import { EService } from '../../models/EService';
+import { EserviceService } from '../../services/eservice.service';
 import { Company } from '../../models/Company';
 import { NewUserComponent } from '../new-user/new-user.component';
+import { AdminUserServicesComponent } from '../admin-user-services/admin-user-services.component';
 import { NbDialogService } from '@nebular/theme';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
@@ -21,7 +24,8 @@ export class AdminUsersComponent implements OnInit {
   constructor(private authService: NbAuthService,
     private userService: UserService,
     private dialogService: NbDialogService,
-    private companyService: CompanyService) { }
+    private companyService: CompanyService,
+    private eserviceService: EserviceService) { }
 
   openNew() {
     // tslint:disable-next-line: max-line-length
@@ -50,6 +54,22 @@ export class AdminUsersComponent implements OnInit {
     };
     this.dialogService.open(NewUserComponent, {context: contxt}).onClose.subscribe(res => {
       this.getUsers();
+    });
+  }
+
+  openEnergy(id: number) {
+    this.eserviceService.getServices().subscribe((serv: EService[]) => {
+      this.eserviceService.userServices(this.users[id].id).subscribe((userv: EService[]) => {
+        // console.log(userv);
+        const contxt = {
+          user: this.users[id],
+          services: serv,
+          selectedServices: userv,
+        };
+        this.dialogService.open(AdminUserServicesComponent, {context: contxt}).onClose.subscribe(resp => {
+          this.getUsers();
+        });
+      });
     });
   }
 

@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { EnergyService } from '../../services/energy.service';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { EService } from '../../models/EService';
+import { ERecord } from '../../models/ERecord';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -20,6 +21,7 @@ export class EnergyPlansComponent implements OnInit {
   plan_establecido: number = 0;
   plan_picod: number = 0;
   plan_picon: number = 0;
+  erecords: ERecord[] = [];
   dates = [];
   fecha_inicio: Date = new Date();
   fecha_fin: Date = new Date();
@@ -29,6 +31,18 @@ export class EnergyPlansComponent implements OnInit {
   constructor(private energyService: EnergyService, protected dialogRef: NbDialogRef<any>) { }
 
   ngOnInit(): void {
+  }
+
+  dayClicked(e) {
+    if (!this.plan_establecido && (!this.plan_picod && this.service.pico_diurno) && (!this.plan_picon && this.service.pico_nocturno)) {
+      this.erecords.forEach(element => {
+        if (moment.utc(element.fecha).isSame(moment.utc(e[0]), 'day')) {
+          this.plan_establecido = element.plan;
+          this.plan_picod = element.plan_hpicd;
+          this.plan_picon = element.plan_hpicn;
+        }
+      });
+    }
   }
 
   plan_change() {
