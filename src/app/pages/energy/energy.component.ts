@@ -85,8 +85,10 @@ export class EnergyComponent implements OnInit {
       });
       this.eserviceService.userServices(this.user.id).subscribe((res: EService[]) => {
         this.services = res;
-        this.generar_rango_inicial(false);
-        this.consumo_por_meses();
+        if (res.length > 0) {
+          this.generar_rango_inicial(false);
+          this.consumo_por_meses();
+        }
       });
     });
   }
@@ -95,90 +97,96 @@ export class EnergyComponent implements OnInit {
     const workBook: Workbook = new Workbook();
     const subscription = this.http.get('./assets/Modelo5.xlsx', { responseType: 'blob' })
     .subscribe(value => {
-    const serv = this.services[this.selectedService];
-    const comp = this.company;
-    const blob: Blob = value;
-    const reader = new FileReader();
-    const tplan = this.totalPlan;
-    const ac_plan = this.erecords[index].planacumulado;
-    const ac_real = this.erecords[index].realacumulado;
-    const d_plan = this.erecords[index].plan;
-    const d_real = this.erecords[index].consumo;
-    const ppland = this.erecords[index].plan_hpicd;
-    const pplann = this.erecords[index].plan_hpicn;
-    let preald = '';
-    if (serv.pico_diurno) {
-      preald = (this.erecords[index].lectura_hpicd2 - this.erecords[index].lectura_hpicd1).toFixed(1);
-    }
-    let prealn = '';
-    if (serv.pico_nocturno) {
-      prealn = (this.erecords[index].lectura_hpicn2 - this.erecords[index].lectura_hpicn1).toFixed(1);
-    }
-    let bitacora = '';
-    if (serv.bitacora) {
-      bitacora = 'X';
-    }
-    let triple_registro = '';
-    if (serv.triple_registro) {
-      triple_registro = 'X';
-    }
-    let acomodo_carga = '';
-    if (serv.aplica_acomodo) {
-      acomodo_carga = 'X';
-    }
-    const edate = moment(this.erecords[index].fecha.toString().substr(0, this.erecords[index].fecha.toString().indexOf('T'))).format('DD-MM-YYYY');
-    // tslint:disable-next-line: max-line-length
-    const fdate = moment(this.erecords[index].fecha.toString().substr(0, this.erecords[index].fecha.toString().indexOf('T'))).locale('es').format('DD/MM/YYYY');
-    const month = moment.utc(this.erecords[index].fecha).locale('es').format('MMMM').toUpperCase();
-    reader.onload = function (e: any) {
-      const contents = e.target.result;
-      workBook.xlsx.load(contents).then(data => {
-        workBook.worksheets[0].getCell(1, 6).value = month;
-        workBook.worksheets[0].getCell(1, 8).value = fdate;
-        workBook.worksheets[0].getCell(3, 2).value = serv.provincia;
-        workBook.worksheets[0].getCell(3, 3).value = serv.municipio;
-        workBook.worksheets[0].getCell(3, 4).value = comp.oace;
-        workBook.worksheets[0].getCell(3, 5).value = comp.osde;
-        workBook.worksheets[0].getCell(3, 6).value = serv.codcli;
-        workBook.worksheets[0].getCell(3, 7).value = serv.control;
-        workBook.worksheets[0].getCell(3, 8).value = serv.ruta;
-        workBook.worksheets[0].getCell(3, 9).value = serv.folio;
-        workBook.worksheets[0].getCell(3, 10).value = serv.nombre;
-        workBook.worksheets[0].getCell(3, 11).value = comp.siglas;
-        workBook.worksheets[0].getCell(3, 12).value = comp.reup;
-        workBook.worksheets[0].getCell(3, 13).value = serv.reup;
-        workBook.worksheets[0].getCell(3, 14).value = tplan;
-        workBook.worksheets[0].getCell(3, 15).value = ac_plan;
-        workBook.worksheets[0].getCell(3, 16).value = ac_real;
-        workBook.worksheets[0].getCell(3, 17).model.result = undefined; // para que recalcule las formulas
-        workBook.worksheets[0].getCell(3, 18).model.result = undefined;
-        workBook.worksheets[0].getCell(3, 19).value = d_plan;
-        workBook.worksheets[0].getCell(3, 20).value = d_real;
-        workBook.worksheets[0].getCell(3, 21).model.result = undefined;
-        workBook.worksheets[0].getCell(3, 22).model.result = undefined;
-        workBook.worksheets[0].getCell(3, 23).value = bitacora;
-        workBook.worksheets[0].getCell(3, 24).value = triple_registro;
-        workBook.worksheets[0].getCell(3, 25).value = acomodo_carga;
-        workBook.worksheets[0].getCell(3, 26).value = ppland;
-        workBook.worksheets[0].getCell(3, 27).value = preald;
-        workBook.worksheets[0].getCell(3, 28).model.result = undefined;
-        workBook.worksheets[0].getCell(3, 29).model.result = undefined;
-        workBook.worksheets[0].getCell(3, 30).value = pplann;
-        workBook.worksheets[0].getCell(3, 31).value = prealn;
-        workBook.worksheets[0].getCell(3, 32).model.result = undefined;
-        workBook.worksheets[0].getCell(3, 33).model.result = undefined;
-        workBook.worksheets[0].getCell(3, 34).value = serv.total_desconectivos;
-        workBook.worksheets[0].getCell(3, 35).value = serv.desc_gen_dia;
-        workBook.worksheets[0].getCell(3, 36).value = serv.desc_parc_dia;
-        workBook.worksheets[0].getCell(3, 37).value = serv.desc_gen_noche;
-        workBook.worksheets[0].getCell(3, 38).value = serv.desc_parc_noche;
-        workBook.xlsx.writeBuffer().then(data1 => {
-          const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-          fsaver.saveAs(blobUpdate, 'Modelo 5 ' + serv.nombre + ' ' + edate + '.xlsx');
-        });
+      // tslint:disable-next-line: max-line-length
+      this.energyService.getEReadingByServices(this.user.id, moment.utc(this.erecords[index].fecha).format('YYYY-MM-DD')).subscribe((res: any[]) => {
+        // console.log(res);
+        const blob: Blob = value;
+        const reader = new FileReader();
+        const comp = this.company;
+        reader.onload = function (e: any) {
+          const contents = e.target.result;
+          workBook.xlsx.load(contents).then(data => {
+            for (let i = 0; i < res.length; i++) {
+              const ac_plan = res[i].planacumulado;
+              const ac_real = res[i].realacumulado;
+              const d_plan = res[i].plan;
+              const d_real = res[i].consumo;
+              const ppland = res[i].plan_hpicd;
+              const pplann = res[i].plan_hpicn;
+              let preald = '';
+              if (res[i].pico_diurno) {
+                preald = (res[i].lectura_hpicd2 - res[i].lectura_hpicd1).toFixed(1);
+              }
+              let prealn = '';
+              if (res[i].pico_nocturno) {
+                prealn = (res[i].lectura_hpicn2 - res[i].lectura_hpicn1).toFixed(1);
+              }
+              let bitacora = '';
+              if (res[i].bitacora) {
+                bitacora = 'X';
+              }
+              let triple_registro = '';
+              if (res[i].triple_registro) {
+                triple_registro = 'X';
+              }
+              let acomodo_carga = '';
+              if (res[i].aplica_acomodo) {
+                acomodo_carga = 'X';
+              }
+              const edate = moment.utc(res[i].fecha.toString().substr(0, res[i].fecha.toString().indexOf('T'))).format('DD-MM-YYYY');
+              const fdate = moment.utc(res[i].fecha.toString().substr(0, res[i].fecha.toString().indexOf('T'))).locale('es').format('DD/MM/YYYY');
+              const month = moment.utc(res[i].fecha).locale('es').format('MMMM').toUpperCase();
+              workBook.worksheets[0].getCell(1, 6).value = month;
+              workBook.worksheets[0].getCell(1, 8).value = fdate;
+              workBook.worksheets[0].getCell(1, 10).value = 'OACE: ' + comp.oace;
+              workBook.worksheets[0].getCell(i + 3, 1).value = i + 1;
+              workBook.worksheets[0].getCell(i + 3, 2).value = res[i].provincia;
+              workBook.worksheets[0].getCell(i + 3, 3).value = res[i].municipio;
+              workBook.worksheets[0].getCell(i + 3, 4).value = comp.oace;
+              workBook.worksheets[0].getCell(i + 3, 5).value = comp.osde;
+              workBook.worksheets[0].getCell(i + 3, 6).value = res[i].codcli;
+              workBook.worksheets[0].getCell(i + 3, 7).value = res[i].control;
+              workBook.worksheets[0].getCell(i + 3, 8).value = res[i].ruta;
+              workBook.worksheets[0].getCell(i + 3, 9).value = res[i].folio;
+              workBook.worksheets[0].getCell(i + 3, 10).value = res[i].nombre;
+              workBook.worksheets[0].getCell(i + 3, 11).value = comp.siglas;
+              workBook.worksheets[0].getCell(i + 3, 12).value = comp.reup;
+              workBook.worksheets[0].getCell(i + 3, 13).value = res[i].reup;
+              workBook.worksheets[0].getCell(i + 3, 14).value = res[i].plan_total;
+              workBook.worksheets[0].getCell(i + 3, 15).value = res[i].plan_acumulado;
+              workBook.worksheets[0].getCell(i + 3, 16).value = res[i].real_acumulado;
+              workBook.worksheets[0].getCell(i + 3, 17).model.result = undefined; // para que recalcule las formulas
+              workBook.worksheets[0].getCell(i + 3, 18).model.result = undefined;
+              workBook.worksheets[0].getCell(i + 3, 19).value = d_plan;
+              workBook.worksheets[0].getCell(i + 3, 20).value = d_real;
+              workBook.worksheets[0].getCell(i + 3, 21).model.result = undefined;
+              workBook.worksheets[0].getCell(i + 3, 22).model.result = undefined;
+              workBook.worksheets[0].getCell(i + 3, 23).value = bitacora;
+              workBook.worksheets[0].getCell(i + 3, 24).value = triple_registro;
+              workBook.worksheets[0].getCell(i + 3, 25).value = acomodo_carga;
+              workBook.worksheets[0].getCell(i + 3, 26).value = ppland;
+              workBook.worksheets[0].getCell(i + 3, 27).value = preald;
+              workBook.worksheets[0].getCell(i + 3, 28).model.result = undefined;
+              workBook.worksheets[0].getCell(i + 3, 29).model.result = undefined;
+              workBook.worksheets[0].getCell(i + 3, 30).value = pplann;
+              workBook.worksheets[0].getCell(i + 3, 31).value = prealn;
+              workBook.worksheets[0].getCell(i + 3, 32).model.result = undefined;
+              workBook.worksheets[0].getCell(i + 3, 33).model.result = undefined;
+              workBook.worksheets[0].getCell(i + 3, 34).value = res[i].total_desconectivos;
+              workBook.worksheets[0].getCell(i + 3, 35).value = res[i].desc_gen_dia;
+              workBook.worksheets[0].getCell(i + 3, 36).value = res[i].desc_parc_dia;
+              workBook.worksheets[0].getCell(i + 3, 37).value = res[i].desc_gen_noche;
+              workBook.worksheets[0].getCell(i + 3, 38).value = res[i].desc_parc_noche;
+            }
+            workBook.xlsx.writeBuffer().then(data1 => {
+              const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+              // tslint:disable-next-line: max-line-length
+              fsaver.saveAs(blobUpdate, 'Modelo 5 ' + moment.utc(res[0].fecha.toString().substr(0, res[0].fecha.toString().indexOf('T'))).format('DD-MM-YYYY') + '.xlsx');
+            });
+          });
+        };
+        reader.readAsArrayBuffer(blob);
       });
-    };
-    reader.readAsArrayBuffer(blob);
     });
   }
 
@@ -495,7 +503,7 @@ export class EnergyComponent implements OnInit {
         // pageOrientation: 'landscape',
         content: [
           {
-            text: 'Desglose Plan de Energía ' + this.company.siglas + ' ' + this.currentYear, fontSize: 15, width: 'auto',
+            text: 'Desglose Plan de Energía ' + this.services[this.selectedService].nombre + ' ' + this.currentYear, fontSize: 15, width: 'auto',
           },
           {
             text: 'Plan para el mes de ' + this.currentMonth + ' ' + this.totalPlan + ' KW', fontSize: 15, width: 'auto',
@@ -576,7 +584,7 @@ export class EnergyComponent implements OnInit {
         // pageOrientation: 'landscape',
         content: [
           {
-            text: 'Desglose Plan de Energía ' + this.company.siglas + ' ' + this.currentYear, fontSize: 15, width: 'auto',
+            text: 'Desglose Plan de Energía ' + this.services[this.selectedService].nombre + ' ' + this.currentYear, fontSize: 15, width: 'auto',
           },
           {
             text: 'Plan para el año ' + this.totalYearPlan + ' KW', fontSize: 15, width: 'auto',

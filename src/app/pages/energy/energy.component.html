@@ -1,4 +1,4 @@
-<nb-card fullwidth accent="info">
+<nb-card fullwidth accent="info" *ngIf="services.length > 0">
     <nb-card-header>
         Control de energía eléctrica        
         <nb-select (selectedChange)="generar_rango_inicial(false)" class="ml-2" *ngIf="services.length > 1" placeholder="----" [(ngModel)]="selectedService" status="info">
@@ -175,4 +175,9 @@
         </div>
     </nb-card-body>
     <nb-card-footer></nb-card-footer>
-  </nb-card>
+ </nb-card>
+<nb-card *ngIf="services.length === 0" accent="info" fullwidth>
+    <nb-card-body>
+        No tiene servicios asignados. Contacte al administrador del sistema.
+    </nb-card-body>
+</nb-card>

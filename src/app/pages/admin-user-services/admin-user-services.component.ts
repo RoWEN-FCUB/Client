@@ -25,7 +25,18 @@ export class AdminUserServicesComponent implements OnInit {
   }
 
   save() {
-    console.log(this.markedServ);
+    // console.log(this.markedServ);
+    const user_serv = {
+      id_usuario: 0,
+      id_servicio: 0,
+    };
+    const datos = [];
+    for (let i = 0; i < this.markedServ.length; i++) {
+      user_serv.id_usuario = this.user.id;
+      user_serv.id_servicio = this.markedServ[i];
+      datos.push(Object.values(user_serv));
+    }
+    this.dialogRef.close(datos);
   }
 
   close() {

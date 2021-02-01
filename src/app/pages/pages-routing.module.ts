@@ -31,13 +31,13 @@ const routes: Routes = [{
       path: 'editProfile',
       component: EditProfileComponent,
       canActivate: [RoleGuard],
-      data: {role: ['user', 'tec', 'admin']},
+      data: {role: ['user', 'tec', 'energy', 'admin']},
     },
     {
       path: 'tasks',
       component: TaskWeekComponent,
       canActivate: [RoleGuard],
-      data: {role: ['user', 'tec', 'admin']},
+      data: {role: ['user', 'tec', 'energy', 'admin']},
     },
     {
       path: 'workshop',
@@ -49,7 +49,7 @@ const routes: Routes = [{
       path: 'tasks/:id/:fecha_inicio/:fecha_fin',
       component: TaskWeekComponent,
       canActivate: [RoleGuard],
-      data: {role: ['user', 'tec', 'admin']},
+      data: {role: ['user', 'tec', 'energy', 'admin']},
     },
     {
       path: 'admin/users',
@@ -79,13 +79,13 @@ const routes: Routes = [{
       path: 'energy',
       component: EnergyComponent,
       canActivate: [RoleGuard],
-      data: {role: ['user', 'tec', 'admin']},
+      data: {role: ['energy', 'admin']},
     },
     {
       path: 'gee',
       component: GeeComponent,
       canActivate: [RoleGuard],
-      data: {role: ['user', 'tec', 'admin']},
+      data: {role: ['energy', 'admin']},
     },
   ],
 }];

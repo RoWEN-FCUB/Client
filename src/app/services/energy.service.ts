@@ -23,6 +23,10 @@ export class EnergyService {
     return this.http.get(ipserver + 'energy/reading/' + date + '&' + id_serv, {responseType: 'json'});
   }
 
+  getEReadingByServices(userid: number, date: string) {
+    return this.http.get(ipserver + 'energy/readingbyservices/' + userid + '&' + date, {responseType: 'json'});
+  }
+
   saveERecord(newrecord: ERecord) {
     return this.http.post(ipserver + 'energy/create', newrecord);
   }

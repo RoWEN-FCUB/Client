@@ -22,6 +22,10 @@ export class EserviceService {
     return this.http.get(ipserver + 'service/user_services/' + userid, {responseType: 'json'});
   }
 
+  updateUserServices(userid: number, services: any) {
+    return this.http.put(ipserver + 'service/user_services/' + userid, services);
+  }
+
   saveService(newService: EService) {
     return this.http.post(ipserver + 'service', newService);
   }

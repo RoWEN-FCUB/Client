@@ -67,7 +67,22 @@ export class AdminUsersComponent implements OnInit {
           selectedServices: userv,
         };
         this.dialogService.open(AdminUserServicesComponent, {context: contxt}).onClose.subscribe(resp => {
-          this.getUsers();
+          if (resp) {
+            this.eserviceService.updateUserServices(this.users[id].id, resp).subscribe(resp2 => {
+              const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timerProgressBar: true,
+                timer: 3000,
+              });
+              Toast.fire({
+                icon: 'success',
+                title: 'Servicios actualizados.',
+              } as SweetAlertOptions);
+              this.getUsers();
+            });
+          }
         });
       });
     });

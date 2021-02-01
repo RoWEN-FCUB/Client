@@ -33,7 +33,7 @@
             <td>{{user.siglas}}</td>
             <td>
               <nb-icon style="cursor: pointer" (click)="openEdit(i)" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar usuario" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
-              <nb-icon *ngIf="getRole(user.role) === 'energy'" style="cursor: pointer" (click)="openEnergy(i)" icon="flash-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Asignar control de servicio eléctrico" nbTooltipIcon="flash-outline" nbTooltipStatus="info"></nb-icon>
+              <nb-icon *ngIf="getRole(user.role) === 'energy' || getRole(user.role) === 'admin'" style="cursor: pointer" (click)="openEnergy(i)" icon="flash-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Asignar control de servicio eléctrico" nbTooltipIcon="flash-outline" nbTooltipStatus="info"></nb-icon>
               <nb-icon style="cursor: pointer" (click)="deleteUser(user.id, user.user)" icon="person-delete-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar usuario" nbTooltipIcon="close-outline" nbTooltipStatus="danger"></nb-icon>
             </td>
           </tr>
