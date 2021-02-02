@@ -43,7 +43,7 @@ export class EnergyComponent implements OnInit {
   show: boolean = false;
   company: Company = {};
   services: EService[] = [];
-  selectedService: number = 0;
+  selectedService: number = -1;
   showstring: string[] = ['mes', 'año'];
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0};
   months: {Mes: number, Plan: number, Consumo: number, PlanAcumulado?: number, RealAcumulado?: number}[] = [];
@@ -103,12 +103,11 @@ export class EnergyComponent implements OnInit {
         const blob: Blob = value;
         const reader = new FileReader();
         const comp = this.company;
+        const fecha = this.erecords[index].fecha;
         reader.onload = function (e: any) {
           const contents = e.target.result;
           workBook.xlsx.load(contents).then(data => {
             for (let i = 0; i < res.length; i++) {
-              const ac_plan = res[i].planacumulado;
-              const ac_real = res[i].realacumulado;
               const d_plan = res[i].plan;
               const d_real = res[i].consumo;
               const ppland = res[i].plan_hpicd;
@@ -133,9 +132,9 @@ export class EnergyComponent implements OnInit {
               if (res[i].aplica_acomodo) {
                 acomodo_carga = 'X';
               }
-              const edate = moment.utc(res[i].fecha.toString().substr(0, res[i].fecha.toString().indexOf('T'))).format('DD-MM-YYYY');
-              const fdate = moment.utc(res[i].fecha.toString().substr(0, res[i].fecha.toString().indexOf('T'))).locale('es').format('DD/MM/YYYY');
-              const month = moment.utc(res[i].fecha).locale('es').format('MMMM').toUpperCase();
+              const edate = moment.utc(fecha.toString().substr(0, fecha.toString().indexOf('T'))).format('DD-MM-YYYY');
+              const fdate = moment.utc(fecha.toString().substr(0, fecha.toString().indexOf('T'))).locale('es').format('DD/MM/YYYY');
+              const month = moment.utc(fecha).locale('es').format('MMMM').toUpperCase();
               workBook.worksheets[0].getCell(1, 6).value = month;
               workBook.worksheets[0].getCell(1, 8).value = fdate;
               workBook.worksheets[0].getCell(1, 10).value = 'OACE: ' + comp.oace;
@@ -181,7 +180,7 @@ export class EnergyComponent implements OnInit {
             workBook.xlsx.writeBuffer().then(data1 => {
               const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
               // tslint:disable-next-line: max-line-length
-              fsaver.saveAs(blobUpdate, 'Modelo 5 ' + moment.utc(res[0].fecha.toString().substr(0, res[0].fecha.toString().indexOf('T'))).format('DD-MM-YYYY') + '.xlsx');
+              fsaver.saveAs(blobUpdate, 'Modelo 5 ' + moment.utc(fecha.toString().substr(0, fecha.toString().indexOf('T'))).format('DD-MM-YYYY') + '.xlsx');
             });
           });
         };

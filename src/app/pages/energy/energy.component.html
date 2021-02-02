@@ -2,6 +2,7 @@
     <nb-card-header>
         Control de energía eléctrica        
         <nb-select (selectedChange)="generar_rango_inicial(false)" class="ml-2" *ngIf="services.length > 1" placeholder="----" [(ngModel)]="selectedService" status="info">
+            <nb-option value="-1">General</nb-option>
             <nb-option *ngFor="let serv of services; let i = index" [value]="i">{{serv.nombre}}</nb-option>
         </nb-select>
         <button *ngIf="user.role==='admin'" class="ml-2" (click)="openPlans()" nbTooltip="Establecer planes diarios." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="browser-outline"></nb-icon>Planes</button>
