@@ -1,11 +1,12 @@
 <nb-card fullwidth accent="info" *ngIf="services.length > 0">
     <nb-card-header>
         Control de energía eléctrica        
-        <nb-select (selectedChange)="generar_rango_inicial(false)" class="ml-2" *ngIf="services.length > 1" placeholder="----" [(ngModel)]="selectedService" status="info">
-            <nb-option value="-1">General</nb-option>
+        <label class="ml-2" *ngIf="services.length === 1">{{services[0].nombre}}</label>
+        <nb-select (selectedChange)="changeSelectedService()" class="ml-2" *ngIf="services.length > 1" placeholder="General" [(ngModel)]="selectedService" status="info">
+            <nb-option value=-1>General</nb-option>
             <nb-option *ngFor="let serv of services; let i = index" [value]="i">{{serv.nombre}}</nb-option>
         </nb-select>
-        <button *ngIf="user.role==='admin'" class="ml-2" (click)="openPlans()" nbTooltip="Establecer planes diarios." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="browser-outline"></nb-icon>Planes</button>
+        <button *ngIf="user.role==='admin' && selectedService > -1" class="ml-2" (click)="openPlans()" nbTooltip="Establecer planes diarios." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="browser-outline"></nb-icon>Planes</button>
         <button class="ml-2" (click)="toogleGraph()" nbTooltip="Mostrar gráfico de consumo." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="activity-outline"></nb-icon>Gráfica</button>
         <button class="ml-2" (click)="export()" nbTooltip="Exportar a PDF." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
         <button class="ml-2" [owlDateTimeTrigger]="dt" nbTooltip="Seleccionar {{showstring[show ? 1 : 0]}} a mostrar." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="keypad-outline"></nb-icon>Seleccionar {{showstring[show ? 1 : 0]}}</button>
@@ -41,7 +42,7 @@
                             <!--<label class="mr-2 ml-2" style="font-family: Open Sans, sans-serif; font-size: 0.8125rem; font-weight: 600; margin-top: 0.01rem;">Mes</label>-->
                             <nb-toggle (checkedChange)="toogleShow($event)" status="info" labelPosition="right"><span #text_muted>Año</span></nb-toggle>
                         </th>
-                        <th colspan="6" style="border: none !important;">Desglose Plan de Energía {{company.siglas}} {{currentYear}}</th>                        
+                        <th colspan="6" style="border: none !important;">Desglose Plan de Energía {{(this.selectedService > -1) ? this.services[this.selectedService].nombre : this.company.siglas}} {{currentYear}}</th>                        
                     </tr>
                     <tr>
                         <th colspan="17"  style="border: none !important;">
@@ -57,21 +58,21 @@
                         <th>DIA</th>                        
                         <th>PLAN ACUMULADO</th>
                         <th>REAL ACUMULADO</th>                        
-                        <th *ngIf="services.length > 0 && services[selectedService].pico_diurno">PLAN PICO DIURNO</th>
+                        <th *ngIf="selectedService > -1 && services.length > 0 && services[selectedService].pico_diurno">PLAN PICO DIURNO</th>
                         <!--
                         <th *ngIf="company.pico_diurno">LECTURA PICO DIURNO 1</th>
                         <th *ngIf="company.pico_diurno">LECTURA PICO DIURNO 2</th>
                         -->
-                        <th *ngIf="services.length > 0 && services[selectedService].pico_diurno">REAL PICO DIURNO</th>
-                        <th *ngIf="services.length > 0 && services[selectedService].pico_nocturno">PLAN PICO NOCTURNO</th>
+                        <th *ngIf="selectedService > -1 && services.length > 0 && services[selectedService].pico_diurno">REAL PICO DIURNO</th>
+                        <th *ngIf="selectedService > -1 && services.length > 0 && services[selectedService].pico_nocturno">PLAN PICO NOCTURNO</th>
                         <!--
                         <th *ngIf="company.pico_nocturno">LECTURA PICO NOCTURNO 1</th>
                         <th *ngIf="company.pico_nocturno">LECTURA PICO NOCTURNO 2</th>
                         -->
-                        <th *ngIf="services.length > 0 && services[selectedService].pico_nocturno">REAL PICO NOCTURNO</th>
+                        <th *ngIf="selectedService > -1 && services.length > 0 && services[selectedService].pico_nocturno">REAL PICO NOCTURNO</th>
                         <th>PLAN DIA</th>
                         <th>REAL DIA</th>
-                        <th>LECTURA CIERRE</th>
+                        <th *ngIf="selectedService > -1">LECTURA CIERRE</th>
                         <th style="width:  7%"></th>                        
                     </tr>
                 </thead>
@@ -81,29 +82,29 @@
                         <td>{{i+1}}</td>                        
                         <td><span>{{erecord.planacumulado}}</span></td>
                         <td><span *ngIf="erecord.consumo > 0">{{erecord.realacumulado}}</span></td>
-                        <td *ngIf="services.length > 0 && services[selectedService].pico_diurno"><span>{{erecord.plan_hpicd}}</span></td>
+                        <td *ngIf="selectedService > -1 && services.length > 0 && services[selectedService].pico_diurno"><span>{{erecord.plan_hpicd}}</span></td>
                         <!--
                         <td *ngIf="company.pico_diurno"><span *ngIf="erecord.plan_hpicd > 0">{{erecord.lectura_hpicd1}}</span></td>
                         <td *ngIf="company.pico_diurno"><span *ngIf="erecord.lectura_hpicd1 > 0">{{erecord.lectura_hpicd2}}</span></td>
                         -->
-                        <td *ngIf="services.length > 0 && services[selectedService].pico_diurno"><span *ngIf="erecord.lectura_hpicd2 > 0">{{(erecord.lectura_hpicd2 - erecord.lectura_hpicd1).toFixed(1)}}</span></td>
-                        <td *ngIf="services.length > 0 && services[selectedService].pico_nocturno"><span>{{erecord.plan_hpicn}}</span></td>
+                        <td *ngIf="selectedService > -1 && services.length > 0 && services[selectedService].pico_diurno"><span *ngIf="erecord.lectura_hpicd2 > 0">{{(erecord.lectura_hpicd2 - erecord.lectura_hpicd1).toFixed(1)}}</span></td>
+                        <td *ngIf="selectedService > -1 && services.length > 0 && services[selectedService].pico_nocturno"><span>{{erecord.plan_hpicn}}</span></td>
                         <!--
                         <td *ngIf="company.pico_nocturno"><span *ngIf="erecord.plan_hpicn > 0">{{erecord.lectura_hpicn1}}</span></td>
                         <td *ngIf="company.pico_nocturno"><span *ngIf="erecord.lectura_hpicn1 > 0">{{erecord.lectura_hpicn2}}</span></td>
                         -->
-                        <td *ngIf="services.length > 0 && services[selectedService].pico_nocturno"><span *ngIf="erecord.lectura_hpicn2 > 0">{{(erecord.lectura_hpicn2 - erecord.lectura_hpicn1).toFixed(1)}}</span></td>
+                        <td *ngIf="selectedService > -1 && services.length > 0 && services[selectedService].pico_nocturno"><span *ngIf="erecord.lectura_hpicn2 > 0">{{(erecord.lectura_hpicn2 - erecord.lectura_hpicn1).toFixed(1)}}</span></td>
                         <td><span *ngIf="erecord.plan > 0">{{erecord.plan}}</span></td>
                         <td>
                             <span *ngIf="erecord.consumo > 0" [ngClass]="(erecord.plan < erecord.consumo)?'text-danger font-weight-bold':''">
                                 {{erecord.consumo}}
                             </span>
                         </td>
-                        <td><span *ngIf="erecord.consumo > 0">{{erecord.lectura}}</span></td>
+                        <td *ngIf="selectedService > -1"><span *ngIf="erecord.consumo > 0">{{erecord.lectura}}</span></td>
                         <td>
-                            <nb-icon (click)="openNew(i)" style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Introducir lecturas" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                            <nb-icon *ngIf="selectedService > -1" (click)="openNew(i)" style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Introducir lecturas" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
                             <nb-icon style="cursor: pointer" *ngIf="erecord.consumo > 0" icon="file-text-outline" (click)="exportLocalXlsx(i)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Exportar a Modelo 5" nbTooltipIcon="file-text-outline" nbTooltipStatus="info"></nb-icon>
-                            <nb-icon style="cursor: pointer" *ngIf="user.role==='admin' && erecord.id" icon="trash-2-outline" (click)="deleteERecord(erecord.id)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar registro" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                            <nb-icon style="cursor: pointer" *ngIf="selectedService > -1 && user.role==='admin' && erecord.id" icon="trash-2-outline" (click)="deleteERecord(erecord.id)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar registro" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
                         </td>                        
                     </tr>
                 </tbody>

@@ -15,8 +15,16 @@ export class EnergyService {
     return this.http.get(ipserver + 'energy/list/' + year + '&' + month + '&' + id_serv, {responseType: 'json'});
   }
 
+  getEAllServices(year: number, month: number, id_user: number) {
+    return this.http.get(ipserver + 'energy/allservices/' + year + '&' + month + '&' + id_user, {responseType: 'json'});
+  }
+
   getMonths(year: number, id_serv: number) {
     return this.http.get(ipserver + 'energy/months/' + year + '&' + id_serv, {responseType: 'json'});
+  }
+
+  getMonthsAllServices(year: number, id_user: number) {
+    return this.http.get(ipserver + 'energy/monthsallservices/' + year + '&' + id_user, {responseType: 'json'});
   }
 
   getEReading(date: string, id_serv: number) {

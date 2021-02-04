@@ -85,6 +85,11 @@ export class EnergyComponent implements OnInit {
       });
       this.eserviceService.userServices(this.user.id).subscribe((res: EService[]) => {
         this.services = res;
+        if (res.length > 1) {
+          this.selectedService = -1;
+        } else {
+          this.selectedService = 0;
+        }
         if (res.length > 0) {
           this.generar_rango_inicial(false);
           this.consumo_por_meses();
@@ -104,21 +109,28 @@ export class EnergyComponent implements OnInit {
         const reader = new FileReader();
         const comp = this.company;
         const fecha = this.erecords[index].fecha;
+        const selserv = this.selectedService;
         reader.onload = function (e: any) {
           const contents = e.target.result;
           workBook.xlsx.load(contents).then(data => {
             for (let i = 0; i < res.length; i++) {
-              const d_plan = res[i].plan;
-              const d_real = res[i].consumo;
-              const ppland = res[i].plan_hpicd;
-              const pplann = res[i].plan_hpicn;
+              let pos: number;
+              if (selserv > -1) {
+                pos = selserv;
+              } else {
+                pos = i;
+              }
+              const d_plan = res[pos].plan;
+              const d_real = res[pos].consumo;
+              const ppland = res[pos].plan_hpicd;
+              const pplann = res[pos].plan_hpicn;
               let preald = '';
               if (res[i].pico_diurno) {
-                preald = (res[i].lectura_hpicd2 - res[i].lectura_hpicd1).toFixed(1);
+                preald = (res[pos].lectura_hpicd2 - res[pos].lectura_hpicd1).toFixed(1);
               }
               let prealn = '';
               if (res[i].pico_nocturno) {
-                prealn = (res[i].lectura_hpicn2 - res[i].lectura_hpicn1).toFixed(1);
+                prealn = (res[pos].lectura_hpicn2 - res[pos].lectura_hpicn1).toFixed(1);
               }
               let bitacora = '';
               if (res[i].bitacora) {
@@ -139,21 +151,21 @@ export class EnergyComponent implements OnInit {
               workBook.worksheets[0].getCell(1, 8).value = fdate;
               workBook.worksheets[0].getCell(1, 10).value = 'OACE: ' + comp.oace;
               workBook.worksheets[0].getCell(i + 3, 1).value = i + 1;
-              workBook.worksheets[0].getCell(i + 3, 2).value = res[i].provincia;
-              workBook.worksheets[0].getCell(i + 3, 3).value = res[i].municipio;
+              workBook.worksheets[0].getCell(i + 3, 2).value = res[pos].provincia;
+              workBook.worksheets[0].getCell(i + 3, 3).value = res[pos].municipio;
               workBook.worksheets[0].getCell(i + 3, 4).value = comp.oace;
               workBook.worksheets[0].getCell(i + 3, 5).value = comp.osde;
-              workBook.worksheets[0].getCell(i + 3, 6).value = res[i].codcli;
-              workBook.worksheets[0].getCell(i + 3, 7).value = res[i].control;
-              workBook.worksheets[0].getCell(i + 3, 8).value = res[i].ruta;
-              workBook.worksheets[0].getCell(i + 3, 9).value = res[i].folio;
-              workBook.worksheets[0].getCell(i + 3, 10).value = res[i].nombre;
+              workBook.worksheets[0].getCell(i + 3, 6).value = res[pos].codcli;
+              workBook.worksheets[0].getCell(i + 3, 7).value = res[pos].control;
+              workBook.worksheets[0].getCell(i + 3, 8).value = res[pos].ruta;
+              workBook.worksheets[0].getCell(i + 3, 9).value = res[pos].folio;
+              workBook.worksheets[0].getCell(i + 3, 10).value = res[pos].nombre;
               workBook.worksheets[0].getCell(i + 3, 11).value = comp.siglas;
               workBook.worksheets[0].getCell(i + 3, 12).value = comp.reup;
-              workBook.worksheets[0].getCell(i + 3, 13).value = res[i].reup;
-              workBook.worksheets[0].getCell(i + 3, 14).value = res[i].plan_total;
-              workBook.worksheets[0].getCell(i + 3, 15).value = res[i].plan_acumulado;
-              workBook.worksheets[0].getCell(i + 3, 16).value = res[i].real_acumulado;
+              workBook.worksheets[0].getCell(i + 3, 13).value = res[pos].reup;
+              workBook.worksheets[0].getCell(i + 3, 14).value = res[pos].plan_total;
+              workBook.worksheets[0].getCell(i + 3, 15).value = res[pos].plan_acumulado;
+              workBook.worksheets[0].getCell(i + 3, 16).value = res[pos].real_acumulado;
               workBook.worksheets[0].getCell(i + 3, 17).model.result = undefined; // para que recalcule las formulas
               workBook.worksheets[0].getCell(i + 3, 18).model.result = undefined;
               workBook.worksheets[0].getCell(i + 3, 19).value = d_plan;
@@ -171,11 +183,14 @@ export class EnergyComponent implements OnInit {
               workBook.worksheets[0].getCell(i + 3, 31).value = prealn;
               workBook.worksheets[0].getCell(i + 3, 32).model.result = undefined;
               workBook.worksheets[0].getCell(i + 3, 33).model.result = undefined;
-              workBook.worksheets[0].getCell(i + 3, 34).value = res[i].total_desconectivos;
-              workBook.worksheets[0].getCell(i + 3, 35).value = res[i].desc_gen_dia;
-              workBook.worksheets[0].getCell(i + 3, 36).value = res[i].desc_parc_dia;
-              workBook.worksheets[0].getCell(i + 3, 37).value = res[i].desc_gen_noche;
-              workBook.worksheets[0].getCell(i + 3, 38).value = res[i].desc_parc_noche;
+              workBook.worksheets[0].getCell(i + 3, 34).value = res[pos].total_desconectivos;
+              workBook.worksheets[0].getCell(i + 3, 35).value = res[pos].desc_gen_dia;
+              workBook.worksheets[0].getCell(i + 3, 36).value = res[pos].desc_parc_dia;
+              workBook.worksheets[0].getCell(i + 3, 37).value = res[pos].desc_gen_noche;
+              workBook.worksheets[0].getCell(i + 3, 38).value = res[pos].desc_parc_noche;
+              if (selserv > -1) {
+                break;
+              }
             }
             workBook.xlsx.writeBuffer().then(data1 => {
               const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -201,6 +216,8 @@ export class EnergyComponent implements OnInit {
 
   toogleShow(event) {
     this.show = !this.show;
+    if (this.show)
+    this.consumo_por_meses();
   }
 
   chosenMonthHandler( normalizedMonth: Moment, datepicker: OwlDateTimeComponent<Moment> ) {
@@ -223,6 +240,13 @@ export class EnergyComponent implements OnInit {
     }
   }
 
+  changeSelectedService() {
+    this.selectedService = Number(this.selectedService);
+    this.generar_rango_inicial(false);
+    if (this.show)
+    this.consumo_por_meses();
+  }
+
   deleteERecord(id: number) {
     const Toast = Swal.mixin({
       toast: true,
@@ -241,34 +265,66 @@ export class EnergyComponent implements OnInit {
   }
 
   consumo_por_meses() {
-    this.energyService.getMonths(this.selectedYear, this.services[this.selectedService].id).subscribe(res => {
-      this.months = res as {Mes: number, Plan: number, Consumo: number}[];
-      this.totalYearPlan = 0;
-      this.totalYearConsume = 0;
-      const consumos = [];
-      const planes = [];
-      for (let i = 0; i < this.months.length; i++) {
-        if (i === 0) {
-          this.months[i].PlanAcumulado = this.months[i].Plan;
-          this.months[i].RealAcumulado = this.months[i].Consumo;
-        } else {
-          this.months[i].PlanAcumulado = this.months[i].Plan + this.months[i - 1].PlanAcumulado;
-          this.months[i].RealAcumulado = this.months[i].Consumo + this.months[i - 1].RealAcumulado;
-        }
-        if (this.months[i].Plan > this.yscaleMax2) {
-          this.yscaleMax2 = this.months[i].Plan + 100;
+    this.selectedService = Number(this.selectedService);
+    if (this.selectedService === -1) {
+      this.energyService.getMonthsAllServices(this.selectedYear, this.user.id).subscribe(res => {
+        this.months = res as {Mes: number, Plan: number, Consumo: number}[];
+        this.totalYearPlan = 0;
+        this.totalYearConsume = 0;
+        const consumos = [];
+        const planes = [];
+        for (let i = 0; i < this.months.length; i++) {
+          if (i === 0) {
+            this.months[i].PlanAcumulado = this.months[i].Plan;
+            this.months[i].RealAcumulado = this.months[i].Consumo;
+          } else {
+            this.months[i].PlanAcumulado = this.months[i].Plan + this.months[i - 1].PlanAcumulado;
+            this.months[i].RealAcumulado = this.months[i].Consumo + this.months[i - 1].RealAcumulado;
+          }
+          if (this.months[i].Plan > this.yscaleMax2) {
+            this.yscaleMax2 = this.months[i].Plan + 100;
+          }
+          // tslint:disable-next-line: max-line-length
+          consumos.push({name : moment().locale('es').set('month', this.months[i].Mes - 1).format('MMMM').toUpperCase(), value : this.months[i].Consumo});
+          // tslint:disable-next-line: max-line-length
+          planes.push({name : moment().locale('es').set('month', this.months[i].Mes - 1).format('MMMM').toUpperCase(), value : this.months[i].Plan});
+          this.totalYearPlan += this.months[i].Plan;
+          this.totalYearConsume += this.months[i].Consumo;
         }
         // tslint:disable-next-line: max-line-length
-        consumos.push({name : moment().locale('es').set('month', this.months[i].Mes - 1).format('MMMM').toUpperCase(), value : this.months[i].Consumo});
+        this.multi2 = [{name: 'Plan ' + this.totalYearPlan + ' KW', series: planes}, {name: 'Consumo ' + this.totalYearConsume + ' KW', series: consumos}];
+        // console.log(this.months);
+      });
+    } else {
+      this.energyService.getMonths(this.selectedYear, this.services[this.selectedService].id).subscribe(res => {
+        this.months = res as {Mes: number, Plan: number, Consumo: number}[];
+        this.totalYearPlan = 0;
+        this.totalYearConsume = 0;
+        const consumos = [];
+        const planes = [];
+        for (let i = 0; i < this.months.length; i++) {
+          if (i === 0) {
+            this.months[i].PlanAcumulado = this.months[i].Plan;
+            this.months[i].RealAcumulado = this.months[i].Consumo;
+          } else {
+            this.months[i].PlanAcumulado = this.months[i].Plan + this.months[i - 1].PlanAcumulado;
+            this.months[i].RealAcumulado = this.months[i].Consumo + this.months[i - 1].RealAcumulado;
+          }
+          if (this.months[i].Plan > this.yscaleMax2) {
+            this.yscaleMax2 = this.months[i].Plan + 100;
+          }
+          // tslint:disable-next-line: max-line-length
+          consumos.push({name : moment().locale('es').set('month', this.months[i].Mes - 1).format('MMMM').toUpperCase(), value : this.months[i].Consumo});
+          // tslint:disable-next-line: max-line-length
+          planes.push({name : moment().locale('es').set('month', this.months[i].Mes - 1).format('MMMM').toUpperCase(), value : this.months[i].Plan});
+          this.totalYearPlan += this.months[i].Plan;
+          this.totalYearConsume += this.months[i].Consumo;
+        }
         // tslint:disable-next-line: max-line-length
-        planes.push({name : moment().locale('es').set('month', this.months[i].Mes - 1).format('MMMM').toUpperCase(), value : this.months[i].Plan});
-        this.totalYearPlan += this.months[i].Plan;
-        this.totalYearConsume += this.months[i].Consumo;
-      }
-      // tslint:disable-next-line: max-line-length
-      this.multi2 = [{name: 'Plan ' + this.totalYearPlan + ' KW', series: planes}, {name: 'Consumo ' + this.totalYearConsume + ' KW', series: consumos}];
-      // console.log(this.months);
-    });
+        this.multi2 = [{name: 'Plan ' + this.totalYearPlan + ' KW', series: planes}, {name: 'Consumo ' + this.totalYearConsume + ' KW', series: consumos}];
+        // console.log(this.months);
+      });
+    }
   }
 
   generar_rango_inicial(adjust: boolean) {
@@ -286,61 +342,114 @@ export class EnergyComponent implements OnInit {
         lectura: 0,
         planacumulado: 0,
         realacumulado: 0,
-        id_serv: this.services[this.selectedService].id,
+        id_serv: (this.selectedService > -1) ? this.services[this.selectedService].id : -1,
       };
       this.erecords.push(erecord);
       fday = moment(fday).locale('es').add(1, 'days').toDate();
     }
-    // tslint:disable-next-line: max-line-length
-    this.energyService.getERecords(this.selectedYear, this.selectedMonth + 1, this.services[this.selectedService].id).subscribe((res: ERecord[]) => {
-      // console.log(this.erecords);
-      let last = 0;
-      for (let i = 0; i < res.length; i++) {
-        for (let j = 0; j < this.erecords.length; j++) {
-          if (moment.utc(res[i].fecha).isSame(this.erecords[j].fecha, 'day')) {
-            this.erecords[j] = res[i];
-            this.erecords[j].planacumulado = 0;
-            this.erecords[j].realacumulado = 0;
-            break;
+    if (this.selectedService === -1) {
+      // tslint:disable-next-line: max-line-length
+      this.energyService.getEAllServices(this.selectedYear, this.selectedMonth + 1, this.user.id).subscribe((res: ERecord[]) => {
+        // console.log(this.erecords);
+        let last = 0;
+        for (let i = 0; i < res.length; i++) {
+          for (let j = 0; j < this.erecords.length; j++) {
+            if (moment.utc(res[i].fecha).isSame(this.erecords[j].fecha, 'day')) {
+              this.erecords[j] = res[i];
+              this.erecords[j].planacumulado = 0;
+              this.erecords[j].realacumulado = 0;
+              break;
+            }
           }
         }
-      }
-      // console.log(this.erecords);
-      for (let i = 0; i < this.erecords.length; i++) {
-        this.totalConsume += this.erecords[i].consumo;
-        this.totalPlan += this.erecords[i].plan;
-        if (this.erecords[i].plan > this.yscaleMax) {
-          this.yscaleMax = this.erecords[i].plan + 10;
+        // console.log(this.erecords);
+        for (let i = 0; i < this.erecords.length; i++) {
+          this.totalConsume += this.erecords[i].consumo;
+          this.totalPlan += this.erecords[i].plan;
+          if (this.erecords[i].plan > this.yscaleMax) {
+            this.yscaleMax = this.erecords[i].plan + 10;
+          }
+          if (i > 0) {
+            this.erecords[i].planacumulado = this.erecords[i].plan + this.erecords[i - 1].planacumulado;
+          } else {
+            this.erecords[i].planacumulado = this.erecords[i].plan;
+          }
+          if (this.erecords[i].consumo) {
+            this.erecords[i].realacumulado = this.erecords[i].consumo + this.erecords[last].realacumulado;
+            last = i;
+          }
         }
-        if (i > 0) {
-          this.erecords[i].planacumulado = this.erecords[i].plan + this.erecords[i - 1].planacumulado;
-        } else {
-          this.erecords[i].planacumulado = this.erecords[i].plan;
+        const consumos = [];
+        const planes = [];
+        for (let i = 0; i < this.erecords.length; i++) {
+          if (this.erecords[i].consumo > 0) {
+            consumos.push({name : (i + 1).toString(), value : this.erecords[i].consumo});
+          }
+          if (this.erecords[i].plan > 0) {
+            planes.push({name : (i + 1).toString(), value : this.erecords[i].plan});
+          }
         }
-        if (this.erecords[i].lectura) {
-          this.erecords[i].realacumulado = this.erecords[i].consumo + this.erecords[last].realacumulado;
-          last = i;
+        if (consumos.length > 0) {
+          this.promConsume = Math.round(this.totalConsume / (last + 1));
         }
-      }
-      const consumos = [];
-      const planes = [];
-      for (let i = 0; i < this.erecords.length; i++) {
-        if (this.erecords[i].consumo > 0) {
-          consumos.push({name : (i + 1).toString(), value : this.erecords[i].consumo});
+        // tslint:disable-next-line: max-line-length
+        this.multi = [{name: 'Plan ' + this.totalPlan + ' KW', series: planes}, {name: 'Consumo ' + this.totalConsume + ' KW', series: consumos}];
+        if (adjust) {
+          this.consume_adjust();
         }
-        if (this.erecords[i].plan > 0) {
-          planes.push({name : (i + 1).toString(), value : this.erecords[i].plan});
-        }
-      }
-      if (consumos.length > 0) {
-        this.promConsume = Math.round(this.totalConsume / (last + 1));
-      }
+      });
+    } else {
       // tslint:disable-next-line: max-line-length
-      this.multi = [{name: 'Plan ' + this.totalPlan + ' KW', series: planes}, {name: 'Consumo ' + this.totalConsume + ' KW', series: consumos}];
-      if (adjust) {
-        this.consume_adjust();
-      }
-    });
+      this.energyService.getERecords(this.selectedYear, this.selectedMonth + 1, this.services[this.selectedService].id).subscribe((res: ERecord[]) => {
+        // console.log(this.erecords);
+        let last = 0;
+        for (let i = 0; i < res.length; i++) {
+          for (let j = 0; j < this.erecords.length; j++) {
+            if (moment.utc(res[i].fecha).isSame(this.erecords[j].fecha, 'day')) {
+              this.erecords[j] = res[i];
+              this.erecords[j].planacumulado = 0;
+              this.erecords[j].realacumulado = 0;
+              break;
+            }
+          }
+        }
+        // console.log(this.erecords);
+        for (let i = 0; i < this.erecords.length; i++) {
+          this.totalConsume += this.erecords[i].consumo;
+          this.totalPlan += this.erecords[i].plan;
+          if (this.erecords[i].plan > this.yscaleMax) {
+            this.yscaleMax = this.erecords[i].plan + 10;
+          }
+          if (i > 0) {
+            this.erecords[i].planacumulado = this.erecords[i].plan + this.erecords[i - 1].planacumulado;
+          } else {
+            this.erecords[i].planacumulado = this.erecords[i].plan;
+          }
+          if (this.erecords[i].lectura) {
+            this.erecords[i].realacumulado = this.erecords[i].consumo + this.erecords[last].realacumulado;
+            last = i;
+          }
+        }
+        const consumos = [];
+        const planes = [];
+        for (let i = 0; i < this.erecords.length; i++) {
+          if (this.erecords[i].consumo > 0) {
+            consumos.push({name : (i + 1).toString(), value : this.erecords[i].consumo});
+          }
+          if (this.erecords[i].plan > 0) {
+            planes.push({name : (i + 1).toString(), value : this.erecords[i].plan});
+          }
+        }
+        if (consumos.length > 0) {
+          this.promConsume = Math.round(this.totalConsume / (last + 1));
+        }
+        // tslint:disable-next-line: max-line-length
+        this.multi = [{name: 'Plan ' + this.totalPlan + ' KW', series: planes}, {name: 'Consumo ' + this.totalConsume + ' KW', series: consumos}];
+        if (adjust) {
+          this.consume_adjust();
+        }
+      });
+    }
   }
 
   openNew(i: number) {
@@ -502,7 +611,8 @@ export class EnergyComponent implements OnInit {
         // pageOrientation: 'landscape',
         content: [
           {
-            text: 'Desglose Plan de Energía ' + this.services[this.selectedService].nombre + ' ' + this.currentYear, fontSize: 15, width: 'auto',
+            // tslint:disable-next-line: max-line-length
+            text: 'Desglose Plan de Energía ' + ((Number(this.selectedService) > -1) ? this.services[this.selectedService].nombre : this.company.siglas) + ' ' + this.currentYear, fontSize: 15, width: 'auto',
           },
           {
             text: 'Plan para el mes de ' + this.currentMonth + ' ' + this.totalPlan + ' KW', fontSize: 15, width: 'auto',
@@ -583,7 +693,8 @@ export class EnergyComponent implements OnInit {
         // pageOrientation: 'landscape',
         content: [
           {
-            text: 'Desglose Plan de Energía ' + this.services[this.selectedService].nombre + ' ' + this.currentYear, fontSize: 15, width: 'auto',
+            // tslint:disable-next-line: max-line-length
+            text: 'Desglose Plan de Energía ' + ((Number(this.selectedService) > -1) ? this.services[this.selectedService].nombre : this.company.siglas) + ' ' + this.currentYear, fontSize: 15, width: 'auto',
           },
           {
             text: 'Plan para el año ' + this.totalYearPlan + ' KW', fontSize: 15, width: 'auto',

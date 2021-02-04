@@ -73,7 +73,7 @@ const routes: Routes = [{
       path: 'notifications',
       component: AllNotificationsComponent,
       canActivate: [RoleGuard],
-      data: {role: ['user', 'tec', 'admin']},
+      data: {role: ['user', 'energy', 'tec', 'admin']},
     },
     {
       path: 'energy',
