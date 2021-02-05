@@ -43,6 +43,26 @@ export class EnergyService {
     return this.http.put(ipserver + 'energy/update/' + id, newrecord);
   }
 
+  blockERecord(id: number) {
+    return this.http.delete(ipserver + 'energy/block/' + id);
+  }
+
+  unblockERecord(id: number) {
+    return this.http.delete(ipserver + 'energy/unblock/' + id);
+  }
+
+  blockAllERecords(id_user: number, date: string) {
+    return this.http.delete(ipserver + 'energy/blockall/' + id_user + '&' + date);
+  }
+
+  unblockAllERecords(id_user: number, date: string) {
+    return this.http.delete(ipserver + 'energy/unblockall/' + id_user + '&' + date);
+  }
+
+  unblockedServices(id_user: number, date: string) {
+    return this.http.get(ipserver + 'energy/unbloquedservices/' + id_user + '&' + date, {responseType: 'json'});
+  }
+
   updateAllERecord(newrecords: ERecord[]) {
     return this.http.put(ipserver + 'energy/updateAll', newrecords);
   }

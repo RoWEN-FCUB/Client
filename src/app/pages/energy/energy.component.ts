@@ -98,6 +98,100 @@ export class EnergyComponent implements OnInit {
     });
   }
 
+  blockrecord(index: number) {
+    if (Number(this.selectedService) > -1) {
+      Swal.fire({
+        title: 'Confirma que desea bloquear el registro?',
+        // tslint:disable-next-line: max-line-length
+        text: 'Una vez bloqueado no podrá modificarlo.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí­',
+        cancelButtonText: 'No',
+      } as SweetAlertOptions).then((result) => {
+        if (result.value) {
+          this.energyService.blockERecord(this.erecords[index].id).subscribe(res => {
+            this.generar_rango_inicial(false);
+          });
+        }
+      });
+    } else {
+      Swal.fire({
+        title: 'Confirma que desea bloquear TODOS los registros de este día?',
+        // tslint:disable-next-line: max-line-length
+        text: 'Una vez bloqueados los demás usuarios no podrán modificarlos.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí­',
+        cancelButtonText: 'No',
+      } as SweetAlertOptions).then((result) => {
+        if (result.value) {
+          this.blockallrecords(index);
+        }
+      });
+    }
+  }
+
+  unblockrecord(index: number) {
+    if (Number(this.selectedService) > -1) {
+      this.energyService.unblockERecord(this.erecords[index].id).subscribe(res => {
+        this.generar_rango_inicial(false);
+      });
+    } else {
+      this.unblockallrecords(index);
+    }
+  }
+
+  blockallrecords(index: number) {
+    this.energyService.blockAllERecords(this.user.id, moment.utc(this.erecords[index].fecha).format('YYYY-MM-DD')).subscribe(res => {
+      this.generar_rango_inicial(false);
+    });
+  }
+
+  unblockallrecords(index: number) {
+    this.energyService.unblockAllERecords(this.user.id, moment.utc(this.erecords[index].fecha).format('YYYY-MM-DD')).subscribe(res => {
+      this.generar_rango_inicial(false);
+    });
+  }
+
+  checkBloquedBeforeExport(index: number) {
+    if (Number(this.selectedService) === -1) {
+      // tslint:disable-next-line: max-line-length
+      this.energyService.unblockedServices(this.user.id, moment.utc(this.erecords[index].fecha).format('YYYY-MM-DD')).subscribe((res: {nombre: string, consumo: number}[]) => {
+        if (res.length > 0) {
+          let list = '<ul class="list-group list-group-flush" style="padding-left: 0pt; text-align: left;">';
+          for (let i = 0; i < res.length; i++) {
+            list += '<li class="list-group-item">' + res[i].nombre + ' - Consumo: ' + res[i].consumo + ' KW</li>';
+          }
+          list += '</ul>';
+          Swal.fire({
+            // tslint:disable-next-line: max-line-length
+            // title: 'Los siguientes servicios no están bloqueados para este día y podrían ser modificados. Desea bloquearlos antes de exportar el Modelo 5?',
+            html: '<div class="row"><div class="col text-justify">Los siguientes servicios no están bloqueados para este día y podrían ser modificados. ¿Desea bloquearlos antes de exportar el Modelo 5?</div></div><div class="row"><div class="col d-flex justify-content-left">' + list + '</div></div>',
+            icon: 'warning',
+            showCancelButton: true,
+            showCloseButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí­',
+            cancelButtonText: 'No',
+          } as SweetAlertOptions).then((result) => {
+            if (result.value) {
+              this.blockallrecords(index);
+            }
+            this.exportLocalXlsx(index);
+          });
+        }
+      });
+    } else {
+      this.exportLocalXlsx(index);
+    }
+  }
+
   async exportLocalXlsx(index: number) {
     const workBook: Workbook = new Workbook();
     const subscription = this.http.get('./assets/Modelo5.xlsx', { responseType: 'blob' })
@@ -340,9 +434,16 @@ export class EnergyComponent implements OnInit {
         plan: 0,
         consumo: 0,
         lectura: 0,
+        lectura_hpicd1: 0,
+        lectura_hpicd2: 0,
+        lectura_hpicn1: 0,
+        lectura_hpicn2: 0,
         planacumulado: 0,
         realacumulado: 0,
+        plan_hpicd: 0,
+        plan_hpicn: 0,
         id_serv: (this.selectedService > -1) ? this.services[this.selectedService].id : -1,
+        bloqueado: false,
       };
       this.erecords.push(erecord);
       fday = moment(fday).locale('es').add(1, 'days').toDate();
@@ -545,13 +646,14 @@ export class EnergyComponent implements OnInit {
           }
         }
         // console.log(this.erecords[i].consumo);
-        this.totalConsume += this.erecords[i].consumo;
+        // this.totalConsume += this.erecords[i].consumo;
         // console.log(this.totalConsume);
         this.totalPlan += this.erecords[i].plan;
         this.erecords[i].realacumulado = this.erecords[i].consumo + this.erecords[last].realacumulado;
         this.erecords[i].planacumulado = this.erecords[i].plan + this.erecords[last].planacumulado;
         if (this.erecords[i].lectura) {
           last = i;
+          this.totalConsume = this.erecords[i].realacumulado;
           bd_update.push(this.erecords[i]);
         }
       }

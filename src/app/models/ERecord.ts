@@ -13,4 +13,5 @@ export interface ERecord {
     plan_hpicd?: number;
     plan_hpicn?: number;
     id_serv?: number;
+    bloqueado?: boolean;
   }

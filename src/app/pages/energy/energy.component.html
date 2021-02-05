@@ -6,7 +6,7 @@
             <nb-option value=-1>General</nb-option>
             <nb-option *ngFor="let serv of services; let i = index" [value]="i">{{serv.nombre}}</nb-option>
         </nb-select>
-        <button *ngIf="user.role==='admin' && selectedService > -1" class="ml-2" (click)="openPlans()" nbTooltip="Establecer planes diarios." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="browser-outline"></nb-icon>Planes</button>
+        <button *ngIf="selectedService > -1" class="ml-2" (click)="openPlans()" nbTooltip="Establecer planes diarios." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="browser-outline"></nb-icon>Planes</button>
         <button class="ml-2" (click)="toogleGraph()" nbTooltip="Mostrar gráfico de consumo." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="activity-outline"></nb-icon>Gráfica</button>
         <button class="ml-2" (click)="export()" nbTooltip="Exportar a PDF." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
         <button class="ml-2" [owlDateTimeTrigger]="dt" nbTooltip="Seleccionar {{showstring[show ? 1 : 0]}} a mostrar." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="keypad-outline"></nb-icon>Seleccionar {{showstring[show ? 1 : 0]}}</button>
@@ -102,8 +102,10 @@
                         </td>
                         <td *ngIf="selectedService > -1"><span *ngIf="erecord.consumo > 0">{{erecord.lectura}}</span></td>
                         <td>
-                            <nb-icon *ngIf="selectedService > -1" (click)="openNew(i)" style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Introducir lecturas" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
-                            <nb-icon style="cursor: pointer" *ngIf="erecord.consumo > 0" icon="file-text-outline" (click)="exportLocalXlsx(i)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Exportar a Modelo 5" nbTooltipIcon="file-text-outline" nbTooltipStatus="info"></nb-icon>
+                            <nb-icon *ngIf="selectedService > -1 && !erecord.bloqueado" (click)="openNew(i)" style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Introducir lecturas" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                            <nb-icon *ngIf="services.length > 1 && erecord.bloqueado" (click)="unblockrecord(i)" style="cursor: pointer" icon="unlock-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Desbloquear registro" nbTooltipIcon="unlock-outline" nbTooltipStatus="info"></nb-icon>
+                            <nb-icon *ngIf="!erecord.bloqueado && erecord.consumo > 0" (click)="blockrecord(i)" style="cursor: pointer" icon="lock-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Bloquear registro" nbTooltipIcon="lock-outline" nbTooltipStatus="info"></nb-icon>
+                            <nb-icon style="cursor: pointer" *ngIf="erecord.consumo > 0" icon="file-text-outline" (click)="checkBloquedBeforeExport(i)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Exportar a Modelo 5" nbTooltipIcon="file-text-outline" nbTooltipStatus="info"></nb-icon>
                             <nb-icon style="cursor: pointer" *ngIf="selectedService > -1 && user.role==='admin' && erecord.id" icon="trash-2-outline" (click)="deleteERecord(erecord.id)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar registro" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
                         </td>                        
                     </tr>
@@ -155,7 +157,6 @@
                         <th>PLAN ACUMULADO</th>
                         <th>REAL ACUMULADO</th>
                         <th>DIFERENCIA</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>          
@@ -170,7 +171,6 @@
                         <td><span *ngIf="month.Consumo > 0">{{month.PlanAcumulado}}</span></td>
                         <td><span *ngIf="month.Consumo > 0">{{month.RealAcumulado}}</span></td>
                         <td><span *ngIf="month.Consumo > 0">{{month.PlanAcumulado - month.RealAcumulado}}</span></td>
-                        <td><nb-icon *ngIf="user.role==='admin' && month.Consumo > 0" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar registro del mes" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon></td>
                     </tr>
                 </tbody>
             </table>            

@@ -52,7 +52,7 @@
                       <span nbTooltip="Tarea superpuesta" nbTooltipIcon="alert-circle-outline" nbTooltipStatus="danger" *ngIf="isInConflict(i)" class="badge badge-danger">!!</span>
                     </td>
                     <td width="10%"><span [ngStyle]="task.estado | formatState">{{task.estado}}</span></td>
-                    <td width="10%" style="cursor: pointer">
+                    <td *ngIf="task.validada" width="10%" style="cursor: pointer">
                       <span (click)="openNewObs(task.id)" [nbPopover]="(task.observaciones | getObservations).length > 0 ? observaciones : null" nbPopoverPlacement="top" nbPopoverTrigger="hover">{{task.observaciones | getObservations | getObservText}}</span>
                       <ng-template #observaciones>
                         <nb-card accent="info">
