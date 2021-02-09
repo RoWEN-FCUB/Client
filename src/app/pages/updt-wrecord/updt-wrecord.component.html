@@ -111,7 +111,7 @@
         <div class="col">
             <div class="form-group">
                 <label>Orden de trabajo:</label>
-                <input type="text" (input)="otChange()" [(ngModel)]="wrecord.ot" [status]="ot_status" nbInput autofocus fullWidth placeholder="Orden de trabajo" class="form-control" aria-describedby="otHelp">
+                <input type="text" (input)="otChange()" [(ngModel)]="wrecord.ot" [status]="ot_status" nbInput fullWidth placeholder="Orden de trabajo" class="form-control" aria-describedby="otHelp">
                 <small id="otHelp" class="form-text text-muted">Número de la orden de trabajo. (De 2 a 10 dígitos)</small>            
             </div>
         </div>
@@ -126,6 +126,15 @@
               <small id="stateHelp" class="form-text text-muted">{{status_description}}</small>            
           </div>
         </div>      
+      </div>
+      <div class="row" *ngIf="wrecord.estado !== 'P'">
+        <div class="col">
+          <div class="form-group">
+            <label style="margin-right: 2px;">Fallo:</label>
+            <textarea nbInput [status]="fallo_status" (input)="failChange()" fullWidth placeholder="Fallo..." [(ngModel)]="wrecord.fallo" aria-describedby="falloHelp"></textarea>
+            <small id="falloHelp" class="form-text text-muted">Descripción del fallo que presentó el equipo.</small>
+          </div>
+        </div>
       </div>      
       <div class="row">
         <div class="col">
@@ -145,8 +154,17 @@
                   <option *ngFor="let name of names" [value]="name">{{name}}</option>
               </datalist>
           </div>
+        </div>
       </div>
-      </div>      
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label style="margin-right: 2px;">Observaciones:</label>
+            <textarea nbInput [status]="'info'" fullWidth placeholder="Observaciones..." [(ngModel)]="wrecord.observaciones" aria-describedby="obsHelp"></textarea>
+            <small id="obsHelp" class="form-text text-muted">Observaciones adicionales.</small>
+          </div>
+        </div>
+      </div>     
     </nb-card-body>
     <nb-card-footer>
       <div class="float-right row">

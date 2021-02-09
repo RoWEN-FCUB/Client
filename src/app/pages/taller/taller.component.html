@@ -45,9 +45,9 @@
             <td (click)="openUpdt(i)" style="cursor: pointer" nbTooltip="{{wrecord.recogido}}">{{wrecord.recogido | shortName}}</td>
             <td style="cursor: pointer">
              <!-- <nb-icon *ngIf="user.role==='admin'" (click)="deleteRecord(i)" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar registro" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon> -->
-              <fa-icon class="mr-1" [icon]="['far', 'id-card']" nbTooltip="Comprobante de entrega" nbTooltipStatus="info"></fa-icon>
+              <fa-icon (click)="generateReceipt(i)" class="mr-1" [icon]="['far', 'id-card']" nbTooltip="Comprobante de entrega" nbTooltipStatus="info"></fa-icon>
               <fa-icon class="mr-1" [icon]="['far', 'share-square']" nbTooltip="Acta de entrega" nbTooltipStatus="info"></fa-icon>
-              <fa-icon class="mr-1" [icon]="['far', 'file-alt']" nbTooltip="Modelo de diagnóstico" nbTooltipStatus="info"></fa-icon>
+              <fa-icon (click)="generateDiagnostic(i)" class="mr-1" [icon]="['far', 'file-alt']" nbTooltip="Modelo de diagnóstico" nbTooltipStatus="info"></fa-icon>
               <fa-icon [icon]="['far', 'trash-alt']" *ngIf="user.role==='admin'" (click)="deleteRecord(i)" nbTooltip="Eliminar registro" nbTooltipStatus="danger"></fa-icon>
             </td>
           </tr>

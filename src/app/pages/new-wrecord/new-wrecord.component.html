@@ -107,6 +107,15 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label style="margin-right: 2px;">Observaciones:</label>
+          <textarea nbInput [status]="'info'" fullWidth placeholder="Observaciones..." [(ngModel)]="newrecord.observaciones" aria-describedby="obsHelp"></textarea>
+          <small id="obsHelp" class="form-text text-muted">Observaciones adicionales.</small>
+        </div>
+      </div>
+    </div>   
   </nb-card-body>
   <nb-card-footer>
     <div class="float-right row">

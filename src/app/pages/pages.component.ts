@@ -74,7 +74,7 @@ export class PagesComponent implements OnInit {
           );
         }
       });
-      this.accessChecker.isGranted('view', 'gee').subscribe(granted => {
+      /*this.accessChecker.isGranted('view', 'gee').subscribe(granted => {
         if (granted) {
           this.menu.push(
             {
@@ -84,7 +84,7 @@ export class PagesComponent implements OnInit {
             },
           );
         }
-      });
+      });*/
       this.accessChecker.isGranted('view', 'admin_menu').subscribe( granted => {
         if (granted) {
           this.menu.push(

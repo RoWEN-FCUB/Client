@@ -37,6 +37,8 @@ export class NewWRecordComponent implements OnInit {
     estado: 'P',
     id_superior: 0,
     id_emp: 0,
+    fallo: '',
+    observaciones: '',
   };
   client_status: string = 'info';
   client_name_status: string = 'info';

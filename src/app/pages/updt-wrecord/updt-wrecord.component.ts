@@ -37,6 +37,7 @@ export class UpdtWRecordComponent implements OnInit {
   serial_status: string = 'info';
   date_received_status: string = 'info';
   deliver_status: string = 'info';
+  fallo_status: string = 'info';
   show_client_name: boolean = false;
 
   constructor(protected dialogRef: NbDialogRef<any>, private workshopService: WorkshopService, private authService: NbAuthService) { }
@@ -189,6 +190,14 @@ export class UpdtWRecordComponent implements OnInit {
     }
   }
 
+  failChange() {
+    if (this.wrecord.fallo) {
+      this.fallo_status = 'success';
+    } else if (this.wrecord.estado !== 'P' && !this.wrecord.fallo) {
+      this.fallo_status = 'danger';
+    }
+  }
+
   serialChange() {
     const regexp = new RegExp(/^[a-zA-Z0-9-]{2,20}$/);
     if (regexp.test(this.wrecord.serie)) {
@@ -277,6 +286,13 @@ export class UpdtWRecordComponent implements OnInit {
         title: 'Debe escribir una orden de trabajo válida.',
       } as SweetAlertOptions);
       this.ot_status = 'danger';
+      return false;
+    } else if (this.fallo_status === 'danger' || (this.wrecord.fallo === '' && this.wrecord.estado !== 'P')) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe describir el fallo que presentó el equipo.',
+      } as SweetAlertOptions);
+      this.fallo_status = 'danger';
       return false;
     } else if (this.receiver_status === 'danger' || this.wrecord.recogido === '') {
       Toast.fire({
