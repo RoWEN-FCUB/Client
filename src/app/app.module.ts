@@ -77,6 +77,7 @@ import { EnergyPlansComponent } from './pages/energy-plans/energy-plans.componen
 import { NewCompanyComponent } from './pages/new-company/new-company.component';
 import { NewServiceComponent } from './pages/new-service/new-service.component';
 import { AdminUserServicesComponent } from './pages/admin-user-services/admin-user-services.component';
+import { WpartsComponent } from './pages/wparts/wparts.component';
 // import { NgxScrollTopModule } from 'ngx-scrolltop';
 
 // here is the default text string
@@ -147,7 +148,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
   declarations: [
     AppComponent, UploadImgComponent, NewTaskComponent, NewObsComponent, NewErecordComponent,
     LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
-     UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent],
+     UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent, WpartsComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   imports: [
     ExportAsModule,
@@ -204,10 +205,10 @@ export class DefaultIntl extends OwlDateTimeIntl {
   ],
   exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
             NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent,
-             NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent],
+             NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent, WpartsComponent],
   entryComponents: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
                     NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent, NewCompanyComponent,
-                     NewServiceComponent, AdminUserServicesComponent],
+                     NewServiceComponent, AdminUserServicesComponent, WpartsComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {

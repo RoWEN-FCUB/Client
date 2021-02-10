@@ -46,8 +46,9 @@
             <td style="cursor: pointer">
              <!-- <nb-icon *ngIf="user.role==='admin'" (click)="deleteRecord(i)" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar registro" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon> -->
               <fa-icon (click)="generateReceipt(i)" class="mr-1" [icon]="['far', 'id-card']" nbTooltip="Comprobante de entrega" nbTooltipStatus="info"></fa-icon>
-              <fa-icon class="mr-1" [icon]="['far', 'share-square']" nbTooltip="Acta de entrega" nbTooltipStatus="info"></fa-icon>
-              <fa-icon (click)="generateDiagnostic(i)" class="mr-1" [icon]="['far', 'file-alt']" nbTooltip="Modelo de diagnóstico" nbTooltipStatus="info"></fa-icon>
+              <fa-icon (click)="openParts(i)" *ngIf="wrecord.equipo === 'Unidad Central' && wrecord.estado === 'P'" class="mr-1" [icon]="['far', 'list-alt']" nbTooltip="Definir partes" nbTooltipStatus="info"></fa-icon>
+              <fa-icon *ngIf="wrecord.equipo === 'Unidad Central' && (wrecord.estado === 'D' || wrecord.estado === 'R')" (click)="generateDeliver(i)" class="mr-1" [icon]="['far', 'share-square']" nbTooltip="Acta de entrega" nbTooltipStatus="info"></fa-icon>
+              <fa-icon *ngIf="wrecord.estado === 'D'" (click)="generateDiagnostic(i)" class="mr-1" [icon]="['far', 'file-alt']" nbTooltip="Modelo de diagnóstico" nbTooltipStatus="info"></fa-icon>
               <fa-icon [icon]="['far', 'trash-alt']" *ngIf="user.role==='admin'" (click)="deleteRecord(i)" nbTooltip="Eliminar registro" nbTooltipStatus="danger"></fa-icon>
             </td>
           </tr>

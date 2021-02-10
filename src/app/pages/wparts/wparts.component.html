@@ -1,0 +1,44 @@
+<nb-card accent="info" size="medium">
+    <nb-card-header><div class="text-center">Actualizar partes</div></nb-card-header>
+    <nb-card-body>
+        <table class="table table-hover table-borderless table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>Parte</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Capacidad</th>
+                    <th>Cantidad</th>
+                    <th>No. Serie</th>
+                    <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let part of parts; let i = index">
+                    <td><input type="text" [status]="'info'" [(ngModel)]="parts[i].parte" nbInput fullWidth placeholder="Parte" class="form-control"></td>
+                    <td><input type="text" [status]="'info'" [(ngModel)]="parts[i].marca" nbInput fullWidth placeholder="Marca" class="form-control"></td>
+                    <td><input type="text" [status]="'info'" [(ngModel)]="parts[i].modelo" nbInput fullWidth placeholder="Modelo" class="form-control"></td>
+                    <td><input type="text" [status]="'info'" [(ngModel)]="parts[i].capacidad" nbInput fullWidth placeholder="Capacidad" class="form-control"></td>
+                    <td><input type="text" [status]="'info'" [(ngModel)]="parts[i].cantidad" nbInput fullWidth placeholder="Cantidad" class="form-control"></td>
+                    <td><input type="text" [status]="'info'" [(ngModel)]="parts[i].serie" nbInput fullWidth placeholder="# Serie" class="form-control"></td>
+                    <td class="align-middle"><nb-icon (click)="deletePart(i)" style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar parte" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon></td>
+                  </tr>
+                  <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td><nb-icon (click)="newPart()" style="cursor: pointer" icon="plus-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Adicionar parte" nbTooltipIcon="plus-outline" nbTooltipStatus="success"></nb-icon></td>
+                  </tr>
+              </tbody>
+        </table>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="float-right row">
+        <button nbButton hero status="success" shape="semi-round" size="small">Aceptar</button>
+        <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+      </div>
+    </nb-card-footer>
+  </nb-card>

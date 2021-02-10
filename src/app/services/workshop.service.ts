@@ -15,6 +15,10 @@ export class WorkshopService {
     return this.http.get(ipserver + 'workshop/records/' + page + '&' + id_emp, {responseType: 'json'});
   }
 
+  getWParts(id_reg: number) {
+    return this.http.get(ipserver + 'workshop/parts/' + id_reg, {responseType: 'json'});
+  }
+
   getWClients() {
     return this.http.get(ipserver + 'workshop/clients', {responseType: 'json'});
   }
