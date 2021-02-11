@@ -3,6 +3,7 @@ import { NbDialogRef } from '@nebular/theme';
 import { WRecord } from '../../models/WRecord';
 import { WClient } from '../../models/WClient';
 import { WDevice } from '../../models/WDevice';
+import { WPerson } from '../../models/WPerson';
 import { WorkshopService } from '../../services/workshop.service';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
@@ -16,13 +17,13 @@ import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 export class NewWRecordComponent implements OnInit {
 
   clients: WClient[] = [];
-  devices: WDevice[] = [];
+  // devices: WDevice[] = [];
   devs: string[] = [];
   marcs: string[] = [];
   models: string[] = [];
   serials: string[] = [];
   inventaries: string[] = [];
-  names: string[] = [];
+  names: WPerson[] = [];
   newrecord: WRecord = {
     cliente: '',
     equipo: '',
@@ -40,6 +41,14 @@ export class NewWRecordComponent implements OnInit {
     fallo: '',
     observaciones: '',
   };
+  entrega: WPerson = {
+    nombre: '',
+    ci: '',
+    cargo: '',
+  };
+  entrega_ci_status: string = 'info';
+  entrega_cargo_status: string = 'info';
+  showPersonInfo: boolean = false;
   client_status: string = 'info';
   client_name_status: string = 'info';
   device_status: string = 'info';
@@ -64,19 +73,14 @@ export class NewWRecordComponent implements OnInit {
       this.newrecord.id_superior = this.user.id_sup;
     });
     this.workshopService.getWDevices().subscribe((res: WDevice[]) => {
-      this.devices = res;
-      this.devs = [];
-      for (let i = 0; i < this.devices.length; i++) {
-        if (!this.devs.includes(this.devices[i].equipo)) {
-          this.devs.push(this.devices[i].equipo);
-        }
+      // this.devices = res;
+      // this.devs = res;
+      for (let i = 0; i < res.length; i++) {
+        this.devs.push(res[i].equipo);
       }
     });
-    this.workshopService.getWNames().subscribe((res: any[]) => {
-      this.names = [];
-      for (let i = 0; i < res.length; i++) {
-        this.names.push(res[i].nombre);
-      }
+    this.workshopService.getWNames().subscribe((res: WPerson[]) => {
+      this.names = res;
     });
   }
 
@@ -106,15 +110,35 @@ export class NewWRecordComponent implements OnInit {
     }
   }
 
-  deviceChange() {
-    this.marcs = [];
-    for (let i = 0; i < this.devices.length; i++) {
-      if (this.devices[i].equipo === this.newrecord.equipo) {
-        if (!this.marcs.includes(this.devices[i].marca)) {
-          this.marcs.push(this.devices[i].marca);
-        }
-      }
+  entregaCIChange() {
+    const nameregexp = new RegExp(/^[0-9]{11}$/);
+    if (nameregexp.test(this.entrega.ci)) {
+      this.entrega_ci_status = 'success';
+    } else {
+      this.entrega_ci_status = 'danger';
     }
+  }
+
+  entregaCargoChange() {
+    if (this.entrega.cargo) {
+      this.entrega_cargo_status = 'success';
+    } else {
+      this.entrega_cargo_status = 'danger';
+    }
+  }
+
+  deviceLostFocus() {
+    if (this.newrecord.equipo) {
+      this.marcs = [];
+      this.workshopService.getWMarcs(this.newrecord.equipo).subscribe((res: WDevice[]) => {
+        for ( let i = 0; i < res.length; i++) {
+          this.marcs.push(res[i].marca);
+        }
+      });
+    }
+  }
+
+  deviceChange() {
     const regexp = new RegExp(/^([A-ZÑ]{1}[a-záéíóúñ]+\s?)+$/);
     if (regexp.test(this.newrecord.equipo)) {
       this.device_status = 'success';
@@ -123,15 +147,18 @@ export class NewWRecordComponent implements OnInit {
     }
   }
 
-  marcChange() {
-    this.models = [];
-    for (let i = 0; i < this.devices.length; i++) {
-      if (this.devices[i].marca === this.newrecord.marca && this.devices[i].equipo === this.newrecord.equipo) {
-        if (!this.models.includes(this.devices[i].modelo)) {
-          this.models.push(this.devices[i].modelo);
+  marcLostFocus() {
+    if (this.newrecord.equipo && this.newrecord.marca) {
+      this.models = [];
+      this.workshopService.getWModels(this.newrecord.equipo, this.newrecord.marca).subscribe((res: WDevice[]) => {
+        for ( let i = 0; i < res.length; i++) {
+          this.models.push(res[i].modelo);
         }
-      }
+      });
     }
+  }
+
+  marcChange() {
     const regexp = new RegExp(/^[a-zA-Z0-9-]{2,20}$/);
     if (regexp.test(this.newrecord.marca)) {
       this.marc_status = 'success';
@@ -140,19 +167,20 @@ export class NewWRecordComponent implements OnInit {
     }
   }
 
-  modelChange() {
-    this.serials = [];
-    this.inventaries = [];
-    for (let i = 0; i < this.devices.length; i++) {
-      if (this.devices[i].modelo === this.newrecord.modelo) {
-        if (!this.serials.includes(this.devices[i].serie)) {
-          this.serials.push(this.devices[i].serie);
+  modelLostFocus() {
+    if (this.newrecord.equipo && this.newrecord.marca && this.newrecord.modelo) {
+      this.serials = [];
+      this.inventaries = [];
+      this.workshopService.getWSerials(this.newrecord.equipo, this.newrecord.marca, this.newrecord.modelo).subscribe((res: WDevice[]) => {
+        for ( let i = 0; i < res.length; i++) {
+          this.serials.push(res[i].serie);
+          this.inventaries.push(res[i].inventario);
         }
-        if (!this.inventaries.includes(this.devices[i].inventario)) {
-          this.inventaries.push(this.devices[i].inventario);
-        }
-      }
+      });
     }
+  }
+
+  modelChange() {
     const regexp = new RegExp(/^[a-zA-Z0-9-]{2,20}$/);
     if (regexp.test(this.newrecord.modelo)) {
       this.model_status = 'success';
@@ -180,6 +208,11 @@ export class NewWRecordComponent implements OnInit {
   }
 
   nameChange() {
+    if (!this.names.some(name => name.nombre === this.newrecord.entregado)) {
+      this.showPersonInfo = true;
+    } else {
+      this.showPersonInfo = false;
+    }
     const nameregexp = new RegExp(/^([A-Za-záéíóúñ]+\s?)+$/);
     if (nameregexp.test(this.newrecord.entregado)) {
       this.deliver_status = 'success';
@@ -252,6 +285,20 @@ export class NewWRecordComponent implements OnInit {
       } as SweetAlertOptions);
       this.deliver_status = 'danger';
       return false;
+    } else if (this.showPersonInfo && (this.entrega_ci_status === 'danger' || !this.entrega.ci)) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir correctamente el carnet de identidad de la persona que entrega el equipo.',
+      } as SweetAlertOptions);
+      this.entrega_ci_status = 'danger';
+      return false;
+    } else if (this.showPersonInfo && (this.entrega_cargo_status === 'danger' || !this.entrega.cargo)) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir correctamente el cargo de la persona que entrega el equipo.',
+      } as SweetAlertOptions);
+      this.entrega_cargo_status = 'danger';
+      return false;
     }
     return true;
   }
@@ -266,6 +313,10 @@ export class NewWRecordComponent implements OnInit {
         timerProgressBar: true,
         timer: 3000,
       });
+      if (this.showPersonInfo) {
+        this.entrega.nombre = this.newrecord.entregado;
+        this.workshopService.savePerson(this.entrega).subscribe(res => {});
+      }
       this.workshopService.saveRecord(this.newrecord).subscribe(res => {
         Toast.fire({
           icon: 'success',

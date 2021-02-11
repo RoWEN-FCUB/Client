@@ -486,7 +486,7 @@ export class TallerComponent implements OnInit {
       tbody.push([{text: 'Concepto', bold: true}, {text: 'U/M', bold: true}, {text: 'Cantidad', bold: true}, {text: 'No. Serie', bold: true}]);
       for (let i = 0; i < res.length; i++) {
         // tslint:disable-next-line: max-line-length
-        const part = [res[0].parte + ' ' + res[0].marca + ' ' + res[0].modelo + '' + ((res[0].capacidad !== '-') ? res[0].capacidad : ''), 'U', res[0].cantidad, res[0].serie];
+        const part = [res[i].parte + ' ' + res[i].marca + ' ' + res[i].modelo + ' ' + ((res[i].capacidad !== '-') ? res[i].capacidad : ''), 'U', res[i].cantidad, res[i].serie];
         tbody.push(part);
       }
       this.docDefinition = {
@@ -678,9 +678,7 @@ export class TallerComponent implements OnInit {
 
   openParts(i: number) {
     this.dialogService.open(WpartsComponent, {context: {wrecord: Object.assign({}, this.wrecords[i])}}).onClose.subscribe(
-      (updtrecord) => {
-        
-      },
+      (updtrecord) => {},
     );
   }
 

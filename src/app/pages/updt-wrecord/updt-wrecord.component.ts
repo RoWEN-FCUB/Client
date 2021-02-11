@@ -18,7 +18,7 @@ export class UpdtWRecordComponent implements OnInit {
   wrecord: WRecord;
   state_status: string;
   clients: WClient[] = [];
-  devices: WDevice[] = [];
+  // devices: WDevice[] = [];
   devs: string[] = [];
   marcs: string[] = [];
   models: string[] = [];
@@ -52,16 +52,30 @@ export class UpdtWRecordComponent implements OnInit {
       }
     });
     this.workshopService.getWDevices().subscribe((res: WDevice[]) => {
-      this.devices = res;
-      this.devs = [];
-      for (let i = 0; i < this.devices.length; i++) {
-        if (!this.devs.includes(this.devices[i].equipo)) {
-          this.devs.push(this.devices[i].equipo);
-        }
+      // this.devices = res;
+      // this.devs = res;
+      for (let i = 0; i < res.length; i++) {
+        this.devs.push(res[i].equipo);
+      }
+    });
+    this.workshopService.getWMarcs(this.wrecord.equipo).subscribe((res: WDevice[]) => {
+      for ( let i = 0; i < res.length; i++) {
+        this.marcs.push(res[i].marca);
       }
     });
     this.workshopService.getWClients().subscribe((res: WClient[]) => {
       this.clients = res;
+    });
+    this.workshopService.getWModels(this.wrecord.equipo, this.wrecord.marca).subscribe((res: WDevice[]) => {
+      for ( let i = 0; i < res.length; i++) {
+        this.models.push(res[i].modelo);
+      }
+    });
+    this.workshopService.getWSerials(this.wrecord.equipo, this.wrecord.marca, this.wrecord.modelo).subscribe((res: WDevice[]) => {
+      for ( let i = 0; i < res.length; i++) {
+        this.serials.push(res[i].serie);
+        this.inventaries.push(res[i].inventario);
+      }
     });
   }
 
@@ -126,15 +140,18 @@ export class UpdtWRecordComponent implements OnInit {
     }
   }
 
-  deviceChange() {
-    this.marcs = [];
-    for (let i = 0; i < this.devices.length; i++) {
-      if (this.devices[i].equipo === this.wrecord.equipo) {
-        if (!this.marcs.includes(this.devices[i].marca)) {
-          this.marcs.push(this.devices[i].marca);
+  deviceLostFocus() {
+    if (this.wrecord.equipo) {
+      this.marcs = [];
+      this.workshopService.getWMarcs(this.wrecord.equipo).subscribe((res: WDevice[]) => {
+        for ( let i = 0; i < res.length; i++) {
+          this.marcs.push(res[i].marca);
         }
-      }
+      });
     }
+  }
+
+  deviceChange() {
     const regexp = new RegExp(/^([A-ZÑ]{1}[a-záéíóúñ]+\s?)+$/);
     if (regexp.test(this.wrecord.equipo)) {
       this.device_status = 'success';
@@ -143,15 +160,18 @@ export class UpdtWRecordComponent implements OnInit {
     }
   }
 
-  marcChange() {
-    this.models = [];
-    for (let i = 0; i < this.devices.length; i++) {
-      if (this.devices[i].marca === this.wrecord.marca && this.devices[i].equipo === this.wrecord.equipo) {
-        if (!this.models.includes(this.devices[i].modelo)) {
-          this.models.push(this.devices[i].modelo);
+  marcLostFocus() {
+    if (this.wrecord.equipo && this.wrecord.marca) {
+      this.models = [];
+      this.workshopService.getWModels(this.wrecord.equipo, this.wrecord.marca).subscribe((res: WDevice[]) => {
+        for ( let i = 0; i < res.length; i++) {
+          this.models.push(res[i].modelo);
         }
-      }
+      });
     }
+  }
+
+  marcChange() {
     const regexp = new RegExp(/^[a-zA-Z0-9-]{2,20}$/);
     if (regexp.test(this.wrecord.marca)) {
       this.marc_status = 'success';
@@ -160,19 +180,20 @@ export class UpdtWRecordComponent implements OnInit {
     }
   }
 
-  modelChange() {
-    this.serials = [];
-    this.inventaries = [];
-    for (let i = 0; i < this.devices.length; i++) {
-      if (this.devices[i].modelo === this.wrecord.modelo) {
-        if (!this.serials.includes(this.devices[i].serie)) {
-          this.serials.push(this.devices[i].serie);
+  modelLostFocus() {
+    if (this.wrecord.equipo && this.wrecord.marca && this.wrecord.modelo) {
+      this.serials = [];
+      this.inventaries = [];
+      this.workshopService.getWSerials(this.wrecord.equipo, this.wrecord.marca, this.wrecord.modelo).subscribe((res: WDevice[]) => {
+        for ( let i = 0; i < res.length; i++) {
+          this.serials.push(res[i].serie);
+          this.inventaries.push(res[i].inventario);
         }
-        if (!this.inventaries.includes(this.devices[i].inventario)) {
-          this.inventaries.push(this.devices[i].inventario);
-        }
-      }
+      });
     }
+  }
+
+  modelChange() {
     const regexp = new RegExp(/^[a-zA-Z0-9-]{2,20}$/);
     if (regexp.test(this.wrecord.modelo)) {
       this.model_status = 'success';

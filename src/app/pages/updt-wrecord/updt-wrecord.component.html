@@ -22,7 +22,7 @@
         <div class="col" *ngIf="!show_client_name">
           <div class="form-group">
             <label>Equipo:</label>
-            <input type="text" (input)="deviceChange()" [(ngModel)]="wrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
+            <input type="text" (focusout)="deviceLostFocus()" (input)="deviceChange()" [(ngModel)]="wrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
             <small id="equipoHelp" class="form-text text-muted">Equipo a registrar.</small>
             <datalist id="dynamicDevices">
               <option *ngFor="let device of devs" [value]="device">{{device}}</option>
@@ -34,7 +34,7 @@
         <div class="col">
           <div class="form-group">
             <label>Equipo:</label>
-            <input type="text" (input)="deviceChange()" [(ngModel)]="wrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
+            <input type="text" (focusout)="deviceLostFocus()" (input)="deviceChange()" [(ngModel)]="wrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
             <small id="equipoHelp" class="form-text text-muted">Equipo a registrar.</small>
             <datalist id="dynamicDevices">
               <option *ngFor="let device of devs" [value]="device">{{device}}</option>
@@ -47,7 +47,7 @@
         <div class="col">
           <div class="form-group">
             <label>Marca:</label>
-            <input type="text" (input)="marcChange()" [(ngModel)]="wrecord.marca" [status]="marc_status" list="dynamicMarcs" nbInput fullWidth placeholder="Marca" class="form-control" aria-describedby="marcaHelp">
+            <input type="text" (focusout)="marcLostFocus()" (input)="marcChange()" [(ngModel)]="wrecord.marca" [status]="marc_status" list="dynamicMarcs" nbInput fullWidth placeholder="Marca" class="form-control" aria-describedby="marcaHelp">
             <small id="marcaHelp" class="form-text text-muted">Marca del equipo a registrar.</small>
             <datalist id="dynamicMarcs">
               <option *ngFor="let marc of marcs" [value]="marc">{{marc}}</option>
@@ -57,7 +57,7 @@
         <div class="col">
           <div class="form-group">
             <label>Modelo:</label>
-            <input type="text" (input)="modelChange()" [(ngModel)]="wrecord.modelo" [status]="model_status" list="dynamicModels" nbInput fullWidth placeholder="Modelo" class="form-control" aria-describedby="modelHelp">
+            <input type="text" (focusout)="modelLostFocus()" (input)="modelChange()" [(ngModel)]="wrecord.modelo" [status]="model_status" list="dynamicModels" nbInput fullWidth placeholder="Modelo" class="form-control" aria-describedby="modelHelp">
             <small id="modelHelp" class="form-text text-muted">Modelo del equipo a registrar.</small>
             <datalist id="dynamicModels">
               <option *ngFor="let model of models" [value]="model">{{model}}</option>

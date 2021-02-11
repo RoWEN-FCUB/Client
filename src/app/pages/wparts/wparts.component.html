@@ -15,12 +15,32 @@
               </thead>
               <tbody>
                   <tr *ngFor="let part of parts; let i = index">
-                    <td><input type="text" [status]="'info'" [(ngModel)]="parts[i].parte" nbInput fullWidth placeholder="Parte" class="form-control"></td>
-                    <td><input type="text" [status]="'info'" [(ngModel)]="parts[i].marca" nbInput fullWidth placeholder="Marca" class="form-control"></td>
-                    <td><input type="text" [status]="'info'" [(ngModel)]="parts[i].modelo" nbInput fullWidth placeholder="Modelo" class="form-control"></td>
-                    <td><input type="text" [status]="'info'" [(ngModel)]="parts[i].capacidad" nbInput fullWidth placeholder="Capacidad" class="form-control"></td>
-                    <td><input type="text" [status]="'info'" [(ngModel)]="parts[i].cantidad" nbInput fullWidth placeholder="Cantidad" class="form-control"></td>
-                    <td><input type="text" [status]="'info'" [(ngModel)]="parts[i].serie" nbInput fullWidth placeholder="# Serie" class="form-control"></td>
+                    <td>
+                      <input type="text" (input)="partChange(i)" (focusout)="partLostFocus(i)" list="dynamicParts" [status]="partes_status[i]" [(ngModel)]="parts[i].parte" nbInput fullWidth placeholder="Parte" class="form-control">
+                      <datalist id="dynamicParts">
+                        <option *ngFor="let parte of partes" [value]="parte">{{parte}}</option>
+                      </datalist>
+                    </td>
+                    <td>
+                      <input type="text" (input)="marcChange(i)" (focusout)="marcLostFocus(i)" [status]="marcas_status[i]" list="dynamicMarcs" [(ngModel)]="parts[i].marca" nbInput fullWidth placeholder="Marca" class="form-control">
+                      <datalist id="dynamicMarcs">
+                        <option *ngFor="let marca of marcas" [value]="marca">{{marca}}</option>
+                      </datalist>
+                    </td>
+                    <td>
+                      <input type="text" (input)="modelChange(i)" [status]="modelos_status[i]" list="dynamicModels" [(ngModel)]="parts[i].modelo" nbInput fullWidth placeholder="Modelo" class="form-control">
+                      <datalist id="dynamicModels">
+                        <option *ngFor="let modelo of modelos" [value]="modelo">{{modelo}}</option>
+                      </datalist>
+                    </td>
+                    <td>
+                      <input type="text" (input)="capChange(i)" list="dynamicCaps" [status]="capacidades_status[i]" [(ngModel)]="parts[i].capacidad" nbInput fullWidth placeholder="Capacidad" class="form-control">
+                      <datalist id="dynamicCaps">
+                        <option *ngFor="let cap of capacidades" [value]="cap">{{cap}}</option>
+                      </datalist>
+                    </td>
+                    <td><input type="text" (input)="amountChange(i)" [status]="cantidades_status[i]" [(ngModel)]="parts[i].cantidad" nbInput fullWidth placeholder="Cantidad" class="form-control"></td>
+                    <td><input type="text" (input)="serieChange(i)" [status]="series_status[i]" [(ngModel)]="parts[i].serie" nbInput fullWidth placeholder="# Serie" class="form-control"></td>
                     <td class="align-middle"><nb-icon (click)="deletePart(i)" style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar parte" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon></td>
                   </tr>
                   <tr>
@@ -37,7 +57,7 @@
     </nb-card-body>
     <nb-card-footer>
       <div class="float-right row">
-        <button nbButton hero status="success" shape="semi-round" size="small">Aceptar</button>
+        <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Aceptar</button>
         <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
       </div>
     </nb-card-footer>
