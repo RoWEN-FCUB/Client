@@ -55,7 +55,7 @@
     "@swimlane/ngx-charts": "^16.0.0",
     "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git",
     "angular2-chartjs": "0.5.1",
-    "bootstrap": "4.5.3",
+    "bootstrap": "4.6.0",
     "chart.js": "^2.9.4",
     "ckeditor": ">=4.11.0",
     "classlist.js": "1.1.20150312",
