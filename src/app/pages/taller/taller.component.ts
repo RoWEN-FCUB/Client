@@ -25,6 +25,7 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faFilePdf, faTrashAlt, faFileAlt, faShareSquare, faIdCard, faListAlt } from '@fortawesome/free-regular-svg-icons';
 
 import { image1, image2 } from './base64images';
+import { WPerson } from '../../models/WPerson';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -41,7 +42,7 @@ export class TallerComponent implements OnInit {
   table_to_print = [];
   docDefinition = {};
   company: Company = {};
-  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0};
+  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0, ci: ''};
   constructor(private userService: UserService,
     private workshopService: WorkshopService,
     private authService: NbAuthService,
@@ -480,153 +481,157 @@ export class TallerComponent implements OnInit {
   }
 
   generateDeliver(index: number) {
-    this.workshopService.getWParts(this.wrecords[index].id).subscribe((res: WPart[]) => {
-      const tbody = [];
-      // tslint:disable-next-line: max-line-length
-      tbody.push([{text: 'Concepto', bold: true}, {text: 'U/M', bold: true}, {text: 'Cantidad', bold: true}, {text: 'No. Serie', bold: true}]);
-      for (let i = 0; i < res.length; i++) {
+    let entrega: WPerson = {};
+    this.workshopService.getWPerson(this.wrecords[index].entregado).subscribe((per: WPerson) => {
+      entrega = per;
+      this.workshopService.getWParts(this.wrecords[index].id).subscribe((res: WPart[]) => {
+        const tbody = [];
         // tslint:disable-next-line: max-line-length
-        const part = [res[i].parte + ' ' + res[i].marca + ' ' + res[i].modelo + ' ' + ((res[i].capacidad !== '-') ? res[i].capacidad : ''), 'U', res[i].cantidad, res[i].serie];
-        tbody.push(part);
-      }
-      this.docDefinition = {
-        info: {
-          title: 'ACTA DE ENTREGA DE EQUIPAMIENTO',
-        },
-        footer: function(currentPage, pageCount) {
-          return {
-            table: {
-              widths: ['*'],
-              body: [
-                [{text: 'Ave. 47 e/ 18 Ay 20, Miramar, Playa, Ciudad de la Habana. CUBA. CP 11300', alignment: 'center'}],
-                [{text: 'Tel: (537) 204 3600 / 206 9300. Fax (537) 2048202', alignment: 'center'}],
-                [{text: 'E-mail: citmatel@citmatel.cu / http://www.citmatel.cu / www.bazar-virtual.com', alignment: 'center'}],
-              ],
-            },
-            layout: {
-              hLineWidth: function (i) { if (i > 0) { return 0; } return 1; },
-              vLineWidth: function (i) {  return 0; },
-              hLineColor: function (i, node) {
-                return '#f1eeee';
+        tbody.push([{text: 'Concepto', bold: true}, {text: 'U/M', bold: true}, {text: 'Cantidad', bold: true}, {text: 'No. Serie', bold: true}]);
+        for (let i = 0; i < res.length; i++) {
+          // tslint:disable-next-line: max-line-length
+          const part = [res[i].parte + ' ' + res[i].marca + ' ' + res[i].modelo + ' ' + ((res[i].capacidad !== '-') ? res[i].capacidad : ''), 'U', res[i].cantidad, res[i].serie];
+          tbody.push(part);
+        }
+        this.docDefinition = {
+          info: {
+            title: 'ACTA DE ENTREGA DE EQUIPAMIENTO',
+          },
+          footer: function(currentPage, pageCount) {
+            return {
+              table: {
+                widths: ['*'],
+                body: [
+                  [{text: 'Ave. 47 e/ 18 Ay 20, Miramar, Playa, Ciudad de la Habana. CUBA. CP 11300', alignment: 'center'}],
+                  [{text: 'Tel: (537) 204 3600 / 206 9300. Fax (537) 2048202', alignment: 'center'}],
+                  [{text: 'E-mail: citmatel@citmatel.cu / http://www.citmatel.cu / www.bazar-virtual.com', alignment: 'center'}],
+                ],
+              },
+              layout: {
+                hLineWidth: function (i) { if (i > 0) { return 0; } return 1; },
+                vLineWidth: function (i) {  return 0; },
+                hLineColor: function (i, node) {
+                  return '#f1eeee';
+                },
+              },
+              alignment: 'center',
+              margin: [2, 2, 5, 2],
+              fontSize: 10,
+              color: '#f1eeee',
+            };
+          },
+          pageSize: 'LETTER',
+          pageOrientation: 'portrait',
+          content: [
+            {
+              table: {
+                widths: ['*', '*'],
+                body: [
+                  [
+                    {
+                      image: image1,
+                      width: 168,
+                      height: 60,
+                    },
+                    {
+                      image: image2,
+                      width: 60,
+                      height: 76,
+                      alignment: 'right',
+                    },
+                  ],
+                ],
+              },
+              layout: {
+                vLineWidth: function (i) { return 0; },
+                hLineWidth: function (i) { return 0; },
               },
             },
-            alignment: 'center',
-            margin: [2, 2, 5, 2],
-            fontSize: 10,
-            color: '#f1eeee',
-          };
-        },
-        pageSize: 'LETTER',
-        pageOrientation: 'portrait',
-        content: [
-          {
-            table: {
-              widths: ['*', '*'],
-              body: [
-                [
-                  {
-                    image: image1,
-                    width: 168,
-                    height: 60,
-                  },
-                  {
-                    image: image2,
-                    width: 60,
-                    height: 76,
-                    alignment: 'right',
-                  },
-                ],
-              ],
+            {
+              text: '  ',
+              lineHeight: 2,
             },
-            layout: {
-              vLineWidth: function (i) { return 0; },
-              hLineWidth: function (i) { return 0; },
+            {
+              text: 'R05.07',
+              alignment: 'right',
+              bold: true,
+              size: 14,
             },
-          },
-          {
-            text: '  ',
-            lineHeight: 2,
-          },
-          {
-            text: 'R05.07',
-            alignment: 'right',
-            bold: true,
-            size: 14,
-          },
-          {
-            text: '  ',
-            lineHeight: 2,
-          },
-          {
-            text: 'ACTA DE ENTREGA DE EQUIPAMIENTO',
-            alignment: 'center',
-            bold: true,
-            size: 10,
-          },
-          {
-            table: {
-              widths: [40, '*', 120],
-              body: [
-                [
-                  'Cliente', this.wrecords[index].cliente, 'Fecha: ' + moment.utc().format('DD/MM/YYYY'),
-                ],
-                [
-                  // tslint:disable-next-line: max-line-length
-                  {text: '', border: [true, true, false, true]}, {text: '', border: [false, true, true, true]}, 'No. de Entrada: ' + this.wrecords[index].cod,
-                ],
-              ],
+            {
+              text: '  ',
+              lineHeight: 2,
             },
-          },
-          {
-            text: '  ',
-            lineHeight: 2,
-          },
-          {
-            table: {
-              widths: ['*', 25, 50, 200],
-              body: tbody,
+            {
+              text: 'ACTA DE ENTREGA DE EQUIPAMIENTO',
+              alignment: 'center',
+              bold: true,
+              size: 10,
             },
-          },
-          {
-            text: '  ',
-            lineHeight: 3,
-          },
-          {
-            table : {
-              widths: ['*', '*'],
-              body: [
-                [
-                  'Recibe', 'Entrega',
+            {
+              table: {
+                widths: [40, '*', 120],
+                body: [
+                  [
+                    'Cliente', this.wrecords[index].cliente, 'Fecha: ' + moment.utc().format('DD/MM/YYYY'),
+                  ],
+                  [
+                    // tslint:disable-next-line: max-line-length
+                    {text: '', border: [true, true, false, true]}, {text: '', border: [false, true, true, true]}, 'No. de Entrada: ' + this.wrecords[index].cod,
+                  ],
                 ],
-                [
-                  ' ', ' ',
-                ],
-                [
-                  'Nombre: ' + this.wrecords[index].recogido, 'Nombre: ' + this.user.fullname,
-                ],
-                [
-                  'No. CI: ', 'No. CI: ',
-                ],
-                [
-                  'Cargo: ', 'Cargo: ' + this.user.position,
-                ],
-                [
-                  ' ', ' ',
-                ],
-                [
-                  'Firma: ____________________', 'Firma: ____________________',
-                ],
-              ],
+              },
             },
-            layout: {
-              vLineWidth: function (i) { return 0; },
-              hLineWidth: function (i) { return 0; },
+            {
+              text: '  ',
+              lineHeight: 2,
             },
-          },
-        ],
-        pageMargins: [25, 25, 25, 60],
-      };
-      pdfMake.createPdf(this.docDefinition).download('CITMATEL Acta de entrega ' + this.wrecords[index].cod);
+            {
+              table: {
+                widths: ['*', 25, 50, 200],
+                body: tbody,
+              },
+            },
+            {
+              text: '  ',
+              lineHeight: 3,
+            },
+            {
+              table : {
+                widths: ['*', '*'],
+                body: [
+                  [
+                    'Recibe', 'Entrega',
+                  ],
+                  [
+                    ' ', ' ',
+                  ],
+                  [
+                    'Nombre: ' + entrega.nombre, 'Nombre: ' + this.user.fullname,
+                  ],
+                  [
+                    'No. CI: ' + entrega.ci, 'No. CI: ' + this.user.ci,
+                  ],
+                  [
+                    'Cargo: ' + entrega.cargo, 'Cargo: ' + this.user.position,
+                  ],
+                  [
+                    ' ', ' ',
+                  ],
+                  [
+                    'Firma: ____________________', 'Firma: ____________________',
+                  ],
+                ],
+              },
+              layout: {
+                vLineWidth: function (i) { return 0; },
+                hLineWidth: function (i) { return 0; },
+              },
+            },
+          ],
+          pageMargins: [25, 25, 25, 60],
+        };
+        pdfMake.createPdf(this.docDefinition).download('CITMATEL Acta de entrega ' + this.wrecords[index].cod);
+      });
     });
   }
 

@@ -19,6 +19,13 @@
       </div>
       <div class="row">
         <div class="col">
+          <label>CI:</label>
+            <input (input)="CIChange()" maxlength="11" type="text" nbInput fullWidth [status]="ci_status" placeholder="###########" [(ngModel)]="newUser.ci" class="form-control" aria-describedby="ciHelp">
+            <small id="ciHelp" class="form-text text-muted">Número de identidad (carnet) del usuario</small>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
           <div class="form-group">
             <label>Cargo:</label>
             <input (input)="position_change()" type="text" nbInput fullWidth [status]="position_status" placeholder="Cargo" [(ngModel)]="newUser.position" class="form-control" aria-describedby="carHelp">
@@ -38,7 +45,7 @@
           <div style="margin-top: 5px" class="form-group">
             <label style="margin-right: 5px">Empresa:</label>
             <nb-select (selectedChange)="company_change()" placeholder="----" [(ngModel)]="selected_company" [status]="company_status" fullWidth>
-              <nb-option *ngFor="let company of companies" [value]="company.id">{{company.nombre}}</nb-option>
+            <nb-option *ngFor="let company of companies" [value]="company.id">{{company.nombre}}</nb-option>
             </nb-select>
             <small id="companyHelp" class="form-text text-muted">Empresa a la que pertenece el usuario.</small>
           </div>

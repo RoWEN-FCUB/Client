@@ -40,6 +40,8 @@ import {
   NbListModule,
   NbCheckboxModule,
   NbAlertModule,
+  NbAutocompleteModule,
+  NbFormFieldModule,
 } from '@nebular/theme';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { FormsModule } from '@angular/forms';
@@ -151,6 +153,8 @@ export class DefaultIntl extends OwlDateTimeIntl {
      UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent, WpartsComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   imports: [
+    NbAutocompleteModule,
+    NbFormFieldModule,
     ExportAsModule,
     NbSecurityModule,
     NbBadgeModule,

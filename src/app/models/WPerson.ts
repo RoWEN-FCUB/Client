@@ -3,4 +3,5 @@ export interface WPerson {
     nombre?: string;
     ci?: string;
     cargo?: string;
+    id_cliente?: number;
 }

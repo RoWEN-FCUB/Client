@@ -45,12 +45,12 @@ export class UpdtWRecordComponent implements OnInit {
   ngOnInit() {
     this.updtDeviceStatus();
     this.wrecord.fecha_salida = new Date();
-    this.workshopService.getWNames().subscribe((res: any[]) => {
+    /*this.workshopService.getWNames().subscribe((res: any[]) => {
       this.names = [];
       for (let i = 0; i < res.length; i++) {
         this.names.push(res[i].nombre);
       }
-    });
+    });*/
     this.workshopService.getWDevices().subscribe((res: WDevice[]) => {
       // this.devices = res;
       // this.devs = res;

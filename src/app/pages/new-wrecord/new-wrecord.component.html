@@ -5,11 +5,23 @@
       <div class="col">
         <div class="form-group">
           <label>Cliente:</label>
-          <input type="text" (input)="clientChange()" [(ngModel)]="newrecord.cliente" [status]="client_status" list="dynamicClients" nbInput autofocus fullWidth placeholder="Siglas" class="form-control" aria-describedby="clienteHelp">
+          <nb-form-field>
+            <input #cli type="text" (input)="clientChange()" [nbAutocomplete]="autoClients" [(ngModel)]="newrecord.cliente" [status]="client_status" nbInput autofocus fullWidth placeholder="Siglas" class="form-control" aria-describedby="clienteHelp">
+            <button *ngIf="newrecord.cliente !== ''" nbSuffix nbButton ghost (click)="clearClientInput()">
+              <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
+            </button>
+          </nb-form-field>
           <small id="clienteHelp" class="form-text text-muted">Siglas del Cliente.</small>
-          <datalist id="dynamicClients">
-            <option *ngFor="let client of clients" [value]="client.siglas">{{client.siglas}}</option>
-          </datalist>
+          <nb-autocomplete #autoClients (selectedChange)="onClientSelectionChange($event)">
+            <nb-option *ngFor="let client of filteredClients$ | async" [value]="client.siglas" style="cursor: auto;">
+              <div class="row w-100" style="cursor: auto;">
+                <div class="col">{{ client.siglas }}</div>
+                <div class="col">
+                  <img style="cursor: pointer;" (click)="removeClient(client)" class="float-right mt-1" src="assets/images/trash.png" width="16px" height="16px" alt="Eliminar">
+                </div>
+              </div>
+            </nb-option>
+          </nb-autocomplete>
         </div>
       </div>
       <div class="col" *ngIf="show_client_name">
@@ -22,11 +34,23 @@
       <div class="col" *ngIf="!show_client_name">
         <div class="form-group">
           <label>Equipo:</label>
-          <input type="text" (focusout)="deviceLostFocus()" (input)="deviceChange()" [(ngModel)]="newrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
+          <nb-form-field>
+            <input #dev type="text" [nbAutocomplete]="autoDevices1" (focusout)="deviceLostFocus()" (input)="deviceChange()" [(ngModel)]="newrecord.equipo" [status]="device_status" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
+            <button *ngIf="newrecord.equipo !== ''" nbSuffix nbButton ghost (click)="clearDeviceInput()">
+              <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
+            </button>
+          </nb-form-field>
           <small id="equipoHelp" class="form-text text-muted">Equipo a registrar.</small>
-          <datalist id="dynamicDevices">
-            <option *ngFor="let device of devs" [value]="device">{{device}}</option>
-          </datalist>
+          <nb-autocomplete #autoDevices1 (selectedChange)="onDeviceSelectionChange($event)">
+            <nb-option *ngFor="let device of filteredDevices$ | async" [value]="device" style="cursor: auto;">
+              <div class="row w-100" style="cursor: auto;">
+                <div class="col">{{ device }}</div>
+                <div class="col">
+                  <img style="cursor: pointer;" (click)="removeDevice(device)" class="float-right mt-1" src="assets/images/trash.png" width="16px" height="16px" alt="Eliminar">
+                </div>
+              </div>
+            </nb-option>
+          </nb-autocomplete>
         </div>
       </div>
     </div>
@@ -34,11 +58,23 @@
       <div class="col">
         <div class="form-group">
           <label>Equipo:</label>
-          <input type="text" (focusout)="deviceLostFocus()" (input)="deviceChange()" [(ngModel)]="newrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
+          <nb-form-field>
+            <input #dev type="text" [nbAutocomplete]="autoDevices" (focusout)="deviceLostFocus()" (input)="deviceChange()" [(ngModel)]="newrecord.equipo" [status]="device_status" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
+            <button *ngIf="newrecord.equipo !== ''" nbSuffix nbButton ghost (click)="clearDeviceInput()">
+              <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
+            </button>
+          </nb-form-field>
           <small id="equipoHelp" class="form-text text-muted">Equipo a registrar.</small>
-          <datalist id="dynamicDevices">
-            <option *ngFor="let device of devs" [value]="device">{{device}}</option>
-          </datalist>
+          <nb-autocomplete #autoDevices (selectedChange)="onDeviceSelectionChange($event)">
+            <nb-option *ngFor="let device of filteredDevices$ | async; let i = index" [value]="device" style="cursor: auto;">
+              <div class="row w-100" style="cursor: auto;">
+                <div class="col">{{ device }}</div>
+                <div class="col">
+                  <img style="cursor: pointer;" (click)="removeDevice(device)" class="float-right mt-1" src="assets/images/trash.png" width="16px" height="16px" alt="Eliminar">
+                </div>
+              </div>
+            </nb-option>
+          </nb-autocomplete>
         </div>
       </div>
       <div class="col"></div>
@@ -47,11 +83,23 @@
       <div class="col">
         <div class="form-group">
           <label>Marca:</label>
-          <input type="text" (input)="marcChange()" (focusout)="marcLostFocus()" [(ngModel)]="newrecord.marca" [status]="marc_status" list="dynamicMarcs" nbInput fullWidth placeholder="Marca" class="form-control" aria-describedby="marcaHelp">
+          <nb-form-field>
+            <input #mrc type="text" [nbAutocomplete]="autoMarcs" (input)="marcChange()" (focusout)="marcLostFocus()" [(ngModel)]="newrecord.marca" [status]="marc_status" nbInput fullWidth placeholder="Marca" class="form-control" aria-describedby="marcaHelp">
+            <button *ngIf="newrecord.marca !== ''" nbSuffix nbButton ghost (click)="clearMarcInput()">
+              <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
+            </button>
+          </nb-form-field>
           <small id="marcaHelp" class="form-text text-muted">Marca del equipo a registrar.</small>
-          <datalist id="dynamicMarcs">
-            <option *ngFor="let marc of marcs" [value]="marc">{{marc}}</option>
-          </datalist>
+          <nb-autocomplete #autoMarcs (selectedChange)="onMarcSelectionChange($event)">
+            <nb-option *ngFor="let marc of filteredMarcs$ | async; let i = index" [value]="marc" style="cursor: auto;">
+              <div class="row w-100" style="cursor: auto;">
+                <div class="col">{{ marc }}</div>
+                <div class="col">
+                  <img style="cursor: pointer;" (click)="removeDevice(marc)" class="float-right mt-1" src="assets/images/trash.png" width="16px" height="16px" alt="Eliminar">
+                </div>
+              </div>
+            </nb-option>
+          </nb-autocomplete>
         </div>
       </div>
       <div class="col">

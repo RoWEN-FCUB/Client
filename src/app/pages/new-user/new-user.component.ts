@@ -22,6 +22,7 @@ export class NewUserComponent implements OnInit {
     picture: 'empty.png',
     id_sup: 0,
     position: '',
+    ci: '',
   };
   users: User[] = [];
   roles: Role[] = [];
@@ -40,6 +41,7 @@ export class NewUserComponent implements OnInit {
   rpass_status: string = 'info';
   usup_status: string = 'info';
   company_status: string = 'info';
+  ci_status: string = 'info';
   title: string = '';
 
   constructor(protected dialogRef: NbDialogRef<any>, private userService: UserService) {
@@ -56,6 +58,15 @@ export class NewUserComponent implements OnInit {
       this.nick_status = 'success';
     } else {
       this.nick_status = 'danger';
+    }
+  }
+
+  CIChange() {
+    const nameregexp = new RegExp(/^[0-9]{11}$/);
+    if (nameregexp.test(this.newUser.ci)) {
+      this.ci_status = 'success';
+    } else {
+      this.ci_status = 'danger';
     }
   }
 
@@ -168,7 +179,13 @@ export class NewUserComponent implements OnInit {
         title: 'Debe escribir un nombre válido.',
       } as SweetAlertOptions);
       this.name_status = 'danger';
-    } else if (this.position_status === 'danger' || this.newUser.position === '') {
+    } else if (this.ci_status === 'danger' || this.newUser.ci === '') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir un número de identidad válido.',
+      } as SweetAlertOptions);
+      this.ci_status = 'danger';
+    }  else if (this.position_status === 'danger' || this.newUser.position === '') {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir un cargo válido.',

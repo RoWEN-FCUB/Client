@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewChild, OnInit, ElementRef } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { NbDialogRef } from '@nebular/theme';
 import { WRecord } from '../../models/WRecord';
 import { WClient } from '../../models/WClient';
@@ -7,15 +9,24 @@ import { WPerson } from '../../models/WPerson';
 import { WorkshopService } from '../../services/workshop.service';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'new-wrecord',
   templateUrl: './new-wrecord.component.html',
   styleUrls: ['./new-wrecord.component.scss'],
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewWRecordComponent implements OnInit {
 
+  @ViewChild('cli') clientinput: ElementRef;
+  @ViewChild('mrc') marcinput: ElementRef;
+  @ViewChild('dev') deviceinput: ElementRef;
+  filteredClients$: Observable<WClient[]>;
+  filteredDevices$: Observable<string[]>;
+  filteredMarcs$: Observable<string[]>;
   clients: WClient[] = [];
   // devices: WDevice[] = [];
   devs: string[] = [];
@@ -45,6 +56,7 @@ export class NewWRecordComponent implements OnInit {
     nombre: '',
     ci: '',
     cargo: '',
+    id_cliente: 0,
   };
   entrega_ci_status: string = 'info';
   entrega_cargo_status: string = 'info';
@@ -60,11 +72,26 @@ export class NewWRecordComponent implements OnInit {
   deliver_status: string = 'info';
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_sup: 0, id_emp: 0};
   show_client_name: boolean = false;
-  constructor(protected dialogRef: NbDialogRef<any>, private workshopService: WorkshopService, private authService: NbAuthService) { }
+  // tslint:disable-next-line: max-line-length
+  constructor(private library: FaIconLibrary, protected dialogRef: NbDialogRef<any>, private workshopService: WorkshopService, private authService: NbAuthService) {
+    this.library.addIcons(faTrashAlt);
+   }
 
   ngOnInit() {
+    // this.options = ['Option 1', 'Option 2', 'Option 3'];
     this.workshopService.getWClients().subscribe((res: WClient[]) => {
       this.clients = res;
+      this.filteredClients$ = of(this.clients);
+      this.workshopService.getWDevices().subscribe((res2: WDevice[]) => {
+        for (let i = 0; i < res2.length; i++) {
+          this.devs.push(res2[i].equipo);
+        }
+        this.filteredDevices$ = of(this.devs);
+        this.clientinput.nativeElement.focus();
+        this.client_status = 'info';
+        this.device_status = 'info';
+        this.marc_status = 'info';
+      });
     });
     this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
@@ -72,19 +99,144 @@ export class NewWRecordComponent implements OnInit {
       this.newrecord.especialista = this.user.fullname;
       this.newrecord.id_superior = this.user.id_sup;
     });
-    this.workshopService.getWDevices().subscribe((res: WDevice[]) => {
-      // this.devices = res;
-      // this.devs = res;
-      for (let i = 0; i < res.length; i++) {
-        this.devs.push(res[i].equipo);
+  }
+
+  clearClientInput() {
+    this.newrecord.cliente = '';
+    this.clientinput.nativeElement.focus();
+  }
+
+  clearDeviceInput() {
+    this.newrecord.equipo = '';
+    this.deviceinput.nativeElement.focus();
+  }
+
+  clearMarcInput() {
+    this.newrecord.marca = '';
+    this.marcinput.nativeElement.focus();
+  }
+
+  private filterClients(value: string): WClient[] {
+    const filterValue = value.toLowerCase();
+    return this.clients.filter(optionValue => optionValue.siglas.toLowerCase().includes(filterValue));
+  }
+
+  private filterDevices(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.devs.filter(optionValue => optionValue.toLowerCase().includes(filterValue));
+  }
+
+  private filterMarcs(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.marcs.filter(optionValue => optionValue.toLowerCase().includes(filterValue));
+  }
+
+  getFilteredClientsOptions(value: string): Observable<WClient[]> {
+    return of(value).pipe(
+      map(filterString => this.filterClients(filterString)),
+    );
+  }
+
+  getFilteredDevicesOptions(value: string): Observable<string[]> {
+    return of(value).pipe(
+      map(filterString => this.filterDevices(filterString)),
+    );
+  }
+
+  getFilteredMarcsOptions(value: string): Observable<string[]> {
+    return of(value).pipe(
+      map(filterString => this.filterMarcs(filterString)),
+    );
+  }
+
+  onClientSelectionChange($event) {
+    this.filteredClients$ = this.getFilteredClientsOptions($event);
+    // console.log($event);
+    this.filteredClients$.subscribe((fclients: WClient[]) => {
+      this.names = [];
+      for (let i = 0; i < fclients.length; i++) {
+        if (fclients[i].siglas === this.newrecord.cliente) {
+          this.show_client_name = false;
+          this.newrecord.cliente_nombre = '';
+          this.entrega.id_cliente = fclients[i].id;
+          this.workshopService.getWNames(fclients[i].id).subscribe((res: WPerson[]) => {
+            this.names = res;
+          });
+          break;
+        }
       }
     });
-    this.workshopService.getWNames().subscribe((res: WPerson[]) => {
-      this.names = res;
+    this.deviceinput.nativeElement.focus();
+  }
+
+  onDeviceSelectionChange($event) {
+    // this.filteredClients$ = this.getFilteredClientsOptions($event);
+    // console.log($event);
+    this.deviceChange();
+    this.marcinput.nativeElement.focus();
+  }
+
+  onMarcSelectionChange($event) {
+    // this.filteredClients$ = this.getFilteredClientsOptions($event);
+    // console.log($event);
+    this.marcChange();
+  }
+
+  removeClient(rclient: WClient) {
+    Swal.fire({
+      title: 'Confirma que desea eliminar el cliente "' + rclient.siglas + '"?',
+      // tslint:disable-next-line: max-line-length
+      text: 'Se eliminarán también los datos de las personas asociadas.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí­',
+      cancelButtonText: 'No',
+    } as SweetAlertOptions).then((result) => {
+      if (result.value) {
+        this.workshopService.deleteWClient(rclient.id).subscribe(res => {
+          this.workshopService.getWClients().subscribe((clients: WClient[]) => {
+            this.clients = clients;
+            this.filteredClients$ = of(this.clients);
+            this.newrecord.cliente = '';
+            // this.clientChange();
+          });
+        });
+      }
+    });
+  }
+
+  removeDevice(wdev: string) {
+    Swal.fire({
+      title: 'Confirma que desea eliminar el dispositivo "' + wdev + '"?',
+      // tslint:disable-next-line: max-line-length
+      text: 'Se eliminarán también los datos asociados (marcas, modelos etc.).',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí­',
+      cancelButtonText: 'No',
+    } as SweetAlertOptions).then((result) => {
+      if (result.value) {
+        this.workshopService.deleteWDevice(wdev).subscribe(res => {
+          this.workshopService.getWDevices().subscribe((res2: WDevice[]) => {
+            this.devs = [];
+            for (let i = 0; i < res2.length; i++) {
+              this.devs.push(res2[i].equipo);
+            }
+            this.filteredDevices$ = of(this.devs);
+            this.newrecord.equipo = '';
+          });
+        });
+      }
     });
   }
 
   clientChange() {
+    this.filteredClients$ = this.getFilteredClientsOptions(this.newrecord.cliente);
+    this.clientinput.nativeElement.focus();
     const regexp = new RegExp(/^[A-Z]{2,20}$/);
     if (regexp.test(this.newrecord.cliente)) {
       this.client_status = 'success';
@@ -92,13 +244,20 @@ export class NewWRecordComponent implements OnInit {
       this.client_status = 'danger';
     }
     this.show_client_name = true;
-    for (let i = 0; i < this.clients.length; i++) {
-      if (this.clients[i].siglas === this.newrecord.cliente) {
-        this.show_client_name = false;
-        this.newrecord.cliente_nombre = '';
-        break;
+    this.filteredClients$.subscribe((fclients: WClient[]) => {
+      this.names = [];
+      for (let i = 0; i < fclients.length; i++) {
+        if (fclients[i].siglas === this.newrecord.cliente) {
+          this.show_client_name = false;
+          this.newrecord.cliente_nombre = '';
+          this.entrega.id_cliente = fclients[i].id;
+          this.workshopService.getWNames(fclients[i].id).subscribe((res: WPerson[]) => {
+            this.names = res;
+          });
+          break;
+        }
       }
-    }
+    });
   }
 
   clientNameChange() {
@@ -134,12 +293,15 @@ export class NewWRecordComponent implements OnInit {
         for ( let i = 0; i < res.length; i++) {
           this.marcs.push(res[i].marca);
         }
+        this.filteredMarcs$ = of(this.marcs);
       });
     }
   }
 
   deviceChange() {
-    const regexp = new RegExp(/^([A-ZÑ]{1}[a-záéíóúñ]+\s?)+$/);
+    this.filteredMarcs$ = of([]);
+    this.filteredDevices$ = this.getFilteredDevicesOptions(this.newrecord.equipo);
+    const regexp = new RegExp(/^([A-ZÑa-záéíóúñ]+\s?)+$/);
     if (regexp.test(this.newrecord.equipo)) {
       this.device_status = 'success';
     } else {
@@ -159,6 +321,7 @@ export class NewWRecordComponent implements OnInit {
   }
 
   marcChange() {
+    this.filteredMarcs$ = this.getFilteredMarcsOptions(this.newrecord.marca);
     const regexp = new RegExp(/^[a-zA-Z0-9-]{2,20}$/);
     if (regexp.test(this.newrecord.marca)) {
       this.marc_status = 'success';

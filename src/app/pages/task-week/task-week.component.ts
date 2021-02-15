@@ -83,17 +83,8 @@ export class TaskWeekComponent implements OnInit {
       // usr.unsubscribe();
     });
     this.nbLayoutScrollService.onScroll().subscribe(r => {
-      /*console.log(r.srcElement.scrollTop + r.srcElement.offsetHeight);
-      console.log(r.srcElement.scrollHeight);
-      if ((r.srcElement.scrollTop + r.srcElement.offsetHeight) / r.srcElement.scrollHeight > 0.3) {
-        // console.log('Mostrar');
-        this.showbtnup = true;
-      } else {
-        this.showbtnup = false;
-      }*/
       this.nbLayoutScrollService.getPosition().subscribe(p => {
         this.pageOffset = p;
-        //console.log(this.pageOffset.y);
       });
     });
   }

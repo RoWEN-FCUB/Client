@@ -57,8 +57,12 @@ export class WorkshopService {
     return this.http.get(ipserver + 'workshop/serials/' + equipo + '&' + marca + '&' + modelo, {responseType: 'json'});
   }
 
-  getWNames() {
-    return this.http.get(ipserver + 'workshop/names', {responseType: 'json'});
+  getWNames(id_cliente: number) {
+    return this.http.get(ipserver + 'workshop/names/' + id_cliente, {responseType: 'json'});
+  }
+
+  getWPerson(name: string) {
+    return this.http.get(ipserver + 'workshop/listperson/' + name, {responseType: 'json'});
   }
 
   saveRecord(record: WRecord) {
@@ -87,5 +91,13 @@ export class WorkshopService {
 
   deletePart(id: number) {
     return this.http.delete(ipserver + 'workshop/parts/' + id);
+  }
+
+  deleteWDevice(wdev: string) {
+    return this.http.delete(ipserver + 'workshop/wdevice/' + wdev);
+  }
+
+  deleteWClient(id: number) {
+    return this.http.delete(ipserver + 'workshop/wclient/' + id);
   }
 }
