@@ -21,12 +21,21 @@ import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 })
 export class NewWRecordComponent implements OnInit {
 
-  @ViewChild('cli') clientinput: ElementRef;
-  @ViewChild('mrc') marcinput: ElementRef;
-  @ViewChild('dev') deviceinput: ElementRef;
+  @ViewChild('clinput', {static: false}) clientinput: ElementRef;
+  @ViewChild('mrc', {static: false}) marcinput: ElementRef;
+  @ViewChild('dev1', {static: false}) deviceinput1: ElementRef;
+  @ViewChild('dev2', {static: false}) deviceinput2: ElementRef;
+  @ViewChild('model', {static: false}) modelinput: ElementRef;
+  @ViewChild('inv', {static: false}) invinput: ElementRef;
+  @ViewChild('serie', {static: false}) serieinput: ElementRef;
+  @ViewChild('namep', {static: false}) nameinput: ElementRef;
   filteredClients$: Observable<WClient[]>;
   filteredDevices$: Observable<string[]>;
   filteredMarcs$: Observable<string[]>;
+  filteredModels$: Observable<string[]>;
+  filteredInvs$: Observable<string[]>;
+  filteredSeries$: Observable<string[]>;
+  filteredName$: Observable<WPerson[]>;
   clients: WClient[] = [];
   // devices: WDevice[] = [];
   devs: string[] = [];
@@ -78,7 +87,7 @@ export class NewWRecordComponent implements OnInit {
    }
 
   ngOnInit() {
-    // this.options = ['Option 1', 'Option 2', 'Option 3'];
+    setTimeout(() => this.clientinput.nativeElement.focus(), 0);
     this.workshopService.getWClients().subscribe((res: WClient[]) => {
       this.clients = res;
       this.filteredClients$ = of(this.clients);
@@ -87,10 +96,6 @@ export class NewWRecordComponent implements OnInit {
           this.devs.push(res2[i].equipo);
         }
         this.filteredDevices$ = of(this.devs);
-        this.clientinput.nativeElement.focus();
-        this.client_status = 'info';
-        this.device_status = 'info';
-        this.marc_status = 'info';
       });
     });
     this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
@@ -103,17 +108,52 @@ export class NewWRecordComponent implements OnInit {
 
   clearClientInput() {
     this.newrecord.cliente = '';
-    this.clientinput.nativeElement.focus();
+    this.clientChange();
+    setTimeout(() => this.clientinput.nativeElement.focus(), 0);
   }
 
   clearDeviceInput() {
+    this.filteredMarcs$ = of([]);
     this.newrecord.equipo = '';
-    this.deviceinput.nativeElement.focus();
+    this.deviceChange();
+    if (!this.show_client_name) {
+      setTimeout(() => this.deviceinput1.nativeElement.focus(), 0);
+    } else {
+      setTimeout(() => this.deviceinput2.nativeElement.focus(), 0);
+    }
   }
 
   clearMarcInput() {
+    this.filteredModels$ = of([]);
     this.newrecord.marca = '';
-    this.marcinput.nativeElement.focus();
+    this.marcChange();
+    setTimeout(() => this.marcinput.nativeElement.focus(), 0);
+  }
+
+  clearModelInput() {
+    this.filteredInvs$ = of([]);
+    this.filteredSeries$ = of([]);
+    this.newrecord.modelo = '';
+    this.modelChange();
+    setTimeout(() => this.modelinput.nativeElement.focus(), 0);
+  }
+
+  clearInvInput() {
+    this.newrecord.inventario = '';
+    this.invChange();
+    setTimeout(() => this.invinput.nativeElement.focus(), 0);
+  }
+
+  clearSerieInput() {
+    this.newrecord.serie = '';
+    this.serialChange();
+    setTimeout(() => this.serieinput.nativeElement.focus(), 0);
+  }
+
+  clearNameInput() {
+    this.newrecord.entregado = '';
+    this.nameChange();
+    setTimeout(() => this.nameinput.nativeElement.focus(), 0);
   }
 
   private filterClients(value: string): WClient[] {
@@ -129,6 +169,26 @@ export class NewWRecordComponent implements OnInit {
   private filterMarcs(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.marcs.filter(optionValue => optionValue.toLowerCase().includes(filterValue));
+  }
+
+  private filterModels(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.models.filter(optionValue => optionValue.toLowerCase().includes(filterValue));
+  }
+
+  private filterInvs(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.inventaries.filter(optionValue => optionValue.toLowerCase().includes(filterValue));
+  }
+
+  private filterSeries(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.serials.filter(optionValue => optionValue.toLowerCase().includes(filterValue));
+  }
+
+  private filterNames(value: string): WPerson[] {
+    const filterValue = value.toLowerCase();
+    return this.names.filter(optionValue => optionValue.nombre.toLowerCase().includes(filterValue));
   }
 
   getFilteredClientsOptions(value: string): Observable<WClient[]> {
@@ -149,37 +209,81 @@ export class NewWRecordComponent implements OnInit {
     );
   }
 
+  getFilteredModelsOptions(value: string): Observable<string[]> {
+    return of(value).pipe(
+      map(filterString => this.filterModels(filterString)),
+    );
+  }
+
+  getFilteredInvsOptions(value: string): Observable<string[]> {
+    return of(value).pipe(
+      map(filterString => this.filterInvs(filterString)),
+    );
+  }
+
+  getFilteredSerialsOptions(value: string): Observable<string[]> {
+    return of(value).pipe(
+      map(filterString => this.filterSeries(filterString)),
+    );
+  }
+
+  getFilteredNamesOptions(value: string): Observable<WPerson[]> {
+    return of(value).pipe(
+      map(filterString => this.filterNames(filterString)),
+    );
+  }
+
   onClientSelectionChange($event) {
-    this.filteredClients$ = this.getFilteredClientsOptions($event);
-    // console.log($event);
-    this.filteredClients$.subscribe((fclients: WClient[]) => {
-      this.names = [];
-      for (let i = 0; i < fclients.length; i++) {
-        if (fclients[i].siglas === this.newrecord.cliente) {
-          this.show_client_name = false;
-          this.newrecord.cliente_nombre = '';
-          this.entrega.id_cliente = fclients[i].id;
-          this.workshopService.getWNames(fclients[i].id).subscribe((res: WPerson[]) => {
-            this.names = res;
-          });
-          break;
-        }
+    if ($event) {
+      this.clientChange();
+      if (!this.show_client_name && this.newrecord.cliente) {
+        setTimeout(() => this.deviceinput1.nativeElement.focus(), 0);
+      } else if (this.newrecord) {
+        setTimeout(() => this.deviceinput2.nativeElement.focus(), 0);
       }
-    });
-    this.deviceinput.nativeElement.focus();
+    }
   }
 
   onDeviceSelectionChange($event) {
-    // this.filteredClients$ = this.getFilteredClientsOptions($event);
-    // console.log($event);
-    this.deviceChange();
-    this.marcinput.nativeElement.focus();
+    if ($event) {
+      this.deviceChange();
+      setTimeout(() => this.marcinput.nativeElement.focus(), 0);
+    }
   }
 
   onMarcSelectionChange($event) {
-    // this.filteredClients$ = this.getFilteredClientsOptions($event);
-    // console.log($event);
-    this.marcChange();
+    if ($event) {
+      this.marcChange();
+      setTimeout(() => this.modelinput.nativeElement.focus(), 0);
+    }
+  }
+
+  onModelSelectionChange($event) {
+    if ($event) {
+      this.modelChange();
+      setTimeout(() => this.invinput.nativeElement.focus(), 0);
+    }
+  }
+
+  onInvSelectionChange($event) {
+    if ($event) {
+      this.invChange();
+      setTimeout(() => this.serieinput.nativeElement.focus(), 0);
+    }
+  }
+
+  onSerieSelectionChange($event) {
+    if ($event) {
+      this.serialChange();
+      setTimeout(() => this.nameinput.nativeElement.focus(), 0);
+    }
+  }
+
+  onNameSelectionChange($event) {
+    if ($event) {
+      this.nameChange();
+      // setTimeout(() => this.modelinput.nativeElement.focus(), 0);
+    }
   }
 
   removeClient(rclient: WClient) {
@@ -198,8 +302,8 @@ export class NewWRecordComponent implements OnInit {
         this.workshopService.deleteWClient(rclient.id).subscribe(res => {
           this.workshopService.getWClients().subscribe((clients: WClient[]) => {
             this.clients = clients;
-            this.filteredClients$ = of(this.clients);
             this.newrecord.cliente = '';
+            this.filteredClients$ = of(this.clients);
             // this.clientChange();
           });
         });
@@ -234,18 +338,42 @@ export class NewWRecordComponent implements OnInit {
     });
   }
 
+  removeWPerson(wper: WPerson) {
+    Swal.fire({
+      title: 'Confirma que desea eliminar del registro a "' + wper.nombre + '"?',
+      // tslint:disable-next-line: max-line-length
+      text: 'Se eliminará su nombre del sistema.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí­',
+      cancelButtonText: 'No',
+    } as SweetAlertOptions).then((result) => {
+      if (result.value) {
+        this.workshopService.deleteWPerson(wper.id).subscribe(resp => {
+          this.workshopService.getWNames(this.entrega.id_cliente).subscribe((res: WPerson[]) => {
+            this.names = res;
+            this.filteredName$ = of(this.names);
+          });
+        });
+      }
+    });
+  }
+
   clientChange() {
+    // this.clientinput.nativeElement.focus();
     this.filteredClients$ = this.getFilteredClientsOptions(this.newrecord.cliente);
-    this.clientinput.nativeElement.focus();
     const regexp = new RegExp(/^[A-Z]{2,20}$/);
     if (regexp.test(this.newrecord.cliente)) {
       this.client_status = 'success';
     } else {
       this.client_status = 'danger';
     }
-    this.show_client_name = true;
     this.filteredClients$.subscribe((fclients: WClient[]) => {
       this.names = [];
+      // console.log(fclients);
+      this.show_client_name = true;
       for (let i = 0; i < fclients.length; i++) {
         if (fclients[i].siglas === this.newrecord.cliente) {
           this.show_client_name = false;
@@ -253,10 +381,14 @@ export class NewWRecordComponent implements OnInit {
           this.entrega.id_cliente = fclients[i].id;
           this.workshopService.getWNames(fclients[i].id).subscribe((res: WPerson[]) => {
             this.names = res;
+            this.filteredName$ = of(this.names);
           });
           break;
         }
       }
+      /*if (fclients.length === 0) {
+        this.show_client_name = true;
+      }*/
     });
   }
 
@@ -316,11 +448,13 @@ export class NewWRecordComponent implements OnInit {
         for ( let i = 0; i < res.length; i++) {
           this.models.push(res[i].modelo);
         }
+        this.filteredModels$ = of(this.models);
       });
     }
   }
 
   marcChange() {
+    this.filteredModels$ = of([]);
     this.filteredMarcs$ = this.getFilteredMarcsOptions(this.newrecord.marca);
     const regexp = new RegExp(/^[a-zA-Z0-9-]{2,20}$/);
     if (regexp.test(this.newrecord.marca)) {
@@ -339,11 +473,14 @@ export class NewWRecordComponent implements OnInit {
           this.serials.push(res[i].serie);
           this.inventaries.push(res[i].inventario);
         }
+        this.filteredInvs$ = of(this.inventaries);
+        this.filteredSeries$ = of(this.serials);
       });
     }
   }
 
   modelChange() {
+    this.filteredModels$ = this.getFilteredModelsOptions(this.newrecord.modelo);
     const regexp = new RegExp(/^[a-zA-Z0-9-]{2,20}$/);
     if (regexp.test(this.newrecord.modelo)) {
       this.model_status = 'success';
@@ -353,6 +490,7 @@ export class NewWRecordComponent implements OnInit {
   }
 
   invChange() {
+    this.filteredInvs$ = this.getFilteredInvsOptions(this.newrecord.inventario);
     const regexp = new RegExp(/^[a-zA-Z0-9-]{2,20}$/);
     if (regexp.test(this.newrecord.inventario)) {
       this.inv_status = 'success';
@@ -362,6 +500,7 @@ export class NewWRecordComponent implements OnInit {
   }
 
   serialChange() {
+    this.filteredSeries$ = this.getFilteredSerialsOptions(this.newrecord.serie);
     const regexp = new RegExp(/^[a-zA-Z0-9-]{2,20}$/);
     if (regexp.test(this.newrecord.serie)) {
       this.serial_status = 'success';
@@ -371,6 +510,7 @@ export class NewWRecordComponent implements OnInit {
   }
 
   nameChange() {
+    this.filteredName$ = this.getFilteredNamesOptions(this.newrecord.entregado);
     if (!this.names.some(name => name.nombre === this.newrecord.entregado)) {
       this.showPersonInfo = true;
     } else {

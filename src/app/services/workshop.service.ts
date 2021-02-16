@@ -100,4 +100,8 @@ export class WorkshopService {
   deleteWClient(id: number) {
     return this.http.delete(ipserver + 'workshop/wclient/' + id);
   }
+
+  deleteWPerson(id: number) {
+    return this.http.delete(ipserver + 'workshop/wperson/' + id);
+  }
 }
