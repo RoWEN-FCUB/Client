@@ -31,7 +31,9 @@
           <small id="clienteNHelp" class="form-text text-muted">Nombre del Cliente.</small>          
         </div>
       </div>
-      <div class="col" [hidden]="show_client_name">
+    </div>
+    <div class="row">
+      <div class="col">
         <div class="form-group">
           <label>Equipo:</label>
           <nb-form-field>
@@ -53,31 +55,6 @@
           </nb-autocomplete>
         </div>
       </div>
-    </div>
-    <div class="row" [hidden]="!show_client_name">
-      <div class="col">
-        <div class="form-group">
-          <label>Equipo:</label>
-          <nb-form-field>
-            <input #dev2 type="text" [nbAutocomplete]="autoDevices2" (focusout)="deviceLostFocus()" (input)="deviceChange()" [(ngModel)]="newrecord.equipo" [status]="device_status" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
-            <button *ngIf="newrecord.equipo !== ''" nbSuffix nbButton ghost (click)="clearDeviceInput()">
-              <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
-            </button>
-          </nb-form-field>
-          <small id="equipoHelp" class="form-text text-muted">Equipo a registrar.</small>
-          <nb-autocomplete #autoDevices2 (selectedChange)="onDeviceSelectionChange($event)">
-            <nb-option *ngFor="let device of filteredDevices$ | async" [value]="device" style="cursor: auto;">
-              <div class="row w-100" style="cursor: auto;">
-                <div class="col">{{ device }}</div>
-                <div class="col" style="padding: 0;">
-                  <img style="cursor: pointer;" (click)="removeDevice(device)" class="float-right mt-1" src="assets/images/trash.png" width="16px" height="16px" alt="Eliminar">
-                </div>
-              </div>
-            </nb-option>
-          </nb-autocomplete>
-        </div>
-      </div>
-      <div class="col"></div>
     </div>
     <div class="row">
       <div class="col">
@@ -172,16 +149,16 @@
         <div class="form-group">
           <label>Entrega:</label>
           <nb-form-field>
-            <input #namep [nbAutocomplete]="autoNames" type="text" (input)="nameChange()" [(ngModel)]="newrecord.entregado" [status]="deliver_status" list="dynamicNames" nbInput fullWidth placeholder="Nombre" class="form-control" aria-describedby="nameHelp">
+            <input [nbAutocomplete]="autoNames" #namep type="text" maxlength="11" (input)="entregaCIChange()" [(ngModel)]="entrega.ci" [status]="entrega_ci_status" nbInput fullWidth placeholder="###########" class="form-control" aria-describedby="ciHelp">
             <button *ngIf="newrecord.entregado !== ''" nbSuffix nbButton ghost (click)="clearNameInput()">
               <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
             </button>
           </nb-form-field>
-          <small id="nameHelp" class="form-text text-muted">Nombre de la persona que entrega el equipo.</small>
-          <nb-autocomplete #autoNames (selectedChange)="onClientSelectionChange($event)">
-            <nb-option *ngFor="let name of filteredName$ | async" [value]="name.nombre" style="cursor: auto;">
+          <small id="ciHelp" class="form-text text-muted">Número de identidad.</small>
+          <nb-autocomplete #autoNames (selectedChange)="onNameSelectionChange($event)">
+            <nb-option *ngFor="let name of filteredName$ | async" [value]="name.ci" style="cursor: auto;">
               <div style="cursor: auto;" class="w-100">
-                <div style="float: left; font-size: 12px;">{{ name.nombre }}</div>
+                <div style="float: left; font-size: 12px;">{{ name.ci }}</div>
                 <div style="padding: 0; float: right;">
                   <img (click)="removeWPerson(name)" style="cursor: pointer;" class="float-right mt-1" src="assets/images/trash.png" width="16px" height="16px" alt="Eliminar">
                 </div>
@@ -191,18 +168,18 @@
         </div>
       </div>
     </div>
-    <div class="row" [hidden]="!showPersonInfo">
+    <div class="row">
       <div class="col">
         <div class="form-group">
-          <label>CI:</label>
-          <input type="text" maxlength="11" (input)="entregaCIChange()" [(ngModel)]="entrega.ci" [status]="entrega_ci_status" nbInput fullWidth placeholder="###########" class="form-control" aria-describedby="ciHelp">
-          <small id="ciHelp" class="form-text text-muted">Número de identidad.</small>
+          <label>Nombre:</label>
+          <input [disabled]="!showPersonInfo" type="text" (input)="nameChange()" [(ngModel)]="entrega.nombre" [status]="deliver_status" nbInput fullWidth placeholder="Nombre" class="form-control" aria-describedby="nameHelp">
+          <small id="nameHelp" class="form-text text-muted">Nombre de la persona que entrega el equipo.</small>
         </div>
       </div>
       <div class="col">
         <div class="form-group">
           <label>Cargo:</label>
-          <input type="text" (input)="entregaCargoChange()" [(ngModel)]="entrega.cargo" [status]="entrega_cargo_status" nbInput fullWidth placeholder="Cargo" class="form-control" aria-describedby="cargoHelp">
+          <input [disabled]="!showPersonInfo" type="text" (input)="entregaCargoChange()" [(ngModel)]="entrega.cargo" [status]="entrega_cargo_status" nbInput fullWidth placeholder="Cargo" class="form-control" aria-describedby="cargoHelp">
           <small id="cargoHelp" class="form-text text-muted">Cargo que ocupa en la entidad.</small>
         </div>
       </div>

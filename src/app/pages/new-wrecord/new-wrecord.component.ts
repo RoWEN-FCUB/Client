@@ -24,7 +24,6 @@ export class NewWRecordComponent implements OnInit {
   @ViewChild('clinput', {static: false}) clientinput: ElementRef;
   @ViewChild('mrc', {static: false}) marcinput: ElementRef;
   @ViewChild('dev1', {static: false}) deviceinput1: ElementRef;
-  @ViewChild('dev2', {static: false}) deviceinput2: ElementRef;
   @ViewChild('model', {static: false}) modelinput: ElementRef;
   @ViewChild('inv', {static: false}) invinput: ElementRef;
   @ViewChild('serie', {static: false}) serieinput: ElementRef;
@@ -116,11 +115,7 @@ export class NewWRecordComponent implements OnInit {
     this.filteredMarcs$ = of([]);
     this.newrecord.equipo = '';
     this.deviceChange();
-    if (!this.show_client_name) {
-      setTimeout(() => this.deviceinput1.nativeElement.focus(), 0);
-    } else {
-      setTimeout(() => this.deviceinput2.nativeElement.focus(), 0);
-    }
+    setTimeout(() => this.deviceinput1.nativeElement.focus(), 0);
   }
 
   clearMarcInput() {
@@ -236,11 +231,7 @@ export class NewWRecordComponent implements OnInit {
   onClientSelectionChange($event) {
     if ($event) {
       this.clientChange();
-      if (!this.show_client_name && this.newrecord.cliente) {
-        setTimeout(() => this.deviceinput1.nativeElement.focus(), 0);
-      } else if (this.newrecord) {
-        setTimeout(() => this.deviceinput2.nativeElement.focus(), 0);
-      }
+      setTimeout(() => this.deviceinput1.nativeElement.focus(), 0);
     }
   }
 
@@ -281,7 +272,7 @@ export class NewWRecordComponent implements OnInit {
 
   onNameSelectionChange($event) {
     if ($event) {
-      this.nameChange();
+      this.entregaCIChange();
       // setTimeout(() => this.modelinput.nativeElement.focus(), 0);
     }
   }
@@ -402,6 +393,17 @@ export class NewWRecordComponent implements OnInit {
   }
 
   entregaCIChange() {
+    this.filteredName$ = this.getFilteredNamesOptions(this.entrega.ci);
+    for (let i = 0; i < this.names.length; i++) {
+      if (this.names[i].ci === this.entrega.ci) {
+        this.entrega.nombre = this.names[i].nombre;
+        this.entrega.cargo = this.names[i].cargo;
+        this.showPersonInfo = false;
+        break;
+      } else {
+        this.showPersonInfo = true;
+      }
+    }
     const nameregexp = new RegExp(/^[0-9]{11}$/);
     if (nameregexp.test(this.entrega.ci)) {
       this.entrega_ci_status = 'success';
@@ -510,14 +512,8 @@ export class NewWRecordComponent implements OnInit {
   }
 
   nameChange() {
-    this.filteredName$ = this.getFilteredNamesOptions(this.newrecord.entregado);
-    if (!this.names.some(name => name.nombre === this.newrecord.entregado)) {
-      this.showPersonInfo = true;
-    } else {
-      this.showPersonInfo = false;
-    }
     const nameregexp = new RegExp(/^([A-Za-záéíóúñ]+\s?)+$/);
-    if (nameregexp.test(this.newrecord.entregado)) {
+    if (nameregexp.test(this.entrega.nombre)) {
       this.deliver_status = 'success';
     } else {
       this.deliver_status = 'danger';
@@ -581,19 +577,19 @@ export class NewWRecordComponent implements OnInit {
       } as SweetAlertOptions);
       this.serial_status = 'danger';
       return false;
-    } else if (this.deliver_status === 'danger' || this.newrecord.entregado === '') {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe escribir correctamente el nombre de la persona que entrega el equipo.',
-      } as SweetAlertOptions);
-      this.deliver_status = 'danger';
-      return false;
-    } else if (this.showPersonInfo && (this.entrega_ci_status === 'danger' || !this.entrega.ci)) {
+    } else if ((this.entrega_ci_status === 'danger' || !this.entrega.ci)) {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir correctamente el carnet de identidad de la persona que entrega el equipo.',
       } as SweetAlertOptions);
       this.entrega_ci_status = 'danger';
+      return false;
+    } else if (this.showPersonInfo && (this.deliver_status === 'danger' || this.newrecord.entregado === '')) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir correctamente el nombre de la persona que entrega el equipo.',
+      } as SweetAlertOptions);
+      this.deliver_status = 'danger';
       return false;
     } else if (this.showPersonInfo && (this.entrega_cargo_status === 'danger' || !this.entrega.cargo)) {
       Toast.fire({
@@ -617,9 +613,9 @@ export class NewWRecordComponent implements OnInit {
         timer: 3000,
       });
       if (this.showPersonInfo) {
-        this.entrega.nombre = this.newrecord.entregado;
         this.workshopService.savePerson(this.entrega).subscribe(res => {});
       }
+      this.newrecord.entregado = this.entrega.ci;
       this.workshopService.saveRecord(this.newrecord).subscribe(res => {
         Toast.fire({
           icon: 'success',
