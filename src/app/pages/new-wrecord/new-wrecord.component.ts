@@ -64,7 +64,7 @@ export class NewWRecordComponent implements OnInit {
     nombre: '',
     ci: '',
     cargo: '',
-    id_cliente: 0,
+    id_cliente: -1,
   };
   entrega_ci_status: string = 'info';
   entrega_cargo_status: string = 'info';
@@ -183,7 +183,7 @@ export class NewWRecordComponent implements OnInit {
 
   private filterNames(value: string): WPerson[] {
     const filterValue = value.toLowerCase();
-    return this.names.filter(optionValue => optionValue.nombre.toLowerCase().includes(filterValue));
+    return this.names.filter(optionValue => optionValue.ci.toLowerCase().includes(filterValue));
   }
 
   getFilteredClientsOptions(value: string): Observable<WClient[]> {
@@ -354,7 +354,6 @@ export class NewWRecordComponent implements OnInit {
 
   clientChange() {
     // this.clientinput.nativeElement.focus();
-    this.filteredClients$ = this.getFilteredClientsOptions(this.newrecord.cliente);
     const regexp = new RegExp(/^[A-Z]{2,20}$/);
     if (regexp.test(this.newrecord.cliente)) {
       this.client_status = 'success';
@@ -377,10 +376,8 @@ export class NewWRecordComponent implements OnInit {
           break;
         }
       }
-      /*if (fclients.length === 0) {
-        this.show_client_name = true;
-      }*/
     });
+    this.filteredClients$ = this.getFilteredClientsOptions(this.newrecord.cliente);
   }
 
   clientNameChange() {
@@ -394,6 +391,7 @@ export class NewWRecordComponent implements OnInit {
 
   entregaCIChange() {
     this.filteredName$ = this.getFilteredNamesOptions(this.entrega.ci);
+    this.showPersonInfo = true;
     for (let i = 0; i < this.names.length; i++) {
       if (this.names[i].ci === this.entrega.ci) {
         this.entrega.nombre = this.names[i].nombre;
@@ -584,7 +582,7 @@ export class NewWRecordComponent implements OnInit {
       } as SweetAlertOptions);
       this.entrega_ci_status = 'danger';
       return false;
-    } else if (this.showPersonInfo && (this.deliver_status === 'danger' || this.newrecord.entregado === '')) {
+    } else if (this.showPersonInfo && (this.deliver_status === 'danger' || this.entrega.nombre === '')) {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir correctamente el nombre de la persona que entrega el equipo.',
@@ -612,16 +610,17 @@ export class NewWRecordComponent implements OnInit {
         timerProgressBar: true,
         timer: 3000,
       });
-      if (this.showPersonInfo) {
-        this.workshopService.savePerson(this.entrega).subscribe(res => {});
-      }
       this.newrecord.entregado = this.entrega.ci;
       this.workshopService.saveRecord(this.newrecord).subscribe(res => {
-        Toast.fire({
-          icon: 'success',
-          title: 'Registro guardado correctamente.',
-        } as SweetAlertOptions);
-        this.dialogRef.close(this.newrecord);
+        if (this.showPersonInfo) {
+          this.workshopService.savePerson(this.entrega, this.newrecord.cliente).subscribe(res2 => {
+            Toast.fire({
+              icon: 'success',
+              title: 'Registro guardado correctamente.',
+            } as SweetAlertOptions);
+            this.dialogRef.close(this.newrecord);
+          });
+        }
       });
     }
   }

@@ -5,63 +5,94 @@
         <div class="col">
           <div class="form-group">
             <label>Cliente:</label>
-            <input type="text" (input)="clientChange()" [(ngModel)]="wrecord.cliente" [status]="client_status" list="dynamicClients" nbInput autofocus fullWidth placeholder="Siglas" class="form-control" aria-describedby="clienteHelp">
+            <nb-form-field>
+              <input #clinput autofocus type="text" (input)="clientChange()" [nbAutocomplete]="autoClients" [(ngModel)]="wrecord.cliente" [status]="client_status" nbInput fullWidth placeholder="Siglas" class="form-control" aria-describedby="clienteHelp">
+              <button *ngIf="wrecord.cliente !== ''" nbSuffix nbButton ghost (click)="clearClientInput()">
+                <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
+              </button>
+            </nb-form-field>
             <small id="clienteHelp" class="form-text text-muted">Siglas del Cliente.</small>
-            <datalist id="dynamicClients">
-              <option *ngFor="let client of clients" [value]="client.siglas">{{client.siglas}}</option>
-            </datalist>
+            <nb-autocomplete #autoClients (selectedChange)="onClientSelectionChange($event)">
+              <nb-option *ngFor="let client of filteredClients$ | async" [value]="client.siglas" style="cursor: auto;">
+                <div style="cursor: auto;" class="w-100">
+                  <div style="float: left; font-size: 12px;">{{ client.siglas }}</div>
+                  <div style="padding: 0; float: right;">
+                    <img (click)="removeClient(client)" style="cursor: pointer;" class="float-right mt-1" src="assets/images/trash.png" width="16px" height="16px" alt="Eliminar">
+                  </div>
+                </div>
+              </nb-option>
+            </nb-autocomplete>
           </div>
         </div>
-        <div class="col" *ngIf="show_client_name">
+        <div class="col" [hidden]="!show_client_name">
           <div class="form-group">
             <label>Nombre del cliente:</label>
             <input type="text" (input)="clientNameChange()" [(ngModel)]="wrecord.cliente_nombre" [status]="client_name_status" nbInput fullWidth placeholder="Nombre del cliente" class="form-control" aria-describedby="clienteNHelp">
             <small id="clienteNHelp" class="form-text text-muted">Nombre del Cliente.</small>          
           </div>
         </div>
-        <div class="col" *ngIf="!show_client_name">
-          <div class="form-group">
-            <label>Equipo:</label>
-            <input type="text" (focusout)="deviceLostFocus()" (input)="deviceChange()" [(ngModel)]="wrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
-            <small id="equipoHelp" class="form-text text-muted">Equipo a registrar.</small>
-            <datalist id="dynamicDevices">
-              <option *ngFor="let device of devs" [value]="device">{{device}}</option>
-            </datalist>
-          </div>
-        </div>
       </div>
-      <div class="row" *ngIf="show_client_name">
+      <div class="row">
         <div class="col">
           <div class="form-group">
             <label>Equipo:</label>
-            <input type="text" (focusout)="deviceLostFocus()" (input)="deviceChange()" [(ngModel)]="wrecord.equipo" [status]="device_status" list="dynamicDevices" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
+            <nb-form-field>
+              <input #dev1 type="text" [nbAutocomplete]="autoDevices1" (focusout)="deviceLostFocus()" (input)="deviceChange()" [(ngModel)]="wrecord.equipo" [status]="device_status" nbInput fullWidth placeholder="Equipo" class="form-control" aria-describedby="eqiopoHelp">
+              <button *ngIf="wrecord.equipo !== ''" nbSuffix nbButton ghost (click)="clearDeviceInput()">
+                <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
+              </button>
+            </nb-form-field>
             <small id="equipoHelp" class="form-text text-muted">Equipo a registrar.</small>
-            <datalist id="dynamicDevices">
-              <option *ngFor="let device of devs" [value]="device">{{device}}</option>
-            </datalist>
+            <nb-autocomplete #autoDevices1 (selectedChange)="onDeviceSelectionChange($event)">
+              <nb-option *ngFor="let device of filteredDevices$ | async" [value]="device" style="cursor: auto;">
+                <div class="row w-100" style="cursor: auto;">
+                  <div class="col">{{ device }}</div>
+                  <div class="col" style="padding: 0;">
+                    <img style="cursor: pointer;" (click)="removeDevice(device)" class="float-right mt-1" src="assets/images/trash.png" width="16px" height="16px" alt="Eliminar">
+                  </div>
+                </div>
+              </nb-option>
+            </nb-autocomplete>
           </div>
         </div>
-        <div class="col"></div>
       </div>
       <div class="row">
         <div class="col">
           <div class="form-group">
             <label>Marca:</label>
-            <input type="text" (focusout)="marcLostFocus()" (input)="marcChange()" [(ngModel)]="wrecord.marca" [status]="marc_status" list="dynamicMarcs" nbInput fullWidth placeholder="Marca" class="form-control" aria-describedby="marcaHelp">
+            <nb-form-field>
+              <input #mrc type="text" [nbAutocomplete]="autoMarcs" (input)="marcChange()" (focusout)="marcLostFocus()" [(ngModel)]="wrecord.marca" [status]="marc_status" nbInput fullWidth placeholder="Marca" class="form-control" aria-describedby="marcaHelp">
+              <button *ngIf="wrecord.marca !== ''" nbSuffix nbButton ghost (click)="clearMarcInput()">
+                <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
+              </button>
+            </nb-form-field>
             <small id="marcaHelp" class="form-text text-muted">Marca del equipo a registrar.</small>
-            <datalist id="dynamicMarcs">
-              <option *ngFor="let marc of marcs" [value]="marc">{{marc}}</option>
-            </datalist>
+            <nb-autocomplete #autoMarcs (selectedChange)="onMarcSelectionChange($event)">
+              <nb-option *ngFor="let marc of filteredMarcs$ | async" [value]="marc" style="cursor: auto;">
+                <div class="row w-100" style="cursor: auto;">
+                  <div class="col">{{ marc }}</div>
+                </div>
+              </nb-option>
+            </nb-autocomplete>
           </div>
         </div>
         <div class="col">
           <div class="form-group">
             <label>Modelo:</label>
-            <input type="text" (focusout)="modelLostFocus()" (input)="modelChange()" [(ngModel)]="wrecord.modelo" [status]="model_status" list="dynamicModels" nbInput fullWidth placeholder="Modelo" class="form-control" aria-describedby="modelHelp">
+            <nb-form-field>
+              <input #model [nbAutocomplete]="autoModels" type="text" (input)="modelChange()" (focusout)="modelLostFocus()" [(ngModel)]="wrecord.modelo" [status]="model_status" list="dynamicModels" nbInput fullWidth placeholder="Modelo" class="form-control" aria-describedby="modelHelp">
+              <button *ngIf="wrecord.modelo !== ''" nbSuffix nbButton ghost (click)="clearModelInput()">
+                <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
+              </button>
+            </nb-form-field>
             <small id="modelHelp" class="form-text text-muted">Modelo del equipo a registrar.</small>
-            <datalist id="dynamicModels">
-              <option *ngFor="let model of models" [value]="model">{{model}}</option>
-            </datalist>
+            <nb-autocomplete #autoModels (selectedChange)="onModelSelectionChange($event)">
+              <nb-option *ngFor="let model of filteredModels$ | async" [value]="model" style="cursor: auto;">
+                <div class="row w-100" style="cursor: auto;">
+                  <div class="col">{{ model }}</div>
+                </div>
+              </nb-option>
+            </nb-autocomplete>
           </div>
         </div>
       </div>
@@ -69,21 +100,39 @@
         <div class="col">
           <div class="form-group">
             <label>Inventario:</label>
-            <input type="text" (input)="invChange()" [(ngModel)]="wrecord.inventario" [status]="inv_status" list="dynamicInventaries" nbInput fullWidth placeholder="Inventario" class="form-control" aria-describedby="invHelp">
+            <nb-form-field>
+              <input type="text" #inv [nbAutocomplete]="autoInvs" (input)="invChange()" [(ngModel)]="wrecord.inventario" [status]="inv_status" list="dynamicInventaries" nbInput fullWidth placeholder="Inventario" class="form-control" aria-describedby="invHelp">
+              <button *ngIf="wrecord.inventario !== ''" nbSuffix nbButton ghost (click)="clearInvInput()">
+                <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
+              </button>
+            </nb-form-field>
             <small id="invHelp" class="form-text text-muted">Inventario del equipo a registrar.</small> 
-            <datalist id="dynamicInventaries">
-              <option *ngFor="let inv of inventaries" [value]="inv">{{inv}}</option>
-            </datalist>     
+            <nb-autocomplete #autoInvs (selectedChange)="onInvSelectionChange($event)">
+              <nb-option *ngFor="let inve of filteredInvs$ | async" [value]="inve" style="cursor: auto;">
+                <div class="row w-100" style="cursor: auto;">
+                  <div class="col">{{ inve }}</div>
+                </div>
+              </nb-option>
+            </nb-autocomplete>
           </div>
         </div>
         <div class="col">
           <div class="form-group">
             <label>Serie:</label>
-            <input type="text" (input)="serialChange()" [(ngModel)]="wrecord.serie" [status]="serial_status" list="dynamicSerials" nbInput fullWidth placeholder="Serie" class="form-control" aria-describedby="serialHelp">
+            <nb-form-field>
+              <input #serie [nbAutocomplete]="autoSeries" type="text" (input)="serialChange()" [(ngModel)]="wrecord.serie" [status]="serial_status" list="dynamicSerials" nbInput fullWidth placeholder="Serie" class="form-control" aria-describedby="serialHelp">
+              <button *ngIf="wrecord.serie !== ''" nbSuffix nbButton ghost (click)="clearSerieInput()">
+                <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
+              </button>
+            </nb-form-field>
             <small id="serialHelp" class="form-text text-muted">Número de serie del equipo a registrar.</small>
-            <datalist id="dynamicSerials">
-              <option *ngFor="let serial of serials" [value]="serial">{{serial}}</option>
-            </datalist>
+            <nb-autocomplete #autoSeries (selectedChange)="onSerieSelectionChange($event)">
+              <nb-option *ngFor="let serial of filteredSeries$ | async" [value]="serial" style="cursor: auto;">
+                <div class="row w-100" style="cursor: auto;">
+                  <div class="col">{{ serial }}</div>
+                </div>
+              </nb-option>
+            </nb-autocomplete>
           </div>
         </div>
       </div>
@@ -99,11 +148,39 @@
         <div class="col">
           <div class="form-group">
             <label>Entrega:</label>
-            <input type="text" (input)="nameChange()" [(ngModel)]="wrecord.entregado" [status]="deliver_status" list="dynamicNames" nbInput fullWidth placeholder="Nombre" class="form-control" aria-describedby="nameHelp">
+            <nb-form-field>
+              <input [nbAutocomplete]="autoNames" #cientrega type="text" maxlength="11" (input)="entregaCIChange()" [(ngModel)]="entrega.ci" [status]="entrega_ci_status" nbInput fullWidth placeholder="###########" class="form-control" aria-describedby="ciHelp">
+              <button *ngIf="wrecord.entregado !== ''" nbSuffix nbButton ghost (click)="clearCIInput()">
+                <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
+              </button>
+            </nb-form-field>
+            <small id="ciHelp" class="form-text text-muted">Número de identidad.</small>
+            <nb-autocomplete #autoNames (selectedChange)="onCISelectionChange($event)">
+              <nb-option *ngFor="let name of filteredName$ | async" [value]="name.ci" style="cursor: auto;">
+                <div style="cursor: auto;" class="w-100">
+                  <div style="float: left; font-size: 12px;">{{ name.ci }}</div>
+                  <div style="padding: 0; float: right;">
+                    <img (click)="removeWPerson(name)" style="cursor: pointer;" class="float-right mt-1" src="assets/images/trash.png" width="16px" height="16px" alt="Eliminar">
+                  </div>
+                </div>
+              </nb-option>
+            </nb-autocomplete>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label>Nombre:</label>
+            <input [disabled]="!showPersonInfo" type="text" (input)="nameChange()" [(ngModel)]="entrega.nombre" [status]="deliver_status" nbInput fullWidth placeholder="Nombre" class="form-control" aria-describedby="nameHelp">
             <small id="nameHelp" class="form-text text-muted">Nombre de la persona que entrega el equipo.</small>
-            <datalist id="dynamicNames">
-              <option *ngFor="let name of names" [value]="name">{{name}}</option>
-            </datalist>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Cargo:</label>
+            <input [disabled]="!showPersonInfo" type="text" (input)="entregaCargoChange()" [(ngModel)]="entrega.cargo" [status]="entrega_cargo_status" nbInput fullWidth placeholder="Cargo" class="form-control" aria-describedby="cargoHelp">
+            <small id="cargoHelp" class="form-text text-muted">Cargo que ocupa en la entidad.</small>
           </div>
         </div>
       </div>
@@ -111,7 +188,7 @@
         <div class="col">
             <div class="form-group">
                 <label>Orden de trabajo:</label>
-                <input type="text" (input)="otChange()" [(ngModel)]="wrecord.ot" [status]="ot_status" nbInput fullWidth placeholder="Orden de trabajo" class="form-control" aria-describedby="otHelp">
+                <input type="text" #ot (input)="otChange()" [(ngModel)]="wrecord.ot" [status]="ot_status" nbInput fullWidth placeholder="Orden de trabajo" class="form-control" aria-describedby="otHelp">
                 <small id="otHelp" class="form-text text-muted">Número de la orden de trabajo. (De 2 a 10 dígitos)</small>            
             </div>
         </div>
@@ -147,12 +224,40 @@
         </div>
         <div class="col">
           <div class="form-group">
-              <label>Recoge:</label>
-              <input type="text" [status]="receiver_status" (input)="receiverChange()" [(ngModel)]="wrecord.recogido" list="dynamicNames" nbInput fullWidth placeholder="Nombre" class="form-control" aria-describedby="nameHelp">
-              <small id="nameHelp" class="form-text text-muted">Nombre de la persona que recoge el equipo.</small>
-              <datalist id="dynamicNames">
-                  <option *ngFor="let name of names" [value]="name">{{name}}</option>
-              </datalist>
+            <label>Recoge:</label>
+            <nb-form-field>
+              <input [nbAutocomplete]="autoNames2" #cirecoge type="text" maxlength="11" (input)="recogeCIChange()" [(ngModel)]="recoge.ci" [status]="recoge_ci_status" nbInput fullWidth placeholder="###########" class="form-control" aria-describedby="ciHelp">
+              <button *ngIf="wrecord.recogido !== ''" nbSuffix nbButton ghost (click)="clearCI2Input()">
+                <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
+              </button>
+            </nb-form-field>
+            <small id="ciHelp" class="form-text text-muted">Número de identidad.</small>
+            <nb-autocomplete #autoNames2 (selectedChange)="onCI2SelectionChange($event)">
+              <nb-option *ngFor="let name of filteredName2$ | async" [value]="name.ci" style="cursor: auto;">
+                <div style="cursor: auto;" class="w-100">
+                  <div style="float: left; font-size: 12px;">{{ name.ci }}</div>
+                  <div style="padding: 0; float: right;">
+                    <img (click)="removeWPerson(name)" style="cursor: pointer;" class="float-right mt-1" src="assets/images/trash.png" width="16px" height="16px" alt="Eliminar">
+                  </div>
+                </div>
+              </nb-option>
+            </nb-autocomplete>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label>Nombre:</label>
+            <input [disabled]="!showPersonInfo2" type="text" (input)="name2Change()" [(ngModel)]="recoge.nombre" [status]="receiver_status" nbInput fullWidth placeholder="Nombre" class="form-control" aria-describedby="nameHelp">
+            <small id="nameHelp" class="form-text text-muted">Nombre de la persona que recoge el equipo.</small>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Cargo:</label>
+            <input [disabled]="!showPersonInfo2" type="text" (input)="recogeCargoChange()" [(ngModel)]="recoge.cargo" [status]="recoge_cargo_status" nbInput fullWidth placeholder="Cargo" class="form-control" aria-describedby="cargoHelp">
+            <small id="cargoHelp" class="form-text text-muted">Cargo que ocupa en la entidad.</small>
           </div>
         </div>
       </div>

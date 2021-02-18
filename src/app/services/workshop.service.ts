@@ -61,16 +61,16 @@ export class WorkshopService {
     return this.http.get(ipserver + 'workshop/names/' + id_cliente, {responseType: 'json'});
   }
 
-  getWPerson(name: string) {
-    return this.http.get(ipserver + 'workshop/listperson/' + name, {responseType: 'json'});
+  getWPerson(ci: string) {
+    return this.http.get(ipserver + 'workshop/listperson/' + ci, {responseType: 'json'});
   }
 
   saveRecord(record: WRecord) {
     return this.http.post(ipserver + 'workshop', record);
   }
 
-  savePerson(record: WPerson) {
-    return this.http.post(ipserver + 'workshop/createwperson', record);
+  savePerson(record: WPerson, siglas: string) {
+    return this.http.post(ipserver + 'workshop/createwperson/' + siglas, record);
   }
 
   updateRecord(id: number, record: WRecord) {
