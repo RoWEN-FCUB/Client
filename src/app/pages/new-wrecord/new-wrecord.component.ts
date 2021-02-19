@@ -620,6 +620,8 @@ export class NewWRecordComponent implements OnInit {
             } as SweetAlertOptions);
             this.dialogRef.close(this.newrecord);
           });
+        } else {
+          this.dialogRef.close(this.newrecord);
         }
       });
     }

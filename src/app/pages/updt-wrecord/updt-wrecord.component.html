@@ -208,7 +208,7 @@
         <div class="col">
           <div class="form-group">
             <label style="margin-right: 2px;">Fallo:</label>
-            <textarea nbInput [status]="fallo_status" (input)="failChange()" fullWidth placeholder="Fallo..." [(ngModel)]="wrecord.fallo" aria-describedby="falloHelp"></textarea>
+            <textarea nbInput #fail [status]="fallo_status" (input)="failChange()" fullWidth placeholder="Fallo..." [(ngModel)]="wrecord.fallo" aria-describedby="falloHelp"></textarea>
             <small id="falloHelp" class="form-text text-muted">Descripción del fallo que presentó el equipo.</small>
           </div>
         </div>
@@ -265,7 +265,7 @@
         <div class="col">
           <div class="form-group">
             <label style="margin-right: 2px;">Observaciones:</label>
-            <textarea nbInput [status]="'info'" fullWidth placeholder="Observaciones..." [(ngModel)]="wrecord.observaciones" aria-describedby="obsHelp"></textarea>
+            <textarea nbInput [status]="'info'" #observ fullWidth placeholder="Observaciones..." [(ngModel)]="wrecord.observaciones" aria-describedby="obsHelp"></textarea>
             <small id="obsHelp" class="form-text text-muted">Observaciones adicionales.</small>
           </div>
         </div>

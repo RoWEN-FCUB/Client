@@ -27,6 +27,8 @@ export class UpdtWRecordComponent implements OnInit {
   @ViewChild('cientrega', {static: false}) ciinput: ElementRef;
   @ViewChild('cirecoge', {static: false}) ci2input: ElementRef;
   @ViewChild('ot', {static: false}) otinput: ElementRef;
+  @ViewChild('observ', {static: false}) obsinput: ElementRef;
+  @ViewChild('fail', {static: false}) failinput: ElementRef;
   filteredClients$: Observable<WClient[]>;
   filteredDevices$: Observable<string[]>;
   filteredMarcs$: Observable<string[]>;
@@ -83,14 +85,26 @@ export class UpdtWRecordComponent implements OnInit {
   ngOnInit() {
     this.updtDeviceStatus();
     this.wrecord.fecha_salida = new Date();
-    this.workshopService.getWPerson(this.wrecord.entrega_ci).subscribe((res: WPerson) => {
-      this.entrega = res;
-      this.workshopService.getWNames(this.entrega.id_cliente).subscribe((res2: WPerson[]) => {
-        this.names = res2;
-        this.showPersonInfo = false;
-        this.filteredName$ = of(this.names);
-        this.filteredName2$ = of(this.names);
-        setTimeout(() => this.otinput.nativeElement.focus(), 0);
+    this.workshopService.getWPerson(this.wrecord.entrega_ci).subscribe((ent: WPerson) => {
+      this.entrega = ent;
+      this.workshopService.getWPerson(this.wrecord.recoge_ci).subscribe((rec: WPerson) => {
+        if (rec) {
+          this.recoge = rec;
+        }
+        this.workshopService.getWNames(this.entrega.id_cliente).subscribe((res: WPerson[]) => {
+          this.names = res;
+          this.showPersonInfo = false;
+          this.showPersonInfo2 = false;
+          this.filteredName$ = of(this.names);
+          this.filteredName2$ = of(this.names);
+          if (!this.wrecord.ot) {
+            setTimeout(() => this.otinput.nativeElement.focus(), 0);
+          } else if (!this.recoge.ci) {
+            setTimeout(() => this.ci2input.nativeElement.focus(), 0);
+          } else {
+            setTimeout(() => this.obsinput.nativeElement.focus(), 0);
+          }
+        });
       });
     });
     this.workshopService.getWDevices().subscribe((res: WDevice[]) => {
@@ -644,6 +658,7 @@ export class UpdtWRecordComponent implements OnInit {
         title: 'Debe escribir un cliente válido.',
       } as SweetAlertOptions);
       this.client_status = 'danger';
+      setTimeout(() => this.clientinput.nativeElement.focus(), 0);
       return false;
     } else if (this.show_client_name && (this.client_name_status === 'danger' || this.wrecord.cliente_nombre === '')) {
       Toast.fire({
@@ -658,6 +673,7 @@ export class UpdtWRecordComponent implements OnInit {
         title: 'Debe escribir un equipo válido.',
       } as SweetAlertOptions);
       this.device_status = 'danger';
+      setTimeout(() => this.deviceinput1.nativeElement.focus(), 0);
       return false;
     } else if (this.marc_status === 'danger' || this.wrecord.marca === '') {
       Toast.fire({
@@ -665,6 +681,7 @@ export class UpdtWRecordComponent implements OnInit {
         title: 'Debe escribir una marca válida.',
       } as SweetAlertOptions);
       this.marc_status = 'danger';
+      setTimeout(() => this.marcinput.nativeElement.focus(), 0);
       return false;
     } else if (this.model_status === 'danger' || this.wrecord.modelo === '') {
       Toast.fire({
@@ -672,6 +689,7 @@ export class UpdtWRecordComponent implements OnInit {
         title: 'Debe escribir una modelo válido.',
       } as SweetAlertOptions);
       this.model_status = 'danger';
+      setTimeout(() => this.modelinput.nativeElement.focus(), 0);
       return false;
     } else if (this.inv_status === 'danger' || this.wrecord.inventario === '') {
       Toast.fire({
@@ -679,6 +697,7 @@ export class UpdtWRecordComponent implements OnInit {
         title: 'Debe escribir un número de inventario válido.',
       } as SweetAlertOptions);
       this.inv_status = 'danger';
+      setTimeout(() => this.invinput.nativeElement.focus(), 0);
       return false;
     } else if (this.serial_status === 'danger' || this.wrecord.serie === '') {
       Toast.fire({
@@ -686,20 +705,37 @@ export class UpdtWRecordComponent implements OnInit {
         title: 'Debe escribir un número de serie válido.',
       } as SweetAlertOptions);
       this.serial_status = 'danger';
+      setTimeout(() => this.serieinput.nativeElement.focus(), 0);
       return false;
-    } else if (this.deliver_status === 'danger' || this.entrega.nombre === '') {
+    } else if (this.entrega_ci_status === 'danger' || this.entrega.ci === '') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir correctamente el número de identidad de la persona que entrega el equipo.',
+      } as SweetAlertOptions);
+      this.entrega_ci_status = 'danger';
+      setTimeout(() => this.ciinput.nativeElement.focus(), 0);
+      return false;
+    } else if (this.showPersonInfo && (this.deliver_status === 'danger' || this.entrega.nombre === '')) {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir correctamente el nombre de la persona que entrega el equipo.',
       } as SweetAlertOptions);
       this.deliver_status = 'danger';
       return false;
-    } else if (this.ot_status === 'danger' || this.wrecord.ot === '') {
+    } else if (this.showPersonInfo && (this.entrega_cargo_status === 'danger' || this.entrega.cargo === '')) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir correctamente el cargo de la persona que entrega el equipo.',
+      } as SweetAlertOptions);
+      this.entrega_cargo_status = 'danger';
+      return false;
+    } else if (this.ot_status === 'danger') {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir una orden de trabajo válida.',
       } as SweetAlertOptions);
       this.ot_status = 'danger';
+      setTimeout(() => this.otinput.nativeElement.focus(), 0);
       return false;
     } else if (this.fallo_status === 'danger' || (this.wrecord.fallo === '' && this.wrecord.estado !== 'P')) {
       Toast.fire({
@@ -707,13 +743,28 @@ export class UpdtWRecordComponent implements OnInit {
         title: 'Debe describir el fallo que presentó el equipo.',
       } as SweetAlertOptions);
       this.fallo_status = 'danger';
+      setTimeout(() => this.failinput.nativeElement.focus(), 0);
       return false;
-    } else if (this.recoge_ci_status === 'danger' || this.recoge.nombre === '') {
+    } else if (this.recoge_ci_status === 'danger') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir correctamente el número de identidad de la persona que recoge el equipo.',
+      } as SweetAlertOptions);
+      setTimeout(() => this.ci2input.nativeElement.focus(), 0);
+      return false;
+    } else if (this.showPersonInfo2 && (this.receiver_status === 'danger' || this.recoge.nombre === '')) {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir correctamente el nombre de la persona que recoge el equipo.',
       } as SweetAlertOptions);
-      this.recoge_ci_status = 'danger';
+      this.receiver_status = 'danger';
+      return false;
+    } else if (this.showPersonInfo2 && (this.recoge_cargo_status === 'danger' || this.recoge.cargo === '')) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir correctamente el cargo de la persona que recoge el equipo.',
+      } as SweetAlertOptions);
+      this.recoge_cargo_status = 'danger';
       return false;
     }
     return true;
@@ -721,6 +772,10 @@ export class UpdtWRecordComponent implements OnInit {
 
   save() {
     if (this.validate()) {
+      this.wrecord.entregado = this.entrega.ci;
+      this.wrecord.recogido = this.recoge.ci;
+      /*console.log(this.recoge.ci);
+      console.log(this.wrecord.recogido);*/
       this.workshopService.updateRecord(this.wrecord.id, this.wrecord).subscribe(res => {
         const Toast = Swal.mixin({
           toast: true,
@@ -729,11 +784,41 @@ export class UpdtWRecordComponent implements OnInit {
           timerProgressBar: true,
           timer: 3000,
         });
-        Toast.fire({
-          icon: 'success',
-          title: 'Registro actualizado correctamente.',
-        } as SweetAlertOptions);
-        this.dialogRef.close(this.wrecord);
+        if (this.showPersonInfo) {
+          if (this.showPersonInfo2) {
+            this.workshopService.savePerson(this.recoge, this.wrecord.cliente).subscribe(res2 => {
+              this.workshopService.savePerson(this.entrega, this.wrecord.cliente).subscribe(res3 => {
+                Toast.fire({
+                  icon: 'success',
+                  title: 'Registro guardado correctamente.',
+                } as SweetAlertOptions);
+                this.dialogRef.close(this.wrecord);
+              });
+            });
+          } else {
+            this.workshopService.savePerson(this.entrega, this.wrecord.cliente).subscribe(res3 => {
+              Toast.fire({
+                icon: 'success',
+                title: 'Registro guardado correctamente.',
+              } as SweetAlertOptions);
+              this.dialogRef.close(this.wrecord);
+            });
+          }
+        } else if (this.showPersonInfo2) {
+          this.workshopService.savePerson(this.recoge, this.wrecord.cliente).subscribe(res2 => {
+            Toast.fire({
+              icon: 'success',
+              title: 'Registro guardado correctamente.',
+            } as SweetAlertOptions);
+            this.dialogRef.close(this.wrecord);
+          });
+        } else {
+          Toast.fire({
+            icon: 'success',
+            title: 'Registro guardado correctamente.',
+          } as SweetAlertOptions);
+          this.dialogRef.close(this.wrecord);
+        }
       });
     }
   }

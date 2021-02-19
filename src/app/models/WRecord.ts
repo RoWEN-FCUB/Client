@@ -20,4 +20,5 @@ export interface WRecord {
   fallo?: string;
   observaciones?: string;
   entrega_ci?: string;
+  recoge_ci?: string;
 }

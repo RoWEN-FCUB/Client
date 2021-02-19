@@ -1,6 +1,6 @@
 import { Injectable, NgModule } from '@angular/core';
 // tslint:disable-next-line: max-line-length
-import { NbAutocompleteModule, NbCheckboxModule, NbBadgeModule, NbAccordionModule, NbIconModule , NbActionsModule, NbTooltipModule, NbPopoverModule, NbMenuModule, NbCardModule, NbInputModule, NbSelectModule, NbButtonModule, NbDialogModule, NbTabsetModule, NbDatepickerModule, NbLayoutModule, NbToggleModule } from '@nebular/theme';
+import { NbAutocompleteModule, NbCheckboxModule, NbBadgeModule, NbAccordionModule, NbIconModule , NbActionsModule, NbTooltipModule, NbPopoverModule, NbMenuModule, NbCardModule, NbInputModule, NbSelectModule, NbButtonModule, NbDialogModule, NbTabsetModule, NbDatepickerModule, NbLayoutModule, NbToggleModule, NbFormFieldModule } from '@nebular/theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import { ThemeModule } from '../@theme/theme.module';
@@ -111,6 +111,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
   imports: [
     NbSecurityModule,
     // NgxMaterialTimepickerModule,
+    NbFormFieldModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     PagesRoutingModule,

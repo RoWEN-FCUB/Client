@@ -1,5 +1,5 @@
 import {
-  Component, OnInit,
+  Component, ElementRef, OnInit, ViewChild,
 } from '@angular/core';
 import { WorkshopService } from '../../services/workshop.service';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
@@ -35,6 +35,7 @@ import { WPerson } from '../../models/WPerson';
 })
 export class TallerComponent implements OnInit {
 
+  @ViewChild('strsearch', {static: false}) searchinput: ElementRef;
   wrecords: WRecord[] = [];
   search_status: string = 'info';
   search_string: string = '';
@@ -67,6 +68,12 @@ export class TallerComponent implements OnInit {
         this.company = comp;
       });
     });
+  }
+
+  clearSearchInput() {
+    this.search_string = '';
+    setTimeout(() => this.searchinput.nativeElement.focus(), 0);
+    this.search();
   }
 
   generateTableToPrint() {
@@ -482,7 +489,7 @@ export class TallerComponent implements OnInit {
 
   generateDeliver(index: number) {
     let entrega: WPerson = {};
-    this.workshopService.getWPerson(this.wrecords[index].entregado).subscribe((per: WPerson) => {
+    this.workshopService.getWPerson(this.wrecords[index].entrega_ci).subscribe((per: WPerson) => {
       entrega = per;
       this.workshopService.getWParts(this.wrecords[index].id).subscribe((res: WPart[]) => {
         const tbody = [];
