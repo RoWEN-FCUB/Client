@@ -59,6 +59,7 @@ export class NewWRecordComponent implements OnInit {
     id_emp: 0,
     fallo: '',
     observaciones: '',
+    externo: false,
   };
   entrega: WPerson = {
     nombre: '',
@@ -80,6 +81,7 @@ export class NewWRecordComponent implements OnInit {
   deliver_status: string = 'info';
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_sup: 0, id_emp: 0};
   show_client_name: boolean = false;
+  save_lock = false;
   // tslint:disable-next-line: max-line-length
   constructor(private library: FaIconLibrary, protected dialogRef: NbDialogRef<any>, private workshopService: WorkshopService, private authService: NbAuthService) {
     this.library.addIcons(faTrashAlt);
@@ -518,6 +520,10 @@ export class NewWRecordComponent implements OnInit {
     }
   }
 
+  extern_change(e: boolean) {
+    this.newrecord.externo = e;
+  }
+
   validate() {
     const Toast = Swal.mixin({
       toast: true,
@@ -602,6 +608,7 @@ export class NewWRecordComponent implements OnInit {
 
   save() {
     if (this.validate()) {
+      this.save_lock = true;
       // console.log(this.newrecord);
       const Toast = Swal.mixin({
         toast: true,
@@ -611,19 +618,32 @@ export class NewWRecordComponent implements OnInit {
         timer: 3000,
       });
       this.newrecord.entregado = this.entrega.ci;
-      this.workshopService.saveRecord(this.newrecord).subscribe(res => {
-        if (this.showPersonInfo) {
-          this.workshopService.savePerson(this.entrega, this.newrecord.cliente).subscribe(res2 => {
+      if (this.showPersonInfo) { // PERSONA NUEVA
+        this.workshopService.getWPerson(this.entrega.ci).subscribe((per: WPerson) => {
+          if (per) { // EXISTE EN LA BD
             Toast.fire({
-              icon: 'success',
-              title: 'Registro guardado correctamente.',
+              icon: 'error',
+              title: 'Ya existe una persona registrada con el mismo número de identidad.',
             } as SweetAlertOptions);
+            this.save_lock = false;
+          } else { // GUARDAR NUEVA PERSONA Y REGISTRO
+            this.workshopService.saveRecord(this.newrecord).subscribe(res => {
+              this.workshopService.savePerson(this.entrega, this.newrecord.cliente).subscribe(res2 => {
+                Toast.fire({
+                  icon: 'success',
+                  title: 'Registro guardado correctamente.',
+                } as SweetAlertOptions);
+                this.dialogRef.close(this.newrecord);
+              });
+              this.dialogRef.close(this.newrecord);
+            });
+          }
+        });
+      } else { // GUARDAR SOLO REGISTRO
+        this.workshopService.saveRecord(this.newrecord).subscribe(res => {
             this.dialogRef.close(this.newrecord);
-          });
-        } else {
-          this.dialogRef.close(this.newrecord);
-        }
-      });
+        });
+      }
     }
   }
 

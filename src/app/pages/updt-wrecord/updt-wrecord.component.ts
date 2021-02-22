@@ -79,6 +79,7 @@ export class UpdtWRecordComponent implements OnInit {
   entrega_cargo_status: string = 'info';
   recoge_cargo_status: string = 'info';
   show_client_name: boolean = false;
+  save_lock = false;
 
   constructor(protected dialogRef: NbDialogRef<any>, private workshopService: WorkshopService, private authService: NbAuthService) { }
 
@@ -644,6 +645,10 @@ export class UpdtWRecordComponent implements OnInit {
     }
   }
 
+  extern_change(e: boolean) {
+    this.wrecord.externo = e;
+  }
+
   validate() {
     const Toast = Swal.mixin({
       toast: true,
@@ -772,54 +777,107 @@ export class UpdtWRecordComponent implements OnInit {
 
   save() {
     if (this.validate()) {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 3000,
+      });
+      this.save_lock = true;
       this.wrecord.entregado = this.entrega.ci;
       this.wrecord.recogido = this.recoge.ci;
-      /*console.log(this.recoge.ci);
-      console.log(this.wrecord.recogido);*/
-      this.workshopService.updateRecord(this.wrecord.id, this.wrecord).subscribe(res => {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 3000,
-        });
-        if (this.showPersonInfo) {
-          if (this.showPersonInfo2) {
-            this.workshopService.savePerson(this.recoge, this.wrecord.cliente).subscribe(res2 => {
+      if (this.showPersonInfo) { // PERSONA QUE ENTREGA NUEVA
+        this.workshopService.getWPerson(this.entrega.ci).subscribe((ent: WPerson) => {
+          if (ent) { // EXISTE
+            Toast.fire({
+              icon: 'error',
+              title: 'Ya existe una persona registrada con el mismo número de identidad.',
+            } as SweetAlertOptions);
+            this.entrega_ci_status = 'danger';
+            setTimeout(() => this.ciinput.nativeElement.focus(), 0);
+            this.save_lock = false;
+          } else {
+            if (this.showPersonInfo2) { // PERSONA QUE RECOGE NUEVA
+              this.workshopService.getWPerson(this.recoge.ci).subscribe((rec: WPerson) => {
+                if (rec) { // EXISTE
+                  Toast.fire({
+                    icon: 'error',
+                    title: 'Ya existe una persona registrada con el mismo número de identidad.',
+                  } as SweetAlertOptions);
+                  this.recoge_ci_status = 'danger';
+                  setTimeout(() => this.ci2input.nativeElement.focus(), 0);
+                  this.save_lock = false;
+                } else { // GUARDO PERSONA QUE RECOGE Y ENTREGA Y DESPUES ACTUALIZO
+                  if (this.recoge.ci !== this.entrega.ci) { // SI SON PERSONAS DISTINTAS
+                    this.workshopService.savePerson(this.recoge, this.wrecord.cliente).subscribe(res2 => {
+                      this.workshopService.savePerson(this.entrega, this.wrecord.cliente).subscribe(res3 => {
+                        Toast.fire({
+                          icon: 'success',
+                          title: 'Registro guardado correctamente.',
+                        } as SweetAlertOptions);
+                        this.workshopService.updateRecord(this.wrecord.id, this.wrecord).subscribe(res => {
+                          this.dialogRef.close(this.wrecord);
+                        });
+                      });
+                    });
+                  } else { // SI ES LA MISMA PERSONA SOLO LA GUARDO UNA VEZ
+                    this.workshopService.savePerson(this.entrega, this.wrecord.cliente).subscribe(res3 => {
+                      Toast.fire({
+                        icon: 'success',
+                        title: 'Registro guardado correctamente.',
+                      } as SweetAlertOptions);
+                      this.workshopService.updateRecord(this.wrecord.id, this.wrecord).subscribe(res => {
+                        this.dialogRef.close(this.wrecord);
+                      });
+                    });
+                  }
+                }
+              });
+            } else { // GUARDO PESONA NUEVA QUE ENTREGA Y ACTUALIZO
               this.workshopService.savePerson(this.entrega, this.wrecord.cliente).subscribe(res3 => {
                 Toast.fire({
                   icon: 'success',
                   title: 'Registro guardado correctamente.',
                 } as SweetAlertOptions);
-                this.dialogRef.close(this.wrecord);
+                this.workshopService.updateRecord(this.wrecord.id, this.wrecord).subscribe(res => {
+                  this.dialogRef.close(this.wrecord);
+                });
               });
-            });
-          } else {
-            this.workshopService.savePerson(this.entrega, this.wrecord.cliente).subscribe(res3 => {
+            }
+          }
+        });
+      } else if (this.showPersonInfo2) { // PERSONA QUE RECOGE NUEVA
+        this.workshopService.getWPerson(this.recoge.ci).subscribe((rec: WPerson) => {
+          if (rec) { // EXISTE
+            Toast.fire({
+              icon: 'error',
+              title: 'Ya existe una persona registrada con el mismo número de identidad.',
+            } as SweetAlertOptions);
+            this.recoge_ci_status = 'danger';
+            setTimeout(() => this.ci2input.nativeElement.focus(), 0);
+            this.save_lock = false;
+          } else { // GUARDO PERSONA QUE RECOGE Y DESPUES ACTUALIZO
+            this.workshopService.savePerson(this.recoge, this.wrecord.cliente).subscribe(res2 => {
               Toast.fire({
                 icon: 'success',
                 title: 'Registro guardado correctamente.',
               } as SweetAlertOptions);
-              this.dialogRef.close(this.wrecord);
+              this.workshopService.updateRecord(this.wrecord.id, this.wrecord).subscribe(res => {
+                this.dialogRef.close(this.wrecord);
+              });
             });
           }
-        } else if (this.showPersonInfo2) {
-          this.workshopService.savePerson(this.recoge, this.wrecord.cliente).subscribe(res2 => {
-            Toast.fire({
-              icon: 'success',
-              title: 'Registro guardado correctamente.',
-            } as SweetAlertOptions);
-            this.dialogRef.close(this.wrecord);
-          });
-        } else {
-          Toast.fire({
-            icon: 'success',
-            title: 'Registro guardado correctamente.',
-          } as SweetAlertOptions);
+        });
+      } else {
+        Toast.fire({
+          icon: 'success',
+          title: 'Registro guardado correctamente.',
+        } as SweetAlertOptions);
+        this.workshopService.updateRecord(this.wrecord.id, this.wrecord).subscribe(res => {
           this.dialogRef.close(this.wrecord);
-        }
-      });
+        });
+      }
     }
   }
 

@@ -19,6 +19,7 @@ export interface WRecord {
   id_emp?: number;
   fallo?: string;
   observaciones?: string;
+  externo?: boolean;
   entrega_ci?: string;
   recoge_ci?: string;
 }

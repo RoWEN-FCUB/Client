@@ -55,6 +55,11 @@
             </nb-autocomplete>
           </div>
         </div>
+        <div class="col">
+          <div class="form-group h-100" style="padding-top: 33px;">
+            <nb-checkbox [checked]="wrecord.externo" (checkedChange)="extern_change($event)" status="info">Fuera del taller</nb-checkbox>                    
+          </div>
+        </div>
       </div>
       <div class="row">
         <div class="col">
@@ -213,7 +218,7 @@
           </div>
         </div>
       </div>      
-      <div class="row">
+      <div class="row" *ngIf="!wrecord.externo">
         <div class="col">
             <div class="form-group">
               <label>Fecha de salida:</label>
@@ -245,7 +250,7 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row" *ngIf="!wrecord.externo">
         <div class="col">
           <div class="form-group">
             <label>Nombre:</label>
@@ -273,7 +278,7 @@
     </nb-card-body>
     <nb-card-footer>
       <div class="float-right row">
-        <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Actualizar</button>
+        <button [disabled]="save_lock" (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Actualizar</button>
         <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
       </div>
     </nb-card-footer>
