@@ -85,6 +85,17 @@ export class PagesComponent implements OnInit {
           );
         }
       });*/
+      this.accessChecker.isGranted('view', 'comercial').subscribe(granted => {
+        if (granted) {
+          this.menu.push(
+            {
+              title: 'Comercial',
+              icon: 'car-outline',
+              link: '/pages/comercial',
+            },
+          );
+        }
+      });
       this.accessChecker.isGranted('view', 'admin_menu').subscribe( granted => {
         if (granted) {
           this.menu.push(

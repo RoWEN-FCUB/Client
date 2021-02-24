@@ -1,0 +1,38 @@
+<nb-card fullwidth accent="info">
+    <nb-card-header>Gestión comercial</nb-card-header>
+    <nb-card-body>
+        <nb-tabset fullwidth (changeTab)="tabChanged($event)">
+            <nb-tab tabTitle="VALES NUEVOS"></nb-tab>
+            <nb-tab tabTitle="VALES CONCILIADOS"></nb-tab>
+            <nb-tab tabTitle="PROVEEDORES">
+                <div class='table-responsive'>
+                    <button nbTooltip="Agregar un nuevo proveedor" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+                    <table id="tablePreview" class="table table-hover table-borderless table-striped table-sm">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>SIGLAS</th>
+                          <th>NOMBRE</th>
+                          <th>REUP</th>
+                          <th>ACCION</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let prov of proveedores; let i = index">
+                          <th scope="row">{{i+1}}</th>
+                          <td>{{prov.siglas}}</td>
+                          <td>{{prov.nombre}}</td>
+                          <td>{{prov.reeup}}</td>
+                          <td>
+                            <nb-icon style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar usuario" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>                            
+                            <nb-icon style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar proveedor" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+            </nb-tab>
+            <nb-tab tabTitle="PRODUCTOS"></nb-tab>
+        </nb-tabset>
+    </nb-card-body>
+</nb-card>

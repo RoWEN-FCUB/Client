@@ -102,10 +102,11 @@ export const NB_CORE_PROVIDERS = [
       },
       tec: {
         parent: 'user',
-        view: ['workshop'], /*
-        create: '*',
-        edit: '*',
-        remove: '*',*/
+        view: ['workshop'],
+      },
+      comercial: {
+        parent: 'user',
+        view: ['comercial', 'energy'],
       },
       admin: {
         view: '*',

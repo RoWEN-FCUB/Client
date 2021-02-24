@@ -13,6 +13,7 @@ import { EnergyComponent } from './energy/energy.component';
 import { GeeComponent } from './gee/gee.component';
 import { AdminCompanyComponent } from './admin-company/admin-company.component';
 import { AdminServiceComponent } from './admin-service/admin-service.component';
+import { ComercialComponent } from './comercial/comercial.component';
 // import { from } from 'rxjs';
 const routes: Routes = [{
   path: '',
@@ -31,13 +32,13 @@ const routes: Routes = [{
       path: 'editProfile',
       component: EditProfileComponent,
       canActivate: [RoleGuard],
-      data: {role: ['user', 'tec', 'energy', 'admin']},
+      data: {role: ['user', 'tec', 'energy', 'comercial', 'admin']},
     },
     {
       path: 'tasks',
       component: TaskWeekComponent,
       canActivate: [RoleGuard],
-      data: {role: ['user', 'tec', 'energy', 'admin']},
+      data: {role: ['user', 'tec', 'energy', 'comercial', 'admin']},
     },
     {
       path: 'workshop',
@@ -49,7 +50,7 @@ const routes: Routes = [{
       path: 'tasks/:id/:fecha_inicio/:fecha_fin',
       component: TaskWeekComponent,
       canActivate: [RoleGuard],
-      data: {role: ['user', 'tec', 'energy', 'admin']},
+      data: {role: ['user', 'tec', 'energy', 'comercial', 'admin']},
     },
     {
       path: 'admin/users',
@@ -73,19 +74,25 @@ const routes: Routes = [{
       path: 'notifications',
       component: AllNotificationsComponent,
       canActivate: [RoleGuard],
-      data: {role: ['user', 'energy', 'tec', 'admin']},
+      data: {role: ['user', 'energy', 'tec', 'comercial', 'admin']},
     },
     {
       path: 'energy',
       component: EnergyComponent,
       canActivate: [RoleGuard],
-      data: {role: ['energy', 'admin']},
+      data: {role: ['energy', 'comercial', 'admin']},
     },
     {
       path: 'gee',
       component: GeeComponent,
       canActivate: [RoleGuard],
       data: {role: ['energy', 'admin']},
+    },
+    {
+      path: 'comercial',
+      component: ComercialComponent,
+      canActivate: [RoleGuard],
+      data: {role: ['comercial', 'admin']},
     },
   ],
 }];
