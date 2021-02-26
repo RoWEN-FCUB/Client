@@ -14,4 +14,12 @@ export class ComercialService {
   getProviders(id_emp: number) {
     return this.http.get(ipserver + 'comercial/listProviders/' + id_emp, {responseType: 'json'});
   }
+
+  getProducts(id_prod: number) {
+    return this.http.get(ipserver + 'comercial/listProducts/' + id_prod, {responseType: 'json'});
+  }
+
+  getReceipts(id_provd: number, conc: number, del: number) {
+    return this.http.get(ipserver + 'comercial/listReceipts/' + id_provd + '&' + conc + '&' + del, {responseType: 'json'});
+  }
 }

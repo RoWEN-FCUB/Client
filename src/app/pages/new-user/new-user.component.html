@@ -45,7 +45,7 @@
           <div style="margin-top: 5px" class="form-group">
             <label style="margin-right: 5px">Empresa:</label>
             <nb-select (selectedChange)="company_change()" placeholder="----" [(ngModel)]="selected_company" [status]="company_status" fullWidth>
-            <nb-option *ngFor="let company of companies" [value]="company.id">{{company.nombre}}</nb-option>
+              <nb-option *ngFor="let company of companies" [value]="company.id">{{company.nombre}}</nb-option>
             </nb-select>
             <small id="companyHelp" class="form-text text-muted">Empresa a la que pertenece el usuario.</small>
           </div>

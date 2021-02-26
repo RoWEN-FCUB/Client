@@ -2,37 +2,131 @@
     <nb-card-header>Gestión comercial</nb-card-header>
     <nb-card-body>
         <nb-tabset fullwidth (changeTab)="tabChanged($event)">
-            <nb-tab tabTitle="VALES NUEVOS"></nb-tab>
-            <nb-tab tabTitle="VALES CONCILIADOS"></nb-tab>
-            <nb-tab tabTitle="PROVEEDORES">
-                <div class='table-responsive'>
-                    <button nbTooltip="Agregar un nuevo proveedor" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
-                    <table id="tablePreview" class="table table-hover table-borderless table-striped table-sm">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>SIGLAS</th>
-                          <th>NOMBRE</th>
-                          <th>REUP</th>
-                          <th>ACCION</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let prov of proveedores; let i = index">
-                          <th scope="row">{{i+1}}</th>
-                          <td>{{prov.siglas}}</td>
-                          <td>{{prov.nombre}}</td>
-                          <td>{{prov.reeup}}</td>
-                          <td>
-                            <nb-icon style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar usuario" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>                            
-                            <nb-icon style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar proveedor" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+            <nb-tab tabTitle="VALES">
+              <div class="row" style="margin-bottom: 20px;">
+                <button nbTooltip="Agregar un nuevo vale" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+                <div style="padding-top: 10px;"><label style="margin-right: 5px; margin-left: 10px;">Proveedor:</label></div>
+                <nb-select (selectedChange)="provider_change()" placeholder="----" [(ngModel)]="selected_provider" [status]="'info'" fullwidth>
+                  <nb-option *ngFor="let prov of proveedores; let i = index" [value]="i">{{prov.siglas}}</nb-option>
+                </nb-select>
+                <div style="margin-left: 10px;">
+                  <nb-select [status]="'info'" fullwidth placeholder="----" [(ngModel)]="show_concilied_receipts">
+                    <nb-option [value]="0">Todos</nb-option>
+                    <nb-option [value]="1">Conciliados</nb-option>
+                    <nb-option [value]="2">No conciliados</nb-option>
+                  </nb-select>
+                </div>
+                <div style="margin-left: 10px;">
+                  <nb-select [status]="'info'" fullwidth placeholder="----" [(ngModel)]="show_delivered_receipts">
+                    <nb-option [value]="0">Todos</nb-option>
+                    <nb-option [value]="1">Entregados</nb-option>
+                    <nb-option [value]="2">No entregados</nb-option>
+                  </nb-select>
+                </div>
+              </div>
+              <table class="table table-hover table-borderless table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>PEDIDO</th>
+                    <th>FECHA</th>
+                    <th>CANTIDAD DE PRODUCTOS</th>
+                    <th>IMPORTE</th>
+                    <th>COSTO DE ENVÍO</th>
+                    <th>MUNICIPIO</th>
+                    <th>PROVINCIA</th>
+                    <th>DESTINATARIO</th>                    
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let vale of vales; let i = index;">
+                    <th>{{vale.id}}</th>
+                    <td>{{vale.pedido}}</td>
+                    <td>{{vale.fecha_emision | onlyDate}}</td>
+                    <td>{{vale.productos.length}}</td>
+                    <td>{{vale.precio_total}}</td>
+                    <td>{{vale.consto_envio}}</td>
+                    <td>{{vale.municipio}}</td>
+                    <td>{{vale.provincia}}</td>
+                    <td>{{vale.destinatario}}</td>
+                    <td style="text-align:right;">
+                      <nb-checkbox style="cursor: pointer; margin-right: 3px; padding: 0;" *ngIf="!vale.conciliado" [checked]="vale.marcado_conciliar" [status]="'info'" nbTooltip="Marcar para conciliar" nbTooltipIcon="checkmark-outline"></nb-checkbox>
+                      <nb-icon *ngIf="!vale.entregado" style="cursor: pointer" icon="car-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Marcar como entregado" nbTooltipIcon="car-outline" nbTooltipStatus="info"></nb-icon>
+                      <nb-icon *ngIf="vale.entregado" style="cursor: pointer" icon="corner-down-left-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Marcar como no entregado" nbTooltipIcon="corner-down-left-outline" nbTooltipStatus="info"></nb-icon>
+                      <nb-icon style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar vale" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                      <nb-icon style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar vale" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </nb-tab>
-            <nb-tab tabTitle="PRODUCTOS"></nb-tab>
+            <nb-tab tabTitle="PROVEEDORES">
+              <div class="row" style="margin-bottom: 20px;">
+                <button nbTooltip="Agregar un nuevo proveedor" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+              </div>
+              <table class="table table-hover table-borderless table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>SIGLAS</th>
+                    <th>NOMBRE</th>
+                    <th>REUP</th>
+                    <th>ACCION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let prov of proveedores; let i = index">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{prov.siglas}}</td>
+                    <td>{{prov.nombre}}</td>
+                    <td>{{prov.reeup}}</td>
+                    <td>
+                      <nb-icon style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar proveedor" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>                            
+                      <nb-icon style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar proveedor" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </nb-tab>
+            <nb-tab tabTitle="PRODUCTOS" [disabled]="(proveedores.length > 0) ? false : true">
+              <div class="row" style="margin-bottom: 20px;">
+                <button nbTooltip="Agregar un nuevo producto" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+                <div style="padding-top: 10px;"><label style="margin-right: 5px; margin-left: 10px;">
+                  Proveedor:</label>
+                </div>
+                <nb-select (selectedChange)="provider_change()" placeholder="----" [(ngModel)]="selected_provider" [status]="'info'" fullwidth>
+                  <nb-option *ngFor="let prov of proveedores; let i = index" [value]="i">{{prov.siglas}}</nb-option>
+                </nb-select>
+              </div>
+              <table class="table table-hover table-borderless table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>CODIGO</th>
+                    <th>NOMBRE</th>
+                    <th>Unidad de Medida</th>
+                    <th>PRECIO</th>
+                    <th>MLC</th>
+                    <th>ACCION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let prod of productos; let i = index">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{prod.codigo}}</td>
+                    <td>{{prod.nombre}}</td>
+                    <td>{{prod.unidad_medida}}</td>
+                    <td>${{prod.precio}}</td>
+                    <td>{{prod.mlc}}</td>
+                    <td>
+                      <nb-icon style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar producto" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>                            
+                      <nb-icon style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar producto" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </nb-tab>
         </nb-tabset>
     </nb-card-body>
 </nb-card>
