@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CProvider } from '../../models/CProvider';
 import { CProduct } from '../../models/CProduct';
 import { CReceipt } from '../../models/CReceipt';
@@ -13,8 +13,8 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import { OwlDateTimeComponent /*, OwlDateTimeIntl, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE*/ } from '@danielmoncada/angular-datetime-picker';
 import { Moment } from 'moment';
-import {HttpClient} from '@angular/common/http';
 import * as fsaver from 'file-saver';
+import { NewCproductComponent } from '../new-cproduct/new-cproduct.component';
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'comercial',
@@ -30,8 +30,11 @@ export class ComercialComponent implements OnInit {
   show_delivered_receipts: number = 0;
   show_concilied_receipts: number = 0;
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0};
+  search_status: string = 'info';
+  search_string: string = '';
+  @ViewChild('strsearch', {static: false}) searchinput: ElementRef;
 
-  constructor(private comercialService: ComercialService, private http: HttpClient, private dialogService: NbDialogService,
+  constructor(private comercialService: ComercialService, private dialogService: NbDialogService,
     private authService: NbAuthService) { }
 
   ngOnInit(): void {
@@ -109,6 +112,27 @@ export class ComercialComponent implements OnInit {
 
   tabChanged(e) {
     // console.log(e);
+  }
+
+  search() {
+
+  }
+
+  clearSearchInput() {
+    this.search_string = '';
+    setTimeout(() => this.searchinput.nativeElement.focus(), 0);
+    this.search();
+  }
+
+  openNewCProduct() {
+    // tslint:disable-next-line: max-line-length
+    this.dialogService.open(NewCproductComponent, {context: {proovedor_seleccionado: this.proveedores[this.selected_provider].id}}).onClose.subscribe(
+      (newCProduct) => {
+        if (newCProduct) {
+          // this.search();
+        }
+      },
+    );
   }
 
 }

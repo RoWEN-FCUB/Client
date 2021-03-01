@@ -1,0 +1,57 @@
+<nb-card accent="info" size="large">
+    <nb-card-header><div class="text-center">Nuevo producto</div></nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label>Código:</label>
+            <input (input)="codigo_change()" type="text" nbInput autofocus fullWidth [status]="codigo_status" placeholder="Código" [(ngModel)]="newCProduct.codigo" class="form-control" aria-describedby="codHelp">
+            <small id="codHelp" class="form-text text-muted">Código del producto.</small>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Nombre:</label>
+            <input (input)="name_change()" type="text" nbInput fullWidth [status]="name_status" placeholder="Nombre" [(ngModel)]="newCProduct.nombre" class="form-control" aria-describedby="namHelp">
+            <small id="namHelp" class="form-text text-muted">Nombre del producto</small>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label>Unidad de medida:</label>
+            <input (input)="um_change()" type="text" nbInput fullWidth [status]="um_status" placeholder="Unidad de medida" [(ngModel)]="newCProduct.unidad_medida" class="form-control" aria-describedby="umHelp">
+            <small id="umHelp" class="form-text text-muted">Unidad de medida del producto.</small>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Precio:</label>
+            <input (input)="precio_change()" type="text" nbInput fullWidth [status]="precio_status" placeholder="0.00" [(ngModel)]="newCProduct.precio" class="form-control" aria-describedby="precHelp">
+            <small id="precHelp" class="form-text text-muted">Precio del producto</small>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+          <div class="col">
+            <div class="form-group"><nb-checkbox [status]="'info'" [checked]="newCProduct.mlc" (checkedChange)="mlc_change($event)">Precio en MLC</nb-checkbox></div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label style="margin-right: 2px;">Descripción:</label>
+            <textarea nbInput [status]="'info'" fullWidth placeholder="Descripción..." [(ngModel)]="newCProduct.descripcion" aria-describedby="descHelp"></textarea>
+            <small id="descHelp" class="form-text text-muted">Descripción del producto.</small>
+          </div>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="float-right row">
+        <button nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+        <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+      </div>
+    </nb-card-footer>
+  </nb-card>

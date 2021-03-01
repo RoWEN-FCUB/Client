@@ -8,15 +8,12 @@ import { WPart } from '../../models/WPart';
 import { NbDialogService } from '@nebular/theme';
 import 'moment/min/locales';
 import * as moment from 'moment';
-import { UserService } from '../../services/user.service';
 import { CompanyService } from '../../services/company.service';
-import { ActivatedRoute } from '@angular/router';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { NewWRecordComponent } from '../new-wrecord/new-wrecord.component';
 import { UpdtWRecordComponent } from '../updt-wrecord/updt-wrecord.component';
 import { WpartsComponent } from '../wparts/wparts.component';
-import { User } from '../../models/User';
 import { Company } from '../../models/Company';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import Swal, { SweetAlertOptions } from 'sweetalert2';
@@ -44,12 +41,11 @@ export class TallerComponent implements OnInit {
   docDefinition = {};
   company: Company = {};
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0, ci: ''};
-  constructor(private userService: UserService,
+  constructor(
     private workshopService: WorkshopService,
     private authService: NbAuthService,
     private dialogService: NbDialogService,
     private companyService: CompanyService,
-    private route: ActivatedRoute,
     private library: FaIconLibrary,
     ) {
       this.config = {

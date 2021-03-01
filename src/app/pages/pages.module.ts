@@ -40,6 +40,8 @@ import { AdminCompanyComponent } from './admin-company/admin-company.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AdminServiceComponent } from './admin-service/admin-service.component';
 import { ComercialComponent } from './comercial/comercial.component';
+// import { NewCproductComponent } from './new-cproduct/new-cproduct.component';
+// import { NewCproviderComponent } from './new-cprovider/new-cprovider.component';
 // import { WpartsComponent } from './wparts/wparts.component';
 // import { AdminUserServicesComponent } from './admin-user-services/admin-user-services.component';
 // import { NewServiceComponent } from './new-service/new-service.component';
@@ -161,7 +163,8 @@ export class DefaultIntl extends OwlDateTimeIntl {
     DeviceStatePipe,
     StateDescriptionPipe,
     // tslint:disable-next-line: max-line-length
-    ShortSerialPipe, ShortNamePipe, EnergyComponent, GeeComponent, AdminCompanyComponent, AdminServiceComponent, ComercialComponent, 
+    ShortSerialPipe, ShortNamePipe, EnergyComponent, GeeComponent, AdminCompanyComponent, AdminServiceComponent, ComercialComponent,
+    // NewCproductComponent, NewCproviderComponent,
     // WpartsComponent,
     // AdminUserServicesComponent,
     // NewServiceComponent,
