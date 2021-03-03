@@ -67,7 +67,7 @@
     "html-to-pdfmake": "^2.1.4",
     "intl": "1.2.5",
     "ionicons": "^5.5.0",
-    "jquery": "^3.5.1",
+    "jquery": "^3.6.0",
     "leaflet": "1.7.1",
     "moment": "^2.29.1",
     "ncu": "^0.2.1",
