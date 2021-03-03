@@ -15,6 +15,9 @@ import { OwlDateTimeComponent /*, OwlDateTimeIntl, OwlDateTimeModule, OwlNativeD
 import { Moment } from 'moment';
 import * as fsaver from 'file-saver';
 import { NewCproductComponent } from '../new-cproduct/new-cproduct.component';
+import { Workbook } from 'exceljs';
+import { HttpClient } from '@angular/common/http';
+import ipserver from '../../ipserver';
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'comercial',
@@ -33,8 +36,17 @@ export class ComercialComponent implements OnInit {
   search_status: string = 'info';
   search_string: string = '';
   @ViewChild('strsearch', {static: false}) searchinput: ElementRef;
+  filename: string = '';
+  conc: {
+    codped: string,
+    fecha: string,
+    provincia: string,
+    estado_entrega: string,
+    transportista: string,
+    proveedor: string,
+  }[] = [];
 
-  constructor(private comercialService: ComercialService, private dialogService: NbDialogService,
+  constructor(private http: HttpClient, private comercialService: ComercialService, private dialogService: NbDialogService,
     private authService: NbAuthService) { }
 
   ngOnInit(): void {
@@ -135,4 +147,76 @@ export class ComercialComponent implements OnInit {
     );
   }
 
+  preview(files) {
+    if (files.length === 0)
+      return;
+    const formData = new FormData();
+    formData.append('uploads', files[0], files[0].filename);
+    // console.log(formData.get('uploads'));
+    this.comercialService.uploadFile(formData).subscribe(
+      (res: {fname: string}) => {
+        this.filename = res.fname;
+        // console.log(this.filename);
+      },
+    );
+  }
+
+  async procesar_fichero() {
+    const workBook: Workbook = new Workbook();
+    const fdir = ipserver + 'public/' + this.filename; // + 'public/YVFMFrd9OgaAxgLci1fkiXge.xlsx';  //
+    const rconc: {
+      codped: string,
+      fecha: string,
+      provincia: string,
+      estado_entrega: string,
+      transportista: string,
+      proveedor: string,
+    }[] = [];
+    const subscription = this.http.get(fdir, { responseType: 'blob' })
+    .subscribe(value => {
+      const blob: Blob = value;
+      const reader = new FileReader();
+      reader.onload = function (e: any) {
+        const contents = e.target.result;
+        workBook.xlsx.load(contents).then(data => {
+          const codped = workBook.worksheets[0].getRow(4).getCell(2).toString();
+          // console.log(codped);
+          let i = 4;
+          do {
+            rconc.push(
+              {
+                codped: workBook.worksheets[0].getRow(i).getCell(2).toString(),
+                fecha: moment.utc(new Date(workBook.worksheets[0].getRow(i).getCell(3).text)).format('DD/MM/YYYY'),
+                provincia: workBook.worksheets[0].getRow(i).getCell(4).toString(),
+                estado_entrega: workBook.worksheets[0].getRow(i).getCell(5).toString(),
+                transportista: workBook.worksheets[0].getRow(i).getCell(6).toString(),
+                proveedor: workBook.worksheets[0].getRow(i).getCell(7).toString(),
+              },
+            );
+            i++;
+          } while (workBook.worksheets[0].getRow(i).getCell(2).toString() !== '');
+          i = 1;
+          do {
+            const prod2 = workBook.worksheets[1].getRow(i).getCell(1).toString();
+            for (let j = 0; j < rconc.length; j++) {
+              if (rconc[j].codped.indexOf(prod2, 0) !== -1) {
+                rconc[j].estado_entrega = 'Entregado';
+                workBook.worksheets[0].getRow(j + 4).getCell(5).value = 'Entregado';
+                break;
+              }
+            }
+            i++;
+          } while (workBook.worksheets[1].getRow(i).getCell(1).toString() !== '');
+          workBook.xlsx.writeBuffer().then(data1 => {
+            const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            // tslint:disable-next-line: max-line-length
+            fsaver.saveAs(blobUpdate, 'Conciliación ' + moment.utc().format('DD-MM-YYYY') + '.xlsx');
+          });
+        });
+      };
+      reader.readAsArrayBuffer(blob);
+    });
+    this.conc = rconc;
+    // console.log(this.conc);
+  }
 }

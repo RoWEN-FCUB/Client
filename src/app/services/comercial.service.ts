@@ -22,4 +22,8 @@ export class ComercialService {
   getReceipts(id_provd: number, conc: number, del: number) {
     return this.http.get(ipserver + 'comercial/listReceipts/' + id_provd + '&' + conc + '&' + del, {responseType: 'json'});
   }
+
+  uploadFile(file) {
+    return this.http.post(ipserver + 'comercial/upload', file);
+  }
 }

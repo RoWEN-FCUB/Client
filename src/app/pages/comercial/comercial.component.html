@@ -132,6 +132,37 @@
                 </tbody>
               </table>
             </nb-tab>
+            <nb-tab tabTitle="TEMPORAL">
+              <div class="row">
+                <input nbInput status="info" #file type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" (change)="preview(file.files)">
+                <button style="margin-left: 10px;" (click)="procesar_fichero()" nbTooltip="Procesar datos subidos" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="collapse-outline"></nb-icon>Procesar</button>
+              </div>
+              <table class="table table-hover table-borderless table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>CODPED</th>
+                    <th>FECHA</th>
+                    <th>PROVINCIA</th>
+                    <th>ESTADO</th>
+                    <th>TRANSPORTISTA</th>
+                    <th>PROVEEDOR</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let prod of conc; let i = index">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{prod.codped}}</td>
+                    <td>{{prod.fecha}}</td>
+                    <td>{{prod.provincia}}</td>
+                    <td *ngIf="prod.estado_entrega === 'Entregado'"><span style="color: green;">{{prod.estado_entrega}}</span></td>
+                    <td *ngIf="prod.estado_entrega !== 'Entregado'">{{prod.estado_entrega}}</td>
+                    <td>{{prod.transportista}}</td>
+                    <td>{{prod.proveedor}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </nb-tab>
         </nb-tabset>
     </nb-card-body>
 </nb-card>
