@@ -18,6 +18,7 @@ import { NewCproductComponent } from '../new-cproduct/new-cproduct.component';
 import { Workbook } from 'exceljs';
 import { HttpClient } from '@angular/common/http';
 import ipserver from '../../ipserver';
+import { NewCproviderComponent } from '../new-cprovider/new-cprovider.component';
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'comercial',
@@ -141,10 +142,173 @@ export class ComercialComponent implements OnInit {
     this.dialogService.open(NewCproductComponent, {context: {proovedor_seleccionado: this.proveedores[this.selected_provider].id}}).onClose.subscribe(
       (newCProduct) => {
         if (newCProduct) {
-          // this.search();
+          this.comercialService.getProducts(this.proveedores[this.selected_provider].id).subscribe((prod: CProduct[]) => {
+            this.productos = prod;
+            const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timerProgressBar: true,
+              timer: 3000,
+            });
+            Toast.fire({
+              icon: 'success',
+              title: 'Producto creado correctamente.',
+            } as SweetAlertOptions);
+          });
         }
       },
     );
+  }
+
+  openNewCProvider() {
+    // tslint:disable-next-line: max-line-length
+    this.dialogService.open(NewCproviderComponent, {context: {id_empresa: this.user.id_emp}}).onClose.subscribe(
+      (newCProvider) => {
+        if (newCProvider) {
+          this.comercialService.getProviders(this.user.id_emp).subscribe((prov: CProvider[]) => {
+            this.proveedores = prov;
+            const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timerProgressBar: true,
+              timer: 3000,
+            });
+            Toast.fire({
+              icon: 'success',
+              title: 'Proveedor creado correctamente.',
+            } as SweetAlertOptions);
+          });
+        }
+      },
+    );
+  }
+
+  openEditCProvider(index: number) {
+    // tslint:disable-next-line: max-line-length
+    this.dialogService.open(NewCproviderComponent, {context: {id_empresa: this.user.id_emp, newProvider: this.proveedores[index]}}).onClose.subscribe(
+      (newCProvider) => {
+        if (newCProvider) {
+          this.comercialService.getProviders(this.user.id_emp).subscribe((prov: CProvider[]) => {
+            this.proveedores = prov;
+            const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timerProgressBar: true,
+              timer: 3000,
+            });
+            Toast.fire({
+              icon: 'success',
+              title: 'Proveedor actualizado correctamente.',
+            } as SweetAlertOptions);
+          });
+        }
+      },
+    );
+  }
+
+  openEditProduct(index: number) {
+    // tslint:disable-next-line: max-line-length
+    this.dialogService.open(NewCproductComponent, {context: {newCProduct: this.productos[index], proovedor_seleccionado: this.proveedores[this.selected_provider].id}}).onClose.subscribe(
+      (newCProduct) => {
+        if (newCProduct) {
+          this.comercialService.getProducts(this.proveedores[this.selected_provider].id).subscribe((prod: CProduct[]) => {
+            this.productos = prod;
+            const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timerProgressBar: true,
+              timer: 3000,
+            });
+            Toast.fire({
+              icon: 'success',
+              title: 'Producto actualizado correctamente.',
+            } as SweetAlertOptions);
+          });
+        }
+      },
+    );
+  }
+
+  deleteProduct(index: number) {
+    Swal.fire({
+      title: 'Confirma que desea eliminar el producto "' + this.productos[index].nombre + '"?',
+      text: 'Se eliminarán todos sus datos del sistema.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí­',
+      cancelButtonText: 'No',
+    } as SweetAlertOptions).then((result) => {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 3000,
+      });
+      if (result.value) {
+        this.comercialService.deleteProduct(this.productos[index].id).subscribe((res: {text: string}) => {
+          if (res.text === 'Product exists') {
+            Toast.fire({
+              icon: 'error',
+              title: 'El producto forma parte de vales y no se puede eliminar.',
+            } as SweetAlertOptions);
+          } else if (res.text === 'Product deleted') {
+            this.comercialService.getProducts(this.proveedores[this.selected_provider].id).subscribe((prod: CProduct[]) => {
+              this.productos = prod;
+              Toast.fire({
+                icon: 'success',
+                title: 'Producto eliminado correctamente.',
+              } as SweetAlertOptions);
+            });
+          }
+        });
+      }
+    });
+  }
+
+  deleteProvider(index: number) {
+    Swal.fire({
+      title: 'Confirma que desea eliminar el proveedor "' + this.proveedores[index].nombre + '"?',
+      text: 'Se eliminarán todos sus datos del sistema.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí­',
+      cancelButtonText: 'No',
+    } as SweetAlertOptions).then((result) => {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 3000,
+      });
+      if (result.value) {
+        this.comercialService.deleteProvider(this.proveedores[index].id).subscribe((res: {text: string}) => {
+          if (res.text === 'Provider exists') {
+            Toast.fire({
+              icon: 'error',
+              title: 'El proveedor forma parte de vales y no se puede eliminar.',
+            } as SweetAlertOptions);
+          } else if (res.text === 'Provider deleted') {
+            this.comercialService.getProviders(this.user.id_emp).subscribe((prov: CProvider[]) => {
+              this.proveedores = prov;
+              Toast.fire({
+                icon: 'success',
+                title: 'Proveedor eliminado correctamente.',
+              } as SweetAlertOptions);
+            });
+          }
+        });
+      }
+    });
   }
 
   preview(files) {

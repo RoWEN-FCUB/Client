@@ -68,7 +68,7 @@
             </nb-tab>
             <nb-tab tabTitle="PROVEEDORES">
               <div class="row" style="margin-bottom: 20px;">
-                <button nbTooltip="Agregar un nuevo proveedor" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+                <button (click)="openNewCProvider()" nbTooltip="Agregar un nuevo proveedor" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
               </div>
               <table class="table table-hover table-borderless table-striped table-sm">
                 <thead>
@@ -87,8 +87,8 @@
                     <td>{{prov.nombre}}</td>
                     <td>{{prov.reeup}}</td>
                     <td>
-                      <nb-icon style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar proveedor" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>                            
-                      <nb-icon style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar proveedor" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                      <nb-icon (click)="openEditCProvider(i)" style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar proveedor" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>                            
+                      <nb-icon (click)="deleteProvider(i)" style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar proveedor" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
                     </td>
                   </tr>
                 </tbody>
@@ -123,10 +123,10 @@
                     <td>{{prod.nombre}}</td>
                     <td>{{prod.unidad_medida}}</td>
                     <td>${{prod.precio}}</td>
-                    <td>{{prod.mlc}}</td>
+                    <td>{{prod.mlc ? 'Si' : 'No' }}</td>
                     <td>
-                      <nb-icon style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar producto" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>                            
-                      <nb-icon style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar producto" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                      <nb-icon (click)="openEditProduct(i)" style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar producto" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>                            
+                      <nb-icon (click)="deleteProduct(i)" style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar producto" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
                     </td>
                   </tr>
                 </tbody>

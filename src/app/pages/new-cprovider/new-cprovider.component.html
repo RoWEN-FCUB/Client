@@ -1,1 +1,36 @@
-<p>new-cprovider works!</p>
+<nb-card accent="info">
+    <nb-card-header><div class="text-center">Nuevo proveedor</div></nb-card-header>
+    <nb-card-body>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Siglas:</label>
+                    <input (input)="siglas_change()" type="text" nbInput fullWidth [status]="siglas_status" placeholder="Siglas" [(ngModel)]="newProvider.siglas" class="form-control" aria-describedby="sigHelp">
+                    <small id="sigHelp" class="form-text text-muted">Siglas del proveedor</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Código REEUP:</label>
+                    <input maxlength="11" (input)="reeup_change()" type="text" nbInput fullWidth placeholder="000.0.00000" class="form-control" aria-describedby="reupHelp" [(ngModel)]="newProvider.reeup" [status]="reeup_status">
+                    <small id="reupHelp" class="form-text text-muted">Código del Registro Estatal de Empresas y Unidades Presupuestadas (REEUP).</small>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Nombre:</label>
+                    <input (input)="name_change()" type="text" nbInput fullWidth [status]="name_status" placeholder="Nombre" [(ngModel)]="newProvider.nombre" class="form-control" aria-describedby="namHelp">
+                    <small id="namHelp" class="form-text text-muted">Nombre del proveedor</small>
+                </div>
+            </div>
+        </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="float-right row">
+        <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+        <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+      </div>
+    </nb-card-footer>
+  </nb-card>

@@ -26,11 +26,12 @@
           </div>
         </div>
         <div class="col">
-          <div class="form-group">
-            <label>Precio:</label>
+          <label>Precio:</label>
+          <nb-form-field>
+            <span nbPrefix>$</span>
             <input (input)="precio_change()" type="text" nbInput fullWidth [status]="precio_status" placeholder="0.00" [(ngModel)]="newCProduct.precio" class="form-control" aria-describedby="precHelp">
-            <small id="precHelp" class="form-text text-muted">Precio del producto</small>
-          </div>
+          </nb-form-field>
+          <small id="precHelp" class="form-text text-muted">Precio del producto</small>
         </div>
       </div>
       <div class="row">
@@ -50,7 +51,7 @@
     </nb-card-body>
     <nb-card-footer>
       <div class="float-right row">
-        <button nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+        <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
         <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
       </div>
     </nb-card-footer>
