@@ -89,7 +89,7 @@
     "rxjs-compat": "6.6.3",
     "socicon": "3.0.5",
     "style-loader": "^2.0.0",
-    "sweetalert2": "^10.14.0",
+    "sweetalert2": "^10.15.5",
     "tinymce": "5.6.2",
     "tslib": "^2.1.0",
     "typeface-exo": "1.1.13",
