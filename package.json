@@ -81,7 +81,7 @@
     "ngx-scrolltop": "^2.3.1",
     "node-sass": "^5.0.0",
     "normalize.css": "8.0.1",
-    "pace-js": "1.0.2",
+    "pace-js": "1.2.4",
     "pdfmake": "^0.1.70",
     "popper.js": "^1.15.0",
     "roboto-fontface": "0.10.0",
