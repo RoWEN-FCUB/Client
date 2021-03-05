@@ -4,4 +4,6 @@ export interface CProvider {
     nombre?: string;
     reeup?: string;
     siglas?: string;
+    provincia?: string;
+    municipio?: string;
 }

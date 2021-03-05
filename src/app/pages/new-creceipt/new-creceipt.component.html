@@ -1,0 +1,136 @@
+<nb-card accent="info" size="large">
+    <nb-card-header><div class="text-center">Nuevo vale</div></nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label>Pedido:</label>
+            <input type="text" nbInput autofocus fullWidth [status]="pedido_status" placeholder="Pedido" [(ngModel)]="newReceipt.pedido" class="form-control" aria-describedby="pedHelp">
+            <small id="pedHelp" class="form-text text-muted">Código del pedido.</small>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Fecha:</label>
+            <input type="text" [owlDateTime]="dt" [selectMode]="'single'" [owlDateTimeTrigger]="dt" nbInput fullWidth [status]="fecha_status" placeholder="Fecha" [(ngModel)]="fecha" class="form-control" aria-describedby="fecHelp">
+            <owl-date-time #dt [pickerType]="'calendar'"></owl-date-time>
+            <small id="fecHelp" class="form-text text-muted">Fecha de emisión del vale.</small>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>Provincia:</label>
+                <nb-select (selectedChange)="cambiarmunicipios()" fullWidth placeholder="----" [(ngModel)]="provincia_seleccionada" [status]="provincia_status">
+                    <nb-option *ngFor="let prov of provincias; let i = index" [value]="i">{{prov.nombre}}</nb-option>
+                </nb-select>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Municipio:</label>
+                <nb-select (selectedChange)="seleccionarMunicipio()" fullWidth placeholder="----" [(ngModel)]="municipio_seleccionado" [status]="municipio_status">
+                    <nb-option *ngFor="let mun of municipios; let i = index" [value]="i">{{mun}}</nb-option>
+                </nb-select>
+            </div>
+        </div>            
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label>Comprador:</label>
+            <input type="text" nbInput fullWidth [status]="comprador_status" placeholder="Comprador" [(ngModel)]="newReceipt.comprador" class="form-control" aria-describedby="compHelp">
+            <small id="compHelp" class="form-text text-muted">Nombre del comprador.</small>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>Destinatario:</label>
+            <input type="text" nbInput fullWidth [status]="destinatario_status" placeholder="Destinatario" [(ngModel)]="newReceipt.destinatario" class="form-control" aria-describedby="destHelp">
+            <small id="destHelp" class="form-text text-muted">Nombre del destinatario.</small>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label>Dirección:</label>
+            <input type="text" nbInput fullWidth [status]="direccion_status" placeholder="Comprador" [(ngModel)]="newReceipt.destinatario_direccion" class="form-control" aria-describedby="dirHelp">
+            <small id="dirHelp" class="form-text text-muted">Dirección del destinatario.</small>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label>No. Teléfono:</label>
+            <input type="text" nbInput fullWidth [status]="telefono_status" placeholder="Destinatario" [(ngModel)]="newReceipt.destinatario_telefono" class="form-control" aria-describedby="telHelp">
+            <small id="telHelp" class="form-text text-muted">Número de teléfono del destinatario.</small>
+          </div>
+        </div>
+      </div>
+      <div>
+        <nb-tabset>
+          <nb-tab tabTitle="PRODUCTOS" style="padding-left: 0; padding-right: 0;">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label>Producto:</label>
+                  <nb-select fullWidth placeholder="----" [(ngModel)]="producto_seleccionado" [status]="'info'">
+                      <nb-option *ngFor="let prod of productos; let i = index" [value]="i">{{prod.nombre}}</nb-option>
+                  </nb-select>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label>Cantidad:</label>
+                  <nb-form-field>
+                    <input type="text" nbInput fullWidth [status]="cantidad_status" placeholder="0" [(ngModel)]="cantidad" class="form-control" aria-describedby="canHelp">
+                    <button nbSuffix nbButton ghost (click)="addProduct()">
+                      <nb-icon icon='plus-outline'></nb-icon>
+                    </button>
+                  </nb-form-field>                  
+                  <small id="canHelp" class="form-text text-muted">Cantidad del producto.</small>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <table class="table table-hover table-borderless table-striped table-sm">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>NOMBRE</th>
+                      <th>PRECIO</th>
+                      <th>CANTIDAD</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let prod of newReceipt.productos; let i = index">
+                      <th scope="row">{{i+1}}</th>
+                      <td>{{prod.nombre}}</td>
+                      <td>{{prod.precio}}</td>
+                      <td>{{prod.cantidad}}</td>
+                      <td>                        
+                        <nb-icon (click)="deleteProduct(i)" style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar producto" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <b>Precio total: </b> ${{newReceipt.precio_total}} 
+              </div>
+            </div>
+          </nb-tab>
+         </nb-tabset>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="float-right row">
+        <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+        <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+      </div>
+    </nb-card-footer>
+  </nb-card>

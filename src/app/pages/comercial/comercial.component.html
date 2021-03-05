@@ -4,7 +4,7 @@
         <nb-tabset fullwidth (changeTab)="tabChanged($event)">
             <nb-tab tabTitle="VALES">
               <div class="row" style="margin-bottom: 20px;">
-                <button nbTooltip="Agregar un nuevo vale" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+                <button (click)="openNewCReceipt()" nbTooltip="Agregar un nuevo vale" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
                 <button style="margin-left: 10px;" nbTooltip="Conciliar vales marcados" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="checkmark-square-outline"></nb-icon>Conciliar</button>
                 <div style="padding-top: 10px;"><label style="margin-right: 5px; margin-left: 10px;">Proveedor:</label></div>
                 <nb-select (selectedChange)="provider_change()" placeholder="----" [(ngModel)]="selected_provider" [status]="'info'" fullwidth>
@@ -77,6 +77,8 @@
                     <th>SIGLAS</th>
                     <th>NOMBRE</th>
                     <th>REUP</th>
+                    <th>PROVINCIA</th>
+                    <th>MUNICIPIO</th>
                     <th>ACCION</th>
                   </tr>
                 </thead>
@@ -86,6 +88,8 @@
                     <td>{{prov.siglas}}</td>
                     <td>{{prov.nombre}}</td>
                     <td>{{prov.reeup}}</td>
+                    <td>{{prov.provincia}}</td>
+                    <td>{{prov.municipio}}</td>
                     <td>
                       <nb-icon (click)="openEditCProvider(i)" style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar proveedor" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>                            
                       <nb-icon (click)="deleteProvider(i)" style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar proveedor" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>

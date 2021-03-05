@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 // import { Observable, from } from 'rxjs';
 import { CProvider } from '../models/CProvider';
 import { CProduct } from '../models/CProduct';
+import { CReceipt } from '../models/CReceipt';
 import ipserver from '../ipserver';
 
 @Injectable({
@@ -30,6 +31,10 @@ export class ComercialService {
 
   createProvider(newProvider: CProvider) {
     return this.http.post(ipserver + 'comercial/provider', newProvider);
+  }
+
+  createReceipt(newReceipt: CReceipt) {
+    return this.http.post(ipserver + 'comercial/receipt', newReceipt);
   }
 
   updateProduct(newProduct: CProduct, id: number) {

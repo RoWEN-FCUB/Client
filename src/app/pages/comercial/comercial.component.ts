@@ -19,6 +19,9 @@ import { Workbook } from 'exceljs';
 import { HttpClient } from '@angular/common/http';
 import ipserver from '../../ipserver';
 import { NewCproviderComponent } from '../new-cprovider/new-cprovider.component';
+import { NewCreceiptComponent } from '../new-creceipt/new-creceipt.component';
+import { Company } from '../../models/Company';
+import { CompanyService } from '../../services/company.service';
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'comercial',
@@ -29,6 +32,7 @@ export class ComercialComponent implements OnInit {
 
   proveedores: CProvider[] = [];
   productos: CProduct[] = [];
+  company: Company = {};
   vales: CReceipt[] = [];
   selected_provider: number = 0;
   show_delivered_receipts: number = 0;
@@ -48,11 +52,14 @@ export class ComercialComponent implements OnInit {
   }[] = [];
 
   constructor(private http: HttpClient, private comercialService: ComercialService, private dialogService: NbDialogService,
-    private authService: NbAuthService) { }
+    private authService: NbAuthService, private companyService: CompanyService) { }
 
   ngOnInit(): void {
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
+      this.companyService.getOne(this.user.id_emp).subscribe((res: Company) => {
+        this.company = res;
+      });
       this.comercialService.getProviders(this.user.id_emp).subscribe((prov: CProvider[]) => {
         this.proveedores = prov;
         if (this.proveedores.length > 0) {
@@ -61,8 +68,7 @@ export class ComercialComponent implements OnInit {
           });
           // tslint:disable-next-line: max-line-length
           this.comercialService.getReceipts(this.proveedores[0].id, this.show_concilied_receipts, this.show_delivered_receipts).subscribe((res: any[]) => {
-            // console.log(res);
-            let oldid = null;
+            let oldid: number = -1;
             let newreceipt: CReceipt;
             for (let i = 0; i < res.length; i++) {
               const newproduct: CProduct = {
@@ -90,14 +96,19 @@ export class ComercialComponent implements OnInit {
                   entregado: (res[i].entregado as boolean),
                   fecha_emision: (res[i].fecha_emision as Date),
                   productos: [],
-                  consto_envio: (res[i].costo_envio as number),
+                  costo_envio: (res[i].costo_envio as number),
                   provincia: (res[i].provincia as string),
                   municipio: (res[i].municipio as string),
                 };
                 newreceipt.productos.push(newproduct);
                 this.vales.push(newreceipt);
               } else {
-                this.vales[i - 1].productos.push(newproduct);
+                for (let j = 0; j < this.vales.length; j++) {
+                  if (this.vales[j].id === (res[i].id as number)) {
+                    this.vales[j].productos.push(newproduct);
+                    break;
+                  }
+                }
               }
             }
             // console.log(this.vales);
@@ -180,6 +191,17 @@ export class ComercialComponent implements OnInit {
               title: 'Proveedor creado correctamente.',
             } as SweetAlertOptions);
           });
+        }
+      },
+    );
+  }
+
+  openNewCReceipt() {
+    // tslint:disable-next-line: max-line-length
+    this.dialogService.open(NewCreceiptComponent, {context: {proveedor: this.proveedores[this.selected_provider], productos: this.productos}}).onClose.subscribe(
+      (newCProduct) => {
+        if (newCProduct) {
+          
         }
       },
     );

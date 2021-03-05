@@ -13,7 +13,7 @@ export interface CReceipt {
     entregado?: boolean;
     fecha_emision?: Date;
     productos?: CProduct[];
-    consto_envio?: number;
+    costo_envio?: number;
     provincia?: string;
     municipio?: string;
 }

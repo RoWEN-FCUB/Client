@@ -82,6 +82,7 @@ import { AdminUserServicesComponent } from './pages/admin-user-services/admin-us
 import { WpartsComponent } from './pages/wparts/wparts.component';
 import { NewCproductComponent } from './pages/new-cproduct/new-cproduct.component';
 import { NewCproviderComponent } from './pages/new-cprovider/new-cprovider.component';
+import { NewCreceiptComponent } from './pages/new-creceipt/new-creceipt.component';
 // import { NgxScrollTopModule } from 'ngx-scrolltop';
 
 // here is the default text string
@@ -153,7 +154,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     AppComponent, UploadImgComponent, NewTaskComponent, NewObsComponent, NewErecordComponent,
     LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
     UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent,
-    WpartsComponent, NewCproductComponent, NewCproviderComponent],
+    WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   imports: [
     NbAutocompleteModule,
@@ -213,10 +214,11 @@ export class DefaultIntl extends OwlDateTimeIntl {
   exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
             NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent,
             NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent, WpartsComponent,
-            NewCproductComponent, NewCproviderComponent],
+            NewCproductComponent, NewCproviderComponent, NewCreceiptComponent],
   entryComponents: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
                     NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent, NewCompanyComponent,
-                     NewServiceComponent, AdminUserServicesComponent, WpartsComponent, NewCproductComponent, NewCproviderComponent],
+                    NewServiceComponent, AdminUserServicesComponent, WpartsComponent, NewCproductComponent, NewCproviderComponent,
+                    NewCreceiptComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {

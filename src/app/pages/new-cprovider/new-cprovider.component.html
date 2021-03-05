@@ -26,6 +26,24 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label>Provincia:</label>
+                    <nb-select (selectedChange)="cambiarmunicipios()" fullWidth placeholder="----" [(ngModel)]="provincia_seleccionada" [status]="provincia_status">
+                        <nb-option *ngFor="let prov of provincias; let i = index" [value]="i">{{prov.nombre}}</nb-option>
+                    </nb-select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label>Municipio:</label>
+                    <nb-select (selectedChange)="seleccionarMunicipio()" fullWidth placeholder="----" [(ngModel)]="municipio_seleccionado" [status]="municipio_status">
+                        <nb-option *ngFor="let mun of municipios; let i = index" [value]="i">{{mun}}</nb-option>
+                    </nb-select>
+                </div>
+            </div>            
+          </div>
     </nb-card-body>
     <nb-card-footer>
       <div class="float-right row">

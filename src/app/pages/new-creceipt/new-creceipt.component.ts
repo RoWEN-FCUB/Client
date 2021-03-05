@@ -1,29 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
-import { CProvider } from '../../models/CProvider';
+import { CProduct } from '../../models/CProduct';
+import { CReceipt } from '../../models/CReceipt';
 import { ComercialService } from '../../services/comercial.service';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
+import { CProvider } from '../../models/CProvider';
+import * as moment from 'moment';
 
 @Component({
   // tslint:disable-next-line: component-selector
-  selector: 'new-cprovider',
-  templateUrl: './new-cprovider.component.html',
-  styleUrls: ['./new-cprovider.component.css'],
+  selector: 'new-creceipt',
+  templateUrl: './new-creceipt.component.html',
+  styleUrls: ['./new-creceipt.component.css'],
 })
-export class NewCproviderComponent implements OnInit {
-  id_empresa: number;
-  newProvider: CProvider = {
-    id_empresa: 0,
-    nombre: '',
-    reeup: '',
-    siglas: '',
-  };
-  name_status: string = 'info';
-  reeup_status = 'info';
-  siglas_status = 'info';
-  provincia_status: string = 'info';
-  municipio_status: string = 'info';
-  proovedor_seleccionado: number;
+export class NewCreceiptComponent implements OnInit {
+  fecha: string = '';
+  proveedor: CProvider;
+  productos: CProduct[];
+  producto_seleccionado: number = -1;
+  cantidad: number = 0;
   provincia_seleccionada = -1;
   municipio_seleccionado = -1;
   municipios: string[] = [];
@@ -78,27 +73,68 @@ export class NewCproviderComponent implements OnInit {
     nombre: 'Guantánamo',
     municipios: ['Baracoa', 'Caimanera', 'El Salvador', 'Guantánamo', 'Imías', 'Maisí', 'Manuel Tames', 'Niceto Pérez', 'San Antonio del Sur', 'Yateras'],
   }];
+  newReceipt: CReceipt = {
+    pedido: '',
+    id_proveedor: 0,
+    precio_total: 0,
+    comprador: '',
+    destinatario: '',
+    destinatario_direccion: '',
+    destinatario_telefono: '',
+    marcado_conciliar: false,
+    conciliado: false,
+    entregado: false,
+    fecha_emision: new Date(),
+    costo_envio: 0,
+    provincia: '',
+    municipio: '',
+    productos: [],
+  };
+  provincia_status: string = 'info';
+  municipio_status: string = 'info';
+  pedido_status: string = 'info';
+  fecha_status: string = 'info';
+  comprador_status: string = 'info';
+  destinatario_status: string = 'info';
+  direccion_status: string = 'info';
+  telefono_status: string = 'info';
+  cantidad_status: string = 'info';
 
   constructor(private comercialService: ComercialService, protected dialogRef: NbDialogRef<any>) { }
 
   ngOnInit(): void {
-    this.newProvider.id_empresa = this.id_empresa;
-    if (this.newProvider.id) {
-      for (let i = 0; i < this.provincias.length; i++) {
-        if (this.newProvider.provincia === this.provincias[i].nombre) {
-          this.provincia_seleccionada = i;
-          this.municipios = this.provincias[this.provincia_seleccionada].municipios;
+    this.newReceipt.id_proveedor = this.proveedor.id;
+    for (let i = 0; i < this.provincias.length; i++) {
+      if (this.proveedor.provincia === this.provincias[i].nombre) {
+        this.provincia_seleccionada = i;
+        this.municipios = this.provincias[this.provincia_seleccionada].municipios;
+        break;
+      }
+    }
+    if (this.provincia_seleccionada >= 0) {
+      for (let i = 0; i < this.provincias[this.provincia_seleccionada].municipios.length; i++) {
+        if (this.proveedor.municipio === this.provincias[this.provincia_seleccionada].municipios[i]) {
+          this.municipio_seleccionado = i;
           break;
         }
       }
-      if (this.provincia_seleccionada >= 0) {
-        for (let i = 0; i < this.provincias[this.provincia_seleccionada].municipios.length; i++) {
-          if (this.newProvider.municipio === this.provincias[this.provincia_seleccionada].municipios[i]) {
-            this.municipio_seleccionado = i;
-            break;
-          }
-        }
-      }
+    }
+  }
+
+  addProduct() {
+    this.productos[this.producto_seleccionado].cantidad = Number(this.cantidad);
+    this.newReceipt.productos.push(this.productos[this.producto_seleccionado]);
+    this.newReceipt.precio_total = 0;
+    for (let i = 0; i < this.newReceipt.productos.length; i++) {
+      this.newReceipt.precio_total += (this.newReceipt.productos[i].precio * this.newReceipt.productos[i].cantidad);
+    }
+  }
+
+  deleteProduct(index: number) {
+    this.newReceipt.productos.splice(index, 1);
+    this.newReceipt.precio_total = 0;
+    for (let i = 0; i < this.newReceipt.productos.length; i++) {
+      this.newReceipt.precio_total += (this.newReceipt.productos[i].precio * this.newReceipt.productos[i].cantidad);
     }
   }
 
@@ -121,87 +157,17 @@ export class NewCproviderComponent implements OnInit {
     }
   }
 
-  name_change() {
-    if (!this.newProvider.nombre) {
-      this.name_status = 'danger';
-    } else {
-      this.name_status = 'success';
-    }
-  }
-
-  siglas_change() {
-    const nickregexp = new RegExp(/^[A-Z0-9ÁÉÍÓÚÑ\s]{2,50}$/);
-    if (nickregexp.test(this.newProvider.siglas)) {
-      this.siglas_status = 'success';
-    } else {
-      this.siglas_status = 'danger';
-    }
-  }
-
-  reeup_change() {
-    const nickregexp = new RegExp(/^[0-9]{3}\.[0-9]{1}\.[0-9]{5}$/);
-    if (nickregexp.test(this.newProvider.reeup)) {
-      this.reeup_status = 'success';
-    } else {
-      this.reeup_status = 'danger';
-    }
-  }
-
   close() {
     this.dialogRef.close(null);
   }
 
   save() {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timerProgressBar: true,
-      timer: 3000,
+    this.newReceipt.fecha_emision = moment.utc(this.fecha).toDate();
+    this.newReceipt.provincia = this.provincias[this.provincia_seleccionada].nombre;
+    this.newReceipt.municipio = this.municipios[this.municipio_seleccionado];
+    this.comercialService.createReceipt(this.newReceipt).subscribe(res => {
+      this.dialogRef.close(this.newReceipt);
     });
-    this.newProvider.provincia = this.provincias[this.provincia_seleccionada].nombre;
-    this.newProvider.municipio = this.provincias[this.provincia_seleccionada].municipios[this.municipio_seleccionado];
-    if (!this.newProvider.siglas || this.siglas_status === 'danger') {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe introducir siglas válidas.',
-      } as SweetAlertOptions);
-      this.siglas_status = 'danger';
-    } else if (!this.newProvider.reeup || this.reeup_status === 'danger') {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe introducir un código reeup válido.',
-      } as SweetAlertOptions);
-      this.reeup_status = 'danger';
-    } else if (!this.newProvider.nombre || this.name_status === 'danger') {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe introducir un nombre válido.',
-      } as SweetAlertOptions);
-      this.name_status = 'danger';
-    } else if (this.provincia_status === 'danger' || this.provincia_seleccionada < 0) {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe seleccionar una provincia.',
-      } as SweetAlertOptions);
-      this.provincia_status = 'danger';
-    } else if (this.municipio_status === 'danger' || this.municipio_seleccionado < 0) {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe seleccionar un municipio.',
-      } as SweetAlertOptions);
-      this.municipio_status = 'danger';
-    } else {
-      if (!this.newProvider.id) {
-        this.comercialService.createProvider(this.newProvider).subscribe(res => {
-          this.dialogRef.close(this.newProvider);
-        });
-      } else {
-        this.comercialService.updateProvider(this.newProvider, this.newProvider.id).subscribe( res => {
-          this.dialogRef.close(this.newProvider);
-        });
-      }
-    }
   }
 
 }
