@@ -16,4 +16,5 @@ export interface CReceipt {
     costo_envio?: number;
     provincia?: string;
     municipio?: string;
+    cantidad_productos?: number;
 }

@@ -49,9 +49,9 @@
                     <th>{{vale.id}}</th>
                     <td>{{vale.pedido}}</td>
                     <td>{{vale.fecha_emision | onlyDate}}</td>
-                    <td>{{vale.productos.length}}</td>
+                    <td>{{vale.cantidad_productos}}</td>
                     <td>{{vale.precio_total}}</td>
-                    <td>{{vale.consto_envio}}</td>
+                    <td>{{vale.costo_envio}}</td>
                     <td>{{vale.municipio}}</td>
                     <td>{{vale.provincia}}</td>
                     <td>{{vale.destinatario}}</td>
@@ -59,7 +59,7 @@
                       <nb-checkbox style="cursor: pointer; margin-right: 3px; padding: 0;" *ngIf="!vale.conciliado" [checked]="vale.marcado_conciliar" [status]="'info'" nbTooltip="Marcar para conciliar" nbTooltipIcon="checkmark-outline"></nb-checkbox>
                       <nb-icon *ngIf="!vale.entregado" style="cursor: pointer" icon="car-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Marcar como entregado" nbTooltipIcon="car-outline" nbTooltipStatus="info"></nb-icon>
                       <nb-icon *ngIf="vale.entregado" style="cursor: pointer" icon="corner-down-left-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Marcar como no entregado" nbTooltipIcon="corner-down-left-outline" nbTooltipStatus="info"></nb-icon>
-                      <nb-icon style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar vale" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                      <nb-icon style="cursor: pointer" (click)="openEditCReceipt(i)" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar vale" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
                       <nb-icon style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar vale" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
                     </td>
                   </tr>

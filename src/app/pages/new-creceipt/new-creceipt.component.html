@@ -5,14 +5,14 @@
         <div class="col">
           <div class="form-group">
             <label>Pedido:</label>
-            <input type="text" nbInput autofocus fullWidth [status]="pedido_status" placeholder="Pedido" [(ngModel)]="newReceipt.pedido" class="form-control" aria-describedby="pedHelp">
+            <input (input)="pedido_change()" type="text" nbInput autofocus fullWidth [status]="pedido_status" placeholder="Pedido" [(ngModel)]="newReceipt.pedido" class="form-control" aria-describedby="pedHelp">
             <small id="pedHelp" class="form-text text-muted">Código del pedido.</small>
           </div>
         </div>
         <div class="col">
           <div class="form-group">
             <label>Fecha:</label>
-            <input type="text" [owlDateTime]="dt" [selectMode]="'single'" [owlDateTimeTrigger]="dt" nbInput fullWidth [status]="fecha_status" placeholder="Fecha" [(ngModel)]="fecha" class="form-control" aria-describedby="fecHelp">
+            <input type="text" (ngModelChange)="fecha_change($event)" [owlDateTime]="dt" [selectMode]="'single'" [owlDateTimeTrigger]="dt" nbInput fullWidth [status]="fecha_status" placeholder="Fecha" [(ngModel)]="fecha" class="form-control" aria-describedby="fecHelp">
             <owl-date-time #dt [pickerType]="'calendar'"></owl-date-time>
             <small id="fecHelp" class="form-text text-muted">Fecha de emisión del vale.</small>
           </div>
@@ -40,14 +40,14 @@
         <div class="col">
           <div class="form-group">
             <label>Comprador:</label>
-            <input type="text" nbInput fullWidth [status]="comprador_status" placeholder="Comprador" [(ngModel)]="newReceipt.comprador" class="form-control" aria-describedby="compHelp">
+            <input type="text" (input)="comprador_change()" nbInput fullWidth [status]="comprador_status" placeholder="Comprador" [(ngModel)]="newReceipt.comprador" class="form-control" aria-describedby="compHelp">
             <small id="compHelp" class="form-text text-muted">Nombre del comprador.</small>
           </div>
         </div>
         <div class="col">
           <div class="form-group">
             <label>Destinatario:</label>
-            <input type="text" nbInput fullWidth [status]="destinatario_status" placeholder="Destinatario" [(ngModel)]="newReceipt.destinatario" class="form-control" aria-describedby="destHelp">
+            <input type="text" (input)="destinatario_change()" nbInput fullWidth [status]="destinatario_status" placeholder="Destinatario" [(ngModel)]="newReceipt.destinatario" class="form-control" aria-describedby="destHelp">
             <small id="destHelp" class="form-text text-muted">Nombre del destinatario.</small>
           </div>
         </div>
@@ -56,14 +56,14 @@
         <div class="col">
           <div class="form-group">
             <label>Dirección:</label>
-            <input type="text" nbInput fullWidth [status]="direccion_status" placeholder="Comprador" [(ngModel)]="newReceipt.destinatario_direccion" class="form-control" aria-describedby="dirHelp">
+            <input type="text" (input)="direccion_change()" nbInput fullWidth [status]="direccion_status" placeholder="Comprador" [(ngModel)]="newReceipt.destinatario_direccion" class="form-control" aria-describedby="dirHelp">
             <small id="dirHelp" class="form-text text-muted">Dirección del destinatario.</small>
           </div>
         </div>
         <div class="col">
           <div class="form-group">
             <label>No. Teléfono:</label>
-            <input type="text" nbInput fullWidth [status]="telefono_status" placeholder="Destinatario" [(ngModel)]="newReceipt.destinatario_telefono" class="form-control" aria-describedby="telHelp">
+            <input type="text" (input)="telefono_change()" nbInput fullWidth [status]="telefono_status" placeholder="Destinatario" [(ngModel)]="newReceipt.destinatario_telefono" class="form-control" aria-describedby="telHelp">
             <small id="telHelp" class="form-text text-muted">Número de teléfono del destinatario.</small>
           </div>
         </div>
@@ -84,8 +84,8 @@
                 <div class="form-group">
                   <label>Cantidad:</label>
                   <nb-form-field>
-                    <input type="text" nbInput fullWidth [status]="cantidad_status" placeholder="0" [(ngModel)]="cantidad" class="form-control" aria-describedby="canHelp">
-                    <button nbSuffix nbButton ghost (click)="addProduct()">
+                    <input type="text" (keyup.enter)="addProduct()" (input)="cantidad_change()" nbInput fullWidth [status]="cantidad_status" placeholder="0" [(ngModel)]="cantidad" class="form-control" aria-describedby="canHelp">
+                    <button *ngIf="cantidad > 0 && producto_seleccionado > -1" nbSuffix nbButton ghost (click)="addProduct()">
                       <nb-icon icon='plus-outline'></nb-icon>
                     </button>
                   </nb-form-field>                  

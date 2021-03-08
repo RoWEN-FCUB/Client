@@ -66,55 +66,63 @@ export class ComercialComponent implements OnInit {
           this.comercialService.getProducts(this.proveedores[0].id).subscribe((prod: CProduct[]) => {
             this.productos = prod;
           });
-          // tslint:disable-next-line: max-line-length
-          this.comercialService.getReceipts(this.proveedores[0].id, this.show_concilied_receipts, this.show_delivered_receipts).subscribe((res: any[]) => {
-            let oldid: number = -1;
-            let newreceipt: CReceipt;
-            for (let i = 0; i < res.length; i++) {
-              const newproduct: CProduct = {
-                id: (res[i].id_producto as number),
-                cantidad: (res[i].cantidad as number),
-                codigo: (res[i].codigo as string),
-                nombre: (res[i].nombre as string),
-                descripcion: (res[i].descripcion as string),
-                unidad_medida: (res[i].unidad_medida as string),
-                precio: (res[i].precio as number),
-                mlc: (res[i].mlc as boolean),
-              };
-              if ((res[i].id as number) !== oldid) {
-                oldid = res[i].id as number;
-                newreceipt = {
-                  id: (res[i].id as number),
-                  pedido: (res[i].pedido as string),
-                  precio_total: (res[i].precio_total as number),
-                  comprador: (res[i].comprador as string),
-                  destinatario: (res[i].destinatario as string),
-                  destinatario_direccion: (res[i].destinatario_direccion as string),
-                  destinatario_telefono: (res[i].destinatario_telefono as string),
-                  conciliado: (res[i].conciliado as boolean),
-                  marcado_conciliar: (res[i].marcado_conciliar as boolean),
-                  entregado: (res[i].entregado as boolean),
-                  fecha_emision: (res[i].fecha_emision as Date),
-                  productos: [],
-                  costo_envio: (res[i].costo_envio as number),
-                  provincia: (res[i].provincia as string),
-                  municipio: (res[i].municipio as string),
-                };
-                newreceipt.productos.push(newproduct);
-                this.vales.push(newreceipt);
-              } else {
-                for (let j = 0; j < this.vales.length; j++) {
-                  if (this.vales[j].id === (res[i].id as number)) {
-                    this.vales[j].productos.push(newproduct);
-                    break;
-                  }
-                }
-              }
-            }
-            // console.log(this.vales);
-          });
+          this.loadReceipts();
         }
       });
+    });
+  }
+
+  loadReceipts() {
+    this.vales = [];
+    // tslint:disable-next-line: max-line-length
+    this.comercialService.getReceipts(this.proveedores[this.selected_provider].id, this.show_concilied_receipts, this.show_delivered_receipts).subscribe((res: any[]) => {
+      let oldid: number = -1;
+      let newreceipt: CReceipt;
+      for (let i = 0; i < res.length; i++) {
+        const newproduct: CProduct = {
+          id: (res[i].id_producto as number),
+          cantidad: (res[i].cantidad as number),
+          codigo: (res[i].codigo as string),
+          nombre: (res[i].nombre as string),
+          descripcion: (res[i].descripcion as string),
+          unidad_medida: (res[i].unidad_medida as string),
+          precio: (res[i].precio as number),
+          mlc: (res[i].mlc as boolean),
+        };
+        if ((res[i].id as number) !== oldid) {
+          oldid = res[i].id as number;
+          newreceipt = {
+            id: (res[i].id as number),
+            pedido: (res[i].pedido as string),
+            precio_total: (res[i].precio_total as number),
+            comprador: (res[i].comprador as string),
+            destinatario: (res[i].destinatario as string),
+            destinatario_direccion: (res[i].destinatario_direccion as string),
+            destinatario_telefono: (res[i].destinatario_telefono as string),
+            conciliado: (res[i].conciliado as boolean),
+            marcado_conciliar: (res[i].marcado_conciliar as boolean),
+            entregado: (res[i].entregado as boolean),
+            fecha_emision: (res[i].fecha_emision as Date),
+            productos: [],
+            costo_envio: (res[i].costo_envio as number),
+            provincia: (res[i].provincia as string),
+            municipio: (res[i].municipio as string),
+            cantidad_productos: 0,
+          };
+          newreceipt.productos.push(newproduct);
+          newreceipt.cantidad_productos++;
+          this.vales.push(newreceipt);
+        } else {
+          for (let j = 0; j < this.vales.length; j++) {
+            if (this.vales[j].id === (res[i].id as number)) {
+              this.vales[j].productos.push(newproduct);
+              this.vales[j].cantidad_productos++;
+              break;
+            }
+          }
+        }
+      }
+      // console.log(this.vales);
     });
   }
 
@@ -201,7 +209,7 @@ export class ComercialComponent implements OnInit {
     this.dialogService.open(NewCreceiptComponent, {context: {proveedor: this.proveedores[this.selected_provider], productos: this.productos}}).onClose.subscribe(
       (newCProduct) => {
         if (newCProduct) {
-          
+          this.loadReceipts();
         }
       },
     );
@@ -250,6 +258,17 @@ export class ComercialComponent implements OnInit {
               title: 'Producto actualizado correctamente.',
             } as SweetAlertOptions);
           });
+        }
+      },
+    );
+  }
+
+  openEditCReceipt(i: number) {
+    // tslint:disable-next-line: max-line-length
+    this.dialogService.open(NewCreceiptComponent, {context: {newReceipt: this.vales[i], productos: this.productos}}).onClose.subscribe(
+      (newCProduct) => {
+        if (newCProduct) {
+          this.loadReceipts();
         }
       },
     );

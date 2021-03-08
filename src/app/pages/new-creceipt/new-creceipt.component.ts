@@ -103,21 +103,99 @@ export class NewCreceiptComponent implements OnInit {
   constructor(private comercialService: ComercialService, protected dialogRef: NbDialogRef<any>) { }
 
   ngOnInit(): void {
-    this.newReceipt.id_proveedor = this.proveedor.id;
-    for (let i = 0; i < this.provincias.length; i++) {
-      if (this.proveedor.provincia === this.provincias[i].nombre) {
-        this.provincia_seleccionada = i;
-        this.municipios = this.provincias[this.provincia_seleccionada].municipios;
-        break;
-      }
-    }
-    if (this.provincia_seleccionada >= 0) {
-      for (let i = 0; i < this.provincias[this.provincia_seleccionada].municipios.length; i++) {
-        if (this.proveedor.municipio === this.provincias[this.provincia_seleccionada].municipios[i]) {
-          this.municipio_seleccionado = i;
+    if (!this.newReceipt.id) {
+      this.newReceipt.id_proveedor = this.proveedor.id;
+      for (let i = 0; i < this.provincias.length; i++) {
+        if (this.proveedor.provincia === this.provincias[i].nombre) {
+          this.provincia_seleccionada = i;
+          this.municipios = this.provincias[this.provincia_seleccionada].municipios;
           break;
         }
       }
+      if (this.provincia_seleccionada >= 0) {
+        for (let i = 0; i < this.provincias[this.provincia_seleccionada].municipios.length; i++) {
+          if (this.proveedor.municipio === this.provincias[this.provincia_seleccionada].municipios[i]) {
+            this.municipio_seleccionado = i;
+            break;
+          }
+        }
+      }
+    } else {
+      for (let i = 0; i < this.provincias.length; i++) {
+        if (this.newReceipt.provincia === this.provincias[i].nombre) {
+          this.provincia_seleccionada = i;
+          this.municipios = this.provincias[this.provincia_seleccionada].municipios;
+          break;
+        }
+      }
+      if (this.provincia_seleccionada >= 0) {
+        for (let i = 0; i < this.provincias[this.provincia_seleccionada].municipios.length; i++) {
+          if (this.newReceipt.municipio === this.provincias[this.provincia_seleccionada].municipios[i]) {
+            this.municipio_seleccionado = i;
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  pedido_change() {
+    if (this.newReceipt.pedido) {
+      this.pedido_status = 'success';
+    } else {
+      this.pedido_status = 'danger';
+    }
+  }
+
+  fecha_change(e) {
+    // console.log(this.fecha);
+    if (e) {
+      this.fecha_status = 'success';
+    } else {
+      this.fecha_status = 'danger';
+    }
+  }
+
+  comprador_change() {
+    const nameregexp = new RegExp(/^([A-Za-záéíóúÁÉÍÓÚñÑ]+\s?)+$/);
+    if (nameregexp.test(this.newReceipt.comprador)) {
+      this.comprador_status = 'success';
+    } else {
+      this.comprador_status = 'danger';
+    }
+  }
+
+  destinatario_change() {
+    const nameregexp = new RegExp(/^([A-Za-záéíóúÁÉÍÓÚñÑ]+\s?)+$/);
+    if (nameregexp.test(this.newReceipt.destinatario)) {
+      this.destinatario_status = 'success';
+    } else {
+      this.destinatario_status = 'danger';
+    }
+  }
+
+  direccion_change() {
+    if (this.newReceipt.destinatario_direccion) {
+      this.direccion_status = 'success';
+    } else {
+      this.direccion_status = 'danger';
+    }
+  }
+
+  telefono_change() {
+    if (this.newReceipt.destinatario_telefono) {
+      this.telefono_status = 'success';
+    } else {
+      this.telefono_status = 'danger';
+    }
+  }
+
+  cantidad_change() {
+    const cantregexp = new RegExp(/^([1-9]+[0-9]*\s?)+$/);
+    if (cantregexp.test(this.cantidad.toString())) {
+      this.cantidad_status = 'success';
+    } else {
+      this.cantidad_status = 'danger';
     }
   }
 
@@ -161,13 +239,76 @@ export class NewCreceiptComponent implements OnInit {
     this.dialogRef.close(null);
   }
 
-  save() {
-    this.newReceipt.fecha_emision = moment.utc(this.fecha).toDate();
-    this.newReceipt.provincia = this.provincias[this.provincia_seleccionada].nombre;
-    this.newReceipt.municipio = this.municipios[this.municipio_seleccionado];
-    this.comercialService.createReceipt(this.newReceipt).subscribe(res => {
-      this.dialogRef.close(this.newReceipt);
+  validate(): boolean {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timerProgressBar: true,
+      timer: 3000,
     });
+    if (this.pedido_status === 'danger' || this.newReceipt.pedido === '') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir un número de pedido válido.',
+      } as SweetAlertOptions);
+      this.pedido_status = 'danger';
+      return false;
+    } else if (this.fecha_status === 'danger' || this.fecha === '') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe seleccionar una fecha.',
+      } as SweetAlertOptions);
+      this.fecha_status = 'danger';
+      return false;
+    } else if (this.comprador_status === 'danger' || this.newReceipt.comprador === '') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir correctamente el nombre del comprador.',
+      } as SweetAlertOptions);
+      this.comprador_status = 'danger';
+      return false;
+    } else if (this.destinatario_status === 'danger' || this.newReceipt.destinatario === '') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir correctamente el nombre del destinatario.',
+      } as SweetAlertOptions);
+      this.destinatario_status = 'danger';
+      return false;
+    } else if (this.direccion_status === 'danger' || this.newReceipt.destinatario_direccion === '') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir la dirección del destinatario.',
+      } as SweetAlertOptions);
+      this.direccion_status = 'danger';
+      return false;
+    } else if (this.telefono_status === 'danger' || this.newReceipt.destinatario_telefono === '') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir el número de teléfono del destinatario.',
+      } as SweetAlertOptions);
+      this.telefono_status = 'danger';
+      return false;
+    } else if (this.newReceipt.productos.length < 1) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe añadir productos al vale.',
+      } as SweetAlertOptions);
+    } else {
+      return true;
+    }
+    return false;
+  }
+
+  save() {
+    if (this.validate()) {
+      this.newReceipt.fecha_emision = moment.utc(this.fecha).toDate();
+      this.newReceipt.provincia = this.provincias[this.provincia_seleccionada].nombre;
+      this.newReceipt.municipio = this.municipios[this.municipio_seleccionado];
+      this.comercialService.createReceipt(this.newReceipt).subscribe(res => {
+        this.dialogRef.close(this.newReceipt);
+      });
+    }
   }
 
 }
