@@ -18,24 +18,28 @@ export class AdminServiceComponent implements OnInit {
 
   services: EService[] = [];
   companies: Company[] = [];
+  selected_company = 0;
   constructor(private authService: NbAuthService, private eserviceService: EserviceService,
      private dialogService: NbDialogService, private companyService: CompanyService) { }
 
   ngOnInit(): void {
     this.companyService.getCompanies().subscribe((res: Company[]) => {
       this.companies = res;
+      if (this.companies.length > 0) {
+        this.getServices();
+      }
     });
-    this.getServices();
   }
 
   getServices() {
-    this.eserviceService.getServices().subscribe((res: EService[]) => {
+    this.eserviceService.getServices(this.companies[this.selected_company].id).subscribe((res: EService[]) => {
       this.services = res;
     });
   }
 
   openNew() {
-    this.dialogService.open(NewServiceComponent, {context: {title: 'Nuevo servicio', companies: this.companies}}).onClose.subscribe(res => {
+    // tslint:disable-next-line: max-line-length
+    this.dialogService.open(NewServiceComponent, {context: {title: 'Nuevo servicio', companies: this.companies, empresa_seleccionada: this.companies[this.selected_company].id}}).onClose.subscribe(res => {
       this.getServices();
     });
   }

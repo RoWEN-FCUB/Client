@@ -155,7 +155,7 @@
           <label>Entrega:</label>
           <nb-form-field>
             <input [nbAutocomplete]="autoNames" #namep type="text" maxlength="11" (input)="entregaCIChange()" [(ngModel)]="entrega.ci" [status]="entrega_ci_status" nbInput fullWidth placeholder="###########" class="form-control" aria-describedby="ciHelp">
-            <button *ngIf="newrecord.entregado !== ''" nbSuffix nbButton ghost (click)="clearNameInput()">
+            <button *ngIf="entrega.ci !== ''" nbSuffix nbButton ghost (click)="clearNameInput()">
               <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
             </button>
           </nb-form-field>

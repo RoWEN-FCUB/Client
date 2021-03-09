@@ -10,8 +10,8 @@ export class EserviceService {
 
   constructor(private http: HttpClient) { }
 
-  getServices() {
-    return this.http.get(ipserver + 'service/list', {responseType: 'json'});
+  getServices(id_emp: number) {
+    return this.http.get(ipserver + 'service/list/' + id_emp, {responseType: 'json'});
   }
 
   getOne(id: number) {

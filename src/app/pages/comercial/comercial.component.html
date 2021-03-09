@@ -101,8 +101,10 @@
             <nb-tab tabTitle="PRODUCTOS" [disabled]="(proveedores.length > 0) ? false : true">
               <div class="row" style="margin-bottom: 20px;">
                 <button (click)="openNewCProduct()" nbTooltip="Agregar un nuevo producto" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
-                <div style="padding-top: 10px;"><label style="margin-right: 5px; margin-left: 10px;">
-                  Proveedor:</label>
+                <div style="padding-top: 10px;">
+                  <label style="margin-right: 5px; margin-left: 10px;">
+                    Proveedor:
+                  </label>
                 </div>
                 <nb-select (selectedChange)="provider_change()" placeholder="----" [(ngModel)]="selected_provider" [status]="'info'" fullwidth>
                   <nb-option *ngFor="let prov of proveedores; let i = index" [value]="i">{{prov.siglas}}</nb-option>

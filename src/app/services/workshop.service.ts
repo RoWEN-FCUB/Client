@@ -13,8 +13,8 @@ export class WorkshopService {
 
   constructor(private http: HttpClient) { }
 
-  getWRecords(page: number, id_emp: number) {
-    return this.http.get(ipserver + 'workshop/records/' + page + '&' + id_emp, {responseType: 'json'});
+  getWRecords(page: number, id_serv: number) {
+    return this.http.get(ipserver + 'workshop/records/' + page + '&' + id_serv, {responseType: 'json'});
   }
 
   getWParts(id_reg: number) {
@@ -81,8 +81,8 @@ export class WorkshopService {
     return this.http.post(ipserver + 'workshop/updateparts', records);
   }
 
-  searchRecord(strtofind: string, page: number, id_emp: number) {
-    return this.http.get(ipserver + 'workshop/search/' + strtofind + '&' + page + '&' + id_emp);
+  searchRecord(strtofind: string, page: number, id_serv: number) {
+    return this.http.get(ipserver + 'workshop/search/' + strtofind + '&' + page + '&' + id_serv);
   }
 
   delete(id: number) {

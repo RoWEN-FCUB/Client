@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-03-2021 a las 18:35:25
+-- Tiempo de generación: 09-03-2021 a las 22:52:55
 -- Versión del servidor: 10.4.11-MariaDB
 -- Versión de PHP: 7.4.3
 
@@ -46,7 +46,10 @@ CREATE TABLE `comercial_producto` (
 INSERT INTO `comercial_producto` (`id`, `id_proveedor`, `codigo`, `nombre`, `descripcion`, `unidad_medida`, `precio`, `mlc`) VALUES
 (1, 1, 'ECLT 0010-2021', 'Carne de res 4 Kg', 'Carne de la que tu sabes', 'Kg', 6.58, 1),
 (2, 2, 'ECLT 0010-2025', 'Pote de yogurt 200 Ml', 'Potesito de yogurt', 'L', 0.63, 1),
-(3, 1, 'BB-0565', 'Tubo de Jamón', 'Jamón ahumado', 'Kg', 37.5, 1);
+(3, 1, 'BB-0565', 'Tubo de Jamón', 'Jamón ahumado', 'Kg', 37.5, 1),
+(4, 1, 'ASD-123', 'Pernil de cerdo 12 Kg', 'Pierna para azar', 'Kg', 32.5, 0),
+(5, 1, 'Y5445324', 'Jamon 5 Kg', 'Jamon ahumado', 'Kg', 23.47, 1),
+(7, 2, 'ECLT 056', 'Cubo de helado de fresa', '', 'Kg', 10.32, 1);
 
 -- --------------------------------------------------------
 
@@ -59,16 +62,18 @@ CREATE TABLE `comercial_proveedor` (
   `id_empresa` int(11) NOT NULL,
   `nombre` varchar(250) NOT NULL,
   `reeup` varchar(11) NOT NULL,
-  `siglas` varchar(50) NOT NULL
+  `siglas` varchar(50) NOT NULL,
+  `provincia` varchar(200) NOT NULL,
+  `municipio` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `comercial_proveedor`
 --
 
-INSERT INTO `comercial_proveedor` (`id`, `id_empresa`, `nombre`, `reeup`, `siglas`) VALUES
-(1, 3, 'Empresa Cárnica de Las Tunas', '211.0.12075', 'CARNELT'),
-(2, 3, 'Empresa de Productos Lácteos', '211.0.12078', 'LACTUNAS');
+INSERT INTO `comercial_proveedor` (`id`, `id_empresa`, `nombre`, `reeup`, `siglas`, `provincia`, `municipio`) VALUES
+(1, 3, 'Empresa Cárnica de Las Tunas', '211.0.12075', 'CARNELT', 'Las Tunas', 'Las Tunas'),
+(2, 3, 'Empresa de Productos Lácteos', '211.0.12078', 'LACTUNAS', 'Las Tunas', 'Las Tunas');
 
 -- --------------------------------------------------------
 
@@ -100,8 +105,12 @@ CREATE TABLE `comercial_vale` (
 
 INSERT INTO `comercial_vale` (`id`, `id_proveedor`, `pedido`, `precio_total`, `comprador`, `destinatario`, `destinatario_direccion`, `destinatario_telefono`, `marcado_conciliar`, `conciliado`, `entregado`, `fecha_emision`, `costo_envio`, `provincia`, `municipio`) VALUES
 (1, 1, 'B2763466', 0, 'Carlos M', 'Pepe', 'Casa de Pepe #3', '31342603', 0, 0, 0, '2021-02-25', 0, 'Las Tunas', 'Las Tunas'),
-(2, 1, 'B59889', 0, 'Cuca Ramirez', 'Cuquito', 'Calle 3', '6556655', 0, 0, 1, '2021-02-24', 0, 'Las Tunas', 'Puerto Padre'),
-(3, 2, 'B8999', 0, 'Ajito Cebolla', 'Comino Rancio', 'Calle 4', '985956', 0, 0, 0, '2021-02-22', 0, 'Las Tunas', 'Jobabo');
+(2, 1, 'B00006', 107.5, 'Cuca Gonzalez', 'Cuquito Gonzalez', 'Calle 333', '1111111', 0, 0, 1, '2021-03-09', 0, 'Ciego de Ávila', 'Ciro Redondo'),
+(3, 2, 'B8999', 0, 'Ajito Cebolla', 'Comino Rancio', 'Calle 4', '985956', 0, 0, 0, '2021-02-22', 0, 'Las Tunas', 'Jobabo'),
+(7, 1, 'B0001', 70, 'Carlos', 'Cuca', 'casa de Cuca', '3132656', 0, 0, 0, '2021-03-05', 0, 'Las Tunas', 'Las Tunas'),
+(8, 1, 'B005', 75, 'Masha', 'Oso', 'Casa de oso', '31349898', 0, 0, 0, '2021-03-09', 0, 'Las Tunas', 'Las Tunas'),
+(9, 1, 'B00002', 100.46, 'Aasdasd', 'ADadasd', 'adasdasd', '314123', 0, 0, 0, '2021-03-02', 0, 'Las Tunas', 'Las Tunas'),
+(10, 1, 'B0003', 100.05, 'Aasdasd', 'adasd', 'adasd', '56565', 0, 0, 0, '2021-03-15', 0, 'Las Tunas', 'Las Tunas');
 
 -- --------------------------------------------------------
 
@@ -123,8 +132,18 @@ CREATE TABLE `comercial_vale_productos` (
 INSERT INTO `comercial_vale_productos` (`id`, `id_vale`, `id_producto`, `cantidad`) VALUES
 (1, 1, 1, 2),
 (2, 1, 3, 5),
-(3, 2, 1, 1),
-(4, 3, 2, 4);
+(4, 3, 2, 4),
+(5, 7, 4, 1),
+(6, 7, 3, 1),
+(7, 8, 3, 2),
+(8, 9, 1, 1),
+(9, 9, 5, 4),
+(10, 10, 1, 1),
+(11, 10, 3, 1),
+(12, 10, 4, 1),
+(13, 10, 5, 1),
+(14, 2, 3, 2),
+(15, 2, 4, 1);
 
 -- --------------------------------------------------------
 
@@ -142,7 +161,7 @@ CREATE TABLE `configuracion` (
 --
 
 INSERT INTO `configuracion` (`id`, `dia_actual`) VALUES
-(1, '2021-02-26 13:52:27');
+(1, '2021-03-09 21:10:18');
 
 -- --------------------------------------------------------
 
@@ -167,7 +186,8 @@ CREATE TABLE `empresas` (
 --
 
 INSERT INTO `empresas` (`id`, `siglas`, `nombre`, `provincia`, `municipio`, `oace`, `osde`, `email`, `reup`) VALUES
-(3, 'CITMATEL', 'Empresa de Tecnologías de la Información y Servicios Telemáticos', 'La Habana', 'Playa', 'CITMA', 'INNOMAX', 'https://webmail.lastunas.cu', '211.0.12071');
+(3, 'CITMATEL', 'Empresa de Tecnologías de la Información y Servicios Telemáticos', 'La Habana', 'Playa', 'CITMA', 'INNOMAX', 'https://webmail.lastunas.cu', '211.0.12071'),
+(4, 'CITMA', 'Centro de Medio Ambiente', 'Artemisa', 'Alquízar', 'ASD', 'ASDASD', 'https://correo.citma.cu', '123.4.45656');
 
 -- --------------------------------------------------------
 
@@ -504,7 +524,38 @@ INSERT INTO `energia` (`id`, `fecha`, `plan`, `consumo`, `lectura`, `lectura_hpi
 (399, '2021-02-05', 95, 93, 74491, '74404.00', '74405.40', '0.00', '0.00', '1.50', '0.00', 2, 0),
 (400, '2021-02-12', 95, 87, 74746, '74664.00', '74665.20', '0.00', '0.00', '1.50', '0.00', 2, 0),
 (401, '2021-02-19', 95, 0, 0, '0.00', '0.00', '0.00', '0.00', '1.50', '0.00', 2, 0),
-(402, '2021-02-26', 95, 0, 0, '0.00', '0.00', '0.00', '0.00', '1.50', '0.00', 2, 0);
+(402, '2021-02-26', 95, 0, 0, '0.00', '0.00', '0.00', '0.00', '1.50', '0.00', 2, 0),
+(403, '2021-03-01', 45, 42, 42, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(404, '2021-03-02', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(405, '2021-03-03', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(406, '2021-03-04', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(407, '2021-03-05', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(408, '2021-03-06', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(409, '2021-03-07', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(410, '2021-03-08', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(411, '2021-03-09', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(412, '2021-03-10', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(413, '2021-03-11', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(414, '2021-03-12', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(415, '2021-03-13', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(416, '2021-03-14', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(417, '2021-03-15', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(418, '2021-03-16', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(419, '2021-03-17', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(420, '2021-03-18', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(421, '2021-03-19', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(422, '2021-03-20', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(423, '2021-03-21', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(424, '2021-03-22', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(425, '2021-03-23', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(426, '2021-03-24', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(427, '2021-03-25', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(428, '2021-03-26', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(429, '2021-03-27', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(430, '2021-03-28', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(431, '2021-03-29', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(432, '2021-03-30', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0),
+(433, '2021-03-31', 45, 0, 0, '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', 4, 0);
 
 -- --------------------------------------------------------
 
@@ -896,7 +947,10 @@ INSERT INTO `notificaciones` (`id`, `id_usuario`, `notificacion`, `fecha`, `leid
 (6388, 1, 'Tarea incumplida: <b>Desarrollo de la intranet de CITMATEL. Módulo de taller.</b>', '2021-03-01 09:53:26', 0, 'tasks/1/Fri Feb 26 2021 08:00:00 GMT-0500 (GMT-05:00)/Fri Feb 26 2021 08:00:00 GMT-0500 (GMT-05:00)', 'danger'),
 (6389, 8, '<b>Carlos</b> incumplió la tarea : <b>Desarrollo de la intranet de CITMATEL. Módulo de taller.</b>', '2021-03-01 09:53:26', 0, 'tasks/1/Fri Feb 26 2021 08:00:00 GMT-0500 (GMT-05:00)/Fri Feb 26 2021 08:00:00 GMT-0500 (GMT-05:00)', 'danger'),
 (6390, 7, 'Tarea incumplida: <b>Encuentro con informáticos de la ONN </b>', '2021-03-01 09:53:26', 0, 'tasks/7/Fri Feb 26 2021 04:00:00 GMT-0500 (GMT-05:00)/Fri Feb 26 2021 04:00:00 GMT-0500 (GMT-05:00)', 'danger'),
-(6391, 8, '<b>Leodan</b> incumplió la tarea : <b>Encuentro con informáticos de la ONN </b>', '2021-03-01 09:53:26', 0, 'tasks/7/Fri Feb 26 2021 04:00:00 GMT-0500 (GMT-05:00)/Fri Feb 26 2021 04:00:00 GMT-0500 (GMT-05:00)', 'danger');
+(6391, 8, '<b>Leodan</b> incumplió la tarea : <b>Encuentro con informáticos de la ONN </b>', '2021-03-01 09:53:26', 0, 'tasks/7/Fri Feb 26 2021 04:00:00 GMT-0500 (GMT-05:00)/Fri Feb 26 2021 04:00:00 GMT-0500 (GMT-05:00)', 'danger'),
+(6392, 8, '<b>Pepito Del Hoyo Ramirez</b> le ha dado entrada al equipo: <b>Impresora EPSON</b>.', '2021-03-09 00:00:00', 0, '/workshop', 'info'),
+(6393, 8, '<b>Pepito Del Hoyo Ramirez</b> le ha dado entrada al equipo: <b>Fuente Huntkey</b>.', '2021-03-09 00:00:00', 0, '/workshop', 'info'),
+(6394, 8, '<b>Jorge Luis Pérez Reyes</b> le ha dado entrada al equipo: <b>Speakers SONY</b>.', '2021-03-09 00:00:00', 0, '/workshop', 'info');
 
 -- --------------------------------------------------------
 
@@ -961,7 +1015,9 @@ CREATE TABLE `servicios` (
 --
 
 INSERT INTO `servicios` (`id`, `id_emp`, `nombre`, `provincia`, `municipio`, `reup`, `codcli`, `control`, `ruta`, `folio`, `bitacora`, `triple_registro`, `aplica_acomodo`, `pico_diurno`, `pico_nocturno`, `total_desconectivos`, `desc_gen_dia`, `desc_parc_dia`, `desc_gen_noche`, `desc_parc_noche`) VALUES
-(2, 3, 'DST Las Tunas', 'Las Tunas', 'Las Tunas', '211.0.12071', '63261', '03105', '94', '6450', 0, 0, 0, 1, 0, 8, 0, 3, 0, 2);
+(2, 3, 'DST Las Tunas', 'Las Tunas', 'Las Tunas', '211.0.12071', '63261', '03105', '94', '6450', 0, 0, 0, 1, 0, 8, 0, 3, 0, 2),
+(3, 4, 'Unidad Presupuestada', 'Las Tunas', 'Las Tunas', '123.1.12345', '45665', '3243', '23434', '234234', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(4, 3, 'DST Granma', 'Granma', 'Bayamo', '567.1.12345', '45', '342', '24', '3545', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -981,7 +1037,8 @@ CREATE TABLE `taller_clientes` (
 
 INSERT INTO `taller_clientes` (`id`, `siglas`, `nombre`) VALUES
 (16, 'DEPORTES', 'UNIDAD PRESUPUESTADA PROVINCIAL DE DEPORTES LAS TUNAS'),
-(18, 'ACLIFIM', 'Asociación de Limitados Fisico Motores');
+(18, 'ACLIFIM', 'Asociación de Limitados Fisico Motores'),
+(19, 'CITMA', 'Centro de no se que');
 
 -- --------------------------------------------------------
 
@@ -1005,7 +1062,8 @@ INSERT INTO `taller_clientes_personas` (`id`, `nombre`, `ci`, `cargo`, `id_clien
 (28, 'Gerardo González Leyva', '11414711441', 'técnico', 16),
 (30, 'Carlos M', '88111524501', 'Tecnico', 18),
 (32, 'Prueba', '25668989454', 'adasdasd', 16),
-(33, 'Adasdasdas', '98989899999', 'adasdasdasd', 18);
+(33, 'Adasdasdas', '98989899999', 'adasdasdasd', 18),
+(34, 'Carlos M', '25656564655', 'Tecnico', 19);
 
 -- --------------------------------------------------------
 
@@ -1064,7 +1122,7 @@ CREATE TABLE `taller_registro` (
   `especialista` varchar(250) NOT NULL,
   `fecha_salida` date DEFAULT NULL,
   `recogido` varchar(250) DEFAULT NULL,
-  `id_emp` int(11) NOT NULL,
+  `id_serv` int(11) NOT NULL,
   `fallo` text NOT NULL,
   `observaciones` text NOT NULL,
   `externo` tinyint(1) NOT NULL
@@ -1074,11 +1132,14 @@ CREATE TABLE `taller_registro` (
 -- Volcado de datos para la tabla `taller_registro`
 --
 
-INSERT INTO `taller_registro` (`id`, `cod`, `cliente`, `equipo`, `marca`, `modelo`, `inventario`, `serie`, `fecha_entrada`, `entregado`, `ot`, `estado`, `especialista`, `fecha_salida`, `recogido`, `id_emp`, `fallo`, `observaciones`, `externo`) VALUES
-(38, 1125, 'DEPORTES', 'Monitor', 'Premium', 'PLC32D100H', 'XXXXX', 'LTV4006009320115', '2021-01-07', '11414711441', NULL, 'P', 'Jorge Luis Pérez Reyes', NULL, NULL, 3, '', 'ruido y pantalla oscura', 0),
-(39, 1126, 'ACLIFIM', 'Impresora', 'EPSON', 'LX300', '2211', 'EP987558', '2021-02-22', '88111524501', NULL, 'P', 'Yarisel Corrales Cadena', NULL, NULL, 3, '', 'Ninguna', 0),
-(40, 1127, 'DEPORTES', 'Speakers', 'SONY', 'SS45', 'I-2323', '56633546', '2021-02-22', '25668989454', NULL, 'P', 'Yarisel Corrales Cadena', NULL, NULL, 3, '', '', 0),
-(41, -1, 'ACLIFIM', 'Fuente', 'Huntkey', 'HNT350', '020610', 'HNT125455', '2021-02-22', '98989899999', NULL, 'P', 'Yarisel Corrales Cadena', NULL, NULL, 3, '', '', 1);
+INSERT INTO `taller_registro` (`id`, `cod`, `cliente`, `equipo`, `marca`, `modelo`, `inventario`, `serie`, `fecha_entrada`, `entregado`, `ot`, `estado`, `especialista`, `fecha_salida`, `recogido`, `id_serv`, `fallo`, `observaciones`, `externo`) VALUES
+(38, 1125, 'DEPORTES', 'Monitor', 'Premium', 'PLC32D100H', 'XXXXX', 'LTV4006009320115', '2021-01-07', '11414711441', NULL, 'P', 'Jorge Luis Pérez Reyes', NULL, NULL, 2, '', 'ruido y pantalla oscura', 0),
+(39, 1126, 'ACLIFIM', 'Impresora', 'EPSON', 'LX300', '2211', 'EP987558', '2021-02-22', '88111524501', NULL, 'P', 'Yarisel Corrales Cadena', NULL, NULL, 2, '', 'Ninguna', 0),
+(40, 1127, 'DEPORTES', 'Speakers', 'SONY', 'SS45', 'I-2323', '56633546', '2021-02-22', '25668989454', NULL, 'P', 'Yarisel Corrales Cadena', NULL, NULL, 2, '', '', 0),
+(41, -1, 'ACLIFIM', 'Fuente', 'Huntkey', 'HNT350', '020610', 'HNT125455', '2021-02-22', '98989899999', NULL, 'P', 'Yarisel Corrales Cadena', NULL, NULL, 2, '', '', 1),
+(42, 1, 'DEPORTES', 'Impresora', 'EPSON', 'LX300', '2211', 'EP987558', '2021-03-09', '25668989454', NULL, 'P', 'Pepito Del Hoyo Ramirez', NULL, NULL, 4, '', '', 0),
+(43, 2, 'ACLIFIM', 'Fuente', 'Huntkey', 'HNT350', '020610', 'HNT125455', '2021-03-09', '88111524501', '566656', 'D', 'Pepito Del Hoyo Ramirez', '2021-03-09', '88111524501', 4, 'dsrfgsrfsfsef', 'dhdgdgdg', 0),
+(44, 1128, 'CITMA', 'Speakers', 'SONY', 'SS45', 'I-2323', '56633546', '2021-03-09', '25656564655', NULL, 'P', 'Jorge Luis Pérez Reyes', NULL, NULL, 2, '', 'adasd', 0);
 
 --
 -- Disparadores `taller_registro`
@@ -1091,7 +1152,7 @@ $$
 DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `nuevo_registro` BEFORE INSERT ON `taller_registro` FOR EACH ROW BEGIN
-SET @MaxCode := (SELECT MAX(taller_registro.cod) FROM taller_registro) + 1;
+SET @MaxCode := (SELECT MAX(taller_registro.cod) FROM taller_registro WHERE id_serv = NEW.id_serv) + 1;
 IF (NEW.externo) THEN
 SET NEW.cod = -1;
 ELSE
@@ -2266,7 +2327,8 @@ INSERT INTO `tareas` (`id`, `id_usuario`, `resumen`, `descripcion`, `fecha_inici
 (3994, 7, 'Videoconferencia con Viceministro', 'Videoconferencia con Viceministro', '2021-02-18 09:00:00', 'Incumplida', 7, 120, 0, '2021-02-18 09:00:00'),
 (3995, 7, 'Encuentro con Directores de unidades territoriales ', 'Encuentro con Directores de unidades territoriales ', '2021-02-18 15:49:00', 'Incumplida', 7, 60, 0, '2021-02-18 15:49:00'),
 (3996, 7, 'Encuentro con la Reserva y Cantera de Cuadros ', 'Encuentro con la Reserva y Cantera de Cuadros ', '2021-02-24 09:00:00', 'Incumplida', 7, 180, 0, '2021-02-24 09:00:00'),
-(3997, 7, 'Encuentro con informáticos de la ONN ', 'Encuentro con informáticos de la ONN ', '2021-02-26 09:00:00', 'Incumplida', 7, 180, 0, '2021-02-26 09:00:00');
+(3997, 7, 'Encuentro con informáticos de la ONN ', 'Encuentro con informáticos de la ONN ', '2021-02-26 09:00:00', 'Incumplida', 7, 180, 0, '2021-02-26 09:00:00'),
+(3998, 12, 'Aasdasd', 'adasdasd', '2021-03-09 16:05:03', 'Pendiente', 12, 60, 0, '2021-03-09 16:05:03');
 
 -- --------------------------------------------------------
 
@@ -2285,6 +2347,7 @@ CREATE TABLE `users` (
   `id_sup` int(11) NOT NULL,
   `position` text NOT NULL,
   `id_emp` int(11) NOT NULL,
+  `id_serv` int(11) NOT NULL,
   `ci` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
@@ -2292,13 +2355,14 @@ CREATE TABLE `users` (
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id`, `user`, `pass`, `fullname`, `role`, `email`, `picture`, `id_sup`, `position`, `id_emp`, `ci`) VALUES
-(1, 'Carlos', '03dd7ebf96ea9da458613f7f799ef98227338880b48bbbe98f1e0cac3a56ff97', 'Carlos Miguel López Durañona', 4, 'carlos@ltunas.inf.cu', '5uKdFZHRRPcPGLanYml7gRr9.jpg', 8, 'Especialista de Rodas', 3, '88111524501'),
-(7, 'Leodan', 'bb6025f0c35495e20f05b04479b978f9465b28ba13226e3206849b3a6dbec7d7', 'Leodan Pino García', 4, 'leodan@ltunas.inf.cu', 'empty.png', 8, 'Especialista de Redes', 3, '79122617805'),
-(8, 'Yaro', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'Yarisel Corrales Cadena', 2, 'yaro@ltunas.inf.cu', 'i2wGXeZzvPplACHO5mQlC93Q.jpg', 11, 'Jefe de Departamento de Servicios Territoriales Las Tunas', 3, '81091623577'),
-(9, 'Jorge', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'Jorge Luis Pérez Reyes', 3, 'jorge@ltunas.inf.cu', 'suvZ6GgMfUr49wBTa75b1sA3.jpg', 8, 'Especialista de Servicios Técnicos', 3, '91010941403'),
-(10, 'Lianelys', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'Lianelys Rosa Segura Rodríguez', 5, 'lianelys@ltunas.inf.cu', 'empty.png', 8, 'Comercial DST Las Tunas', 3, '93020818731'),
-(11, 'Miguel', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'Miguel Aguiar Estévez', 2, 'miguel@ltunas.inf.cu', 'empty.png', 8, 'Director UEB Servicios Territorales', 3, '');
+INSERT INTO `users` (`id`, `user`, `pass`, `fullname`, `role`, `email`, `picture`, `id_sup`, `position`, `id_emp`, `id_serv`, `ci`) VALUES
+(1, 'Carlos', '03dd7ebf96ea9da458613f7f799ef98227338880b48bbbe98f1e0cac3a56ff97', 'Carlos Miguel López Durañona', 4, 'carlos@ltunas.inf.cu', '5uKdFZHRRPcPGLanYml7gRr9.jpg', 8, 'Especialista de Rodas', 3, 2, '88111524501'),
+(7, 'Leodan', 'bb6025f0c35495e20f05b04479b978f9465b28ba13226e3206849b3a6dbec7d7', 'Leodan Pino García', 4, 'leodan@ltunas.inf.cu', 'empty.png', 8, 'Especialista de Redes', 3, 2, '79122617805'),
+(8, 'Yaro', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'Yarisel Corrales Cadena', 2, 'yaro@ltunas.inf.cu', 'i2wGXeZzvPplACHO5mQlC93Q.jpg', 11, 'Jefe de Departamento de Servicios Territoriales Las Tunas', 3, 2, '81091623577'),
+(9, 'Jorge', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'Jorge Luis Pérez Reyes', 3, 'jorge@ltunas.inf.cu', 'suvZ6GgMfUr49wBTa75b1sA3.jpg', 8, 'Especialista de Servicios Técnicos', 3, 2, '91010941403'),
+(10, 'Lianelys', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'Lianelys Rosa Segura Rodríguez', 5, 'lianelys@ltunas.inf.cu', 'empty.png', 8, 'Comercial DST Las Tunas', 3, 2, '93020818731'),
+(11, 'Miguel', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'Miguel Aguiar Estévez', 2, 'miguel@ltunas.inf.cu', 'empty.png', 8, 'Director UEB Servicios Territorales', 3, 2, ''),
+(12, 'Pepito', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'Pepito Del Hoyo Ramirez', 5, 'pepito@ltunas.inf.cu', 'empty.png', 8, 'Jefe de Nada', 3, 4, '88111524510');
 
 -- --------------------------------------------------------
 
@@ -2344,7 +2408,8 @@ INSERT INTO `usuario_servicio` (`id`, `id_usuario`, `id_servicio`) VALUES
 (10, 7, 2),
 (11, 8, 2),
 (12, 10, 2),
-(13, 11, 2);
+(13, 11, 2),
+(14, 12, 4);
 
 --
 -- Índices para tablas volcadas
@@ -2473,25 +2538,25 @@ ALTER TABLE `usuario_servicio`
 -- AUTO_INCREMENT de la tabla `comercial_producto`
 --
 ALTER TABLE `comercial_producto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `comercial_proveedor`
 --
 ALTER TABLE `comercial_proveedor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `comercial_vale`
 --
 ALTER TABLE `comercial_vale`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `comercial_vale_productos`
 --
 ALTER TABLE `comercial_vale_productos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `configuracion`
@@ -2503,19 +2568,19 @@ ALTER TABLE `configuracion`
 -- AUTO_INCREMENT de la tabla `empresas`
 --
 ALTER TABLE `empresas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `energia`
 --
 ALTER TABLE `energia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=403;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=434;
 
 --
 -- AUTO_INCREMENT de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6392;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6395;
 
 --
 -- AUTO_INCREMENT de la tabla `observaciones_tareas`
@@ -2527,19 +2592,19 @@ ALTER TABLE `observaciones_tareas`
 -- AUTO_INCREMENT de la tabla `servicios`
 --
 ALTER TABLE `servicios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `taller_clientes`
 --
 ALTER TABLE `taller_clientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `taller_clientes_personas`
 --
 ALTER TABLE `taller_clientes_personas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de la tabla `taller_equipos`
@@ -2551,7 +2616,7 @@ ALTER TABLE `taller_equipos`
 -- AUTO_INCREMENT de la tabla `taller_registro`
 --
 ALTER TABLE `taller_registro`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT de la tabla `taller_registro_partes`
@@ -2563,13 +2628,13 @@ ALTER TABLE `taller_registro_partes`
 -- AUTO_INCREMENT de la tabla `tareas`
 --
 ALTER TABLE `tareas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3998;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3999;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `users_roles`
@@ -2581,7 +2646,7 @@ ALTER TABLE `users_roles`
 -- AUTO_INCREMENT de la tabla `usuario_servicio`
 --
 ALTER TABLE `usuario_servicio`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

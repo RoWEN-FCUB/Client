@@ -15,6 +15,7 @@
             <th>ROL</th>
             <th>SUPERIOR</th>
             <th>EMPRESA</th>
+            <th>SERVICIO</th>
             <th>ACCION</th>
           </tr>
         </thead>
@@ -24,13 +25,10 @@
             <td>{{user.user}}</td>
             <td>{{user.fullname}}</td>
             <td>{{user.email}}</td>
-            <td>
-              {{getRole(user.role)}}
-            </td>
-            <td>
-              {{superior(user.id_sup)}}
-            </td>
+            <td>{{getRole(user.role)}}</td>
+            <td>{{superior(user.id_sup)}}</td>
             <td>{{user.siglas}}</td>
+            <td>{{user.nombre_servicio}}</td>
             <td>
               <nb-icon style="cursor: pointer" (click)="openEdit(i)" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar usuario" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
               <nb-icon *ngIf="getRole(user.role) === 'energy' || getRole(user.role) === 'admin'" style="cursor: pointer" (click)="openEnergy(i)" icon="flash-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Asignar control de servicio eléctrico" nbTooltipIcon="flash-outline" nbTooltipStatus="info"></nb-icon>

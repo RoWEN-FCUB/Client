@@ -56,7 +56,7 @@ export class NewWRecordComponent implements OnInit {
     cliente_nombre: '',
     estado: 'P',
     id_superior: 0,
-    id_emp: 0,
+    id_serv: 0,
     fallo: '',
     observaciones: '',
     externo: false,
@@ -67,8 +67,6 @@ export class NewWRecordComponent implements OnInit {
     cargo: '',
     id_cliente: -1,
   };
-  entrega_ci_status: string = 'info';
-  entrega_cargo_status: string = 'info';
   showPersonInfo: boolean = false;
   client_status: string = 'info';
   client_name_status: string = 'info';
@@ -79,7 +77,10 @@ export class NewWRecordComponent implements OnInit {
   serial_status: string = 'info';
   date_received_status: string = 'info';
   deliver_status: string = 'info';
-  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_sup: 0, id_emp: 0};
+  entrega_ci_status: string = 'info';
+  entrega_cargo_status: string = 'info';
+  // tslint:disable-next-line: max-line-length
+  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_sup: 0, id_emp: 0, id_serv: 0};
   show_client_name: boolean = false;
   save_lock = false;
   // tslint:disable-next-line: max-line-length
@@ -101,7 +102,7 @@ export class NewWRecordComponent implements OnInit {
     });
     this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
-      this.newrecord.id_emp = this.user.id_emp;
+      this.newrecord.id_serv = this.user.id_serv;
       this.newrecord.especialista = this.user.fullname;
       this.newrecord.id_superior = this.user.id_sup;
     });
@@ -149,6 +150,12 @@ export class NewWRecordComponent implements OnInit {
 
   clearNameInput() {
     this.newrecord.entregado = '';
+    this.entrega.ci = '';
+    this.entrega.cargo = '';
+    this.entrega.nombre = '';
+    this.deliver_status = 'danger';
+    this.entrega_ci_status = 'danger';
+    this.entrega_cargo_status = 'danger';
     this.nameChange();
     setTimeout(() => this.nameinput.nativeElement.focus(), 0);
   }

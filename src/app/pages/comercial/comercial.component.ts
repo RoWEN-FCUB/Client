@@ -269,6 +269,17 @@ export class ComercialComponent implements OnInit {
       (newCProduct) => {
         if (newCProduct) {
           this.loadReceipts();
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 3000,
+          });
+          Toast.fire({
+            icon: 'success',
+            title: 'Vale actualizado correctamente.',
+          } as SweetAlertOptions);
         }
       },
     );

@@ -14,7 +14,7 @@ import * as moment from 'moment';
   styleUrls: ['./new-creceipt.component.css'],
 })
 export class NewCreceiptComponent implements OnInit {
-  fecha: string = '';
+  fecha;
   proveedor: CProvider;
   productos: CProduct[];
   producto_seleccionado: number = -1;
@@ -121,6 +121,8 @@ export class NewCreceiptComponent implements OnInit {
         }
       }
     } else {
+      this.fecha = new Date(this.newReceipt.fecha_emision);
+      this.fecha = this.convertUTCDateToLocalDate(this.fecha);
       for (let i = 0; i < this.provincias.length; i++) {
         if (this.newReceipt.provincia === this.provincias[i].nombre) {
           this.provincia_seleccionada = i;
@@ -137,6 +139,14 @@ export class NewCreceiptComponent implements OnInit {
         }
       }
     }
+  }
+
+  convertUTCDateToLocalDate(date) {
+    const newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+    const offset = date.getTimezoneOffset() / 60;
+    const hours = date.getHours();
+    newDate.setHours(hours - offset);
+    return newDate;
   }
 
   pedido_change() {
@@ -302,12 +312,21 @@ export class NewCreceiptComponent implements OnInit {
 
   save() {
     if (this.validate()) {
-      this.newReceipt.fecha_emision = moment.utc(this.fecha).toDate();
-      this.newReceipt.provincia = this.provincias[this.provincia_seleccionada].nombre;
-      this.newReceipt.municipio = this.municipios[this.municipio_seleccionado];
-      this.comercialService.createReceipt(this.newReceipt).subscribe(res => {
-        this.dialogRef.close(this.newReceipt);
-      });
+      if (this.newReceipt.id) {
+        this.newReceipt.provincia = this.provincias[this.provincia_seleccionada].nombre;
+        this.newReceipt.municipio = this.municipios[this.municipio_seleccionado];
+        this.newReceipt.fecha_emision = moment.utc(this.fecha).toDate();
+        this.comercialService.updateReceipt(this.newReceipt, this.newReceipt.id).subscribe(res => {
+          this.dialogRef.close(this.newReceipt);
+        });
+      } else {
+        this.newReceipt.fecha_emision = moment.utc(this.fecha).toDate();
+        this.newReceipt.provincia = this.provincias[this.provincia_seleccionada].nombre;
+        this.newReceipt.municipio = this.municipios[this.municipio_seleccionado];
+        this.comercialService.createReceipt(this.newReceipt).subscribe(res => {
+          this.dialogRef.close(this.newReceipt);
+        });
+      }
     }
   }
 

@@ -17,7 +17,7 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div style="margin-top: 5px" class="row">
         <div class="col">
           <label>CI:</label>
             <input (input)="CIChange()" maxlength="11" type="text" nbInput fullWidth [status]="ci_status" placeholder="###########" [(ngModel)]="newUser.ci" class="form-control" aria-describedby="ciHelp">
@@ -26,7 +26,7 @@
       </div>
       <div class="row">
         <div class="col">
-          <div class="form-group">
+          <div style="margin-top: 5px" class="form-group">
             <label>Cargo:</label>
             <input (input)="position_change()" type="text" nbInput fullWidth [status]="position_status" placeholder="Cargo" [(ngModel)]="newUser.position" class="form-control" aria-describedby="carHelp">
             <small id="carHelp" class="form-text text-muted">Cargo que ocupa el usuario</small>
@@ -50,7 +50,18 @@
             <small id="companyHelp" class="form-text text-muted">Empresa a la que pertenece el usuario.</small>
           </div>
         </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div style="margin-top: 5px" class="form-group">
+            <label style="margin-right: 5px">Servicio:</label>
+            <nb-select (selectedChange)="service_change()" placeholder="----" [(ngModel)]="selected_service" [status]="service_status" fullWidth>
+              <nb-option *ngFor="let service of services" [value]="service.id">{{service.nombre}}</nb-option>
+            </nb-select>
+            <small id="servHelp" class="form-text text-muted">Servicio al que pertenece el usuario.</small>
+          </div>
         </div>
+      </div>
       <div class="row">
         <div class="col">
           <div style="margin-top: 5px" class="form-group">
@@ -62,7 +73,7 @@
           </div>
         </div>
         <div class="col">
-          <div style="margin-top: 5px" class="form-group">
+          <div class="form-group">
             <label style="margin-right: 5px">Subordinado de:</label>
             <nb-select (selectedChange)="superior_change()" [placeholder]="nsup" [status]="usup_status" [(ngModel)]="usup" fullWidth>
               <nb-option *ngFor="let user of users" [value]="user.id">{{user.user}}</nb-option>

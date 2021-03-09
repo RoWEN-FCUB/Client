@@ -45,6 +45,10 @@ export class ComercialService {
     return this.http.put(ipserver + 'comercial/provider/' + id, newProvider);
   }
 
+  updateReceipt(newReceipt: CReceipt, id: number) {
+    return this.http.put(ipserver + 'comercial/receipt/' + id, newReceipt);
+  }
+
   deleteProduct(id: number) {
     return this.http.delete(ipserver + 'comercial/product/' + id, {responseType: 'json'});
   }

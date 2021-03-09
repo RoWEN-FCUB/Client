@@ -23,6 +23,8 @@ import { faFilePdf, faTrashAlt, faFileAlt, faShareSquare, faIdCard, faListAlt } 
 
 import { image1, image2 } from './base64images';
 import { WPerson } from '../../models/WPerson';
+import { EService } from '../../models/EService';
+import { EserviceService } from '../../services/eservice.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -40,9 +42,11 @@ export class TallerComponent implements OnInit {
   table_to_print = [];
   docDefinition = {};
   company: Company = {};
-  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0, ci: ''};
+  service: EService = {};
+  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0, id_serv: 0, ci: ''};
   constructor(
     private workshopService: WorkshopService,
+    private eserviceService: EserviceService,
     private authService: NbAuthService,
     private dialogService: NbDialogService,
     private companyService: CompanyService,
@@ -62,6 +66,9 @@ export class TallerComponent implements OnInit {
       this.search();
       this.companyService.getOne(this.user.id_emp).subscribe((comp: Company) => {
         this.company = comp;
+      });
+      this.eserviceService.getOne(this.user.id_serv).subscribe((serv: EService) => {
+        this.service = serv;
       });
     });
   }
@@ -516,7 +523,7 @@ export class TallerComponent implements OnInit {
     if (this.search_string !== '') {
       strtosearch = this.search_string;
     }
-    this.workshopService.searchRecord(strtosearch, this.config.currentPage, this.user.id_emp).subscribe((res: {total, wrecords}) => {
+    this.workshopService.searchRecord(strtosearch, this.config.currentPage, this.user.id_serv).subscribe((res: {total, wrecords}) => {
       this.config.totalItems = res.total;
       this.wrecords = res.wrecords;
       if (this.wrecords.length > 0 && this.search_string) {

@@ -9,6 +9,8 @@ export interface User {
   id_sup?: number;
   position?: string;
   id_emp?: number;
+  id_serv?: number;
+  nombre_servicio?: string;
   siglas?: string;
   ci?: string;
 }

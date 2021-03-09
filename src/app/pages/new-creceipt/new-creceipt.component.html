@@ -13,7 +13,7 @@
           <div class="form-group">
             <label>Fecha:</label>
             <input type="text" (ngModelChange)="fecha_change($event)" [owlDateTime]="dt" [selectMode]="'single'" [owlDateTimeTrigger]="dt" nbInput fullWidth [status]="fecha_status" placeholder="Fecha" [(ngModel)]="fecha" class="form-control" aria-describedby="fecHelp">
-            <owl-date-time #dt [pickerType]="'calendar'"></owl-date-time>
+            <owl-date-time #dt [pickerType]="'calendar'" [startAt]="newReceipt.fecha_emision"></owl-date-time>
             <small id="fecHelp" class="form-text text-muted">Fecha de emisión del vale.</small>
           </div>
         </div>

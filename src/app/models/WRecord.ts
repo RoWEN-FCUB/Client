@@ -16,7 +16,7 @@ export interface WRecord {
   recogido?: string;
   cliente_nombre?: string;
   id_superior?: number;
-  id_emp?: number;
+  id_serv?: number;
   fallo?: string;
   observaciones?: string;
   externo?: boolean;

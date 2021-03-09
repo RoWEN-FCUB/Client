@@ -3,8 +3,10 @@ import { NbDialogRef } from '@nebular/theme';
 import { User } from '../../models/User';
 import { Role } from '../../models/Role';
 import { Company } from '../../models/Company';
+import { EService } from '../../models/EService';
 import { UserService } from '../../services/user.service';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
+import { EserviceService } from '../../services/eservice.service';
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'new-user',
@@ -27,6 +29,8 @@ export class NewUserComponent implements OnInit {
   users: User[] = [];
   roles: Role[] = [];
   companies: Company[] = [];
+  services: EService[] = [];
+  selected_service = -1;
   urole: string = ''; // rol del usuario en string
   usup: string = ''; // id del superior del usuario en string
   nsup: string = ''; // nombre del superior del usuario
@@ -41,15 +45,23 @@ export class NewUserComponent implements OnInit {
   rpass_status: string = 'info';
   usup_status: string = 'info';
   company_status: string = 'info';
+  service_status: string = 'info';
   ci_status: string = 'info';
   title: string = '';
 
-  constructor(protected dialogRef: NbDialogRef<any>, private userService: UserService) {
+  constructor(protected dialogRef: NbDialogRef<any>, private userService: UserService, private eserviceService: EserviceService) {
   }
 
   ngOnInit() {
     this.selected_role = this.newUser.role;
     this.selected_company = this.newUser.id_emp;
+    this.selected_service = this.newUser.id_serv;
+    if (this.selected_company) {
+      this.eserviceService.getServices(this.selected_company).subscribe((res: EService[]) => {
+        this.services = res;
+        this.selected_service = this.newUser.id_serv;
+      });
+    }
   }
 
   nick_change() {
@@ -107,8 +119,19 @@ export class NewUserComponent implements OnInit {
   company_change() {
     if (this.selected_company >= 0) {
       this.company_status = 'success';
+      this.eserviceService.getServices(this.selected_company).subscribe((res: EService[]) => {
+        this.services = res;
+      });
     } else {
       this.company_status = 'danger';
+    }
+  }
+
+  service_change() {
+    if (this.selected_service >= 0) {
+      this.service_status = 'success';
+    } else {
+      this.service_status = 'danger';
     }
   }
 
@@ -132,6 +155,7 @@ export class NewUserComponent implements OnInit {
   save() {
     this.newUser.role = this.selected_role;
     this.newUser.id_emp = this.selected_company;
+    this.newUser.id_serv = this.selected_service;
     this.newUser.id_sup = Number(this.usup);
     const Toast = Swal.mixin({
       toast: true,
@@ -203,6 +227,12 @@ export class NewUserComponent implements OnInit {
         title: 'Debe seleccionar una empresa.',
       } as SweetAlertOptions);
       this.company_status = 'danger';
+    } else  if (this.service_status === 'danger' || !this.selected_service) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe seleccionar un servicio.',
+      } as SweetAlertOptions);
+      this.service_status = 'danger';
     } else if (this.usup_status === 'danger' || this.usup === '') {
       Toast.fire({
         icon: 'error',
@@ -214,7 +244,7 @@ export class NewUserComponent implements OnInit {
         icon: 'error',
         title: 'Debe escribir una contraseña válida.',
       } as SweetAlertOptions);
-      this.pass_status === 'danger';
+      this.pass_status = 'danger';
     } else if (this.rpass_status === 'danger' || this.reppass !== this.newUser.pass) {
       Toast.fire({
         icon: 'error',

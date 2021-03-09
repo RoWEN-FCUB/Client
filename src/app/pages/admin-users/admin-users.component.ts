@@ -58,7 +58,7 @@ export class AdminUsersComponent implements OnInit {
   }
 
   openEnergy(id: number) {
-    this.eserviceService.getServices().subscribe((serv: EService[]) => {
+    this.eserviceService.getServices(this.users[id].id_emp).subscribe((serv: EService[]) => {
       this.eserviceService.userServices(this.users[id].id).subscribe((userv: EService[]) => {
         // console.log(userv);
         const contxt = {
