@@ -22,6 +22,8 @@ import { NewCproviderComponent } from '../new-cprovider/new-cprovider.component'
 import { NewCreceiptComponent } from '../new-creceipt/new-creceipt.component';
 import { Company } from '../../models/Company';
 import { CompanyService } from '../../services/company.service';
+import { EService } from '../../models/EService';
+import { EserviceService } from '../../services/eservice.service';
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'comercial',
@@ -33,11 +35,12 @@ export class ComercialComponent implements OnInit {
   proveedores: CProvider[] = [];
   productos: CProduct[] = [];
   company: Company = {};
+  service: EService = {};
   vales: CReceipt[] = [];
   selected_provider: number = 0;
   show_delivered_receipts: number = 0;
   show_concilied_receipts: number = 0;
-  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0};
+  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0, id_serv: 0};
   search_status: string = 'info';
   search_string: string = '';
   @ViewChild('strsearch', {static: false}) searchinput: ElementRef;
@@ -52,15 +55,18 @@ export class ComercialComponent implements OnInit {
   }[] = [];
 
   constructor(private http: HttpClient, private comercialService: ComercialService, private dialogService: NbDialogService,
-    private authService: NbAuthService, private companyService: CompanyService) { }
+    private authService: NbAuthService, private companyService: CompanyService, private eserviceService: EserviceService) { }
 
   ngOnInit(): void {
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
-      this.companyService.getOne(this.user.id_emp).subscribe((res: Company) => {
-        this.company = res;
+      this.eserviceService.getOne(this.user.id_serv).subscribe((serv: EService) => {
+        this.service = serv;
       });
-      this.comercialService.getProviders(this.user.id_emp).subscribe((prov: CProvider[]) => {
+      this.companyService.getOne(this.user.id_emp).subscribe((comp: Company) => {
+        this.company = comp;
+      });
+      this.comercialService.getProviders(this.user.id_serv).subscribe((prov: CProvider[]) => {
         this.proveedores = prov;
         if (this.proveedores.length > 0) {
           this.comercialService.getProducts(this.proveedores[0].id).subscribe((prod: CProduct[]) => {
@@ -110,13 +116,13 @@ export class ComercialComponent implements OnInit {
             cantidad_productos: 0,
           };
           newreceipt.productos.push(newproduct);
-          newreceipt.cantidad_productos++;
+          newreceipt.cantidad_productos = newproduct.cantidad;
           this.vales.push(newreceipt);
         } else {
           for (let j = 0; j < this.vales.length; j++) {
             if (this.vales[j].id === (res[i].id as number)) {
               this.vales[j].productos.push(newproduct);
-              this.vales[j].cantidad_productos++;
+              this.vales[j].cantidad_productos += newproduct.cantidad;
               break;
             }
           }
@@ -182,10 +188,10 @@ export class ComercialComponent implements OnInit {
 
   openNewCProvider() {
     // tslint:disable-next-line: max-line-length
-    this.dialogService.open(NewCproviderComponent, {context: {id_empresa: this.user.id_emp}}).onClose.subscribe(
+    this.dialogService.open(NewCproviderComponent, {context: {id_serv: this.user.id_serv}}).onClose.subscribe(
       (newCProvider) => {
         if (newCProvider) {
-          this.comercialService.getProviders(this.user.id_emp).subscribe((prov: CProvider[]) => {
+          this.comercialService.getProviders(this.user.id_serv).subscribe((prov: CProvider[]) => {
             this.proveedores = prov;
             const Toast = Swal.mixin({
               toast: true,
@@ -217,10 +223,10 @@ export class ComercialComponent implements OnInit {
 
   openEditCProvider(index: number) {
     // tslint:disable-next-line: max-line-length
-    this.dialogService.open(NewCproviderComponent, {context: {id_empresa: this.user.id_emp, newProvider: this.proveedores[index]}}).onClose.subscribe(
+    this.dialogService.open(NewCproviderComponent, {context: {id_serv: this.user.id_serv, newProvider: this.proveedores[index]}}).onClose.subscribe(
       (newCProvider) => {
         if (newCProvider) {
-          this.comercialService.getProviders(this.user.id_emp).subscribe((prov: CProvider[]) => {
+          this.comercialService.getProviders(this.user.id_serv).subscribe((prov: CProvider[]) => {
             this.proveedores = prov;
             const Toast = Swal.mixin({
               toast: true,
@@ -360,6 +366,94 @@ export class ComercialComponent implements OnInit {
           }
         });
       }
+    });
+  }
+
+  deleteReceipt(index: number) {
+    Swal.fire({
+      title: 'Confirma que desea eliminar el vale "' + this.vales[index].pedido + '"?',
+      text: 'Se eliminarán todos sus datos del sistema.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí­',
+      cancelButtonText: 'No',
+    } as SweetAlertOptions).then((result) => {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 3000,
+      });
+      if (result.value) {
+        this.comercialService.deleteReceipt(this.vales[index].id).subscribe((res: {text: string}) => {
+          this.loadReceipts();
+          Toast.fire({
+            icon: 'success',
+            title: 'Vale eliminado correctamente.',
+          } as SweetAlertOptions);
+        });
+      }
+    });
+  }
+
+  changeDeliveredState(index: number, state: boolean) {
+    let msg: string = '- No entregado -';
+    if (state) {
+      msg = '- Entregado -';
+    }
+    Swal.fire({
+      title: 'Confirma que desea cambiar el estado del vale "' + this.vales[index].pedido + '"?',
+      text: 'Se establecerá a ' + msg,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí­',
+      cancelButtonText: 'No',
+    } as SweetAlertOptions).then((result) => {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 3000,
+      });
+      if (result.value) {
+        this.vales[index].entregado = state;
+        this.comercialService.updateReceipt(this.vales[index], this.vales[index].id).subscribe((res: {text: string}) => {
+          this.loadReceipts();
+          Toast.fire({
+            icon: 'success',
+            title: 'Vale actualizado correctamente.',
+          } as SweetAlertOptions);
+        });
+      }
+    });
+  }
+
+  markForConciliate(e, index: number) {
+    // console.log(this.vales[index].id + ' ' + e);
+    this.vales[index].marcado_conciliar = e;
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timerProgressBar: true,
+      timer: 3000,
+    });
+    let msg: string = 'desmarcado';
+    if (e) {
+      msg = 'marcado';
+    }
+    this.comercialService.updateReceipt(this.vales[index], this.vales[index].id).subscribe((res: {text: string}) => {
+      this.loadReceipts();
+      Toast.fire({
+        icon: 'success',
+        title: 'Vale ' + msg + ' para conciliar correctamente.',
+      } as SweetAlertOptions);
     });
   }
 

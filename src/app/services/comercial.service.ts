@@ -57,6 +57,10 @@ export class ComercialService {
     return this.http.delete(ipserver + 'comercial/provider/' + id, {responseType: 'json'});
   }
 
+  deleteReceipt(id: number) {
+    return this.http.delete(ipserver + 'comercial/receipt/' + id, {responseType: 'json'});
+  }
+
   uploadFile(file) {
     return this.http.post(ipserver + 'comercial/upload', file);
   }

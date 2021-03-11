@@ -211,7 +211,17 @@ export class NewCreceiptComponent implements OnInit {
 
   addProduct() {
     this.productos[this.producto_seleccionado].cantidad = Number(this.cantidad);
-    this.newReceipt.productos.push(this.productos[this.producto_seleccionado]);
+    let found: boolean = false;
+    for (let i = 0; i < this.newReceipt.productos.length; i++) {
+      if (this.newReceipt.productos[i].codigo === this.productos[this.producto_seleccionado].codigo) {
+        this.newReceipt.productos[i].cantidad += Number(this.cantidad);
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      this.newReceipt.productos.push(this.productos[this.producto_seleccionado]);
+    }
     this.newReceipt.precio_total = 0;
     for (let i = 0; i < this.newReceipt.productos.length; i++) {
       this.newReceipt.precio_total += (this.newReceipt.productos[i].precio * this.newReceipt.productos[i].cantidad);

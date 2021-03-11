@@ -11,9 +11,9 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
   styleUrls: ['./new-cprovider.component.css'],
 })
 export class NewCproviderComponent implements OnInit {
-  id_empresa: number;
+  id_serv: number;
   newProvider: CProvider = {
-    id_empresa: 0,
+    id_serv: 0,
     nombre: '',
     reeup: '',
     siglas: '',
@@ -82,7 +82,7 @@ export class NewCproviderComponent implements OnInit {
   constructor(private comercialService: ComercialService, protected dialogRef: NbDialogRef<any>) { }
 
   ngOnInit(): void {
-    this.newProvider.id_empresa = this.id_empresa;
+    this.newProvider.id_serv = this.id_serv;
     if (this.newProvider.id) {
       for (let i = 0; i < this.provincias.length; i++) {
         if (this.newProvider.provincia === this.provincias[i].nombre) {
