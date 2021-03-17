@@ -15,6 +15,8 @@ import * as moment from 'moment';
 })
 export class NewCreceiptComponent implements OnInit {
   fecha;
+  editable: boolean = false;
+  title: string = '';
   proveedor: CProvider;
   productos: CProduct[];
   producto_seleccionado: number = -1;
@@ -121,6 +123,9 @@ export class NewCreceiptComponent implements OnInit {
         }
       }
     } else {
+      this.comercialService.getReceiptProducts(this.newReceipt.id).subscribe((res: CProduct[]) => {
+        this.newReceipt.productos = res;
+      });
       this.fecha = new Date(this.newReceipt.fecha_emision);
       this.fecha = this.convertUTCDateToLocalDate(this.fecha);
       for (let i = 0; i < this.provincias.length; i++) {
@@ -139,6 +144,20 @@ export class NewCreceiptComponent implements OnInit {
         }
       }
     }
+  }
+
+  increase_product(index: number) {
+    this.newReceipt.productos[index].cantidad++;
+    this.total_price();
+  }
+
+  decrease_product(index: number) {
+    if (this.newReceipt.productos[index].cantidad > 1) {
+      this.newReceipt.productos[index].cantidad--;
+    } else {
+      this.deleteProduct(index);
+    }
+    this.total_price();
   }
 
   convertUTCDateToLocalDate(date) {
@@ -222,14 +241,15 @@ export class NewCreceiptComponent implements OnInit {
     if (!found) {
       this.newReceipt.productos.push(this.productos[this.producto_seleccionado]);
     }
-    this.newReceipt.precio_total = 0;
-    for (let i = 0; i < this.newReceipt.productos.length; i++) {
-      this.newReceipt.precio_total += (this.newReceipt.productos[i].precio * this.newReceipt.productos[i].cantidad);
-    }
+    this.total_price();
   }
 
   deleteProduct(index: number) {
     this.newReceipt.productos.splice(index, 1);
+    this.total_price();
+  }
+
+  total_price() {
     this.newReceipt.precio_total = 0;
     for (let i = 0; i < this.newReceipt.productos.length; i++) {
       this.newReceipt.precio_total += (this.newReceipt.productos[i].precio * this.newReceipt.productos[i].cantidad);

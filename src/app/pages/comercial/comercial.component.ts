@@ -37,6 +37,7 @@ export class ComercialComponent implements OnInit {
   company: Company = {};
   service: EService = {};
   vales: CReceipt[] = [];
+  config: any;
   selected_provider: number = 0;
   show_delivered_receipts: number = 0;
   show_concilied_receipts: number = 0;
@@ -55,7 +56,13 @@ export class ComercialComponent implements OnInit {
   }[] = [];
 
   constructor(private http: HttpClient, private comercialService: ComercialService, private dialogService: NbDialogService,
-    private authService: NbAuthService, private companyService: CompanyService, private eserviceService: EserviceService) { }
+    private authService: NbAuthService, private companyService: CompanyService, private eserviceService: EserviceService) {
+      this.config = {
+        itemsPerPage: 2,
+        currentPage: 1,
+        totalItems: 0,
+      };
+     }
 
   ngOnInit(): void {
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
@@ -78,57 +85,22 @@ export class ComercialComponent implements OnInit {
     });
   }
 
+  pageChanged(event) {
+    this.config.currentPage = event;
+    this.search();
+  }
+
   loadReceipts() {
+    let strtosearch = 'null';
+    if (this.search_string !== '') {
+      strtosearch = this.search_string;
+    }
     this.vales = [];
     // tslint:disable-next-line: max-line-length
-    this.comercialService.getReceipts(this.proveedores[this.selected_provider].id, this.show_concilied_receipts, this.show_delivered_receipts).subscribe((res: any[]) => {
-      let oldid: number = -1;
-      let newreceipt: CReceipt;
-      for (let i = 0; i < res.length; i++) {
-        const newproduct: CProduct = {
-          id: (res[i].id_producto as number),
-          cantidad: (res[i].cantidad as number),
-          codigo: (res[i].codigo as string),
-          nombre: (res[i].nombre as string),
-          descripcion: (res[i].descripcion as string),
-          unidad_medida: (res[i].unidad_medida as string),
-          precio: (res[i].precio as number),
-          mlc: (res[i].mlc as boolean),
-        };
-        if ((res[i].id as number) !== oldid) {
-          oldid = res[i].id as number;
-          newreceipt = {
-            id: (res[i].id as number),
-            pedido: (res[i].pedido as string),
-            precio_total: (res[i].precio_total as number),
-            comprador: (res[i].comprador as string),
-            destinatario: (res[i].destinatario as string),
-            destinatario_direccion: (res[i].destinatario_direccion as string),
-            destinatario_telefono: (res[i].destinatario_telefono as string),
-            conciliado: (res[i].conciliado as boolean),
-            marcado_conciliar: (res[i].marcado_conciliar as boolean),
-            entregado: (res[i].entregado as boolean),
-            fecha_emision: (res[i].fecha_emision as Date),
-            productos: [],
-            costo_envio: (res[i].costo_envio as number),
-            provincia: (res[i].provincia as string),
-            municipio: (res[i].municipio as string),
-            cantidad_productos: 0,
-          };
-          newreceipt.productos.push(newproduct);
-          newreceipt.cantidad_productos = newproduct.cantidad;
-          this.vales.push(newreceipt);
-        } else {
-          for (let j = 0; j < this.vales.length; j++) {
-            if (this.vales[j].id === (res[i].id as number)) {
-              this.vales[j].productos.push(newproduct);
-              this.vales[j].cantidad_productos += newproduct.cantidad;
-              break;
-            }
-          }
-        }
-      }
-      // console.log(this.vales);
+    this.comercialService.searchReceipts(strtosearch, this.config.currentPage, this.proveedores[this.selected_provider].id, this.show_concilied_receipts, this.show_delivered_receipts).subscribe((resp: {receipts: any[], total: number}) => {
+      // console.log(resp);
+      this.config.totalItems = resp.total;
+      this.vales = resp.receipts;
     });
   }
 
@@ -153,7 +125,7 @@ export class ComercialComponent implements OnInit {
   }
 
   search() {
-
+    this.loadReceipts();
   }
 
   clearSearchInput() {
@@ -269,9 +241,15 @@ export class ComercialComponent implements OnInit {
     );
   }
 
-  openEditCReceipt(i: number) {
+  openEditCReceipt(i: number, editable: boolean) {
+    let title: string;
+    if (editable) {
+      title = 'Datos del vale ' + this.vales[i].pedido;
+    } else {
+      title = 'Modificar vale ' + this.vales[i].pedido;
+    }
     // tslint:disable-next-line: max-line-length
-    this.dialogService.open(NewCreceiptComponent, {context: {newReceipt: this.vales[i], productos: this.productos}}).onClose.subscribe(
+    this.dialogService.open(NewCreceiptComponent, {context: {title: title, editable: editable, newReceipt: JSON.parse(JSON.stringify(this.vales[i])), productos: this.productos}}).onClose.subscribe(
       (newCProduct) => {
         if (newCProduct) {
           this.loadReceipts();

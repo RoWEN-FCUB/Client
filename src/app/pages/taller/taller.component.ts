@@ -56,8 +56,8 @@ export class TallerComponent implements OnInit {
         itemsPerPage: 10,
         currentPage: 1,
         totalItems: 0,
-    };
-    this.library.addIcons(faFilePdf, faTrashAlt, faFileAlt, faShareSquare, faIdCard, faListAlt);
+      };
+      this.library.addIcons(faFilePdf, faTrashAlt, faFileAlt, faShareSquare, faIdCard, faListAlt);
     }
 
   ngOnInit() {

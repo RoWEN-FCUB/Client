@@ -12,16 +12,16 @@
                 </nb-select>
                 <div style="margin-left: 10px;">
                   <nb-select [status]="'info'" fullwidth placeholder="----" [(ngModel)]="show_concilied_receipts">
-                    <nb-option [value]="0">Todos</nb-option>
+                    <nb-option [value]="3">Todos</nb-option>
                     <nb-option [value]="1">Conciliados</nb-option>
-                    <nb-option [value]="2">No conciliados</nb-option>
+                    <nb-option [value]="0">No conciliados</nb-option>
                   </nb-select>
                 </div>
                 <div style="margin-left: 10px;">
                   <nb-select [status]="'info'" fullwidth placeholder="----" [(ngModel)]="show_delivered_receipts">
-                    <nb-option [value]="0">Todos</nb-option>
+                    <nb-option [value]="3">Todos</nb-option>
                     <nb-option [value]="1">Entregados</nb-option>
-                    <nb-option [value]="2">No entregados</nb-option>
+                    <nb-option [value]="0">No entregados</nb-option>
                   </nb-select>
                 </div>
                 <div style="margin-left: 10px; padding-top: 5px;">
@@ -29,6 +29,7 @@
                   <input #strsearch nbTooltip="Escriba uno o varios parámetros separados por espacio y presione enter." (keyup.enter)="search()" [(ngModel)]="search_string" [status]="'info'" class="ml-2" type="text" nbInput fieldSize="small" placeholder="Escriba el valor...">
                 </div>
               </div>
+              <pagination-controls maxSize="2" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageChanged($event)"></pagination-controls>
               <table class="table table-hover table-borderless table-striped table-sm">
                 <thead>
                   <tr>
@@ -45,26 +46,27 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let vale of vales; let i = index;">
-                    <th>{{vale.id}}</th>
-                    <td>{{vale.pedido}}</td>
-                    <td>{{vale.fecha_emision | onlyDate}}</td>
-                    <td>{{vale.cantidad_productos}}</td>
-                    <td>{{vale.precio_total}}</td>
-                    <td>{{vale.costo_envio}}</td>
-                    <td>{{vale.municipio}}</td>
-                    <td>{{vale.provincia}}</td>
-                    <td>{{vale.destinatario}}</td>
+                  <tr *ngFor="let vale of vales | paginate: config; let i = index;">
+                    <th (click)="openEditCReceipt(i, true)" style="cursor: pointer">{{vale.id}}</th>
+                    <td (click)="openEditCReceipt(i, true)" style="cursor: pointer">{{vale.pedido}}</td>
+                    <td (click)="openEditCReceipt(i, true)" style="cursor: pointer">{{vale.fecha_emision | onlyDate}}</td>
+                    <td (click)="openEditCReceipt(i, true)" style="cursor: pointer">{{vale.cantidad_productos}}</td>
+                    <td (click)="openEditCReceipt(i, true)" style="cursor: pointer">{{vale.precio_total}}</td>
+                    <td (click)="openEditCReceipt(i, true)" style="cursor: pointer">{{vale.costo_envio}}</td>
+                    <td (click)="openEditCReceipt(i, true)" style="cursor: pointer">{{vale.municipio}}</td>
+                    <td (click)="openEditCReceipt(i, true)" style="cursor: pointer">{{vale.provincia}}</td>
+                    <td (click)="openEditCReceipt(i, true)" style="cursor: pointer">{{vale.destinatario}}</td>
                     <td style="text-align:right;">
                       <nb-checkbox (checkedChange)="markForConciliate($event, i)" style="cursor: pointer; margin-right: 3px; padding: 0;" *ngIf="!vale.conciliado" [checked]="vale.marcado_conciliar" [status]="'info'" nbTooltip="Marcar para conciliar" nbTooltipIcon="checkmark-outline"></nb-checkbox>
                       <nb-icon *ngIf="!vale.entregado" (click)="changeDeliveredState(i, true)" style="cursor: pointer" icon="car-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Marcar como entregado" nbTooltipIcon="car-outline" nbTooltipStatus="info"></nb-icon>
                       <nb-icon *ngIf="vale.entregado" (click)="changeDeliveredState(i, false)" style="cursor: pointer" icon="corner-down-left-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Marcar como no entregado" nbTooltipIcon="corner-down-left-outline" nbTooltipStatus="info"></nb-icon>
-                      <nb-icon style="cursor: pointer" (click)="openEditCReceipt(i)" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar vale" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                      <nb-icon style="cursor: pointer" (click)="openEditCReceipt(i, false)" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar vale" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
                       <nb-icon style="cursor: pointer" (click)="deleteReceipt(i)" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar vale" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
                     </td>
                   </tr>
                 </tbody>
               </table>
+              <pagination-controls maxSize="2" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageChanged($event)"></pagination-controls>
             </nb-tab>
             <nb-tab tabTitle="PROVEEDORES">
               <div class="row" style="margin-bottom: 20px;">

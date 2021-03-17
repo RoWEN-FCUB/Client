@@ -1,18 +1,18 @@
 <nb-card accent="info" size="large">
-    <nb-card-header><div class="text-center">Nuevo vale</div></nb-card-header>
+    <nb-card-header><div class="text-center">{{title}}</div></nb-card-header>
     <nb-card-body>
       <div class="row">
         <div class="col">
           <div class="form-group">
             <label>Pedido:</label>
-            <input (input)="pedido_change()" type="text" nbInput autofocus fullWidth [status]="pedido_status" placeholder="Pedido" [(ngModel)]="newReceipt.pedido" class="form-control" aria-describedby="pedHelp">
+            <input (input)="pedido_change()" type="text" [disabled]="editable" nbInput autofocus fullWidth [status]="pedido_status" placeholder="Pedido" [(ngModel)]="newReceipt.pedido" class="form-control" aria-describedby="pedHelp">
             <small id="pedHelp" class="form-text text-muted">Código del pedido.</small>
           </div>
         </div>
         <div class="col">
           <div class="form-group">
             <label>Fecha:</label>
-            <input type="text" (ngModelChange)="fecha_change($event)" [owlDateTime]="dt" [selectMode]="'single'" [owlDateTimeTrigger]="dt" nbInput fullWidth [status]="fecha_status" placeholder="Fecha" [(ngModel)]="fecha" class="form-control" aria-describedby="fecHelp">
+            <input type="text" [disabled]="editable" (ngModelChange)="fecha_change($event)" [owlDateTime]="dt" [selectMode]="'single'" [owlDateTimeTrigger]="dt" nbInput fullWidth [status]="fecha_status" placeholder="Fecha" [(ngModel)]="fecha" class="form-control" aria-describedby="fecHelp">
             <owl-date-time #dt [pickerType]="'calendar'" [startAt]="newReceipt.fecha_emision"></owl-date-time>
             <small id="fecHelp" class="form-text text-muted">Fecha de emisión del vale.</small>
           </div>
@@ -22,7 +22,7 @@
         <div class="col">
             <div class="form-group">
                 <label>Provincia:</label>
-                <nb-select (selectedChange)="cambiarmunicipios()" fullWidth placeholder="----" [(ngModel)]="provincia_seleccionada" [status]="provincia_status">
+                <nb-select [disabled]="editable" (selectedChange)="cambiarmunicipios()" fullWidth placeholder="----" [(ngModel)]="provincia_seleccionada" [status]="provincia_status">
                     <nb-option *ngFor="let prov of provincias; let i = index" [value]="i">{{prov.nombre}}</nb-option>
                 </nb-select>
             </div>
@@ -30,7 +30,7 @@
         <div class="col">
             <div class="form-group">
                 <label>Municipio:</label>
-                <nb-select (selectedChange)="seleccionarMunicipio()" fullWidth placeholder="----" [(ngModel)]="municipio_seleccionado" [status]="municipio_status">
+                <nb-select [disabled]="editable" (selectedChange)="seleccionarMunicipio()" fullWidth placeholder="----" [(ngModel)]="municipio_seleccionado" [status]="municipio_status">
                     <nb-option *ngFor="let mun of municipios; let i = index" [value]="i">{{mun}}</nb-option>
                 </nb-select>
             </div>
@@ -40,14 +40,14 @@
         <div class="col">
           <div class="form-group">
             <label>Comprador:</label>
-            <input type="text" (input)="comprador_change()" nbInput fullWidth [status]="comprador_status" placeholder="Comprador" [(ngModel)]="newReceipt.comprador" class="form-control" aria-describedby="compHelp">
+            <input type="text" [disabled]="editable" (input)="comprador_change()" nbInput fullWidth [status]="comprador_status" placeholder="Comprador" [(ngModel)]="newReceipt.comprador" class="form-control" aria-describedby="compHelp">
             <small id="compHelp" class="form-text text-muted">Nombre del comprador.</small>
           </div>
         </div>
         <div class="col">
           <div class="form-group">
             <label>Destinatario:</label>
-            <input type="text" (input)="destinatario_change()" nbInput fullWidth [status]="destinatario_status" placeholder="Destinatario" [(ngModel)]="newReceipt.destinatario" class="form-control" aria-describedby="destHelp">
+            <input type="text" [disabled]="editable" (input)="destinatario_change()" nbInput fullWidth [status]="destinatario_status" placeholder="Destinatario" [(ngModel)]="newReceipt.destinatario" class="form-control" aria-describedby="destHelp">
             <small id="destHelp" class="form-text text-muted">Nombre del destinatario.</small>
           </div>
         </div>
@@ -56,14 +56,14 @@
         <div class="col">
           <div class="form-group">
             <label>Dirección:</label>
-            <input type="text" (input)="direccion_change()" nbInput fullWidth [status]="direccion_status" placeholder="Comprador" [(ngModel)]="newReceipt.destinatario_direccion" class="form-control" aria-describedby="dirHelp">
+            <input type="text" [disabled]="editable" (input)="direccion_change()" nbInput fullWidth [status]="direccion_status" placeholder="Comprador" [(ngModel)]="newReceipt.destinatario_direccion" class="form-control" aria-describedby="dirHelp">
             <small id="dirHelp" class="form-text text-muted">Dirección del destinatario.</small>
           </div>
         </div>
         <div class="col">
           <div class="form-group">
             <label>No. Teléfono:</label>
-            <input type="text" (input)="telefono_change()" nbInput fullWidth [status]="telefono_status" placeholder="Destinatario" [(ngModel)]="newReceipt.destinatario_telefono" class="form-control" aria-describedby="telHelp">
+            <input type="text" [disabled]="editable" (input)="telefono_change()" nbInput fullWidth [status]="telefono_status" placeholder="Destinatario" [(ngModel)]="newReceipt.destinatario_telefono" class="form-control" aria-describedby="telHelp">
             <small id="telHelp" class="form-text text-muted">Número de teléfono del destinatario.</small>
           </div>
         </div>
@@ -71,7 +71,7 @@
       <div>
         <nb-tabset>
           <nb-tab tabTitle="PRODUCTOS" style="padding-left: 0; padding-right: 0;">
-            <div class="row">
+            <div class="row" *ngIf="!editable">
               <div class="col">
                 <div class="form-group">
                   <label>Producto:</label>
@@ -110,7 +110,9 @@
                       <td>{{prod.nombre}}</td>
                       <td>{{prod.precio}}</td>
                       <td>{{prod.cantidad}}</td>
-                      <td>                        
+                      <td *ngIf="!editable">                        
+                        <nb-icon (click)="increase_product(i)" style="cursor: pointer" icon="plus-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Incrementar producto" nbTooltipIcon="plus-outline" nbTooltipStatus="info"></nb-icon>
+                        <nb-icon *ngIf="prod.cantidad > 0" (click)="decrease_product(i)" style="cursor: pointer" icon="minus-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Disminuir producto" nbTooltipIcon="minus-outline" nbTooltipStatus="info"></nb-icon>
                         <nb-icon (click)="deleteProduct(i)" style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar producto" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
                       </td>
                     </tr>
@@ -129,8 +131,9 @@
     </nb-card-body>
     <nb-card-footer>
       <div class="float-right row">
-        <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
-        <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+        <button *ngIf="!editable" (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+        <button *ngIf="editable" (click)="close()" nbButton hero status="info" shape="semi-round" size="small">Cerrar</button>
+        <button *ngIf="!editable" (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
       </div>
     </nb-card-footer>
   </nb-card>

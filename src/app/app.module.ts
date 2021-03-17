@@ -73,7 +73,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 // import { GetObservationsPipe } from './pipes/get-observations.pipe';
 // import { FormatStatePipe } from './pipes/format-state.pipe';
 // import { FormatTimePipe } from './pipes/format-time.pipe';
-import { NgxPaginationModule } from 'ngx-pagination';
+// import { NgxPaginationModule } from 'ngx-pagination';
 import { NewErecordComponent } from './pages/new-erecord/new-erecord.component';
 import { EnergyPlansComponent } from './pages/energy-plans/energy-plans.component';
 import { NewCompanyComponent } from './pages/new-company/new-company.component';
@@ -194,7 +194,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     }),
     CoreModule.forRoot(),
     NgbModule,
-    NgxPaginationModule,
+    // NgxPaginationModule,
     NgxChartsModule,
   ],
   providers: [

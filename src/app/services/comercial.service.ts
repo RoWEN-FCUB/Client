@@ -21,6 +21,10 @@ export class ComercialService {
     return this.http.get(ipserver + 'comercial/listProducts/' + id_prod, {responseType: 'json'});
   }
 
+  getReceiptProducts(id_receipt: number) {
+    return this.http.get(ipserver + 'comercial/listReceiptProducts/' + id_receipt, {responseType: 'json'});
+  }
+
   getReceipts(id_provd: number, conc: number, del: number) {
     return this.http.get(ipserver + 'comercial/listReceipts/' + id_provd + '&' + conc + '&' + del, {responseType: 'json'});
   }
@@ -63,5 +67,10 @@ export class ComercialService {
 
   uploadFile(file) {
     return this.http.post(ipserver + 'comercial/upload', file);
+  }
+
+  searchReceipts(str: string, page: number, id_provider: number, concilied: number, delivered: number) {
+    // tslint:disable-next-line: max-line-length
+    return this.http.get(ipserver + 'comercial/searchreceipts/' + str + '&' + page + '&' + id_provider + '&' + concilied + '&' + delivered, {responseType: 'json'});
   }
 }
