@@ -11,14 +11,14 @@
                   <nb-option *ngFor="let prov of proveedores; let i = index" [value]="i">{{prov.siglas}}</nb-option>
                 </nb-select>
                 <div style="margin-left: 10px;">
-                  <nb-select [status]="'info'" fullwidth placeholder="----" [(ngModel)]="show_concilied_receipts">
+                  <nb-select (selectedChange)="concilied_change()" [status]="'info'" fullwidth placeholder="----" [(ngModel)]="show_concilied_receipts">
                     <nb-option [value]="3">Todos</nb-option>
                     <nb-option [value]="1">Conciliados</nb-option>
                     <nb-option [value]="0">No conciliados</nb-option>
                   </nb-select>
                 </div>
                 <div style="margin-left: 10px;">
-                  <nb-select [status]="'info'" fullwidth placeholder="----" [(ngModel)]="show_delivered_receipts">
+                  <nb-select (selectedChange)="delivered_change()" [status]="'info'" fullwidth placeholder="----" [(ngModel)]="show_delivered_receipts">
                     <nb-option [value]="3">Todos</nb-option>
                     <nb-option [value]="1">Entregados</nb-option>
                     <nb-option [value]="0">No entregados</nb-option>

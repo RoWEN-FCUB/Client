@@ -39,8 +39,8 @@ export class ComercialComponent implements OnInit {
   vales: CReceipt[] = [];
   config: any;
   selected_provider: number = 0;
-  show_delivered_receipts: number = 0;
-  show_concilied_receipts: number = 0;
+  show_delivered_receipts: number = 3;
+  show_concilied_receipts: number = 3;
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0, id_serv: 0};
   search_status: string = 'info';
   search_string: string = '';
@@ -109,15 +109,16 @@ export class ComercialComponent implements OnInit {
       this.comercialService.getProducts(this.proveedores[this.selected_provider].id).subscribe((prod: CProduct[]) => {
         this.productos = prod;
       });
+      this.search();
     }
   }
 
-  concilied_change(e) {
-
+  concilied_change() {
+    this.search();
   }
 
-  delivered_change(e) {
-
+  delivered_change() {
+    this.search();
   }
 
   tabChanged(e) {
