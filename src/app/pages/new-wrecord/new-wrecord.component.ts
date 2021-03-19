@@ -390,8 +390,7 @@ export class NewWRecordComponent implements OnInit {
   }
 
   clientNameChange() {
-    const nameregexp = new RegExp(/^([A-Za-záéíóúñÑ]+\s?)+$/);
-    if (nameregexp.test(this.newrecord.cliente_nombre)) {
+    if (this.newrecord.cliente_nombre) {
       this.client_name_status = 'success';
     } else {
       this.client_name_status = 'danger';

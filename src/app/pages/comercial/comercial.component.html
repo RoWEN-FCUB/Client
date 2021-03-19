@@ -24,9 +24,14 @@
                     <nb-option [value]="0">No entregados</nb-option>
                   </nb-select>
                 </div>
-                <div style="margin-left: 10px; padding-top: 5px;">
+                <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin-left: 10px; padding-top: 7px;">
                   <label>Buscar:</label>
-                  <input #strsearch nbTooltip="Escriba uno o varios parámetros separados por espacio y presione enter." (keyup.enter)="search()" [(ngModel)]="search_string" [status]="'info'" class="ml-2" type="text" nbInput fieldSize="small" placeholder="Escriba el valor...">
+                  <nb-form-field>
+                    <input #strsearch nbTooltip="Escriba uno o varios parámetros separados por espacio y presione enter." (keyup.enter)="search()" [(ngModel)]="search_string" [status]="'info'" class="ml-2" type="text" nbInput fieldSize="small" placeholder="Escriba el valor...">
+                    <button *ngIf="search_string !== ''" nbSuffix nbButton ghost (click)="clearSearchInput()">
+                      <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
+                    </button>
+                  </nb-form-field>
                 </div>
               </div>
               <pagination-controls maxSize="2" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageChanged($event)"></pagination-controls>

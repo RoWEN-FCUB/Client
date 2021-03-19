@@ -252,7 +252,8 @@ export class NewCreceiptComponent implements OnInit {
   total_price() {
     this.newReceipt.precio_total = 0;
     for (let i = 0; i < this.newReceipt.productos.length; i++) {
-      this.newReceipt.precio_total += (this.newReceipt.productos[i].precio * this.newReceipt.productos[i].cantidad);
+      // tslint:disable-next-line: max-line-length
+      this.newReceipt.precio_total += Math.round(((this.newReceipt.productos[i].precio * this.newReceipt.productos[i].cantidad) + Number.EPSILON) * 100) / 100;
     }
   }
 
