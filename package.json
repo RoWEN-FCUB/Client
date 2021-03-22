@@ -86,7 +86,7 @@
     "popper.js": "^1.15.0",
     "roboto-fontface": "0.10.0",
     "rxjs": "^6.6.6",
-    "rxjs-compat": "6.6.3",
+    "rxjs-compat": "6.6.6",
     "socicon": "3.0.5",
     "style-loader": "^2.0.0",
     "sweetalert2": "^10.15.6",
