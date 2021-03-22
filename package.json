@@ -45,7 +45,7 @@
     "@fortawesome/fontawesome-common-types": "^0.2.34",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-regular-svg-icons": "^5.15.2",
-    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@nebular/auth": "6.2.1",
     "@nebular/eva-icons": "6.2.1",
     "@nebular/security": "7.0.0",
