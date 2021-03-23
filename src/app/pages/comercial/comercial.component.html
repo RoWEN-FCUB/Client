@@ -5,7 +5,8 @@
             <nb-tab tabTitle="VALES">
               <div class="row" style="margin-bottom: 20px;">
                 <button (click)="openNewCReceipt()" nbTooltip="Agregar un nuevo vale" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
-                <button style="margin-left: 10px;" nbTooltip="Conciliar vales marcados" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="checkmark-square-outline"></nb-icon>Conciliar</button>
+                <button (click)="reviewMarkedRecipes()" style="margin-left: 10px;" nbTooltip="Revisar conciliación" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="checkmark-circle-outline"></nb-icon>Revisar</button>
+                <button (click)="conciliate()" style="margin-left: 10px;" nbTooltip="Conciliar vales marcados" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="checkmark-square-outline"></nb-icon>Conciliar</button>
                 <div style="padding-top: 10px;"><label style="margin-right: 5px; margin-left: 10px;">Proveedor:</label></div>
                 <nb-select (selectedChange)="provider_change()" placeholder="----" [(ngModel)]="selected_provider" [status]="'info'" fullwidth>
                   <nb-option *ngFor="let prov of proveedores; let i = index" [value]="i">{{prov.siglas}}</nb-option>
@@ -63,15 +64,18 @@
                     <td (click)="openEditCReceipt(i, true)" style="cursor: pointer">{{vale.destinatario}}</td>
                     <td style="text-align:right;">
                       <nb-checkbox (checkedChange)="markForConciliate($event, i)" style="cursor: pointer; margin-right: 3px; padding: 0;" *ngIf="!vale.conciliado" [checked]="vale.marcado_conciliar" [status]="'info'" nbTooltip="Marcar para conciliar" nbTooltipIcon="checkmark-outline"></nb-checkbox>
-                      <nb-icon *ngIf="!vale.entregado" (click)="changeDeliveredState(i, true)" style="cursor: pointer" icon="car-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Marcar como entregado" nbTooltipIcon="car-outline" nbTooltipStatus="info"></nb-icon>
-                      <nb-icon *ngIf="vale.entregado" (click)="changeDeliveredState(i, false)" style="cursor: pointer" icon="corner-down-left-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Marcar como no entregado" nbTooltipIcon="corner-down-left-outline" nbTooltipStatus="info"></nb-icon>
-                      <nb-icon style="cursor: pointer" (click)="openEditCReceipt(i, false)" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar vale" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
-                      <nb-icon style="cursor: pointer" (click)="deleteReceipt(i)" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar vale" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                      <nb-icon *ngIf="!vale.entregado && !vale.conciliado" (click)="changeDeliveredState(i, true)" style="cursor: pointer" icon="car-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Marcar como entregado" nbTooltipIcon="car-outline" nbTooltipStatus="info"></nb-icon>
+                      <nb-icon *ngIf="vale.entregado && !vale.conciliado" (click)="changeDeliveredState(i, false)" style="cursor: pointer" icon="corner-down-left-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Marcar como no entregado" nbTooltipIcon="corner-down-left-outline" nbTooltipStatus="info"></nb-icon>
+                      <nb-icon *ngIf="!vale.conciliado" style="cursor: pointer" (click)="openEditCReceipt(i, false)" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar vale" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                      <nb-icon *ngIf="!vale.conciliado" style="cursor: pointer" (click)="deleteReceipt(i)" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar vale" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
                     </td>
                   </tr>
                 </tbody>
               </table>
               <pagination-controls maxSize="2" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageChanged($event)"></pagination-controls>
+            </nb-tab>
+            <nb-tab tabTitle="Conciliaciones">
+
             </nb-tab>
             <nb-tab tabTitle="PROVEEDORES">
               <div class="row" style="margin-bottom: 20px;">

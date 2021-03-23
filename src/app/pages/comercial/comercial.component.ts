@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CProvider } from '../../models/CProvider';
 import { CProduct } from '../../models/CProduct';
 import { CReceipt } from '../../models/CReceipt';
+import { CConc } from '../../models/CConc';
 import { ComercialService } from '../../services/comercial.service';
 import { NbDialogService } from '@nebular/theme';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
@@ -24,6 +25,7 @@ import { Company } from '../../models/Company';
 import { CompanyService } from '../../services/company.service';
 import { EService } from '../../models/EService';
 import { EserviceService } from '../../services/eservice.service';
+import { image1, image2 } from '../taller/base64images';
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'comercial',
@@ -54,6 +56,8 @@ export class ComercialComponent implements OnInit {
     transportista: string,
     proveedor: string,
   }[] = [];
+  docDefinition = {};
+  table_to_print = [];
 
   constructor(private http: HttpClient, private comercialService: ComercialService, private dialogService: NbDialogService,
     private authService: NbAuthService, private companyService: CompanyService, private eserviceService: EserviceService) {
@@ -82,6 +86,224 @@ export class ComercialComponent implements OnInit {
           this.loadReceipts();
         }
       });
+    });
+  }
+
+  reviewMarkedRecipes() { // REVISAR VALES ANTES DE EMITIR CONCILIACION
+    const vales_conc: CConc[] = [];
+    this.comercialService.getMarkedReceipts(this.proveedores[this.selected_provider].id).subscribe((res: any[]) => {
+      // console.log(res);
+      for (let i = 0; i < res.length; i++) {
+        let index = -1;
+        for (let j = 0; j < vales_conc.length; j++) {
+          if (vales_conc[j].id_producto === Number(res[i].id_producto)) {
+            index = j;
+            break;
+          }
+        }
+        if (index > -1) {
+          vales_conc[index].cantidad += Number(res[i].cantidad);
+          if (res[i].mlc) {
+            // tslint:disable-next-line: max-line-length
+            vales_conc[index].total_usd = Math.round(((vales_conc[index].cantidad * vales_conc[index].precio_usd) + Number.EPSILON) * 100) / 100;
+            // tslint:disable-next-line: max-line-length
+            vales_conc[index].total_mn = Math.round(((vales_conc[index].total_usd * 24) + Number.EPSILON) * 100) / 100;
+            vales_conc[index].cl = Math.round(((vales_conc[index].total_usd * 0.8) + Number.EPSILON) * 100) / 100;
+          } else {
+            // tslint:disable-next-line: max-line-length
+            vales_conc[index].total_mn = Math.round(((vales_conc[index].precio_mn * vales_conc[index].cantidad) + Number.EPSILON) * 100) / 100;
+          }
+        } else {
+          const newCCon: CConc = {
+            nombre: res[i].nombre,
+            id_producto: Number(res[i].id_producto),
+            cantidad: Number(res[i].cantidad),
+            cl: 0,
+            total_usd: 0,
+            total_mn: 0,
+            precio_mn: 0,
+            precio_usd: 0,
+          };
+          if (res[i].mlc) {
+            newCCon.precio_usd = Number(res[i].precio);
+            newCCon.total_usd = Math.round(((newCCon.precio_usd * newCCon.cantidad) + Number.EPSILON) * 100) / 100;
+            newCCon.total_mn = Math.round(((newCCon.total_usd * 24) + Number.EPSILON) * 100) / 100;
+            newCCon.cl = Math.round(((newCCon.total_usd * 0.8) + Number.EPSILON) * 100) / 100;
+          } else {
+            newCCon.precio_mn = Number(res[i].precio);
+            newCCon.total_mn = Math.round(((newCCon.precio_mn * newCCon.cantidad) + Number.EPSILON) * 100) / 100;
+          }
+          vales_conc.push(newCCon);
+        }
+      }
+      // console.log(vales_conc);
+      const table = [];
+      const head = [
+        'No.',
+        'PRODUCTO',
+        'CANTIDAD',
+        'PRECIO MN',
+        'PRECIO USD',
+        'TOTAL MN',
+        'TOTAL USD',
+        'CL'];
+      table.push(head);
+      let total_usd = 0;
+      let total_mn = 0;
+      let total_cl = 0;
+      for (let i = 0; i < vales_conc.length; i++) {
+        const row = [
+          {text: i + 1},
+          {text: vales_conc[i].nombre},
+          {text: vales_conc[i].cantidad},
+          {text: vales_conc[i].precio_mn},
+          {text: vales_conc[i].precio_usd},
+          {text: vales_conc[i].total_mn},
+          {text: vales_conc[i].total_usd},
+          {text: vales_conc[i].cl},
+        ];
+        table.push(row);
+        total_cl += vales_conc[i].cl;
+        total_mn += vales_conc[i].total_mn;
+        total_usd += vales_conc[i].total_usd;
+      }
+      const row2 = [
+        {text: ''},
+        {text: 'TOTAL', bold: true},
+        {text: ''},
+        {text: ''},
+        {text: ''},
+        {text: total_mn, bold: true},
+        {text: total_usd, bold: true},
+        {text: total_cl, bold: true},
+      ];
+      table.push(row2);
+      this.table_to_print = [
+        [{text: 'MODELO DE CONCILIACIÓN CON PROVEEDOR', alignment: 'center', bold: true}],
+        [
+          {text: 'Fecha: ' + moment.utc().format('DD/MM/YYYY'), alignment: 'left'},
+        ],
+        [
+          {text: 'Proveedor: ' + this.proveedores[this.selected_provider].nombre, alignment: 'left'},
+        ],
+        [
+          {text: 'Confeccionado por: ' + this.user.fullname, alignment: 'left'},
+        ],
+      ];
+      this.docDefinition = {
+        info: {
+          title: 'Modelo de conciliación',
+        },
+        footer: function(currentPage, pageCount) {
+          return {
+            text: 'Página ' + currentPage.toString() + ' de ' + pageCount,
+            alignment: 'right',
+            margin: [2, 2, 5, 2],
+            fontSize: 10,
+          };
+        },
+        pageSize: 'LETTER',
+        pageOrientation: 'landscape',
+        content: [
+          {
+            table: {
+              widths: ['*'],
+              body: [
+                [
+                  {
+                    image: image1,
+                    width: 168,
+                    height: 60,
+                  },
+                ],
+              ],
+            },
+            layout: {
+              vLineWidth: function (i) { return 0; },
+              hLineWidth: function (i) { return 0; },
+            },
+          },
+          {
+            table: {
+              widths: ['*'],
+              body: this.table_to_print,
+            },
+            layout: {
+              paddingLeft: function(i, node) { return 2; },
+              paddingRight: function(i, node) { return 2; },
+              paddingTop: function(i, node) { return 2; },
+              paddingBottom: function(i, node) { return 2; },
+              vLineWidth: function (i) {  return 0; },
+              hLineWidth: function (i) {  return 0; },
+            },
+          },
+          {
+            table: {
+              widths: [20, '*', '*', '*', '*', '*', '*', 50],
+              body: table,
+              fontSize: 12,
+            },
+          },
+        ],
+        pageMargins: [25, 25, 25, 25],
+      };
+      pdfMake.createPdf(this.docDefinition).download('CITMATEL Conciliación');
+    });
+  }
+
+  conciliate() {
+    const vales_conc: CConc[] = [];
+    this.comercialService.getMarkedReceipts(this.proveedores[this.selected_provider].id).subscribe((res: any[]) => {
+      // console.log(res);
+      for (let i = 0; i < res.length; i++) {
+        let index = -1;
+        for (let j = 0; j < vales_conc.length; j++) {
+          if (vales_conc[j].id_producto === Number(res[i].id_producto)) {
+            index = j;
+            break;
+          }
+        }
+        if (index > -1) {
+          vales_conc[index].cantidad += Number(res[i].cantidad);
+          if (res[i].mlc) {
+            // tslint:disable-next-line: max-line-length
+            vales_conc[index].total_usd = Math.round(((vales_conc[index].cantidad * vales_conc[index].precio_usd) + Number.EPSILON) * 100) / 100;
+            // tslint:disable-next-line: max-line-length
+            vales_conc[index].total_mn = Math.round(((vales_conc[index].total_usd * 24) + Number.EPSILON) * 100) / 100;
+            vales_conc[index].cl = Math.round(((vales_conc[index].total_usd * 0.8) + Number.EPSILON) * 100) / 100;
+          } else {
+            // tslint:disable-next-line: max-line-length
+            vales_conc[index].total_mn = Math.round(((vales_conc[index].precio_mn * vales_conc[index].cantidad) + Number.EPSILON) * 100) / 100;
+          }
+        } else {
+          const newCCon: CConc = {
+            nombre: res[i].nombre,
+            id_producto: Number(res[i].id_producto),
+            cantidad: Number(res[i].cantidad),
+            cl: 0,
+            total_usd: 0,
+            total_mn: 0,
+            precio_mn: 0,
+            precio_usd: 0,
+          };
+          if (res[i].mlc) {
+            newCCon.precio_usd = Number(res[i].precio);
+            newCCon.total_usd = Math.round(((newCCon.precio_usd * newCCon.cantidad) + Number.EPSILON) * 100) / 100;
+            newCCon.total_mn = Math.round(((newCCon.total_usd * 24) + Number.EPSILON) * 100) / 100;
+            newCCon.cl = Math.round(((newCCon.total_usd * 0.8) + Number.EPSILON) * 100) / 100;
+          } else {
+            newCCon.precio_mn = Number(res[i].precio);
+            newCCon.total_mn = Math.round(((newCCon.precio_mn * newCCon.cantidad) + Number.EPSILON) * 100) / 100;
+          }
+          vales_conc.push(newCCon);
+        }
+      }
+      const datos = {
+        id_prov: this.proveedores[this.selected_provider].id,
+        id_user: this.user.id,
+        fecha: moment.utc().toDate(),
+      };
+      this.comercialService.createConciliation(vales_conc, datos).subscribe(res => {});
     });
   }
 

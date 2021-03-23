@@ -5,6 +5,7 @@ import { CProvider } from '../models/CProvider';
 import { CProduct } from '../models/CProduct';
 import { CReceipt } from '../models/CReceipt';
 import ipserver from '../ipserver';
+import { CConc } from '../models/CConc';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +30,10 @@ export class ComercialService {
     return this.http.get(ipserver + 'comercial/listReceipts/' + id_provd + '&' + conc + '&' + del, {responseType: 'json'});
   }
 
+  getMarkedReceipts(id_provd: number) {
+    return this.http.get(ipserver + 'comercial/listMarkedReceipts/' + id_provd, {responseType: 'json'});
+  }
+
   createProduct(newProduct: CProduct) {
     return this.http.post(ipserver + 'comercial/product', newProduct);
   }
@@ -39,6 +44,11 @@ export class ComercialService {
 
   createReceipt(newReceipt: CReceipt) {
     return this.http.post(ipserver + 'comercial/receipt', newReceipt);
+  }
+
+  createConciliation(newCon: CConc[], datos) {
+    const todo = {productos: newCon, datos: datos};
+    return this.http.post(ipserver + 'comercial/concic', todo);
   }
 
   updateProduct(newProduct: CProduct, id: number) {
