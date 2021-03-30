@@ -205,8 +205,7 @@ export class NewServiceComponent implements OnInit {
   }
 
   nombre_change() {
-    const nickregexp = new RegExp(/^[a-zA-Z0-9záéíóúñÑ\s]{4,200}$/);
-    if (nickregexp.test(this.newService.nombre)) {
+    if (this.newService.nombre) {
       this.nombre_status = 'success';
     } else {
       this.nombre_status = 'danger';
@@ -242,8 +241,7 @@ export class NewServiceComponent implements OnInit {
   }
 
   codcli_change() {
-    const nickregexp = new RegExp(/^[a-zA-Z0-9\s]{1,50}$/);
-    if (nickregexp.test(this.newService.codcli)) {
+    if (this.newService.codcli) {
       this.codcli_status = 'success';
     } else {
       this.codcli_status = 'danger';
@@ -251,8 +249,7 @@ export class NewServiceComponent implements OnInit {
   }
 
   control_change() {
-    const nickregexp = new RegExp(/^[a-zA-Z0-9\s]{1,50}$/);
-    if (nickregexp.test(this.newService.control)) {
+    if (this.newService.control) {
       this.control_status = 'success';
     } else {
       this.control_status = 'danger';
@@ -260,8 +257,7 @@ export class NewServiceComponent implements OnInit {
   }
 
   ruta_change() {
-    const nickregexp = new RegExp(/^[a-zA-Z0-9\s]{1,50}$/);
-    if (nickregexp.test(this.newService.ruta)) {
+    if (this.newService.ruta) {
       this.ruta_status = 'success';
     } else {
       this.ruta_status = 'danger';
@@ -269,8 +265,7 @@ export class NewServiceComponent implements OnInit {
   }
 
   folio_change() {
-    const nickregexp = new RegExp(/^[a-zA-Z0-9\s]{1,50}$/);
-    if (nickregexp.test(this.newService.folio)) {
+    if (this.newService.folio) {
       this.folio_status = 'success';
     } else {
       this.folio_status = 'danger';
