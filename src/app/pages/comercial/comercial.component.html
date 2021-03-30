@@ -25,7 +25,7 @@
                     <nb-option [value]="0">No entregados</nb-option>
                   </nb-select>
                 </div>
-                <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin-left: 10px; padding-top: 7px;">
+                <div style="display:flex; flex-direction: row; justify-content: center; align-items: center; margin-left: 10px; padding-top: 3px;">
                   <label>Buscar:</label>
                   <nb-form-field>
                     <input #strsearch nbTooltip="Escriba uno o varios parámetros separados por espacio y presione enter." (keyup.enter)="search()" [(ngModel)]="search_string" [status]="'info'" class="ml-2" type="text" nbInput fieldSize="small" placeholder="Escriba el valor...">

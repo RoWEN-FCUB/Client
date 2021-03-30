@@ -91,8 +91,14 @@ export class ComercialComponent implements OnInit {
 
   reviewMarkedRecipes() { // REVISAR VALES ANTES DE EMITIR CONCILIACION
     const vales_conc: CConc[] = [];
+    const pedidos: String[] = [];
     this.comercialService.getMarkedReceipts(this.proveedores[this.selected_provider].id).subscribe((res: any[]) => {
       // console.log(res);
+      for (let i = 0; i < res.length; i++) {
+        if (pedidos.indexOf(res[i].pedido) === -1) {
+          pedidos.push(res[i].pedido);
+        }
+      }
       for (let i = 0; i < res.length; i++) {
         let index = -1;
         for (let j = 0; j < vales_conc.length; j++) {
@@ -189,6 +195,9 @@ export class ComercialComponent implements OnInit {
         [
           {text: 'Confeccionado por: ' + this.user.fullname, alignment: 'left'},
         ],
+        [
+          {text: 'Pedidos: ' + pedidos.toString(), alignment: 'left'},
+        ],
       ];
       this.docDefinition = {
         info: {
@@ -253,8 +262,14 @@ export class ComercialComponent implements OnInit {
 
   conciliate() {
     const vales_conc: CConc[] = [];
+    const pedidos: String[] = [];
     this.comercialService.getMarkedReceipts(this.proveedores[this.selected_provider].id).subscribe((res: any[]) => {
       // console.log(res);
+      for (let i = 0; i < res.length; i++) {
+        if (pedidos.indexOf(res[i].pedido) === -1) {
+          pedidos.push(res[i].pedido);
+        }
+      }
       for (let i = 0; i < res.length; i++) {
         let index = -1;
         for (let j = 0; j < vales_conc.length; j++) {
@@ -302,6 +317,7 @@ export class ComercialComponent implements OnInit {
         id_prov: this.proveedores[this.selected_provider].id,
         id_user: this.user.id,
         fecha: moment.utc().toDate(),
+        pedidos: pedidos.toString(),
       };
       this.comercialService.createConciliation(vales_conc, datos).subscribe(res => {});
     });
