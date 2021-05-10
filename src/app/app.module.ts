@@ -83,6 +83,7 @@ import { WpartsComponent } from './pages/wparts/wparts.component';
 import { NewCproductComponent } from './pages/new-cproduct/new-cproduct.component';
 import { NewCproviderComponent } from './pages/new-cprovider/new-cprovider.component';
 import { NewCreceiptComponent } from './pages/new-creceipt/new-creceipt.component';
+// import { CountdownPipe } from './pipes/countdown.pipe';
 // import { NgxScrollTopModule } from 'ngx-scrolltop';
 
 // here is the default text string

@@ -354,7 +354,7 @@ export class EnergyComponent implements OnInit {
         icon: 'success',
         title: 'Registro eliminado.',
       } as SweetAlertOptions);
-      this.generar_rango_inicial(false);
+      this.generar_rango_inicial(true);
     });
   }
 
@@ -633,17 +633,11 @@ export class EnergyComponent implements OnInit {
         if (i === 0) {
           this.erecords[i].realacumulado = 0;
           this.erecords[i].planacumulado = 0;
-          if (this.erecords[i].id) {
-            this.erecords[i].consumo = this.erecords[i].lectura - prev;
-          } else {
-            this.erecords[i].consumo = 0;
-          }
+        }
+        if (this.erecords[i].id) {
+          this.erecords[i].consumo = this.erecords[i].lectura - prev;
         } else {
-          if (this.erecords[i].id) {
-            this.erecords[i].consumo = this.erecords[i].lectura - this.erecords[last].lectura;
-          } else {
-            this.erecords[i].consumo = 0;
-          }
+          this.erecords[i].consumo = 0;
         }
         // console.log(this.erecords[i].consumo);
         // this.totalConsume += this.erecords[i].consumo;
@@ -653,6 +647,7 @@ export class EnergyComponent implements OnInit {
         this.erecords[i].planacumulado = this.erecords[i].plan + this.erecords[last].planacumulado;
         if (this.erecords[i].lectura) {
           last = i;
+          prev = this.erecords[last].lectura;
           this.totalConsume = this.erecords[i].realacumulado;
           bd_update.push(this.erecords[i]);
         }

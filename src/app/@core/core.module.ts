@@ -50,6 +50,7 @@ export const NB_CORE_PROVIDERS = [
         // baseEndpoint: 'http://104.207.147.123:443/',
         baseEndpoint: 'http://localhost:8080/',
         // baseEndpoint: 'https://169.158.137.126:3128/',
+        // baseEndpoint: 'http://169.158.143.133:8080/',
         login: {
           endpoint: 'user/login',
           method: 'post',

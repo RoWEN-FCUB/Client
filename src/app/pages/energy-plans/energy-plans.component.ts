@@ -34,15 +34,20 @@ export class EnergyPlansComponent implements OnInit {
   }
 
   dayClicked(e) {
-    if (!this.plan_establecido && (!this.plan_picod && this.service.pico_diurno) && (!this.plan_picon && this.service.pico_nocturno)) {
-      this.erecords.forEach(element => {
-        if (moment.utc(element.fecha).isSame(moment.utc(e[0]), 'day')) {
-          this.plan_establecido = element.plan;
-          this.plan_picod = element.plan_hpicd;
-          this.plan_picon = element.plan_hpicn;
+    // console.log(e);
+    if (!this.plan_establecido) {
+      for (let i = 0; i < this.erecords.length; i++) {
+        if (moment.utc(this.erecords[i].fecha).isSame(moment.utc(e[0]), 'day')) {
+          this.plan_establecido = this.erecords[i].plan;
+          this.plan_picod = this.erecords[i].plan_hpicd;
+          this.plan_picon = this.erecords[i].plan_hpicn;
+          break;
         }
-      });
+      }
     }
+    /* if (!this.plan_establecido && (!this.plan_picod && this.service.pico_diurno) && (!this.plan_picon && this.service.pico_nocturno)) {
+
+    } */
   }
 
   plan_change() {
@@ -88,13 +93,13 @@ export class EnergyPlansComponent implements OnInit {
         icon: 'error',
         title: 'Debe escribir un plan válido.',
       } as SweetAlertOptions);
-    } else if (this.ppicd_status === 'danger' || (this.service.pico_diurno && !this.plan_picod)) {
+    } else if (this.ppicd_status === 'danger') {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir una plan para el horario pico diurno válido.',
       } as SweetAlertOptions);
       this.ppicd_status = 'danger';
-    } else if (this.ppicn_status === 'danger' || (this.service.pico_nocturno && !this.plan_picon)) {
+    } else if (this.ppicn_status === 'danger') {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir una plan para el horario pico nocturno válido.',

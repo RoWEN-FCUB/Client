@@ -68,7 +68,7 @@ export class NewErecordComponent implements OnInit {
       } as SweetAlertOptions);
       this.ppicn_status = 'danger';
     // tslint:disable-next-line: max-line-length
-    } else if (this.lectura_hpicd1_status === 'danger' || (!this.newERecord.lectura_hpicd1 && this.service.pico_diurno)) {
+    } else if (this.lectura_hpicd1_status === 'danger' || (!this.newERecord.lectura_hpicd1 && this.service.pico_diurno && this.newERecord.plan_hpicd > 0)) {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir una primera lectura válida para el horario pico diurno.',
@@ -81,7 +81,8 @@ export class NewErecordComponent implements OnInit {
         title: 'Debe escribir una segunda lectura válida para el horario pico diurno.',
       } as SweetAlertOptions);
       this.lectura_hpicd2_status = 'danger';
-    } else if (this.lectura_hpicn1_status === 'danger') {
+    // tslint:disable-next-line: max-line-length
+    } else if (this.lectura_hpicn1_status === 'danger' || (!this.newERecord.lectura_hpicn1 && this.service.pico_nocturno && this.newERecord.plan_hpicn > 0)) {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir una primera lectura válida para el horario pico nocturno.',
@@ -142,6 +143,7 @@ export class NewErecordComponent implements OnInit {
     }
     if (Number(this.newERecord.lectura)) {
       this.newERecord.consumo = this.newERecord.lectura - this.prev_reading;
+      // console.log(this.newERecord.consumo);
     }
   }
 

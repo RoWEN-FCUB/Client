@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit, AfterViewInit,
-  ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService, NbPopoverDirective } from '@nebular/theme';
+  ChangeDetectionStrategy, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { Router } from '@angular/router';
 import { map, takeUntil } from 'rxjs/operators';
-import { Subject, Observable, Observer, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/switchMap';
@@ -13,6 +13,11 @@ import { NotificationService } from '../../../services/notification.service';
 import { Notification } from '../../../models/Notification';
 import { Company } from '../../../models/Company';
 import { CompanyService } from '../../../services/company.service';
+import { CountdownComponent, CountdownConfig, CountdownEvent } from 'ngx-countdown';
+import * as moment from 'moment';
+// import { timer } from "rxjs";
+// import { Pipe, PipeTransform } from "@angular/core";
+
 @Component({
   selector: 'ngx-header',
   styleUrls: ['./header.component.scss'],
@@ -20,6 +25,21 @@ import { CompanyService } from '../../../services/company.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+
+  /* countDown: Subscription;
+  counter = 1800;
+  tick = 1000;
+  */
+  prettyConfig: CountdownConfig = {
+    leftTime: 60,
+    format: 'HH:mm:ss',
+    prettyText: (text) => {
+      return text
+        .split(':')
+        .map((v) => '<span>' + v + '</span>')
+        .join(':');
+    },
+  };
 
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
@@ -59,15 +79,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private breakpointService: NbMediaBreakpointsService,
               private notificationService: NotificationService,
               private cdr: ChangeDetectorRef,
+              private elementRef: ElementRef,
               private companyService: CompanyService) {
   }
 
   ngOnInit() {
+    // this.countDown = timer(0, this.tick).subscribe(() => --this.counter);
+    
     this.currentTheme = this.themeService.currentTheme;
     this.authService.onTokenChange()
       .subscribe((token: NbAuthJWTToken) => {
         // console.log(token.getPayload());
         if (token.isValid()) {
+          this.prettyConfig.leftTime = moment(token.getTokenExpDate()).diff(moment(), 'seconds');
           this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
           this.companyService.getOne(this.user.id_emp).subscribe((res: Company) => {
             this.company = res;
@@ -103,6 +127,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(themeName => this.currentTheme = themeName);
+  }
+
+  tokenExpired(e) {
+    // console.log(e);
+    if(e.left === 0) {
+      console.log('token expired');
+      this.router.navigate(['auth/logout']);
+    }
   }
 
   clickMail() {
