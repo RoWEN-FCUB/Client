@@ -87,29 +87,34 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // this.countDown = timer(0, this.tick).subscribe(() => --this.counter);
     
     this.currentTheme = this.themeService.currentTheme;
+    this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
+      if (token.isValid()) {
+        this.prettyConfig.leftTime = moment(token.getTokenExpDate()).diff(moment(), 'seconds');
+        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
+        this.companyService.getOne(this.user.id_emp).subscribe((res: Company) => {
+          this.company = res;
+        });
+        this.userpicture = ipserver + 'public/' + this.user.picture;
+        this.notificationService.searchNewNotifications(this.user.id);
+        this.notificationService.getNotifications().subscribe((res) => {
+          if (this.updating_notif) {
+            if (res) {
+              this.new_notifications = res;
+              this.cdr.detectChanges();
+            } else {
+              this.new_notifications = [];
+            }
+          }
+        });
+      } else {
+        this.notif.unsubscribe();
+      }
+    });
     this.authService.onTokenChange()
       .subscribe((token: NbAuthJWTToken) => {
         // console.log(token.getPayload());
         if (token.isValid()) {
           this.prettyConfig.leftTime = moment(token.getTokenExpDate()).diff(moment(), 'seconds');
-          this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-          this.companyService.getOne(this.user.id_emp).subscribe((res: Company) => {
-            this.company = res;
-          });
-          this.userpicture = ipserver + 'public/' + this.user.picture;
-          this.notificationService.searchNewNotifications(this.user.id);
-          this.notificationService.getNotifications().subscribe((res) => {
-            if (this.updating_notif) {
-              if (res) {
-                this.new_notifications = res;
-                this.cdr.detectChanges();
-              } else {
-                this.new_notifications = [];
-              }
-            }
-          });
-        } else {
-          this.notif.unsubscribe();
         }
       });
 
@@ -133,7 +138,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // console.log(e);
     if(e.left === 0) {
       console.log('token expired');
-      this.router.navigate(['auth/logout']);
+      // this.router.navigate(['auth/logout']);
     }
   }
 

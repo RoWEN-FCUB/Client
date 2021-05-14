@@ -1,9 +1,9 @@
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { NbAuthJWTToken, NbAuthResult, NbAuthService } from '@nebular/auth';
 import { Router } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -33,6 +33,8 @@ export class AuthInterceptor implements HttpInterceptor {
         if (token) {
           if (!token.isValid()) {
              this.router.navigate(['/auth/login']);
+          } else if (!req.url.match(/refresh|login/)) {
+            this.authService.refreshToken('email', token).subscribe((result: NbAuthResult) => {});
           }
           const cloned = req.clone({
             headers: req.headers.set('Authorization', 'Bearer ' + token),

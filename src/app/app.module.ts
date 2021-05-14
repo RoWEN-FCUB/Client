@@ -13,7 +13,7 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
@@ -83,9 +83,11 @@ import { WpartsComponent } from './pages/wparts/wparts.component';
 import { NewCproductComponent } from './pages/new-cproduct/new-cproduct.component';
 import { NewCproviderComponent } from './pages/new-cprovider/new-cprovider.component';
 import { NewCreceiptComponent } from './pages/new-creceipt/new-creceipt.component';
+import { NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';
+import { environment } from '../environments/environment';
 // import { CountdownPipe } from './pipes/countdown.pipe';
 // import { NgxScrollTopModule } from 'ngx-scrolltop';
-
+import ipserver from './ipserver';
 // here is the default text string
 @Injectable()
 export class DefaultIntl extends OwlDateTimeIntl {
@@ -199,6 +201,12 @@ export class DefaultIntl extends OwlDateTimeIntl {
     NgxChartsModule,
   ],
   providers: [
+    {
+      provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
+      useValue: function (req: HttpRequest<any>) {
+        return req.url === ipserver + 'user/refresh';
+      },
+    },
     [{
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

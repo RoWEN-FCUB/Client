@@ -1,16 +1,16 @@
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbAuthModule, NbDummyAuthStrategy, NbPasswordAuthStrategy, NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { NbAuthModule, NbPasswordAuthStrategy, NbAuthJWTToken } from '@nebular/auth';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
-import { of as observableOf, from } from 'rxjs';
+// import { of as observableOf, from } from 'rxjs';
 
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { AnalyticsService } from './utils';
-import { UserData } from './data/users';
-import { UserService } from './mock/users.service';
-import { MockDataModule } from './mock/mock-data.module';
+// import { UserData } from './data/users';
+// import { UserService } from './mock/users.service';
+// import { MockDataModule } from './mock/mock-data.module';
 import { RoleProvider } from './role.provider';
-import ipserver from '../ipserver';
+// import ipserver from '../ipserver';
 
 const socialLinks = [
   {
@@ -58,6 +58,11 @@ export const NB_CORE_PROVIDERS = [
             success: '/',
             failure: null,
           },
+        },
+        refreshToken: {
+          endpoint: 'user/refresh',
+          method: 'post',
+          requireValidToken: true,
         },
         logout: {
           endpoint: '',
