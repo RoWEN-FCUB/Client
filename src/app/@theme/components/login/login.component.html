@@ -17,10 +17,10 @@
   </ul>
 </nb-alert>
 
-<form (ngSubmit)="login()" #form="ngForm" aria-labelledby="title">
+<form #form="ngForm" aria-labelledby="title">
   <div class="form-control-group">
     <label class="label" for="input-email">Dirección de correo:</label>
-    <input nbInput
+    <input (keydown.enter)="login()" nbInput
            fullWidth
            [(ngModel)]="user.email"
            #email="ngModel"
@@ -43,19 +43,24 @@
   </div>
   <div class="form-control-group">
     <label class="label" for="input-password">Contraseña:</label>
-    <input nbInput
-           fullWidth
-           [(ngModel)]="user.password"
-           #password="ngModel"
-           name="password"
-           type="password"
-           id="input-password"
-           placeholder="Contraseña"
-           [status]="password.dirty ? (password.invalid  ? 'danger' : 'success') : 'basic'"
-           [required]="getConfigValue('forms.validation.password.required')"
-           [minlength]="getConfigValue('forms.validation.password.minLength')"
-           [maxlength]="getConfigValue('forms.validation.password.maxLength')"
-           [attr.aria-invalid]="password.invalid && password.touched ? true : null">
+    <nb-form-field>
+      <input (keydown.enter)="login()" nbInput
+            fullWidth
+            [(ngModel)]="user.password"
+            #password="ngModel"
+            name="password"
+            [type]="!show_password ? 'password' : 'text'"
+            id="input-password"
+            placeholder="Contraseña"
+            [status]="password.dirty ? (password.invalid  ? 'danger' : 'success') : 'basic'"
+            [required]="getConfigValue('forms.validation.password.required')"
+            [minlength]="getConfigValue('forms.validation.password.minLength')"
+            [maxlength]="getConfigValue('forms.validation.password.maxLength')"
+            [attr.aria-invalid]="password.invalid && password.touched ? true : null">
+      <button class="shadow-none" *ngIf="user.password" type="button" nbSuffix nbButton ghost (click)="toogleShowPassword()">
+        <nb-icon [icon]="!show_password ? 'eye-outline' : 'eye-off-outline'" [nbTooltip]="!show_password ? 'Mostrar contraseña' : 'Ocultar contraseña'" nbTooltipStatus="info"></nb-icon>
+      </button>
+    </nb-form-field>
     <ng-container *ngIf="password.invalid && password.touched ">
       <p class="error-message" *ngIf="password.errors?.required">
         Debe escribir una contraseña!
@@ -76,6 +81,7 @@
           fullWidth
           status="success"
           [disabled]="submitted || !form.valid"
+          (click)="login()"
           [class.btn-pulse]="submitted">
     Acceder
   </button>

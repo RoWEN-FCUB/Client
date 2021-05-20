@@ -26,7 +26,12 @@
     </div>
     <div class="form-group">
       <label>Contraseña:</label>
-      <input (input)="pass_change()" type="password" nbInput fullWidth [status]="pass_status" placeholder="Contraseña" [(ngModel)]="bd_user.pass" class="form-control" aria-describedby="passHelp">
+      <nb-form-field>
+        <input (input)="pass_change()" [type]="!show_password ? 'password' : 'text'" nbInput fullWidth [status]="pass_status" placeholder="Contraseña" [(ngModel)]="bd_user.pass" class="form-control" aria-describedby="passHelp">
+        <button class="shadow-none" nbSuffix nbButton ghost (click)="toogleShowPassword()">
+          <nb-icon [icon]="!show_password ? 'eye-outline' : 'eye-off-outline'" [nbTooltip]="!show_password ? 'Mostrar contraseña' : 'Ocultar contraseña'" nbTooltipStatus="info"></nb-icon>
+        </button>
+      </nb-form-field>
       <small id="passHelp" class="form-text text-muted">Contraseña para el acceso al sistema. Entre 4 y 25 caracteres, permite @ . *</small>
     </div>
   </nb-card-body>

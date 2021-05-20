@@ -8,6 +8,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent extends NbLoginComponent {
+  show_password: boolean = false;
+
+  toogleShowPassword() {
+    this.show_password = !this.show_password;
+  }
 
   login(): void {
     this.errors = [];

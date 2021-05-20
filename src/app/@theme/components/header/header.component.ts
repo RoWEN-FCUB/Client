@@ -110,14 +110,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.notif.unsubscribe();
       }
     });
-    this.authService.onTokenChange()
+    /* this.authService.onTokenChange()
       .subscribe((token: NbAuthJWTToken) => {
         // console.log(token.getPayload());
         if (token.isValid()) {
           this.prettyConfig.leftTime = moment(token.getTokenExpDate()).diff(moment(), 'seconds');
         }
       });
-
+    */
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
       .pipe(

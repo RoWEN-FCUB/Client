@@ -7,7 +7,7 @@
             <nb-option *ngFor="let serv of services; let i = index" [value]="i">{{serv.nombre}}</nb-option>
         </nb-select>
         <button *ngIf="selectedService > -1" class="ml-2" (click)="openPlans()" nbTooltip="Establecer planes diarios." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="browser-outline"></nb-icon>Planes</button>
-        <button class="ml-2" (click)="toogleGraph()" nbTooltip="Mostrar gráfico de consumo." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="activity-outline"></nb-icon>Gráfica</button>
+        <button class="ml-2" (click)="toogleGraph()" nbTooltip="Mostrar gráfico de consumo." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="activity-outline"></nb-icon>Gráfico</button>
         <button class="ml-2" (click)="export()" nbTooltip="Exportar a PDF." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
         <button class="ml-2" [owlDateTimeTrigger]="dt" nbTooltip="Seleccionar {{showstring[show ? 1 : 0]}} a mostrar." nbButton hero status="primary" shape="semi-round" size="small"><nb-icon icon="keypad-outline"></nb-icon>Seleccionar {{showstring[show ? 1 : 0]}}</button>
         <input [owlDateTime]="dt" #mes [owlDateTimeTrigger]="dt" nbInput status="info" style="visibility: hidden">        

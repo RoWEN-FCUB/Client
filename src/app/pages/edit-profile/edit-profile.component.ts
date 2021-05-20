@@ -32,8 +32,13 @@ export class EditProfileComponent implements OnInit {
     picture: 'empty.png',
   };
   userpicture = ipserver + 'public/' + this.bd_user.picture;
+  show_password: boolean = false;
   // tslint:disable-next-line: max-line-length
   constructor(private router: Router, private authService: NbAuthService, private userService: UserService, private dialogService: NbDialogService) {
+  }
+
+  toogleShowPassword() {
+    this.show_password = !this.show_password;
   }
 
   nick_change() {
