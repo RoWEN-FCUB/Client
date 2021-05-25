@@ -30,12 +30,13 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return this.authService.getToken().pipe(
       switchMap((token: NbAuthJWTToken) => {
+        // console.log(token);
         if (token) {
           if (!token.isValid()) {
              this.router.navigate(['/auth/login']);
-          } else if (!req.url.match(/refresh|login/)) {
+          } /* else if (!req.url.match(/refresh|login|public/)) {
             this.authService.refreshToken('email', token).subscribe((result: NbAuthResult) => {});
-          }
+          } */
           const cloned = req.clone({
             headers: req.headers.set('Authorization', 'Bearer ' + token),
           });

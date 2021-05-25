@@ -86,7 +86,12 @@
         <div class="col">
           <div class="form-group">
             <label>Contraseña:</label>
-            <input (input)="pass_change()" type="password" nbInput fullWidth [status]="pass_status" placeholder="Contraseña" [(ngModel)]="newUser.pass" class="form-control" aria-describedby="passHelp">
+            <nb-form-field>
+              <input (input)="pass_change()" [type]="!show_password ? 'password' : 'text'" nbInput fullWidth [status]="pass_status" placeholder="Contraseña" [(ngModel)]="newUser.pass" class="form-control" aria-describedby="passHelp">
+              <button class="shadow-none" *ngIf="newUser.pass" type="button" nbSuffix nbButton ghost (click)="toogleShowPassword()">
+                <nb-icon [icon]="!show_password ? 'eye-outline' : 'eye-off-outline'" [nbTooltip]="!show_password ? 'Mostrar contraseña' : 'Ocultar contraseña'" nbTooltipStatus="info"></nb-icon>
+              </button>
+            </nb-form-field>
             <small id="passHelp" class="form-text text-muted">Contraseña para el acceso al sistema. Entre 4 y 25 caracteres, permite @ . *</small>
           </div>
         </div>
@@ -95,7 +100,12 @@
         <div class="col">
           <div class="form-group">
             <label>Repetir:</label>
-            <input (input)="repeat_pass()" type="password" nbInput fullWidth [status]="rpass_status" placeholder="Repetir contraseña" [(ngModel)]="reppass" class="form-control" aria-describedby="rpassHelp">
+            <nb-form-field>
+              <input (input)="repeat_pass()" [type]="!show_password ? 'password' : 'text'" nbInput fullWidth [status]="rpass_status" placeholder="Repetir contraseña" [(ngModel)]="reppass" class="form-control" aria-describedby="rpassHelp">
+              <button class="shadow-none" *ngIf="newUser.pass" type="button" nbSuffix nbButton ghost (click)="toogleShowPassword()">
+                <nb-icon [icon]="!show_password ? 'eye-outline' : 'eye-off-outline'" [nbTooltip]="!show_password ? 'Mostrar contraseña' : 'Ocultar contraseña'" nbTooltipStatus="info"></nb-icon>
+              </button>
+            </nb-form-field>
             <small id="rpassHelp" class="form-text text-muted">Repita la contraseña para comprobar que la escribió correctamente.</small>
           </div>
         </div>

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { NbMenuService } from '@nebular/theme';
 import { MENU_ITEMS } from './pages-menu';
-import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { NbAuthJWTToken, NbAuthResult, NbAuthService } from '@nebular/auth';
 import { NbAccessChecker } from '@nebular/security';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-pages',
@@ -14,6 +15,21 @@ export class PagesComponent implements OnInit {
 
   }
   menu = MENU_ITEMS;
+
+  @HostListener('document:click', ['$event'])
+  documentClick(event: MouseEvent) {
+      // your click logic
+      // console.log('clicked');
+      this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
+        if (token) {
+          if (!token.isValid()) {
+             this.authService.logout('email');
+          } else {
+            this.authService.refreshToken('email', token).subscribe((result: NbAuthResult) => {});
+          }
+        }
+      });
+  }
 
   ngOnInit(): void {
     this.authService.onAuthenticationChange().subscribe(autenticated => {

@@ -48,6 +48,7 @@ export class NewUserComponent implements OnInit {
   service_status: string = 'info';
   ci_status: string = 'info';
   title: string = '';
+  show_password: boolean = false;
 
   constructor(protected dialogRef: NbDialogRef<any>, private userService: UserService, private eserviceService: EserviceService) {
   }
@@ -62,6 +63,10 @@ export class NewUserComponent implements OnInit {
         this.selected_service = this.newUser.id_serv;
       });
     }
+  }
+
+  toogleShowPassword() {
+    this.show_password = !this.show_password;
   }
 
   nick_change() {
