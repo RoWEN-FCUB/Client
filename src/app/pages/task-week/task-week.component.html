@@ -3,29 +3,29 @@
     <nb-icon class="ml-2" style="cursor: pointer" (click)="prevDay()" icon="arrow-ios-back-outline" status="info" [options]="{animation:{type: 'zoom'}}" nbTooltip="Día anterior"></nb-icon>
     <button (click)="today()" nbTooltip="Mostrar las tareas de hoy" nbButton hero status="primary" shape="semi-round"size="small"><nb-icon icon="calendar-outline"></nb-icon>Hoy</button>
     <nb-icon style="cursor: pointer" (click)="nextDay()" icon="arrow-ios-forward-outline" status="info" [options]="{animation:{type: 'zoom'}}" nbTooltip="Día siguiente"></nb-icon>
-    <button (click)="thisWeek()" class="ml-2" nbTooltip="Mostrar las tareas de la semana" nbButton hero status="primary" shape="semi-round"size="small"><nb-icon icon="grid-outline"></nb-icon>Esta semana</button>
-    <button (click)="thisMonth()" class="ml-2" nbTooltip="Mostrar las tareas del mes" nbButton hero status="primary" shape="semi-round"size="small"><nb-icon icon="keypad-outline"></nb-icon>Este mes</button>
-    <button class="ml-2" (click)="clickShowRange()" nbTooltip="Seleccionar un rango de días específico" nbButton hero status="primary" shape="semi-round"size="small"><nb-icon icon="expand-outline"></nb-icon>Rango específico</button>    
+    <button (click)="thisWeek()" class="ms-2" nbTooltip="Mostrar las tareas de la semana" nbButton hero status="primary" shape="semi-round"size="small"><nb-icon icon="grid-outline"></nb-icon>Esta semana</button>
+    <button (click)="thisMonth()" class="ms-2" nbTooltip="Mostrar las tareas del mes" nbButton hero status="primary" shape="semi-round"size="small"><nb-icon icon="keypad-outline"></nb-icon>Este mes</button>
+    <button class="ms-2" (click)="clickShowRange()" nbTooltip="Seleccionar un rango de días específico" nbButton hero status="primary" shape="semi-round"size="small"><nb-icon icon="expand-outline"></nb-icon>Rango específico</button>    
     <input nbInput style="visibility: hidden !important; background-color:transparent !important;border:none !important;" id="rangodias" #rangodias type="text" [nbDatepicker]="diaspicker">
     <nb-rangepicker #diaspicker (rangeChange)="cambiarRango($event)"></nb-rangepicker>
   </nb-card-header>
   <nb-card-body>
     <div class="align-middle mb-2">
       <button nbTooltip="Agregar una nueva tarea" (click)="openNew()" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
-      <button *ngIf="user.role==='admin' && tasktovalidate > 0" class="ml-1" (click)="validateAllTasks()" nbTooltip="Validar todas las tareas del período seleccionado" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="done-all-outline"></nb-icon>Validar todas</button>
-      <button (click)="export()" class="ml-1" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>      
-      <label *ngIf="subordinados.length > 1" class="ml-2 mr-2">Mostrar tareas de: </label>
+      <button *ngIf="user.role==='admin' && tasktovalidate > 0" class="ms-1" (click)="validateAllTasks()" nbTooltip="Validar todas las tareas del período seleccionado" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="done-all-outline"></nb-icon>Validar todas</button>
+      <button (click)="export()" class="ms-1" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>      
+      <label *ngIf="subordinados.length > 1" class="ms-2 me-2">Mostrar tareas de: </label>
       <nb-select *ngIf="subordinados.length > 1" (selectedChange)="getTaskinRange()" placeholder="----" status="info" [(ngModel)]="usuario_a_mostrar">
         <nb-option *ngFor="let subordinado of subordinados" [value]="subordinado.id">{{subordinado.user}}</nb-option>
       </nb-select>
-      <span class="ml-2">Período mostrado:</span>
-      <span class="ml-2">{{periodoamostrar}}</span>
+      <span class="ms-2">Período mostrado:</span>
+      <span class="ms-2">{{periodoamostrar}}</span>
     </div>
     <!-- <div><nb-checkbox style="vertical-align: middle;" status="primary" [checked]="expandir_todas" (checkedChange)="expand_tasks($event)">Expandir todos</nb-checkbox></div> -->
     <div class='table-responsive'>
       <nb-card *ngFor="let day of tareas_por_dias" [accent]="day.tasks_failed === 0 ? 'info' : 'danger'">
         <nb-card-header>
-          <div class="label label-default ml-1 text-uppercase" style="font-size: 15px">
+          <div class="label label-default ms-1 text-uppercase" style="font-size: 15px">
             <span (click)="openNew(day.day)" style="cursor: pointer;" nbTooltip="Agregar una nueva tarea" nbTooltipIcon="plus-outline" nbTooltipStatus="success">{{day.day | dayOfWeek}}</span>
             <!--<span style="cursor: pointer;" class="ml-2"><nb-icon (click)="openNew(day.day)" icon="plus-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Agregar una nueva tarea" nbTooltipIcon="plus-outline" nbTooltipStatus="success"></nb-icon></span>-->
           </div>          

@@ -15,7 +15,7 @@ export class RoleGuardService implements CanActivate {
   constructor(public router: Router, private authService: NbAuthService) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
-    this.authService.isAuthenticated().subscribe(res => {
+    this.authService.isAuthenticatedOrRefresh().subscribe(res => {
       if (!res) {
         this.router.navigate(['/auth/login']);
         return false;

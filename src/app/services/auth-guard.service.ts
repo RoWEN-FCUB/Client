@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { NbAuthService } from '@nebular/auth';
-import { tap } from 'rxjs/operators';
+import { NbAuthJWTToken, NbAuthResult, NbAuthService } from '@nebular/auth';
+import { switchMap, tap } from 'rxjs/operators';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
 
   constructor(private authService: NbAuthService, private router: Router) {
+
   }
 
   canActivate() {
-    // return true;
-    return this.authService.isAuthenticated()
+    // console.log('revisando');
+    return this.authService.isAuthenticatedOrRefresh()
       .pipe(
         tap(authenticated => {
+          // console.log(authenticated);
           if (!authenticated) {
             // console.log('Redireccionando al login...');
             this.router.navigate(['auth/login']);

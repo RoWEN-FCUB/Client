@@ -5,10 +5,10 @@
         <button (click)="openNew()" nbTooltip="Agregar un nuevo servicio" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
         <div style="padding-top: 10px;">
           <label style="margin-right: 5px; margin-left: 10px;">Empresa: </label>
+          <nb-select (selectedChange)="getServices()" placeholder="----" [(ngModel)]="selected_company" [status]="'info'">
+            <nb-option *ngFor="let company of companies; let i = index" [value]="i">{{company.nombre}}</nb-option>
+          </nb-select>
         </div>
-        <nb-select (selectedChange)="getServices()" placeholder="----" [(ngModel)]="selected_company" [status]="'info'">
-          <nb-option *ngFor="let company of companies; let i = index" [value]="i">{{company.nombre}}</nb-option>
-        </nb-select>
       </div>
       <div class='table-responsive'>
         <table id="tablePreview" class="table table-hover table-borderless table-striped table-sm">

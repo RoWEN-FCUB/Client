@@ -1,63 +1,69 @@
-<div class="row">
-  <nb-card>
-    <nb-card-body>Bienvenido al Sistema de Gestión Interna de {{company.nombre}}.</nb-card-body>
-  </nb-card>
-</div>
-<div class="row" *ngIf="tiempo.descripcion">
-  <nb-card>
-    <nb-card-body>
-      <div class="table" style="width: 300px;">
-        <div class="row">
-          <div class="col h5">{{user.municipio}}</div>
-        </div>
-        <div class="row">
-          <div class="col text-center">
-            <img src="assets/icons/{{tiempo.icon}}.png" alt="{{tiempo.descripcion}}" nbTooltip="Estado del tiempo: {{tiempo.descripcion}}" width="60px" height="60px">
-            <div nbTooltip="Sensación térmica: {{tiempo.sensacion_termica}}º">
-              <nb-icon icon="thermometer-outline"></nb-icon>
-              <span class="h4">{{tiempo.temperatura}}º</span>
+<div>
+  <div class="row" style="display: table;">
+    <div class="col">
+      <nb-card>
+        <nb-card-body>Bienvenido al Sistema de Gestión Interna de {{company.nombre}}.</nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+  <div class="row" *ngIf="tiempo.descripcion" style="display: table;">
+    <div class="col">
+      <nb-card>
+        <nb-card-body>
+          <div class="table" style="width: 350px;">
+            <div class="row">
+              <div class="col h5">{{user.municipio}}</div>
+            </div>
+            <div class="row">
+              <div class="col text-center">
+                <img src="assets/icons/{{tiempo.icon}}.png" alt="{{tiempo.descripcion}}" nbTooltip="Estado del tiempo: {{tiempo.descripcion}}" width="90px" height="90px">
+                <div nbTooltip="Sensación térmica: {{tiempo.sensacion_termica}}º">
+                  <nb-icon icon="thermometer-outline"></nb-icon>
+                  <span class="h4">{{tiempo.temperatura}}º</span>
+                </div>
+              </div>
+              <div class="col text-center">
+                <div class="align-self-center" style="margin-top: 20px;">
+                  <img nbTooltip="Dirección del viento" src="assets/images/arrow.png" alt="{{tiempo.grados}}" width="30px" height="30px" [style.transform]="'rotate(' + tiempo.grados + 'deg)'">
+                </div>
+                <div style="margin-top: 25px;">
+                  <span class="h4" nbTooltip="Dirección del viento">{{tiempo.direccion}}</span>
+                  <span style="margin-left: 5px;" class="h4" nbTooltip="Velocidad del viento">{{tiempo.velocidad}}Km/h</span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <span>Latitud: {{tiempo.latitud}}</span>
+              </div>
+              <div class="col">
+                <span>Longitud: {{tiempo.longitud}}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <span>Humedad: {{tiempo.humedad}}%</span>
+              </div>
+              <div class="col">
+                <span>Presión: {{tiempo.presion}}hPa</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <span>Visibilidad: {{tiempo.visibilidad / 1000}}Km</span>
+              </div>
+              <div class="col">
+                <span>Nubes: {{tiempo.nubes}}%</span>
+              </div>
+            </div>
+            <div class="row" *ngIf="tiempo.lluvia > 0">
+              <div class="col">
+                <span>Lluvia: {{tiempo.lluvia}}mm</span>
+              </div>
             </div>
           </div>
-          <div class="col text-center">
-            <div class="align-self-center" style="margin-top: 20px;">
-              <img nbTooltip="Dirección del viento" src="assets/images/arrow.png" alt="{{tiempo.grados}}" width="30px" height="30px" [style.transform]="'rotate(' + tiempo.grados + 'deg)'">
-            </div>
-            <div style="margin-top: 10px;">
-              <span class="h4" nbTooltip="Dirección del viento">{{tiempo.direccion}}</span>
-              <span class="h6 ml-2" nbTooltip="Velocidad del viento">{{tiempo.velocidad}}Km/h</span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <span>Latitud: {{tiempo.latitud}}</span>
-          </div>
-          <div class="col">
-            <span>Longitud: {{tiempo.longitud}}</span>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <span>Humedad: {{tiempo.humedad}}%</span>
-          </div>
-          <div class="col">
-            <span>Presión: {{tiempo.presion}}hPa</span>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <span>Visibilidad: {{tiempo.visibilidad / 1000}}Km</span>
-          </div>
-          <div class="col">
-            <span>Nubes: {{tiempo.nubes}}%</span>
-          </div>
-        </div>
-        <div class="row" *ngIf="tiempo.lluvia > 0">
-          <div class="col">
-            <span>Lluvia: {{tiempo.lluvia}}mm</span>
-          </div>
-        </div>
-      </div>
-    </nb-card-body>
-  </nb-card>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
 </div>

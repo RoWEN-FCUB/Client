@@ -4,16 +4,16 @@ import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeServ
 import { Router } from '@angular/router';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
-import 'rxjs/add/observable/interval';
-import 'rxjs/add/operator/startWith';
-import 'rxjs/add/operator/switchMap';
+// import 'rxjs/add/observable/interval';
+// import 'rxjs/add/operator/startWith';
+// import 'rxjs/add/operator/switchMap';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import ipserver from '../../../ipserver';
 import { NotificationService } from '../../../services/notification.service';
 import { Notification } from '../../../models/Notification';
 import { Company } from '../../../models/Company';
 import { CompanyService } from '../../../services/company.service';
-import { CountdownComponent, CountdownConfig, CountdownEvent } from 'ngx-countdown';
+// import { CountdownComponent, CountdownConfig, CountdownEvent } from 'ngx-countdown';
 import * as moment from 'moment';
 // import { timer } from "rxjs";
 // import { Pipe, PipeTransform } from "@angular/core";
@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   counter = 1800;
   tick = 1000;
   */
-  prettyConfig: CountdownConfig = {
+  /*prettyConfig: CountdownConfig = {
     leftTime: 60,
     format: 'HH:mm:ss',
     prettyText: (text) => {
@@ -39,7 +39,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         .map((v) => '<span>' + v + '</span>')
         .join(':');
     },
-  };
+  };*/
 
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
@@ -89,7 +89,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.currentTheme = this.themeService.currentTheme;
     this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
-        this.prettyConfig.leftTime = moment(token.getTokenExpDate()).diff(moment(), 'seconds');
+        // this.prettyConfig.leftTime = moment(token.getTokenExpDate()).diff(moment(), 'seconds');
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
         this.companyService.getOne(this.user.id_emp).subscribe((res: Company) => {
           this.company = res;

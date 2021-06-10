@@ -83,7 +83,7 @@ import { WpartsComponent } from './pages/wparts/wparts.component';
 import { NewCproductComponent } from './pages/new-cproduct/new-cproduct.component';
 import { NewCproviderComponent } from './pages/new-cprovider/new-cprovider.component';
 import { NewCreceiptComponent } from './pages/new-creceipt/new-creceipt.component';
-import { NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';
+import { NbAuthJWTInterceptor, NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';
 import { environment } from '../environments/environment';
 // import { CountdownPipe } from './pipes/countdown.pipe';
 // import { NgxScrollTopModule } from 'ngx-scrolltop';
@@ -204,14 +204,10 @@ export class DefaultIntl extends OwlDateTimeIntl {
     {
       provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
       useValue: function (req: HttpRequest<any>) {
-        return req.url === ipserver + 'user/refresh';
+        return (req.url === ipserver + 'user/refresh' || req.url === ipserver + 'user/login');
       },
     },
-    [{
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    }],
+    { provide: HTTP_INTERCEPTORS, useClass: NbAuthJWTInterceptor, multi: true },
     UserService,
     NotificationService,
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'es'},

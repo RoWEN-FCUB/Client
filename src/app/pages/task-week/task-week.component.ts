@@ -65,7 +65,7 @@ export class TaskWeekComponent implements OnInit {
   ngOnInit() {
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
-      // console.log(this.route.snapshot.paramMap);
+      // console.log(token.getPayload());
       if (this.route.snapshot.paramMap.get('id')) {
         this.usuario_a_mostrar = Number(this.route.snapshot.paramMap.get('id'));
       }
@@ -421,6 +421,7 @@ export class TaskWeekComponent implements OnInit {
       this.subordinados = res;
       if (this.subordinados.length > 0) {
         this.subordinados.splice(0, 0, {id: this.user.id, user: this.user.name});
+        // console.log(this.subordinados);
       }
       if (!this.route.snapshot.paramMap.get('id')) {
         this.today();

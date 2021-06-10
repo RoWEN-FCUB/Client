@@ -1,38 +1,40 @@
 <nb-card accent="info" size="large">
   <nb-card-header><div class="text-center">Nueva tarea</div></nb-card-header>
   <nb-card-body>
-    <div class="form-group" *ngIf="subordinados.length > 0">
-        <label class="mr-2">Asignar tarea a: </label>
+    <form>
+      <div class="mb-3" *ngIf="subordinados.length > 0">
+        <label class="me-2">Asignar tarea a: </label>
         <nb-select (selectedChange)="subordinados_change()" multiple placeholder="----" [status]="sub_status" [(ngModel)]="sub_seleccionados">
           <nb-option *ngFor="let subordinado of subordinados" [value]="subordinado.id">{{subordinado.user}}</nb-option>
         </nb-select>
         <small class="form-text text-muted">Se creará una tarea individual para cada usuario seleccionado.</small>
-    </div>
-    <div class="form-group">
-      <label>Resumen:</label>
-      <input (input)="resumen_change()" autofocus type="text" [(ngModel)]="task.resumen" #resumen fullWidth nbInput [status]="resumen_status" class="form-control" aria-describedby="resHelp" placeholder="Resumen de la nueva tarea">
-      <small id="resHelp" class="form-text text-muted">El resumen de la tarea debe mostrar la información elemental de la misma.</small>
-    </div>
-    <div class="form-group">
-      <label>Descripción:</label>
-      <textarea (input)="descripcion_change()" #descripcion [(ngModel)]="task.descripcion" cols="30" rows="10" fullWidth nbInput [status]="descripcion_status" class="form-control" aria-describedby="descHelp" placeholder="Descripción de la nueva tarea"></textarea>
-      <small id="descHelp" class="form-text text-muted">Describa la tarea con todas las acciones a realizar.</small>
-    </div>
-    <div class="form-group">
-      <label>Fecha:</label>
-      <div class="form-group">
-        <nb-toggle [(checked)]="checked" (checkedChange)="select_range($event)" status="info" labelPosition="right"><span class="text-muted" #text_muted>La tarea tomará varios días.</span></nb-toggle>
       </div>
-      <input [owlDateTime]="dt" [selectMode]="rango" [owlDateTimeTrigger]="dt" nbInput status="info" class="form-control" [(ngModel)]="fecha">
-      <owl-date-time #dt [pickerType]="'calendar'"></owl-date-time>
-      <small id="dateHelp" class="form-text text-muted">Fecha en la que se realizará la tarea.</small>
-    </div>
-    <div class="form-group">
-      <label>Hora:</label>
-      <input [owlDateTime]="dh" selectMode="range" [owlDateTimeTrigger]="dh" nbInput status="info" class="form-control" [(ngModel)]="hora">
-      <owl-date-time hour12Timer="true" #dh [pickerType]="'timer'"></owl-date-time>
-      <small id="timeHelp" class="form-text text-muted">Horario en el que se realizará la tarea.</small>
-    </div>
+      <div class="mb-3">
+        <label>Resumen:</label>
+        <input (input)="resumen_change()" autofocus type="text" [(ngModel)]="task.resumen" #resumen fullWidth nbInput [status]="resumen_status" class="form-control" aria-describedby="resHelp" placeholder="Resumen de la nueva tarea">
+        <small id="resHelp" class="form-text text-muted">El resumen de la tarea debe mostrar la información elemental de la misma.</small>
+      </div>
+      <div class="mb-3">
+        <label>Descripción:</label>
+        <textarea (input)="descripcion_change()" #descripcion [(ngModel)]="task.descripcion" cols="30" rows="10" fullWidth nbInput [status]="descripcion_status" class="form-control" aria-describedby="descHelp" placeholder="Descripción de la nueva tarea"></textarea>
+        <small id="descHelp" class="form-text text-muted">Describa la tarea con todas las acciones a realizar.</small>
+      </div>
+      <div class="mb-3">
+        <label>Fecha:</label>
+        <div class="mb-3">
+          <nb-toggle [(checked)]="checked" (checkedChange)="select_range($event)" status="info" labelPosition="right"><span class="text-muted" #text_muted>La tarea tomará varios días.</span></nb-toggle>
+        </div>
+        <input [owlDateTime]="dt" [selectMode]="rango" [owlDateTimeTrigger]="dt" nbInput status="info" class="form-control" [(ngModel)]="fecha">
+        <owl-date-time #dt [pickerType]="'calendar'"></owl-date-time>
+        <small id="dateHelp" class="form-text text-muted">Fecha en la que se realizará la tarea.</small>
+      </div>
+      <div class="mb-3">
+        <label>Hora:</label>
+        <input [owlDateTime]="dh" selectMode="range" [owlDateTimeTrigger]="dh" nbInput status="info" class="form-control" [(ngModel)]="hora">
+        <owl-date-time hour12Timer="true" #dh [pickerType]="'timer'"></owl-date-time>
+        <small id="timeHelp" class="form-text text-muted">Horario en el que se realizará la tarea.</small>
+      </div>
+    </form>
   </nb-card-body>
   <nb-card-footer>
     <div class="float-right row">

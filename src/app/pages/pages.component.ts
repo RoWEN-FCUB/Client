@@ -16,7 +16,7 @@ export class PagesComponent implements OnInit {
   }
   menu = MENU_ITEMS;
 
-  @HostListener('document:click', ['$event'])
+  /*@HostListener('document:click', ['$event'])
   documentClick(event: MouseEvent) {
       // your click logic
       // console.log('clicked');
@@ -29,7 +29,7 @@ export class PagesComponent implements OnInit {
           }
         }
       });
-  }
+  }*/
 
   ngOnInit(): void {
     this.authService.onAuthenticationChange().subscribe(autenticated => {
