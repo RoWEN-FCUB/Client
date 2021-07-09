@@ -44,7 +44,7 @@ import {
   NbFormFieldModule,
 } from '@nebular/theme';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE, OwlDateTimeIntl } from '@danielmoncada/angular-datetime-picker';
 import { UserService } from './services/user.service';
 import { NotificationService } from './services/notification.service';
@@ -160,6 +160,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   imports: [
+    ReactiveFormsModule,
     NbAutocompleteModule,
     NbFormFieldModule,
     ExportAsModule,

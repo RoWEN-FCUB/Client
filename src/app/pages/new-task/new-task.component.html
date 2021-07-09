@@ -4,10 +4,12 @@
     <form>
       <div class="mb-3" *ngIf="subordinados.length > 0">
         <label class="me-2">Asignar tarea a: </label>
-        <nb-select (selectedChange)="subordinados_change()" multiple placeholder="----" [status]="sub_status" [(ngModel)]="sub_seleccionados">
+        <nb-select (selectedChange)="subordinados_change()" multiple placeholder="----" [status]="sub_status" [formControl]="selectedSubs">
           <nb-option *ngFor="let subordinado of subordinados" [value]="subordinado.id">{{subordinado.user}}</nb-option>
         </nb-select>
-        <small class="form-text text-muted">Se creará una tarea individual para cada usuario seleccionado.</small>
+        <div class="form-text text-muted">
+          Se creará una tarea individual para cada usuario seleccionado.
+        </div>
       </div>
       <div class="mb-3">
         <label>Resumen:</label>
@@ -37,7 +39,7 @@
     </form>
   </nb-card-body>
   <nb-card-footer>
-    <div class="float-right row">
+    <div class="form-group" style="float: right;">
       <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
       <button style="margin-left: 10px" (click)="close()" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
     </div>

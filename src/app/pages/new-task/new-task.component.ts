@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
+import { FormControl } from '@angular/forms';
 import { Task } from '../../models/Task';
 import * as moment from 'moment';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
@@ -36,7 +37,7 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
     fecha_fin: new Date(),
   };
   subordinados: User[] = [];
-  sub_seleccionados: any[] = [];
+  selectedSubs = new FormControl();
   constructor(protected dialogRef: NbDialogRef<any>) {
   }
 
@@ -57,7 +58,7 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
   }
 
   subordinados_change() {
-    if (this.sub_seleccionados.length > 0) {
+    if (this.selectedSubs.value.length > 0) {
       this.sub_status = 'success';
     } else {
       this.sub_status = 'danger';
@@ -67,7 +68,7 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.task.id_creador = this.id_creador;
     this.task.id_usuario = this.id_usuario;
-    this.sub_seleccionados.push(this.task.id_usuario);
+    this.selectedSubs.setValue([this.id_usuario]);
   }
 
   ngAfterViewInit() {
@@ -139,7 +140,7 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
     // console.log( this.sub_seleccionados);
     if (this.validate_task()) {
       this.parseTime();
-      const newTask = {task: this.task, subs: this.sub_seleccionados};
+      const newTask = {task: this.task, subs: this.selectedSubs.value};
       this.dialogRef.close(newTask);
     }
   }
@@ -152,7 +153,7 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
       timerProgressBar: true,
       timer: 3000,
     });
-    if (this.sub_seleccionados.length === 0 && this.subordinados.length > 0) {
+    if (this.selectedSubs.value.length === 0 && this.subordinados.length > 0) {
       Toast.fire({
         icon: 'error',
         title: 'Debe seleccionar para que usuario(s) será la tarea.',

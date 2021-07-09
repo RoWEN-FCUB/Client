@@ -36,6 +36,7 @@ export class TaskService {
   }
 
   validateTask(data: any) {
+    // console.log(data);
     return this.http.post(ipserver + 'task/validate', data);
   }
 

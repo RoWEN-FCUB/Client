@@ -36,9 +36,9 @@
     </div>
   </nb-card-body>
   <nb-card-footer>
-    <div class="float-right row">
-      <a nbButton status="success" hero (click)="validate_user()">Guardar</a>
-      <a style="margin-left: 10px" hero nbButton status="danger" [routerLink]="['/']" routerLinkActive="router-link-active">Cancelar</a>
+    <div class="form-group" style="float: right;">
+      <button nbButton status="success" (click)="validate_user()" size="small" hero>Guardar</button>
+      <a style="margin-left: 10px" size="small" hero nbButton status="danger" [routerLink]="['/']" routerLinkActive="router-link-active">Cancelar</a>
     </div>
   </nb-card-footer>
 </nb-card>
