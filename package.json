@@ -103,7 +103,7 @@
     "@angular/language-service": "12.0.3",
     "@angular/localize": "^12.0.3",
     "@angular/router": "^12.0.3",
-    "@babel/core": "^7.14.3",
+    "@babel/core": "^7.14.6",
     "@compodoc/compodoc": "^1.1.13",
     "@fortawesome/fontawesome-free": "^5.15.3",
     "@juggle/resize-observer": "^3.3.1",
