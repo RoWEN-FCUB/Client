@@ -1,11 +1,15 @@
 <nb-card fullwidth accent="info">
     <nb-card-header>Administración de servicios eléctricos del sistema</nb-card-header>
     <nb-card-body>
-      <div class="row" style="margin-bottom: 20px; margin-left: 3px;">
-        <button (click)="openNew()" nbTooltip="Agregar un nuevo servicio" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
-        <div style="padding-top: 10px;">
-          <label style="margin-right: 5px; margin-left: 10px;">Empresa: </label>
-          <nb-select (selectedChange)="getServices()" placeholder="----" [(ngModel)]="selected_company" [status]="'info'">
+      <div class="row g-3 align-items-center">
+        <div class="col-auto">
+          <button (click)="openNew()" nbTooltip="Agregar un nuevo servicio" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+        </div>
+        <div class="col-auto">
+          <label for="empresa" class="col-form-label">Empresa:</label>
+        </div>
+        <div class="col-auto">
+          <nb-select #empresa (selectedChange)="getServices()" placeholder="----" [(ngModel)]="selected_company" [status]="'info'">
             <nb-option *ngFor="let company of companies; let i = index" [value]="i">{{company.nombre}}</nb-option>
           </nb-select>
         </div>

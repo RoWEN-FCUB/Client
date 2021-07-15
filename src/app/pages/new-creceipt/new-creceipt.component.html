@@ -3,14 +3,14 @@
     <nb-card-body>
       <div class="row">
         <div class="col">
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label>Pedido:</label>
             <input (input)="pedido_change()" type="text" [disabled]="editable" nbInput autofocus fullWidth [status]="pedido_status" placeholder="Pedido" [(ngModel)]="newReceipt.pedido" class="form-control" aria-describedby="pedHelp">
             <small id="pedHelp" class="form-text text-muted">Código del pedido.</small>
           </div>
         </div>
         <div class="col">
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label>Fecha:</label>
             <input type="text" [disabled]="editable" (ngModelChange)="fecha_change($event)" [owlDateTime]="dt" [selectMode]="'single'" [owlDateTimeTrigger]="dt" nbInput fullWidth [status]="fecha_status" placeholder="Fecha" [(ngModel)]="fecha" class="form-control" aria-describedby="fecHelp">
             <owl-date-time #dt [pickerType]="'calendar'" [startAt]="newReceipt.fecha_emision"></owl-date-time>
@@ -20,7 +20,7 @@
       </div>
       <div class="row">
         <div class="col">
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label>Provincia:</label>
                 <nb-select [disabled]="editable" (selectedChange)="cambiarmunicipios()" fullWidth placeholder="----" [(ngModel)]="provincia_seleccionada" [status]="provincia_status">
                     <nb-option *ngFor="let prov of provincias; let i = index" [value]="i">{{prov.nombre}}</nb-option>
@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="col">
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label>Municipio:</label>
                 <nb-select [disabled]="editable" (selectedChange)="seleccionarMunicipio()" fullWidth placeholder="----" [(ngModel)]="municipio_seleccionado" [status]="municipio_status">
                     <nb-option *ngFor="let mun of municipios; let i = index" [value]="i">{{mun}}</nb-option>
@@ -38,14 +38,14 @@
       </div>
       <div class="row">
         <div class="col">
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label>Comprador:</label>
             <input type="text" [disabled]="editable" (input)="comprador_change()" nbInput fullWidth [status]="comprador_status" placeholder="Comprador" [(ngModel)]="newReceipt.comprador" class="form-control" aria-describedby="compHelp">
             <small id="compHelp" class="form-text text-muted">Nombre del comprador.</small>
           </div>
         </div>
         <div class="col">
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label>Destinatario:</label>
             <input type="text" [disabled]="editable" (input)="destinatario_change()" nbInput fullWidth [status]="destinatario_status" placeholder="Destinatario" [(ngModel)]="newReceipt.destinatario" class="form-control" aria-describedby="destHelp">
             <small id="destHelp" class="form-text text-muted">Nombre del destinatario.</small>
@@ -54,14 +54,14 @@
       </div>
       <div class="row">
         <div class="col">
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label>Dirección:</label>
             <input type="text" [disabled]="editable" (input)="direccion_change()" nbInput fullWidth [status]="direccion_status" placeholder="Comprador" [(ngModel)]="newReceipt.destinatario_direccion" class="form-control" aria-describedby="dirHelp">
             <small id="dirHelp" class="form-text text-muted">Dirección del destinatario.</small>
           </div>
         </div>
         <div class="col">
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label>No. Teléfono:</label>
             <input type="text" [disabled]="editable" (input)="telefono_change()" nbInput fullWidth [status]="telefono_status" placeholder="Destinatario" [(ngModel)]="newReceipt.destinatario_telefono" class="form-control" aria-describedby="telHelp">
             <small id="telHelp" class="form-text text-muted">Número de teléfono del destinatario.</small>
@@ -73,7 +73,7 @@
           <nb-tab tabTitle="PRODUCTOS" style="padding-left: 0; padding-right: 0;">
             <div class="row" *ngIf="!editable">
               <div class="col">
-                <div class="form-group">
+                <div class="form-group mb-3">
                   <label>Producto:</label>
                   <nb-select fullWidth placeholder="----" [(ngModel)]="producto_seleccionado" [status]="'info'">
                       <nb-option *ngFor="let prod of productos; let i = index" [value]="i">{{prod.nombre}}</nb-option>
@@ -81,7 +81,7 @@
                 </div>
               </div>
               <div class="col">
-                <div class="form-group">
+                <div class="form-group mb-3">
                   <label>Cantidad:</label>
                   <nb-form-field>
                     <input type="text" (keyup.enter)="addProduct()" (input)="cantidad_change()" nbInput fullWidth [status]="cantidad_status" placeholder="0" [(ngModel)]="cantidad" class="form-control" aria-describedby="canHelp">
@@ -130,7 +130,7 @@
       </div>
     </nb-card-body>
     <nb-card-footer>
-      <div class="float-right row">
+      <div class="form-group" style="float: right;margin-top: 5px">
         <button *ngIf="!editable" (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
         <button *ngIf="editable" (click)="close()" nbButton hero status="info" shape="semi-round" size="small">Cerrar</button>
         <button *ngIf="!editable" (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>

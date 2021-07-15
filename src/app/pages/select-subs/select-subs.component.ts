@@ -3,6 +3,7 @@ import { Task } from '../../models/Task';
 import { User } from '../../models/User';
 import { NbDialogRef } from '@nebular/theme';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
+import { FormControl } from '@angular/forms';
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'select-subs',
@@ -12,11 +13,17 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 export class SelectSubsComponent implements OnInit {
   task: Task;
   subordinados: User[] = [];
-  seleccionados: Number[] = [];
+  seleccionados = new FormControl();
   sub_status: string = 'info';
   constructor(protected dialogRef: NbDialogRef<any>) { }
 
   ngOnInit() {
+    for (let i = 0; i < this.subordinados.length; i++) {
+      if (this.task.id_usuario === this.subordinados[i].id) {
+        this.subordinados.splice(i, 1);
+        break;
+      }
+    }
   }
 
   close() {
@@ -24,7 +31,7 @@ export class SelectSubsComponent implements OnInit {
   }
 
   subordinados_change() {
-    if (this.seleccionados.length > 0) {
+    if (this.seleccionados.value.length > 0) {
       this.sub_status = 'success';
     } else {
       this.sub_status = 'danger';
@@ -40,7 +47,7 @@ export class SelectSubsComponent implements OnInit {
       timer: 3000,
     });
     if (this.sub_status === 'success') {
-      const newTask = {task: this.task, subs: this.seleccionados};
+      const newTask = {task: this.task, subs: this.seleccionados.value};
       this.dialogRef.close(newTask);
     } else {
       Toast.fire({

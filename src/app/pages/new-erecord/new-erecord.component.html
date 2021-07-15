@@ -3,7 +3,7 @@
   <nb-card-body>
     <div class="row">
       <div class="col">
-        <div class="form-group" *ngIf="!newERecord.id">
+        <div class="mb-3" *ngIf="!newERecord.id">
           <label>Plan del día:</label>
           <input (input)="plan_change()" autofocus type="text" [(ngModel)]="newERecord.plan" #plan fullWidth nbInput [status]="plan_status" class="form-control" aria-describedby="planHelp" placeholder="0">
           <small id="planHelp" class="form-text text-muted">Plan de energía para el día.</small>
@@ -12,54 +12,54 @@
     </div>
     <div class="row">
       <div class="col" *ngIf="service.pico_diurno">
-        <div class="form-group" *ngIf="!newERecord.id && service.pico_diurno">
+        <div class="mb-3" *ngIf="!newERecord.id && service.pico_diurno">
           <label>Plan Horario Pico Diurno:</label>
           <input (input)="ppicd_change()" type="text" [(ngModel)]="newERecord.plan_hpicd" #plan_picd fullWidth nbInput [status]="ppicd_status" class="form-control" aria-describedby="planpicdHelp" placeholder="0">
           <small id="planpicdHelp" class="form-text text-muted">Plan para el horario pico del mediodía.</small>
         </div>
-        <div class="form-group" *ngIf="service.pico_diurno && newERecord.plan_hpicd > 0">
+        <div class="mb-3" *ngIf="service.pico_diurno && newERecord.plan_hpicd > 0">
           <label>Lectura Inicial Pico Diurno:</label>
           <input (input)="lectura_hpicd1_change()" type="text" [(ngModel)]="newERecord.lectura_hpicd1" fullWidth nbInput [status]="lectura_hpicd1_status" class="form-control" aria-describedby="lectpicd1Help" placeholder="0">
           <small id="lectpicd1Help" class="form-text text-muted">Primera lectura del horario pico.</small>
         </div>
-        <div class="form-group" *ngIf="service.pico_diurno && newERecord.lectura_hpicd1 > 0">
+        <div class="mb-3" *ngIf="service.pico_diurno && newERecord.lectura_hpicd1 > 0">
           <label>Lectura Final Pico Diurno:</label>
           <input (input)="lectura_hpicd2_change()" type="text" [(ngModel)]="newERecord.lectura_hpicd2" fullWidth nbInput [status]="lectura_hpicd2_status" class="form-control" aria-describedby="lectpicd2Help" placeholder="0">
           <small id="lectpicd2Help" class="form-text text-muted">Segunda lectura del horario pico.</small>
         </div>
-        <div class="form-group" *ngIf="service.pico_diurno && newERecord.lectura_hpicd2 > 0">
+        <div class="mb-3" *ngIf="service.pico_diurno && newERecord.lectura_hpicd2 > 0">
           <label>Consumo del pico diurno: <span [ngClass]="(newERecord.plan_hpicd >= (newERecord.lectura_hpicd2 - newERecord.lectura_hpicd1) && (newERecord.lectura_hpicd2 - newERecord.lectura_hpicd1) >= 0)?'text-success font-weight-bold':'text-danger font-weight-bold'">{{(newERecord.lectura_hpicd2 - newERecord.lectura_hpicd1).toFixed(1)}}</span></label>      
         </div>
       </div>
       <div class="col" *ngIf="service.pico_nocturno && !(service.pico_diurno && !(newERecord.lectura_hpicd2 > 0 && newERecord.lectura_hpicd1 > 0))">
-        <div class="form-group" *ngIf="!newERecord.id && service.pico_nocturno && !(service.pico_diurno && newERecord.lectura_hpicd2 === 0)">
+        <div class="mb-3" *ngIf="!newERecord.id && service.pico_nocturno && !(service.pico_diurno && newERecord.lectura_hpicd2 === 0)">
           <label>Plan Horario Pico Nocturno:</label>
           <input (input)="ppicn_change()" type="text" [(ngModel)]="newERecord.plan_hpicd" #plan_picd fullWidth nbInput [status]="ppicd_status" class="form-control" aria-describedby="planpicnHelp" placeholder="0">
           <small id="planpicnHelp" class="form-text text-muted">Plan para el horario pico nocturno.</small>
         </div>
-        <div class="form-group" *ngIf="service.pico_nocturno && !(service.pico_diurno && !(newERecord.lectura_hpicd2 > 0)) && newERecord.plan_hpicd > 0">
+        <div class="mb-3" *ngIf="service.pico_nocturno && !(service.pico_diurno && !(newERecord.lectura_hpicd2 > 0)) && newERecord.plan_hpicd > 0">
           <label>Lectura Inicial Pico Nocturno:</label>
           <input (input)="lectura_hpicn1_change()" type="text" [(ngModel)]="newERecord.lectura_hpicn1" fullWidth nbInput [status]="lectura_hpicn1_status" class="form-control" aria-describedby="lectpicn1Help" placeholder="0">
           <small id="lectpicn1Help" class="form-text text-muted">Primera lectura del horario pico.</small>
         </div>
-        <div class="form-group" *ngIf="service.pico_nocturno && newERecord.lectura_hpicn1 > 0 && !(service.pico_diurno && newERecord.lectura_hpicd2 === 0)">
+        <div class="mb-3" *ngIf="service.pico_nocturno && newERecord.lectura_hpicn1 > 0 && !(service.pico_diurno && newERecord.lectura_hpicd2 === 0)">
           <label>Lectura Final Pico Nocturno:</label>
           <input (input)="lectura_hpicn2_change()" type="text" [(ngModel)]="newERecord.lectura_hpicn2" fullWidth nbInput [status]="lectura_hpicn2_status" class="form-control" aria-describedby="lectpicn2Help" placeholder="0">
           <small id="lectpicn2Help" class="form-text text-muted">Segunda lectura del horario pico.</small>
         </div>
-        <div class="form-group" *ngIf="service.pico_nocturno && newERecord.lectura_hpicn2 > 0">
+        <div class="mb-3" *ngIf="service.pico_nocturno && newERecord.lectura_hpicn2 > 0">
           <label>Consumo del pico nocturno: <span [ngClass]="(newERecord.plan_hpicn >= (newERecord.lectura_hpicn2 - newERecord.lectura_hpicn1) && (newERecord.lectura_hpicn2 - newERecord.lectura_hpicn1) >= 0)?'text-success font-weight-bold':'text-danger font-weight-bold'">{{(newERecord.lectura_hpicn2 - newERecord.lectura_hpicn1).toFixed(1)}}</span></label>      
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <div class="form-group" *ngIf="!(service.pico_diurno && newERecord.lectura_hpicd2 === 0 && newERecord.plan_hpicd > 0) && !(service.pico_nocturno && newERecord.lectura_hpicn2 === 0 && newERecord.plan_hpicn > 0)">
+        <div class="mb-3" *ngIf="!(service.pico_diurno && newERecord.lectura_hpicd2 === 0 && newERecord.plan_hpicd > 0) && !(service.pico_nocturno && newERecord.lectura_hpicn2 === 0 && newERecord.plan_hpicn > 0)">
           <label>Lectura cierre:</label>
           <input (input)="lectura_change()" type="text" [(ngModel)]="newERecord.lectura" #lectura fullWidth nbInput [status]="lectura_status" class="form-control" aria-describedby="resHelp" placeholder="0">
           <small id="lecturaHelp" class="form-text text-muted">Lectura del metro contador.</small>
         </div>
-        <div class="form-group" *ngIf="!(service.pico_diurno && newERecord.lectura_hpicd2 === 0 && newERecord.plan_hpicd > 0) && !(service.pico_nocturno && newERecord.lectura_hpicn2 === 0 && newERecord.plan_hpicn > 0)">
+        <div class="mb-3" *ngIf="!(service.pico_diurno && newERecord.lectura_hpicd2 === 0 && newERecord.plan_hpicd > 0) && !(service.pico_nocturno && newERecord.lectura_hpicn2 === 0 && newERecord.plan_hpicn > 0)">
           <label>Consumo del día: <span [ngClass]="(newERecord.plan >= newERecord.consumo && newERecord.consumo >= 0)?'text-success font-weight-bold':'text-danger font-weight-bold'">{{newERecord.consumo}}</span></label>      
         </div>
       </div>
@@ -67,7 +67,7 @@
     </div>
   </nb-card-body>
   <nb-card-footer>
-    <div class="float-right row">      
+    <div class="form-group" style="float: right;margin-top: 5px">      
       <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
       <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>      
     </div>

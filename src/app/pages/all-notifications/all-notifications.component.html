@@ -3,7 +3,7 @@
     <div class="row fullWidth">
       <div class="col col-8 text-left">Notificaciones</div>
       <div class="col text-right" *ngIf="hay_nuevas"><span (click)="notificationsReaded()" class="btn-link" style="cursor: pointer;" nbTooltip="Marcar todas como leídas" nbTooltipIcon="checkmark-outline" nbTooltipStatus="success">Marcar como leídas</span></div>
-      <div class="col text-right ml-2" *ngIf="notificaciones.length > 0"><span (click)="deleteAllNotifications()" nbTooltip="Eliminar todas las notificaciones" nbTooltipIcon="close-outline" nbTooltipStatus="danger" class="btn-link" style="cursor: pointer;">Borrar todas</span></div>
+      <div class="col text-right ms-2" *ngIf="notificaciones.length > 0"><span (click)="deleteAllNotifications()" nbTooltip="Eliminar todas las notificaciones" nbTooltipIcon="close-outline" nbTooltipStatus="danger" class="btn-link" style="cursor: pointer;">Borrar todas</span></div>
     </div>
   </nb-card-header>
   <nb-card-body>
@@ -20,7 +20,7 @@
         <tbody>
           <tr *ngFor="let notificacion of notificaciones; let i = index" class="table-{{notificacion.estatus}}">
             <th scope="row">{{i+1}}</th>
-            <td><div style="cursor: pointer" (click)="clickNotification(notificacion.vinculo)"><span [innerHTML]="notificacion.notificacion"></span><span *ngIf="!notificacion.leida" class="badge badge-success">Nueva!!</span></div></td>
+            <td><div style="cursor: pointer" (click)="clickNotification(notificacion.vinculo)"><span [innerHTML]="notificacion.notificacion"></span><span *ngIf="!notificacion.leida" class="badge bg-success rounded-pill ms-3">Nueva!!</span></div></td>
             <td>{{formatDate(notificacion.fecha)}}</td>
             <td align="right">
               <nb-icon (click)="notificationReaded(i)" *ngIf="!notificacion.leida" style="cursor: pointer" [options]="{animation:{type: 'zoom'}}" nbTooltip="Leída" nbTooltipIcon="checkmark-outline" nbTooltipStatus="success" icon="checkmark-outline"></nb-icon>

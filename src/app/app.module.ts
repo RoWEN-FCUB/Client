@@ -84,7 +84,8 @@ import { NewCproductComponent } from './pages/new-cproduct/new-cproduct.componen
 import { NewCproviderComponent } from './pages/new-cprovider/new-cprovider.component';
 import { NewCreceiptComponent } from './pages/new-creceipt/new-creceipt.component';
 import { NbAuthJWTInterceptor, NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';
-import { environment } from '../environments/environment';
+import { UserIdleModule } from 'angular-user-idle';
+// import { environment } from '../environments/environment';
 // import { CountdownPipe } from './pipes/countdown.pipe';
 // import { NgxScrollTopModule } from 'ngx-scrolltop';
 import ipserver from './ipserver';
@@ -200,6 +201,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     NgbModule,
     // NgxPaginationModule,
     NgxChartsModule,
+    UserIdleModule.forRoot({idle: 300, timeout: 10, ping: 120}),
   ],
   providers: [
     {

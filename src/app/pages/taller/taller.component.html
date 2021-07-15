@@ -1,15 +1,21 @@
 <nb-card fullwidth accent="info">
   <nb-card-header>Registro de entradas y salidas del taller {{service.nombre}}</nb-card-header>
   <nb-card-body>
-    <div class="row">
-      <label class="mt-1">Buscar:</label>
-      <nb-form-field>
-        <input #strsearch nbTooltip="Escriba uno o varios parámetros separados por espacio y presione enter." (keyup.enter)="search()" [(ngModel)]="search_string" [status]="search_status" class="ml-2" type="text" nbInput fieldSize="small" placeholder="Escriba el valor...">
-        <button *ngIf="search_string !== ''" nbSuffix nbButton ghost (click)="clearSearchInput()">
-          <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
-        </button>
-      </nb-form-field>
-      <button class="ml-4" (click)="openNew()" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+    <div class="row g-3 align-items-center">
+      <div class="col-auto">
+        <label for="strsearch" class="col-form-label">Buscar:</label>
+      </div>
+      <div class="col-auto">
+        <nb-form-field>
+          <input #strsearch nbTooltip="Escriba uno o varios parámetros separados por espacio y presione enter." (keyup.enter)="search()" [(ngModel)]="search_string" [status]="search_status" class="ml-2" type="text" nbInput fieldSize="small" placeholder="Escriba el valor...">
+          <button *ngIf="search_string !== ''" nbSuffix nbButton ghost (click)="clearSearchInput()">
+            <nb-icon icon="close-outline" nbTooltip="Borrar" nbTooltipStatus="info"></nb-icon>
+          </button>
+        </nb-form-field>
+      </div>
+      <div class="col-auto">
+        <button class="ml-4" (click)="openNew()" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+      </div>
     </div>
     <div class='table-responsive'>
       <table id="tablePreview" class="table table-hover table-borderless table-striped table-sm">
@@ -51,10 +57,10 @@
             <td (click)="openUpdt(i)" style="cursor: pointer" nbTooltip="{{wrecord.recogido}}">{{wrecord.recogido | shortName}}</td>
             <td style="cursor: pointer">
              <!-- <nb-icon *ngIf="user.role==='admin'" (click)="deleteRecord(i)" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar registro" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon> -->
-              <fa-icon (click)="generateReceipt(i)" class="mr-1" [icon]="['far', 'id-card']" nbTooltip="Comprobante de entrega" nbTooltipStatus="info"></fa-icon>
-              <fa-icon (click)="openParts(i)" *ngIf="wrecord.equipo === 'Unidad Central' && wrecord.estado === 'P'" class="mr-1" [icon]="['far', 'list-alt']" nbTooltip="Definir partes" nbTooltipStatus="info"></fa-icon>
-              <fa-icon *ngIf="wrecord.equipo === 'Unidad Central'" (click)="generateDeliver(i)" class="mr-1" [icon]="['far', 'share-square']" nbTooltip="Acta de entrega" nbTooltipStatus="info"></fa-icon>
-              <fa-icon *ngIf="wrecord.estado === 'D'" (click)="generateDiagnostic(i)" class="mr-1" [icon]="['far', 'file-alt']" nbTooltip="Modelo de diagnóstico" nbTooltipStatus="info"></fa-icon>
+              <fa-icon (click)="generateReceipt(i)" class="me-1" [icon]="['far', 'id-card']" nbTooltip="Comprobante de entrega" nbTooltipStatus="info"></fa-icon>
+              <fa-icon (click)="openParts(i)" *ngIf="wrecord.equipo === 'Unidad Central' && wrecord.estado === 'P'" class="me-1" [icon]="['far', 'list-alt']" nbTooltip="Definir partes" nbTooltipStatus="info"></fa-icon>
+              <fa-icon *ngIf="wrecord.equipo === 'Unidad Central'" (click)="generateDeliver(i)" class="me-1" [icon]="['far', 'share-square']" nbTooltip="Acta de entrega" nbTooltipStatus="info"></fa-icon>
+              <fa-icon *ngIf="wrecord.estado === 'D'" (click)="generateDiagnostic(i)" class="me-1" [icon]="['far', 'file-alt']" nbTooltip="Modelo de diagnóstico" nbTooltipStatus="info"></fa-icon>
               <fa-icon [icon]="['far', 'trash-alt']" *ngIf="user.role==='admin'" (click)="deleteRecord(i)" nbTooltip="Eliminar registro" nbTooltipStatus="danger"></fa-icon>
             </td>
           </tr>

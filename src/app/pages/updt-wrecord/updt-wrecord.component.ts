@@ -86,12 +86,10 @@ export class UpdtWRecordComponent implements OnInit {
   ngOnInit() {
     this.updtDeviceStatus();
     this.wrecord.fecha_salida = new Date();
-    this.workshopService.getWPerson(this.wrecord.entrega_ci).subscribe((ent: WPerson) => {
-      this.entrega = ent;
-      this.workshopService.getWPerson(this.wrecord.recoge_ci).subscribe((rec: WPerson) => {
-        if (rec) {
-          this.recoge = rec;
-        }
+    if (this.wrecord.entrega_ci) {
+      this.showPersonInfo = false;
+      this.workshopService.getWPerson(this.wrecord.entrega_ci).subscribe((ent: WPerson) => {
+        this.entrega = ent;
         this.workshopService.getWNames(this.entrega.id_cliente).subscribe((res: WPerson[]) => {
           this.names = res;
           this.showPersonInfo = false;
@@ -106,8 +104,15 @@ export class UpdtWRecordComponent implements OnInit {
             setTimeout(() => this.obsinput.nativeElement.focus(), 0);
           }
         });
+        if (this.wrecord.recoge_ci) {
+          this.workshopService.getWPerson(this.wrecord.recoge_ci).subscribe((rec: WPerson) => {
+            if (rec) {
+              this.recoge = rec;
+            }
+          });
+        }
       });
-    });
+    }
     this.workshopService.getWDevices().subscribe((res: WDevice[]) => {
       for (let i = 0; i < res.length; i++) {
         this.devs.push(res[i].equipo);
@@ -464,14 +469,14 @@ export class UpdtWRecordComponent implements OnInit {
   entregaCIChange() { // NUEVO
     this.filteredName$ = this.getFilteredNamesOptions(this.entrega.ci);
     this.showPersonInfo = true;
+    // console.log(this.names);
     for (let i = 0; i < this.names.length; i++) {
       if (this.names[i].ci === this.entrega.ci) {
         this.entrega.nombre = this.names[i].nombre;
         this.entrega.cargo = this.names[i].cargo;
         this.showPersonInfo = false;
+        console.log('encontrado');
         break;
-      } else {
-        this.showPersonInfo = true;
       }
     }
     const nameregexp = new RegExp(/^[0-9]{11}$/);
@@ -491,8 +496,6 @@ export class UpdtWRecordComponent implements OnInit {
         this.recoge.cargo = this.names[i].cargo;
         this.showPersonInfo2 = false;
         break;
-      } else {
-        this.showPersonInfo2 = true;
       }
     }
     const nameregexp = new RegExp(/^[0-9]{11}$/);

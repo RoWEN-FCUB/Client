@@ -28,6 +28,7 @@ export class EnergyPlansComponent implements OnInit {
   startDate: Date; // fecha inicial en la que abre el selector de fecha
   company: Company = {};
   service: EService;
+  saving: boolean = false;
   constructor(private energyService: EnergyService, protected dialogRef: NbDialogRef<any>) { }
 
   ngOnInit(): void {
@@ -117,6 +118,7 @@ export class EnergyPlansComponent implements OnInit {
       } else {
         this.fecha_fin = new Date(this.dates[1]);
       }
+      this.saving = true;
       // tslint:disable-next-line: max-line-length
       this.energyService.updateAllPlans(this.plan_establecido, this.plan_picod, this.plan_picon, this.fecha_inicio, this.fecha_fin, this.service.id).subscribe(res => {
         Toast.fire({

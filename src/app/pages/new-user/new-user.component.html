@@ -3,38 +3,40 @@
     <nb-card-body>
       <div class="row">
         <div class="col">
-          <div class="form-group">
-            <label>Usuario:</label>
+          <div class="form-group mb-3">
+            <label class="form-label">Usuario:</label>
             <input (input)="nick_change()" type="text" nbInput autofocus fullWidth [status]="nick_status" placeholder="Usuario" [(ngModel)]="newUser.user" class="form-control" aria-describedby="usrHelp">
             <small id="usrHelp" class="form-text text-muted">Apodo (Nickname) del usuario. Solo letras en 4 y 20 caracteres.</small>
           </div>
         </div>
         <div class="col">
-          <div class="form-group">
-            <label>Nombre completo:</label>
+          <div class="form-group mb-3">
+            <label class="form-label">Nombre completo:</label>
             <input (input)="name_change()" type="text" nbInput fullWidth [status]="name_status" placeholder="Nombre" [(ngModel)]="newUser.fullname" class="form-control" aria-describedby="namHelp">
             <small id="namHelp" class="form-text text-muted">Nombre(s) y Apellidos del usuario</small>
           </div>
         </div>
       </div>
-      <div style="margin-top: 5px" class="row">
+      <div class="row">
         <div class="col">
-          <label>CI:</label>
+          <div class="form-group mb-3">
+            <label class="form-label">CI:</label>
             <input (input)="CIChange()" maxlength="11" type="text" nbInput fullWidth [status]="ci_status" placeholder="###########" [(ngModel)]="newUser.ci" class="form-control" aria-describedby="ciHelp">
             <small id="ciHelp" class="form-text text-muted">Número de identidad (carnet) del usuario</small>
+          </div>
         </div>
       </div>
       <div class="row">
         <div class="col">
-          <div style="margin-top: 5px" class="form-group">
-            <label>Cargo:</label>
+          <div class="form-group">
+            <label class="form-label">Cargo:</label>
             <input (input)="position_change()" type="text" nbInput fullWidth [status]="position_status" placeholder="Cargo" [(ngModel)]="newUser.position" class="form-control" aria-describedby="carHelp">
             <small id="carHelp" class="form-text text-muted">Cargo que ocupa el usuario</small>
           </div>
         </div>
         <div class="col">
-          <div class="form-group">
-            <label>E-mail:</label>
+          <div class="form-group mb-3">
+            <label class="form-label">E-mail:</label>
             <input (input)="email_change()" type="text" nbInput fullWidth [status]="email_status" placeholder="emai@server.dom" [(ngModel)]="newUser.email" class="form-control" aria-describedby="emailHelp">
             <small id="emailHelp" class="form-text text-muted">La dirección de correo que usará para el acceso al sistema.</small>
           </div>
@@ -42,8 +44,8 @@
       </div>
       <div class="row">
         <div class="col">
-          <div style="margin-top: 5px" class="form-group">
-            <label style="margin-right: 5px">Empresa:</label>
+          <div class="form-group mb-3">
+            <label class="form-label" style="margin-right: 5px">Empresa:</label>
             <nb-select (selectedChange)="company_change()" placeholder="----" [(ngModel)]="selected_company" [status]="company_status" fullWidth>
               <nb-option *ngFor="let company of companies" [value]="company.id">{{company.nombre}}</nb-option>
             </nb-select>
@@ -53,8 +55,8 @@
       </div>
       <div class="row">
         <div class="col">
-          <div style="margin-top: 5px" class="form-group">
-            <label style="margin-right: 5px">Servicio:</label>
+          <div class="form-group mb-3">
+            <label class="form-label" style="margin-right: 5px">Servicio:</label>
             <nb-select (selectedChange)="service_change()" placeholder="----" [(ngModel)]="selected_service" [status]="service_status" fullWidth>
               <nb-option *ngFor="let service of services" [value]="service.id">{{service.nombre}}</nb-option>
             </nb-select>
@@ -64,8 +66,8 @@
       </div>
       <div class="row">
         <div class="col">
-          <div style="margin-top: 5px" class="form-group">
-            <label style="margin-right: 5px">Rol:</label>
+          <div class="form-group mb-3">
+            <label class="form-label" style="margin-right: 5px">Rol:</label>
             <nb-select placeholder="----" status="success" [(ngModel)]="selected_role" fullWidth>
               <nb-option *ngFor="let rol of roles" [value]="rol.id">{{rol.role}}</nb-option>
             </nb-select>
@@ -73,8 +75,8 @@
           </div>
         </div>
         <div class="col">
-          <div class="form-group">
-            <label style="margin-right: 5px">Subordinado de:</label>
+          <div class="form-group mb-3">
+            <label class="form-label" style="margin-right: 5px">Subordinado de:</label>
             <nb-select (selectedChange)="superior_change()" [placeholder]="nsup" [status]="usup_status" [(ngModel)]="usup" fullWidth>
               <nb-option *ngFor="let user of users" [value]="user.id">{{user.user}}</nb-option>
             </nb-select>
@@ -84,8 +86,8 @@
       </div>
       <div class="row">
         <div class="col">
-          <div class="form-group">
-            <label>Contraseña:</label>
+          <div class="form-group mb-3">
+            <label class="form-label">Contraseña:</label>
             <nb-form-field>
               <input (input)="pass_change()" [type]="!show_password ? 'password' : 'text'" nbInput fullWidth [status]="pass_status" placeholder="Contraseña" [(ngModel)]="newUser.pass" class="form-control" aria-describedby="passHelp">
               <button class="shadow-none" *ngIf="newUser.pass" type="button" nbSuffix nbButton ghost (click)="toogleShowPassword()">
@@ -98,8 +100,8 @@
       </div>
       <div class="row">
         <div class="col">
-          <div class="form-group">
-            <label>Repetir:</label>
+          <div class="form-group mb-3">
+            <label class="form-label">Repetir:</label>
             <nb-form-field>
               <input (input)="repeat_pass()" [type]="!show_password ? 'password' : 'text'" nbInput fullWidth [status]="rpass_status" placeholder="Repetir contraseña" [(ngModel)]="reppass" class="form-control" aria-describedby="rpassHelp">
               <button class="shadow-none" *ngIf="newUser.pass" type="button" nbSuffix nbButton ghost (click)="toogleShowPassword()">
@@ -112,7 +114,7 @@
       </div>
     </nb-card-body>
     <nb-card-footer>
-      <div class="float-right row">
+      <div class="form-group" style="float: right;margin-top: 5px">
         <button (click)="validate_user()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
         <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
       </div>

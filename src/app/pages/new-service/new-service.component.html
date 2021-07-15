@@ -5,16 +5,16 @@
             <nb-tab tabTitle="Datos generales" id="Tab1" name="Tab1" #Tab1>
                 <div class="row">
                     <div class="col">
-                        <div class="form-group">
-                            <label>Empresa:</label>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Empresa:</label>
                             <nb-select (selectedChange)="cambiarEmpresa()" fullWidth placeholder="----" [(ngModel)]="empresa_seleccionada" [status]="nombre_emp_status">
                                 <nb-option *ngFor="let comp of companies; let i = index" [value]="comp.id">{{comp.siglas}}</nb-option>
                             </nb-select>
                         </div>
                     </div>
                     <div class="col">
-                        <div class="form-group">
-                            <label>Nombre:</label>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Nombre:</label>
                             <input maxlength="200" (input)="nombre_change()" type="text" nbInput fullWidth placeholder="Nombre"class="form-control" aria-describedby="nombresHelp" [(ngModel)]="newService.nombre" [status]="nombre_status">
                             <small id="nombreHelp" class="form-text text-muted">Nombre completo del servicio. Entre 4 y 200 caracteres.</small>
                         </div>
@@ -22,16 +22,16 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div class="form-group">
-                            <label>Provincia:</label>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Provincia:</label>
                             <nb-select (selectedChange)="cambiarmunicipios()" fullWidth placeholder="----" [(ngModel)]="provincia_seleccionada" [status]="provincia_status">
                                 <nb-option *ngFor="let prov of provincias; let i = index" [value]="i">{{prov.nombre}}</nb-option>
                             </nb-select>
                         </div>
                     </div>
                     <div class="col">
-                        <div class="form-group">
-                            <label>Municipio:</label>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Municipio:</label>
                             <nb-select (selectedChange)="seleccionarMunicipio()" fullWidth placeholder="----" [(ngModel)]="municipio_seleccionado" [status]="municipio_status">
                                 <nb-option *ngFor="let mun of municipios; let i = index" [value]="i">{{mun}}</nb-option>
                             </nb-select>
@@ -40,8 +40,8 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div class="form-group">
-                            <label>Código REEUP:</label>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Código REEUP:</label>
                             <input maxlength="200" (input)="reup_change()" type="text" nbInput fullWidth placeholder="000.0.00000" class="form-control" aria-describedby="reupHelp" [(ngModel)]="newService.reup" [status]="reup_status">
                             <small id="reupHelp" class="form-text text-muted">Código del Registro Estatal de Empresas y Unidades Presupuestadas (REEUP).</small>
                         </div>
@@ -52,15 +52,15 @@
             <nb-tab tabTitle="Control eléctrico" id="Tab2" name="Tab2" #Tab2>
                 <div class="row">
                     <div class="col">
-                        <div class="form-group">
-                            <label>CODCLI:</label>
+                        <div class="form-group mb-3">
+                            <label class="form-label">CODCLI:</label>
                             <input maxlength="50" (input)="codcli_change()" type="text" nbInput fullWidth placeholder="CODCLI"class="form-control" aria-describedby="codcliHelp" [(ngModel)]="newService.codcli" [status]="codcli_status">
                             <small id="codcliHelp" class="form-text text-muted">Código de cliente de la empresa. Entre 1 y 50 caracteres.</small>
                         </div>
                     </div>
                     <div class="col">
-                        <div class="form-group">
-                            <label>Control:</label>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Control:</label>
                             <input maxlength="50" (input)="control_change()" type="text" nbInput fullWidth placeholder="Control"class="form-control" aria-describedby="controlHelp" [(ngModel)]="newService.control" [status]="control_status">
                             <small id="controlHelp" class="form-text text-muted">Control de la empresa. Entre 1 y 50 caracteres.</small>
                         </div>
@@ -68,15 +68,15 @@
                 </div>  
                 <div class="row">
                     <div class="col">
-                        <div class="form-group">
-                            <label>RUTA:</label>
+                        <div class="form-group mb-3">
+                            <label class="form-label">RUTA:</label>
                             <input maxlength="50" (input)="ruta_change()" type="text" nbInput fullWidth placeholder="Ruta"class="form-control" aria-describedby="rutaHelp" [(ngModel)]="newService.ruta" [status]="ruta_status">
                             <small id="rutaHelp" class="form-text text-muted">Ruta de la empresa. Entre 1 y 50 caracteres.</small>
                         </div>
                     </div>
                     <div class="col">
-                        <div class="form-group">
-                            <label>FOLIO:</label>
+                        <div class="form-group mb-3">
+                            <label class="form-label">FOLIO:</label>
                             <input maxlength="50" (input)="folio_change()" type="text" nbInput fullWidth placeholder="Folio"class="form-control" aria-describedby="folioHelp" [(ngModel)]="newService.folio" [status]="folio_status">
                             <small id="folioHelp" class="form-text text-muted">Folio de la empresa. Entre 1 y 50 caracteres.</small>
                         </div>
@@ -84,31 +84,31 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <nb-checkbox [checked]="newService.bitacora" (checkedChange)="bitacora_change($event)">Utiliza bitácora</nb-checkbox>
                         </div>
                     </div>
                     <div class="col">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <nb-checkbox [checked]="newService.triple_registro" (checkedChange)="tripleR_change($event)">Es de triple registro</nb-checkbox>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <nb-checkbox [checked]="newService.aplica_acomodo" (checkedChange)="acomodo_change($event)">Aplican acomodo de carga</nb-checkbox>                    
                         </div>
                     </div>
                     <div class="col">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <nb-checkbox [checked]="newService.pico_diurno" (checkedChange)="picoD_change($event)">Registra horario pico diurno</nb-checkbox>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <nb-checkbox [checked]="newService.pico_nocturno" (checkedChange)="picoN_change($event)">Registra horario pico nocturno</nb-checkbox>                    
                         </div>
                     </div>
@@ -121,15 +121,15 @@
                             <legend>Horario pico del mediodía</legend>
                             <div class="row">
                                 <div class="col">
-                                    <div class="form-group">
-                                        <label>Desconectivos generales abiertos:</label>
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Desconectivos generales abiertos:</label>
                                         <input (input)="descGD_change()" maxlength="20" type="text" nbInput fullWidth placeholder="0" class="form-control" aria-describedby="mdescgHelp" [(ngModel)]="newService.desc_gen_dia" [status]="descGD_status">
                                         <small id="mdescgHelp" class="form-text text-muted">Desconectivos generales que se abren en el horario del mediodía.</small>
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="form-group">
-                                        <label>Desconectivos parciales abiertos:</label>
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Desconectivos parciales abiertos:</label>
                                         <input (input)="descPD_change()" maxlength="20" type="text" nbInput fullWidth placeholder="0" class="form-control" aria-describedby="mdescgHelp" [(ngModel)]="newService.desc_parc_dia" [status]="descPD_status">
                                         <small id="mdescgHelp" class="form-text text-muted">Desconectivos parciales que se abren en el horario del mediodía.</small>
                                     </div>             
@@ -144,15 +144,15 @@
                             <legend>Horario pico nocturno</legend>
                             <div class="row">
                                 <div class="col">
-                                    <div class="form-group">
-                                        <label>Desconectivos generales abiertos:</label>
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Desconectivos generales abiertos:</label>
                                         <input (input)="descGN_change()" maxlength="20" type="text" nbInput fullWidth placeholder="0" class="form-control" aria-describedby="mdescgHelp" [(ngModel)]="newService.desc_gen_noche" [status]="descGN_status">
                                         <small id="mdescgHelp" class="form-text text-muted">Desconectivos generales que se abren en el horario de la noche.</small>
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div class="form-group">
-                                        <label>Desconectivos parciales abiertos:</label>
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Desconectivos parciales abiertos:</label>
                                         <input (input)="descPN_change()" maxlength="20" type="text" nbInput fullWidth placeholder="0" class="form-control" aria-describedby="mdescgHelp" [(ngModel)]="newService.desc_parc_noche" [status]="descPN_status">
                                         <small id="mdescgHelp" class="form-text text-muted">Desconectivos parciales que se abren en el horario de la noche.</small>
                                     </div>             
@@ -163,8 +163,8 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div class="form-group">
-                            <label>Total de desconectivos:</label>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Total de desconectivos:</label>
                             <input (input)="tdesc_change()" maxlength="20" type="text" nbInput fullWidth placeholder="0" class="form-control" aria-describedby="tdescHelp" [(ngModel)]="newService.total_desconectivos" [status]="tdesc_status">
                             <small id="tdescHelp" class="form-text text-muted">Número total de desconectivos que tiene la entidad.</small>
                         </div>
@@ -176,7 +176,7 @@
         </nb-tabset>
     </nb-card-body>
     <nb-card-footer>
-        <div class="float-right row">
+        <div class="form-group" style="float: right;margin-top: 5px">
             <button (click)="validate()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
             <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
         </div>

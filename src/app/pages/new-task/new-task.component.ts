@@ -22,8 +22,8 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
   minutos: number = 0;
   horas: number = 0;
   checked: Boolean = false;
-  fecha;
-  hora;
+  fecha = new FormControl();
+  hora = new FormControl();
   rango: string = 'single';
   task: Task = {
     id_usuario: 0,
@@ -38,6 +38,7 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
   };
   subordinados: User[] = [];
   selectedSubs = new FormControl();
+  editing: boolean = false;
   constructor(protected dialogRef: NbDialogRef<any>) {
   }
 
@@ -66,9 +67,12 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.task.id_creador = this.id_creador;
-    this.task.id_usuario = this.id_usuario;
-    this.selectedSubs.setValue([this.id_usuario]);
+    if (!this.editing) {
+      this.task.id_creador = this.id_creador;
+      this.task.id_usuario = this.id_usuario;
+      this.selectedSubs.setValue([this.id_usuario]);
+    }
+    // console.log(this.fecha);
   }
 
   ngAfterViewInit() {
@@ -83,7 +87,7 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
   }
 
   select_range(e) {
-    this.fecha = '';
+    this.fecha.setValue('');
     const picked_range: HTMLElement = this.text_muted.nativeElement;
     if (e) {
       this.rango = 'range';
@@ -100,27 +104,27 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
 
   parseDate() {
     if (this.rango === 'range') {
-      if (this.fecha.length > 1) {
-        this.task.fecha_inicio = new Date(this.fecha[0]);
-        this.task.fecha_fin = new Date(this.fecha[1]);
+      if (this.fecha.value.length > 1) {
+        this.task.fecha_inicio = new Date(this.fecha.value[0]);
+        this.task.fecha_fin = new Date(this.fecha.value[1]);
       }
     } else {
-      this.task.fecha_inicio = new Date(this.fecha);
+      this.task.fecha_inicio = new Date(this.fecha.value);
       this.task.fecha_fin = this.task.fecha_inicio;
     }
   }
 
   parseTime() {
-    if (this.hora) {
-      this.hora[0] = new Date(this.hora[0]);
-      this.hora[1] = new Date(this.hora[1]);
-      this.hora[0] = this.convertUTCDateToLocalDate(this.hora[0]);
-      this.hora[1] = this.convertUTCDateToLocalDate(this.hora[1]);
-      const tduracion = moment(this.hora[1]).diff(moment(this.hora[0]), 'minutes');
+    if (this.hora.value) {
+      this.hora.value[0] = new Date(this.hora.value[0]);
+      this.hora.value[1] = new Date(this.hora.value[1]);
+      this.hora.value[0] = this.convertUTCDateToLocalDate(this.hora.value[0]);
+      this.hora.value[1] = this.convertUTCDateToLocalDate(this.hora.value[1]);
+      const tduracion = moment(this.hora.value[1]).diff(moment(this.hora.value[0]), 'minutes');
       this.task.duracion = tduracion;
       this.parseDate();
-      const hora_inicio = moment(this.hora[0]).hour();
-      const min_inicio = moment(this.hora[0]).minute();
+      const hora_inicio = moment(this.hora.value[0]).hour();
+      const min_inicio = moment(this.hora.value[0]).minute();
       this.task.fecha_inicio = moment(this.task.fecha_inicio).hour(hora_inicio).toDate();
       this.task.fecha_fin = moment(this.task.fecha_fin).hour(hora_inicio).toDate();
       this.task.fecha_inicio = moment(this.task.fecha_inicio).minute(min_inicio).toDate();
@@ -174,19 +178,19 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
       } as SweetAlertOptions);
       this.descripcion_status = 'danger';
       return false;
-    } else if (!this.fecha) {
+    } else if (!this.fecha.value) {
       Toast.fire({
         icon: 'error',
         title: 'Debe especificar una fecha.',
       } as SweetAlertOptions);
       return false;
-    } else if (!this.hora) {
+    } else if (!this.hora.value) {
       Toast.fire({
         icon: 'error',
         title: 'Debe especificar una hora.',
       } as SweetAlertOptions);
       return false;
-    } else if (this.hora.length < 2) {
+    } else if (this.hora.value.length < 2) {
       Toast.fire({
         icon: 'error',
         title: 'Debe especificar una hora.',

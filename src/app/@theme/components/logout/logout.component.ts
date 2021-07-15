@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { NbLogoutComponent } from '@nebular/auth';
 @Component({
   // tslint:disable-next-line: component-selector
@@ -6,6 +6,6 @@ import { NbLogoutComponent } from '@nebular/auth';
   templateUrl: './logout.component.html',
   styleUrls: ['./logout.component.scss'],
 })
-export class LogoutComponent extends NbLogoutComponent {
+export class LogoutComponent extends NbLogoutComponent implements OnInit{
 
 }

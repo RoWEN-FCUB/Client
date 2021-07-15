@@ -48,9 +48,9 @@ export const NB_CORE_PROVIDERS = [
         },
         // baseEndpoint: 'http://app-f2a3c51f-6e3a-4980-a984-74bda65da601.cleverapps.io/',
         // baseEndpoint: 'http://104.207.147.123:443/',
-        baseEndpoint: 'http://localhost:8080/',
+        // baseEndpoint: 'https://localhost:80/',
         // baseEndpoint: 'https://169.158.137.126:3128/',
-        // baseEndpoint: 'http://169.158.143.133:8080/',
+        baseEndpoint: 'https://169.158.143.133:80/',
         login: {
           endpoint: 'user/login',
           method: 'post',

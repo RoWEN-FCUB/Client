@@ -1,10 +1,10 @@
 <nb-card accent="info" size="tiny">
   <nb-card-body>
-    <div class="form-group">
-      <label>Nueva anotación:</label>
+    <div class="form-group mb-3">
+      <label class="form-label">Nueva anotación:</label>
       <textarea autofocus type="text" [(ngModel)]="observ" fullWidth nbInput status="info" class="form-control" placeholder="Nueva anotación"></textarea>
     </div>
-    <div style="margin-top: 20px" class="float-right row">
+    <div class="form-group" style="float: right;margin-top: 5px">
       <button hero (click)="save()" nbButton status="success" shape="semi-round" size="small">Guardar</button>
       <button hero style="margin-left: 10px" (click)="close()" nbButton status="danger" shape="semi-round" size="small">Cancelar</button>
     </div>

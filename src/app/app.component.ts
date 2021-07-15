@@ -6,8 +6,8 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { AnalyticsService } from './@core/utils/analytics.service';
 import { NbIconLibraries } from '@nebular/theme';
-import { NbAuthJWTToken, NbAuthResult, NbAuthService } from '@nebular/auth';
-
+import { UserIdleService } from 'angular-user-idle';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-app',
@@ -15,27 +15,21 @@ import { NbAuthJWTToken, NbAuthResult, NbAuthService } from '@nebular/auth';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private analytics: AnalyticsService, private iconLibraries: NbIconLibraries, private authService: NbAuthService) {
+  constructor(private analytics: AnalyticsService, private iconLibraries: NbIconLibraries, private userIdle: UserIdleService,
+    protected router: Router) {
     this.iconLibraries.registerFontPack('font-awesome', { iconClassPrefix: 'fa' });
     this.iconLibraries.setDefaultPack('font-awesome'); // <---- set as default
   }
 
-  /*@HostListener('document:click', ['$event'])
-  documentClick(event: MouseEvent) {
-      // your click logic
-      // console.log('clicked');
-      this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
-        if (token) {
-          if (!token.isValid()) {
-             this.authService.logout('email');
-          } else {
-            this.authService.refreshToken('email', token).subscribe((result: NbAuthResult) => {});
-          }
-        }
-      });
-  }*/
-
   ngOnInit() {
     this.analytics.trackPageViews();
+    this.userIdle.startWatching();
+    // console.log('start watching...');
+    this.userIdle.onTimerStart().subscribe(count => this.userIdle.stopTimer());
+    this.userIdle.onTimeout().subscribe(() => this.router.navigate(['auth/logout']));
+    /*this.userIdle.onTimeout().subscribe(() => {
+      this.userIdle.stopTimer();
+      this.router.navigate(['auth/logout']);
+    });*/
   }
 }

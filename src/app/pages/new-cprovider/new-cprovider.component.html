@@ -4,14 +4,14 @@
         <div class="row">
             <div class="col">
                 <div class="form-group">
-                    <label>Siglas:</label>
+                    <label class="form-label">Siglas:</label>
                     <input (input)="siglas_change()" type="text" nbInput fullWidth [status]="siglas_status" placeholder="Siglas" [(ngModel)]="newProvider.siglas" class="form-control" aria-describedby="sigHelp">
                     <small id="sigHelp" class="form-text text-muted">Siglas del proveedor</small>
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label>Código REEUP:</label>
+                    <label class="form-label">Código REEUP:</label>
                     <input maxlength="11" (input)="reeup_change()" type="text" nbInput fullWidth placeholder="000.0.00000" class="form-control" aria-describedby="reupHelp" [(ngModel)]="newProvider.reeup" [status]="reeup_status">
                     <small id="reupHelp" class="form-text text-muted">Código del Registro Estatal de Empresas y Unidades Presupuestadas (REEUP).</small>
                 </div>
@@ -20,7 +20,7 @@
         <div class="row">
             <div class="col">
                 <div class="form-group">
-                    <label>Nombre:</label>
+                    <label class="form-label">Nombre:</label>
                     <input (input)="name_change()" type="text" nbInput fullWidth [status]="name_status" placeholder="Nombre" [(ngModel)]="newProvider.nombre" class="form-control" aria-describedby="namHelp">
                     <small id="namHelp" class="form-text text-muted">Nombre del proveedor</small>
                 </div>
@@ -29,7 +29,7 @@
         <div class="row">
             <div class="col">
                 <div class="form-group">
-                    <label>Provincia:</label>
+                    <label class="form-label">Provincia:</label>
                     <nb-select (selectedChange)="cambiarmunicipios()" fullWidth placeholder="----" [(ngModel)]="provincia_seleccionada" [status]="provincia_status">
                         <nb-option *ngFor="let prov of provincias; let i = index" [value]="i">{{prov.nombre}}</nb-option>
                     </nb-select>
@@ -37,7 +37,7 @@
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label>Municipio:</label>
+                    <label class="form-label">Municipio:</label>
                     <nb-select (selectedChange)="seleccionarMunicipio()" fullWidth placeholder="----" [(ngModel)]="municipio_seleccionado" [status]="municipio_status">
                         <nb-option *ngFor="let mun of municipios; let i = index" [value]="i">{{mun}}</nb-option>
                     </nb-select>
@@ -46,7 +46,7 @@
           </div>
     </nb-card-body>
     <nb-card-footer>
-      <div class="float-right row">
+      <div class="form-group" style="float: right;margin-top: 5px">
         <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
         <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
       </div>
