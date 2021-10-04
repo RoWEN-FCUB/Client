@@ -45,7 +45,7 @@
     "@nebular/security": "7.0.0",
     "@nebular/theme": "^7.0.0",
     "@ng-bootstrap/ng-bootstrap": "^9.1.2",
-    "@ngtools/webpack": "^12.0.3",
+    "@ngtools/webpack": "^12.2.8",
     "@swimlane/ngx-charts": "^18.0.1",
     "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git",
     "angular-user-idle": "^2.2.6",
