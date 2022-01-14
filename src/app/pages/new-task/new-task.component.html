@@ -13,12 +13,12 @@
       </div>
       <div class="mb-3">
         <label>Resumen:</label>
-        <input (input)="resumen_change()" autofocus type="text" [(ngModel)]="task.resumen" #resumen fullWidth nbInput [status]="resumen_status" class="form-control" aria-describedby="resHelp" placeholder="Resumen de la nueva tarea">
+        <input name="resumen" (input)="resumen_change()" autofocus type="text" [(ngModel)]="task.resumen" fullWidth nbInput [status]="resumen_status" class="form-control" aria-describedby="resHelp" placeholder="Resumen de la nueva tarea">
         <small id="resHelp" class="form-text text-muted">El resumen de la tarea debe mostrar la información elemental de la misma.</small>
       </div>
       <div class="mb-3">
         <label>Descripción:</label>
-        <textarea (input)="descripcion_change()" #descripcion [(ngModel)]="task.descripcion" cols="30" rows="10" fullWidth nbInput [status]="descripcion_status" class="form-control" aria-describedby="descHelp" placeholder="Descripción de la nueva tarea"></textarea>
+        <textarea name="descripcion" (input)="descripcion_change()" [(ngModel)]="task.descripcion" cols="30" rows="10" fullWidth nbInput [status]="descripcion_status" class="form-control" aria-describedby="descHelp" placeholder="Descripción de la nueva tarea"></textarea>
         <small id="descHelp" class="form-text text-muted">Describa la tarea con todas las acciones a realizar.</small>
       </div>
       <div class="mb-3">

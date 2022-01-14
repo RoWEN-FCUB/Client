@@ -72,7 +72,7 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
       this.task.id_usuario = this.id_usuario;
       this.selectedSubs.setValue([this.id_usuario]);
     }
-    // console.log(this.fecha);
+    // console.log(this.task);
   }
 
   ngAfterViewInit() {
@@ -157,7 +157,7 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
       timerProgressBar: true,
       timer: 3000,
     });
-    if (this.selectedSubs.value.length === 0 && this.subordinados.length > 0) {
+    if ((this.selectedSubs.value && this.selectedSubs.value.length === 0) && this.subordinados.length > 0) {
       Toast.fire({
         icon: 'error',
         title: 'Debe seleccionar para que usuario(s) será la tarea.',

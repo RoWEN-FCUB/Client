@@ -602,10 +602,8 @@ export class EnergyComponent implements OnInit {
   openPlans() {
     // tslint:disable-next-line: max-line-length
     this.dialogService.open(EnergyPlansComponent, {context: {erecords: this.erecords, service: this.services[this.selectedService], company: this.company, startDate: new Date(this.selectedYear, this.selectedMonth)}}).onClose.subscribe(
-      (newWRecord: ERecord) => {
-        if (newWRecord) {
-          this.generar_rango_inicial(false);
-        }
+      res => {
+        this.generar_rango_inicial(false);
       },
     );
   }

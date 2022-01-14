@@ -36,7 +36,17 @@ export class EnergyPlansComponent implements OnInit {
 
   dayClicked(e) {
     // console.log(e);
-    if (!this.plan_establecido) {
+    if (!e[1]) {
+      for (let i = 0; i < this.erecords.length; i++) {
+        if (moment.utc(this.erecords[i].fecha).isSame(moment.utc(e[0]), 'day')) {
+          this.plan_establecido = this.erecords[i].plan;
+          this.plan_picod = this.erecords[i].plan_hpicd;
+          this.plan_picon = this.erecords[i].plan_hpicn;
+          break;
+        }
+      }
+    }
+    /*if (!this.plan_establecido) {
       for (let i = 0; i < this.erecords.length; i++) {
         if (moment.utc(this.erecords[i].fecha).isSame(moment.utc(e[0]), 'day')) {
           this.plan_establecido = this.erecords[i].plan;
@@ -125,7 +135,29 @@ export class EnergyPlansComponent implements OnInit {
           icon: 'success',
           title: 'Planes actualizados correctamente.',
         } as SweetAlertOptions);
-        this.dialogRef.close(res);
+        let inicio = new Date(this.fecha_inicio);
+        const fin = new Date(this.fecha_fin);
+        while (moment(inicio).isSameOrBefore(fin, 'day')) {
+          const newE: ERecord = {plan: this.plan_establecido, plan_hpicd: this.plan_picod, plan_hpicn: this.plan_picon,
+          fecha: inicio};
+          let found = -1;
+          for (let i = 0; i < this.erecords.length; i++) {
+            if (moment.utc(this.erecords[i].fecha).isSame(moment.utc(inicio), 'day')) {
+              found = i;
+              break;
+            }
+          }
+          if (found === -1) {
+            this.erecords.push(newE);
+          } else {
+            this.erecords[found].plan = this.plan_establecido;
+            this.erecords[found].plan_hpicd = this.plan_picod;
+            this.erecords[found].plan_hpicn = this.plan_picon;
+          }
+          inicio = moment(inicio).add(1, 'days').toDate();
+      }
+        // this.dialogRef.close(res);
+        this.saving = false;
       });
     }
   }

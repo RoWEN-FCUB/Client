@@ -47,16 +47,16 @@ export const NB_CORE_PROVIDERS = [
           // key: 'token',
         },
         // baseEndpoint: 'http://app-f2a3c51f-6e3a-4980-a984-74bda65da601.cleverapps.io/',
-        // baseEndpoint: 'http://104.207.147.123:443/',
-        // baseEndpoint: 'https://localhost:80/',
+        baseEndpoint: 'http://104.207.147.123:443/',
+        // baseEndpoint: 'http://localhost:443/',
         // baseEndpoint: 'https://169.158.137.126:3128/',
-        baseEndpoint: 'https://169.158.143.133:80/',
+        // baseEndpoint: 'http://169.158.143.133:443/',
         login: {
           endpoint: 'user/login',
           method: 'post',
           redirect: {
-            success: '/',
-            failure: null,
+            success: '/pages/dashboard',
+            failure: 'user/login',
           },
         },
         refreshToken: {
@@ -75,7 +75,7 @@ export const NB_CORE_PROVIDERS = [
     ],
     forms: {
       login: {
-        redirectDelay: 500, // delay before redirect after a successful login, while success message is shown to the user
+        redirectDelay: 1000, // delay before redirect after a successful login, while success message is shown to the user
         strategy: 'email',  // strategy id key.
         rememberMe: false,   // whether to show or not the `rememberMe` checkbox
         showMessages: {     // show/not show success/error messages
