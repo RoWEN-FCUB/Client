@@ -94,7 +94,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^12.1.2",
     "@angular/animations": "^12.1.2",
-    "@angular/cdk": "^12.1.2",
+    "@angular/cdk": "^13.2.2",
     "@angular/cli": "^12.1.2",
     "@angular/common": "^12.1.2",
     "@angular/compiler-cli": "^12.1.2",
