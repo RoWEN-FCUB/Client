@@ -30,7 +30,9 @@
                 "output": "./"
               },
               "src/favicon.ico",
-              "src/favicon.png"
+              "src/favicon.png",
+              "src/manifest.webmanifest",
+              "src/manifest.webmanifest"
             ],
             "styles": [
               {"input":"node_modules/bootstrap/dist/css/bootstrap.css"},
@@ -45,7 +47,9 @@
             "scripts": [
               "node_modules/pace-js/pace.min.js",
               "node_modules/@fortawesome/fontawesome-free/js/all.js"
-            ]
+            ],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {
@@ -108,7 +112,9 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
-              "src/favicon.png"
+              "src/favicon.png",
+              "src/manifest.webmanifest",
+              "src/manifest.webmanifest"
             ]
           }
         },
@@ -152,7 +158,7 @@
   "defaultProject": "ngx-admin-demo",
   "schematics": {
     "@schematics/angular:component": {
-      "styleext": "scss"
+      "style": "scss"
     },
     "@schematics/angular:directive": {}
   }

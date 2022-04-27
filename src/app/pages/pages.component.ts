@@ -1,9 +1,9 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { NbMenuService } from '@nebular/theme';
+import { NbMenuService, NbSidebarService } from '@nebular/theme';
 import { MENU_ITEMS } from './pages-menu';
-import { NbAuthJWTToken, NbAuthResult, NbAuthService } from '@nebular/auth';
+import { NbAuthService } from '@nebular/auth';
 import { NbAccessChecker } from '@nebular/security';
-import { switchMap } from 'rxjs/operators';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'ngx-pages',
@@ -11,27 +11,24 @@ import { switchMap } from 'rxjs/operators';
   templateUrl: 'pages.component.html',
 })
 export class PagesComponent implements OnInit {
-  constructor(private accessChecker: NbAccessChecker, private menuService: NbMenuService, private authService: NbAuthService) {
 
-  }
   menu = MENU_ITEMS;
+  deviceInfo = null;
+  isMobile = false;
 
-  /*@HostListener('document:click', ['$event'])
-  documentClick(event: MouseEvent) {
-      // your click logic
-      // console.log('clicked');
-      this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
-        if (token) {
-          if (!token.isValid()) {
-             this.authService.logout('email');
-          } else {
-            this.authService.refreshToken('email', token).subscribe((result: NbAuthResult) => {});
-          }
-        }
-      });
-  }*/
+  constructor(private accessChecker: NbAccessChecker, private menuService: NbMenuService,
+    private authService: NbAuthService, private sidebarService: NbSidebarService, private deviceService: DeviceDetectorService) {
+    this.deviceInfo = this.deviceService.getDeviceInfo();
+    this.isMobile = this.deviceService.isMobile();
+  }
 
   ngOnInit(): void {
+    if (this.isMobile) {
+      // console.log('is mobile');
+      this.menuService.onItemSelect().subscribe(() => {
+        this.sidebarService.compact('menu-sidebar');
+      });
+    }
     this.authService.onAuthenticationChange().subscribe(autenticated => {
       this.menu = [];
       this.menu.push(
@@ -57,6 +54,17 @@ export class PagesComponent implements OnInit {
           },
         );
       }
+      this.accessChecker.isGranted('view', 'delivers').subscribe(granted => {
+        if (granted) {
+          this.menu.push(
+            {
+              title: 'Entregas',
+              icon: 'shopping-cart-outline',
+              link: '/pages/delivers',
+            },
+          );
+        }
+      });
       this.accessChecker.isGranted('view', 'tasks').subscribe(granted => {
         if (granted) {
           this.menu.push(

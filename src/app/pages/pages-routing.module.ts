@@ -14,6 +14,7 @@ import { GeeComponent } from './gee/gee.component';
 import { AdminCompanyComponent } from './admin-company/admin-company.component';
 import { AdminServiceComponent } from './admin-service/admin-service.component';
 import { ComercialComponent } from './comercial/comercial.component';
+import { DeliversComponent } from './delivers/delivers.component';
 // import { from } from 'rxjs';
 const routes: Routes = [{
   path: '',
@@ -31,6 +32,12 @@ const routes: Routes = [{
     {
       path: 'editProfile',
       component: EditProfileComponent,
+      canActivate: [RoleGuard],
+      data: {role: ['user', 'tec', 'energy', 'comercial', 'admin']},
+    },
+    {
+      path: 'delivers',
+      component: DeliversComponent,
       canActivate: [RoleGuard],
       data: {role: ['user', 'tec', 'energy', 'comercial', 'admin']},
     },

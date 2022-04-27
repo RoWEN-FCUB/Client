@@ -15,14 +15,14 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private analytics: AnalyticsService, private iconLibraries: NbIconLibraries, private userIdle: UserIdleService,
+  constructor(private iconLibraries: NbIconLibraries, private userIdle: UserIdleService,
     protected router: Router) {
     this.iconLibraries.registerFontPack('font-awesome', { iconClassPrefix: 'fa' });
     this.iconLibraries.setDefaultPack('font-awesome'); // <---- set as default
   }
 
   ngOnInit() {
-    this.analytics.trackPageViews();
+    //this.analytics.trackPageViews();
     this.userIdle.startWatching();
     // console.log('start watching...');
     this.userIdle.onTimerStart().subscribe(count => this.userIdle.stopTimer());

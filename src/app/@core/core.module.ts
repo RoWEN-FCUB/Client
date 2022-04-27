@@ -97,7 +97,7 @@ export const NB_CORE_PROVIDERS = [
       },
       user: {
         parent: 'guest',
-        view: ['profile', 'tasks', 'notifications'], /*
+        view: ['profile', 'tasks', 'notifications', 'delivers'], /*
         create: '*',
         edit: '*',
         remove: '*',*/
@@ -108,7 +108,7 @@ export const NB_CORE_PROVIDERS = [
       },
       tec: {
         parent: 'user',
-        view: ['workshop'],
+        view: ['workshop', 'energy'],
       },
       comercial: {
         parent: 'user',

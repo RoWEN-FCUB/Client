@@ -89,6 +89,8 @@ import { UserIdleModule } from 'angular-user-idle';
 // import { CountdownPipe } from './pipes/countdown.pipe';
 // import { NgxScrollTopModule } from 'ngx-scrolltop';
 import ipserver from './ipserver';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 // here is the default text string
 @Injectable()
 export class DefaultIntl extends OwlDateTimeIntl {
@@ -202,6 +204,12 @@ export class DefaultIntl extends OwlDateTimeIntl {
     // NgxPaginationModule,
     NgxChartsModule,
     UserIdleModule.forRoot({idle: 300, timeout: 10, ping: 120}),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   providers: [
     {

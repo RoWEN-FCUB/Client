@@ -4,10 +4,9 @@
       <nb-icon icon="menu-2-outline"></nb-icon>
     </a>
     <a class="logo" href="#" (click)="navigateHome()"><img src="assets/images/logo_3.png" width="168px" height="60px"></a>
-    <a class="logo" href="#" (click)="navigateHome()"><span style="size: 16px; font-weight: bold;" class="text-muted">SISTEMA DE GESTION INTERNA</span></a>
+    <a *ngIf="!isMobile" class="logo" href="#" (click)="navigateHome()"><span style="size: 16px; font-weight: bold;" class="text-muted">SISTEMA DE GESTION INTERNA</span></a>
   </div>
 </div>
-<!--<countdown [config]="prettyConfig" class="custom-style"></countdown>-->
 <div class="header-container">
   <nb-actions size="small" *nbIsGranted="['view', 'profile']">
     <!--<nb-action><span class="text-muted" nbTooltip="Tiempo de sesión restante" nbTooltipStatus="info"><countdown (event)="tokenExpired($event)" [config]="prettyConfig" class="custom-style"></countdown></span></nb-action>-->

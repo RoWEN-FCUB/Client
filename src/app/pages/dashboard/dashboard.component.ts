@@ -3,6 +3,7 @@ import { CompanyService } from '../../services/company.service';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { Company } from '../../models/Company';
 import { WeatherService } from '../../services/weather.service';
+import { DeviceDetectorService } from 'ngx-device-detector';
 @Component({
   selector: 'ngx-dashboard',
   templateUrl: './dashboard.component.html',
@@ -26,9 +27,13 @@ export class DashboardComponent implements OnInit {
     direccion: '', // viento
     lluvia: 0,
   };
-  constructor(private authService: NbAuthService, private companyService: CompanyService, private weather: WeatherService) { }
+  deviceInfo = null;
+  isMobile = false;
+  constructor(private authService: NbAuthService, private companyService: CompanyService, private weather: WeatherService, private deviceService: DeviceDetectorService) { }
 
   ngOnInit(): void {
+    this.deviceInfo = this.deviceService.getDeviceInfo();
+    this.isMobile = this.deviceService.isMobile();
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
       this.weather.getWeather(this.user.municipio).subscribe((res: any) => {
