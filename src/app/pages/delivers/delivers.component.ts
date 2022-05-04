@@ -8,17 +8,13 @@ import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
   templateUrl: './delivers.component.html',
   styleUrls: ['./delivers.component.scss'],
 })
-export class DeliversComponent implements OnInit {
+export class DeliversComponent {
   public webcamImage: WebcamImage = null;
   private trigger: Subject<void> = new Subject<void>();
   public valeStatus = 'info';
   public videoWidth: Number;
 
   constructor() { }
-
-  ngOnInit(): void {
-
-  }
 
   triggerSnapshot(): void {
     this.trigger.next();

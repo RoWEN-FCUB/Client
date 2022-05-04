@@ -50,7 +50,6 @@ import { DEFAULT_THEME } from './styles/theme.default';
 import { COSMIC_THEME } from './styles/theme.cosmic';
 import { CORPORATE_THEME } from './styles/theme.corporate';
 import { DARK_THEME } from './styles/theme.dark';
-import { CountdownModule } from 'ngx-countdown';
 
 const NB_MODULES = [
   NbLayoutModule,
@@ -74,7 +73,6 @@ const NB_MODULES = [
   NbDatepickerModule,
   NbAlertModule,
   NbListModule,
-  CountdownModule,
 ];
 const COMPONENTS = [
   SwitcherComponent,

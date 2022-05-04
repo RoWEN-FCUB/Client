@@ -47,7 +47,7 @@ import { DeliversComponent } from './delivers/delivers.component';
 // import { WpartsComponent } from './wparts/wparts.component';
 // import { AdminUserServicesComponent } from './admin-user-services/admin-user-services.component';
 // import { NewServiceComponent } from './new-service/new-service.component';
-
+import { WebcamModule } from 'ngx-webcam';
 
 @Injectable()
 export class DefaultIntl extends OwlDateTimeIntl {
@@ -146,6 +146,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     FontAwesomeModule,
     NbAutocompleteModule,
     // NgxScrollTopModule,
+    WebcamModule,
   ],
   declarations: [
     PagesComponent,

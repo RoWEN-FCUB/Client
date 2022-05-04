@@ -1,7 +1,8 @@
 {
   "compileOnSave": false,
+  "paths": { "path": [ "./node_modules/path-browserify" ] },
   "compilerOptions": {    
-    "importHelpers": true,
+    "importHelpers": false,
     "module": "esnext",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
@@ -18,7 +19,7 @@
       "dom"
     ],
     "plugins": [
-      { "name": "tslint-language-service"}
+      {}
     ]
   }
 }

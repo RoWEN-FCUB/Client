@@ -48,7 +48,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE, OwlDateTimeIntl } from '@danielmoncada/angular-datetime-picker';
 import { UserService } from './services/user.service';
 import { NotificationService } from './services/notification.service';
-import { AuthInterceptor } from './services/authInterceptor';
+// import { AuthInterceptor } from './services/authInterceptor';
 import { UploadImgComponent } from './pages/upload-img/upload-img.component';
 import { NewTaskComponent } from './pages/new-task/new-task.component';
 import { NewObsComponent } from './pages/new-obs/new-obs.component';
@@ -56,7 +56,6 @@ import { NewUserComponent } from './pages/new-user/new-user.component';
 import { SelectSubsComponent } from './pages/select-subs/select-subs.component';
 // import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { AuthGuard } from './services/auth-guard.service';
-import { ExportAsModule } from 'ngx-export-as';
 import { NewWRecordComponent } from './pages/new-wrecord/new-wrecord.component';
 import { UpdtWRecordComponent } from './pages/updt-wrecord/updt-wrecord.component';
 // import { AnalyticsService } from './@core/utils/analytics.service';
@@ -91,6 +90,7 @@ import { UserIdleModule } from 'angular-user-idle';
 import ipserver from './ipserver';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+
 // here is the default text string
 @Injectable()
 export class DefaultIntl extends OwlDateTimeIntl {
@@ -166,7 +166,6 @@ export class DefaultIntl extends OwlDateTimeIntl {
     ReactiveFormsModule,
     NbAutocompleteModule,
     NbFormFieldModule,
-    ExportAsModule,
     NbSecurityModule,
     NbBadgeModule,
     NbListModule,
@@ -208,7 +207,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
   providers: [
