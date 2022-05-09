@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
+import { DeliverService } from '../../services/deliver.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -13,8 +14,34 @@ export class DeliversComponent {
   private trigger: Subject<void> = new Subject<void>();
   public valeStatus = 'info';
   public videoWidth: Number;
+  code: string = '';
+  deliver = {
+    fecha: '',
+    estado: '',
+    proceso: '',
+    importe: '',
+    comprador: '',
+    destinatario: ''
+  }
 
-  constructor() { }
+  constructor(private deliverService: DeliverService) {
+    
+  }
+
+  searchCode() {
+    this.deliverService.getDeliver(this.code).subscribe((res: any[]) => {
+      // console.log(res);
+      if (res.length > 0) {
+        this.deliver.fecha = res[0][2];
+        this.deliver.estado = res[0][3];
+        this.deliver.proceso = res[0][4];
+        this.deliver.importe = res[0][12];
+        this.deliver.comprador = res[0][6];
+        this.deliver.destinatario = res[0][8];
+        // console.log(this.deliver);
+      }
+    });
+  }
 
   triggerSnapshot(): void {
     this.trigger.next();

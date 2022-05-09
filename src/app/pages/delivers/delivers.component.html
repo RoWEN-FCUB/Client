@@ -4,7 +4,54 @@
         <div class="row">
             <div class="col">
                 <div class="form-group mb-3">
-                    <input #vale maxlength="20" type="text" nbInput autofocus fullWidth placeholder="Vale" class="form-control" [status]="valeStatus">
+                    <nb-form-field>
+                        <input #vale maxlength="20" type="text" nbInput autofocus fullWidth placeholder="Vale" class="form-control" [(ngModel)]="code" [status]="valeStatus">
+                        <button *ngIf="code.length > 0" class="shadow-none" type="button" nbSuffix nbButton ghost (click)="searchCode()">
+                            <nb-icon icon="search-outline" nbTooltip="Mostrar datos del vale" nbTooltipStatus="info"></nb-icon>
+                          </button>
+                    </nb-form-field>                    
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="deliver.fecha">
+            <div class="col">
+                <div class="form-group">
+                    <label>Fecha: <b>{{deliver.fecha}}</b></label>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="deliver.estado">
+            <div class="col">
+                <div class="form-group">
+                    <label>Estado: <b>{{deliver.estado}}</b></label>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="deliver.proceso">
+            <div class="col">
+                <div class="form-group">
+                    <label>Proceso: <b>{{deliver.proceso}}</b></label>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="deliver.importe">
+            <div class="col">
+                <div class="form-group">
+                    <label>Importe: <b>{{deliver.importe}}</b></label>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="deliver.comprador">
+            <div class="col">
+                <div class="form-group">
+                    <label>Comprador: <b>{{deliver.comprador}}</b></label>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="deliver.destinatario">
+            <div class="col">
+                <div class="form-group">
+                    <label>Destinatario: <b>{{deliver.destinatario}}</b></label>
                 </div>
             </div>
         </div>
