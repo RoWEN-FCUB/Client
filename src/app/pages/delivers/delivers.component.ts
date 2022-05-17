@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { DeliverService } from '../../services/deliver.service';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -29,6 +30,13 @@ export class DeliversComponent {
   }
 
   searchCode() {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timerProgressBar: true,
+      timer: 3000,
+    });
     this.deliverService.getDeliver(this.code).subscribe((res: any[]) => {
       // console.log(res);
       if (res.length > 0) {
@@ -39,7 +47,17 @@ export class DeliversComponent {
         this.deliver.comprador = res[0][6];
         this.deliver.destinatario = res[0][8];
         // console.log(this.deliver);
+      } else {
+        Toast.fire({
+          icon: 'warning',
+          title: 'Vale no encontrado',
+        } as SweetAlertOptions);
       }
+    }, (error: any) => {
+      Toast.fire({
+        icon: 'error',
+        title: 'Error al contactar con el servidor.',
+      } as SweetAlertOptions);
     });
   }
 
@@ -71,6 +89,48 @@ export class DeliversComponent {
 
    deleteImage(): void {
      this.webcamImage = null;
+   }
+
+   code_change(): void {
+    const valeReg = new RegExp(/^B[0-9]{4,25}$/);
+    if (valeReg.test(this.code)) {
+      this.valeStatus = 'success';
+    } else {
+      this.valeStatus = 'danger'
+    }
+   }
+
+   saveImage() : void {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timerProgressBar: true,
+      timer: 3000,
+    });    
+    if (this.valeStatus === 'success') {
+      this.deliverService.saveDeliver({code: this.code, img: this.webcamImage.imageAsBase64}).subscribe(res => {
+        Toast.fire({
+          icon: 'success',
+          title: 'Vale guardado correctamente.',
+        } as SweetAlertOptions);
+        this.valeStatus = 'info';
+        this.webcamImage = null;
+        this.code = '';
+      }, (error: any) => {
+        Toast.fire({
+          icon: 'error',
+          title: error.error.text,
+        } as SweetAlertOptions);
+        console.log(error);
+      });
+    } else {
+    Toast.fire({
+      icon: 'error',
+      title: 'Debe escribir el código del vale.',
+    } as SweetAlertOptions);
+    this.valeStatus = 'danger';
+    }
    }
 
 }

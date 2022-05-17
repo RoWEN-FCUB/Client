@@ -5,7 +5,7 @@
             <div class="col">
                 <div class="form-group mb-3">
                     <nb-form-field>
-                        <input #vale maxlength="20" type="text" nbInput autofocus fullWidth placeholder="Vale" class="form-control" [(ngModel)]="code" [status]="valeStatus">
+                        <input (input)="code_change()" #vale maxlength="20" type="text" nbInput autofocus fullWidth placeholder="Vale" class="form-control" [(ngModel)]="code" [status]="valeStatus">
                         <button *ngIf="code.length > 0" class="shadow-none" type="button" nbSuffix nbButton ghost (click)="searchCode()">
                             <nb-icon icon="search-outline" nbTooltip="Mostrar datos del vale" nbTooltipStatus="info"></nb-icon>
                           </button>
@@ -62,7 +62,7 @@
                     <img [src]="webcamImage.imageAsDataUrl" width="225"/>
                 </div>
                 <div class="form-group mt-2" *ngIf="webcamImage">
-                    <button nbButton status="success">Guardar</button>
+                    <button nbButton status="success" (click)="saveImage()">Guardar</button>
                     <button nbButton style="margin-left: 5px" (click)="deleteImage()" status="danger">Borrar</button>
                 </div>
             </div>

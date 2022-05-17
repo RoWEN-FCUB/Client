@@ -12,4 +12,8 @@ export class DeliverService {
   getDeliver(code: string) {
     return this.http.get(ipserver + 'deliver/' + code, {responseType: 'json'});
   }
+
+  saveDeliver(deliver) {
+    return this.http.post(ipserver + 'deliver/', deliver);
+  }
 }

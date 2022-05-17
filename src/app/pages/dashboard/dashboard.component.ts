@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
           // console.log(this.tiempo);
         }
         // console.log(res);
-      });
+      }, (error: any) => {});
       this.companyService.getOne(this.user.id_emp).subscribe((res: Company) => {
         this.company = res;
       });
