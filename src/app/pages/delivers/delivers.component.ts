@@ -3,6 +3,8 @@ import { Observable, Subject } from 'rxjs';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { DeliverService } from '../../services/deliver.service';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import ipserver from '../../ipserver';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -22,11 +24,17 @@ export class DeliversComponent {
     proceso: '',
     importe: '',
     comprador: '',
-    destinatario: ''
-  }
+    destinatario: '',
+  };
+  modname: string = 'Registrar vale';
+  imgurl: string = '';
+  user = {id: 0};
+  public remoteImg: string = '';
 
-  constructor(private deliverService: DeliverService) {
-    
+  constructor(private deliverService: DeliverService, private authService: NbAuthService) {
+    this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
+      this.user = token.getPayload();
+    });
   }
 
   searchCode() {
@@ -40,12 +48,14 @@ export class DeliversComponent {
     this.deliverService.getDeliver(this.code).subscribe((res: any[]) => {
       // console.log(res);
       if (res.length > 0) {
+        this.modname = 'Buscar vale';
         this.deliver.fecha = res[0][2];
         this.deliver.estado = res[0][3];
         this.deliver.proceso = res[0][4];
         this.deliver.importe = res[0][12];
         this.deliver.comprador = res[0][6];
         this.deliver.destinatario = res[0][8];
+        this.imgurl = ipserver + 'public/Vales/' + this.code + '.png';
         // console.log(this.deliver);
       } else {
         Toast.fire({
@@ -88,7 +98,13 @@ export class DeliversComponent {
    }
 
    deleteImage(): void {
-     this.webcamImage = null;
+    this.valeStatus = 'info';
+    this.modname = 'Registrar vale';
+    this.webcamImage = null;
+    this.code = '';
+    Object.keys(this.deliver).forEach(function(index) {
+      this.deliver[index] = '';
+    }.bind(this));
    }
 
    code_change(): void {
@@ -100,16 +116,16 @@ export class DeliversComponent {
     }
    }
 
-   saveImage() : void {
+   saveImage(): void {
     const Toast = Swal.mixin({
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
       timerProgressBar: true,
       timer: 3000,
-    });    
+    });
     if (this.valeStatus === 'success') {
-      this.deliverService.saveDeliver({code: this.code, img: this.webcamImage.imageAsBase64}).subscribe(res => {
+      this.deliverService.saveDeliver({code: this.code, img: this.webcamImage.imageAsBase64, id_user: this.user.id}).subscribe(res => {
         Toast.fire({
           icon: 'success',
           title: 'Vale guardado correctamente.',

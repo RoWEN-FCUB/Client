@@ -1,5 +1,5 @@
 <nb-card accent="info">
-    <nb-card-header><div class="text-center">Registrar vale</div></nb-card-header>
+    <nb-card-header><div class="text-center">{{modname}}</div></nb-card-header>
     <nb-card-body>
         <div class="row">
             <div class="col">
@@ -57,13 +57,17 @@
         </div>
         <div class="row mt-3">
             <div class="col">
-                <webcam *ngIf="!webcamImage" [width]="videoWidth" (click)="triggerSnapshot()" (initError)="handleInitError($event)" [trigger]="triggerObservable" (imageCapture)="handleImage($event)"></webcam>
+                <img width="225" [src]="imgurl" *ngIf="modname === 'Buscar vale'"/>
+                <webcam *ngIf="!webcamImage && modname === 'Registrar vale'" [width]="videoWidth" (click)="triggerSnapshot()" (initError)="handleInitError($event)" [trigger]="triggerObservable" (imageCapture)="handleImage($event)"></webcam>
                 <div class="snapshot" *ngIf="webcamImage">
                     <img [src]="webcamImage.imageAsDataUrl" width="225"/>
                 </div>
                 <div class="form-group mt-2" *ngIf="webcamImage">
                     <button nbButton status="success" (click)="saveImage()">Guardar</button>
                     <button nbButton style="margin-left: 5px" (click)="deleteImage()" status="danger">Borrar</button>
+                </div>
+                <div class="form-group mt-2" *ngIf="modname === 'Buscar vale'">
+                    <button nbButton status="info" (click)="deleteImage()">Volver</button>
                 </div>
             </div>
         </div>
