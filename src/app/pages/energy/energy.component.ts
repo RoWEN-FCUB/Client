@@ -204,6 +204,12 @@ export class EnergyComponent implements OnInit {
         const comp = this.company;
         const fecha = this.erecords[index].fecha;
         const selserv = this.selectedService;
+        let servname = '';
+        if (selserv === -1) {
+          servname = this.company.nombre;
+        } else {
+          servname = this.services[selserv].nombre;
+        }
         reader.onload = function (e: any) {
           const contents = e.target.result;
           workBook.xlsx.load(contents).then(data => {
@@ -238,8 +244,8 @@ export class EnergyComponent implements OnInit {
               if (res[i].aplica_acomodo) {
                 acomodo_carga = 'X';
               }
-              const edate = moment.utc(fecha.toString().substr(0, fecha.toString().indexOf('T'))).format('DD-MM-YYYY');
-              const fdate = moment.utc(fecha.toString().substr(0, fecha.toString().indexOf('T'))).locale('es').format('DD/MM/YYYY');
+              // const edate = moment.utc(fecha.toString().substr(0, fecha.toString().indexOf('T'))).format('DD-MM-YYYY');
+              const fdate = moment.utc(fecha.toString().substring(0, fecha.toString().indexOf('T'))).locale('es').format('DD/MM/YYYY');
               const month = moment.utc(fecha).locale('es').format('MMMM').toUpperCase();
               workBook.worksheets[0].getCell(1, 6).value = month;
               workBook.worksheets[0].getCell(1, 8).value = fdate;
@@ -289,7 +295,7 @@ export class EnergyComponent implements OnInit {
             workBook.xlsx.writeBuffer().then(data1 => {
               const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
               // tslint:disable-next-line: max-line-length
-              fsaver.saveAs(blobUpdate, 'Modelo 5 ' + moment.utc(fecha.toString().substr(0, fecha.toString().indexOf('T'))).format('DD-MM-YYYY') + '.xlsx');
+              fsaver.saveAs(blobUpdate, 'Modelo 5 ' + servname + ' ' + moment.utc(fecha.toString().substring(0, fecha.toString().indexOf('T'))).format('DD-MM-YYYY') + '.xlsx');
             });
           });
         };

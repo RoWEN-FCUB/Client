@@ -93,22 +93,22 @@ export class PagesComponent implements OnInit {
             {
               title: 'Energía',
               icon: 'flash-outline',
-              link: '/pages/energy',
+              children: [
+                {
+                  title: 'Bitácora',
+                  icon: 'flash-outline',
+                  link: '/pages/energy',
+                },
+                {
+                  title: 'GEE',
+                  icon: 'charging-outline',
+                  link: '/pages/gee',
+                },
+              ],
             },
           );
         }
       });
-      /*this.accessChecker.isGranted('view', 'gee').subscribe(granted => {
-        if (granted) {
-          this.menu.push(
-            {
-              title: 'GEE',
-              icon: 'charging-outline',
-              link: '/pages/gee',
-            },
-          );
-        }
-      });*/
       this.accessChecker.isGranted('view', 'comercial').subscribe(granted => {
         if (granted) {
           this.menu.push(
@@ -141,6 +141,11 @@ export class PagesComponent implements OnInit {
                   title: 'Servicios',
                   icon: 'layers-outline',
                   link: '/pages/admin/service',
+                },
+                {
+                  title: 'GEE',
+                  icon: 'charging-outline',
+                  link: '/pages/admin/gee',
                 },
               ],
             },
