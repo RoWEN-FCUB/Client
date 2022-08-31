@@ -4,7 +4,6 @@ import { EService } from '../../models/EService';
 import { Company } from '../../models/Company';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { EserviceService } from '../../services/eservice.service';
-import { CompanyService } from '../../services/company.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -112,7 +111,7 @@ export class NewServiceComponent implements OnInit {
   @ViewChild('Tab1') Tab1El: NbTabComponent;
   @ViewChild('Tab2') Tab2El: NbTabComponent;
 
-  constructor(protected dialogRef: NbDialogRef<any>, private eserviceService: EserviceService, private companyService: CompanyService) { }
+  constructor(protected dialogRef: NbDialogRef<any>, private eserviceService: EserviceService) { }
 
   ngOnInit(): void {
     this.empresa_seleccionada = this.newService.id_emp;

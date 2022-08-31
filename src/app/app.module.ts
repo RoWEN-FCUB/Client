@@ -90,6 +90,7 @@ import { UserIdleModule } from 'angular-user-idle';
 import ipserver from './ipserver';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { NewGeeComponent } from './pages/new-gee/new-gee.component';
 
 // here is the default text string
 @Injectable()
@@ -160,7 +161,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     AppComponent, UploadImgComponent, NewTaskComponent, NewObsComponent, NewErecordComponent,
     LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
     UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent,
-    WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent],
+    WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   imports: [
     ReactiveFormsModule,
@@ -229,11 +230,11 @@ export class DefaultIntl extends OwlDateTimeIntl {
   exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
             NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent,
             NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent, WpartsComponent,
-            NewCproductComponent, NewCproviderComponent, NewCreceiptComponent],
+            NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent],
   entryComponents: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
                     NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent, NewCompanyComponent,
                     NewServiceComponent, AdminUserServicesComponent, WpartsComponent, NewCproductComponent, NewCproviderComponent,
-                    NewCreceiptComponent],
+                    NewCreceiptComponent, NewGeeComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {

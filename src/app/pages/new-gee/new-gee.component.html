@@ -1,0 +1,57 @@
+<nb-card accent="info" size="large">
+    <nb-card-header><div class="text-center">{{title}}</div></nb-card-header>
+    <nb-card-body>
+        <div class="row">
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label class="form-label">Empresa:</label>
+                    <nb-select (selectedChange)="seleccionarEmpresa()" fullWidth placeholder="----" [(ngModel)]="empresa_seleccionada" [status]="company_status">
+                        <nb-option *ngFor="let company of companies; let i = index" [value]="i">{{company.siglas}}</nb-option>
+                    </nb-select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label class="form-label">Servicio:</label>
+                    <nb-select (selectedChange)="seleccionarServicio()" fullWidth placeholder="----" [(ngModel)]="servicio_seleccionado" [status]="service_status">
+                        <nb-option *ngFor="let serv of services; let i = index" [value]="i">{{serv.nombre}}</nb-option>
+                    </nb-select>
+                </div>
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label class="form-label">ID:</label>
+                    <input (input)="idgee_change()" maxlength="50" type="text" nbInput fullWidth placeholder="ID" class="form-control" aria-describedby="idHelp" [(ngModel)]="newGEE.idgee" [status]="idgee_status">
+                    <small id="idHelp" class="form-text text-muted">Código identificador del grupo. Entre 1 y 50 caracteres.</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label class="form-label">Marca:</label>
+                    <input (input)="marca_change()" maxlength="50" type="text" nbInput fullWidth placeholder="Marca" class="form-control" aria-describedby="marcaHelp" [(ngModel)]="newGEE.marca" [status]="marca_status">
+                    <small id="marcaHelp" class="form-text text-muted">Fabricante del grupo. Entre 1 y 50 caracteres.</small>
+                </div>
+            </div>            
+        </div> 
+        <div class="row">
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label class="form-label">KVA:</label>
+                    <input (input)="kva_change()" maxlength="5" type="text" nbInput placeholder="KVA" class="form-control" aria-describedby="kvaHelp" [(ngModel)]="newGEE.kva" [status]="kva_status">
+                    <small id="kvaHelp" class="form-text text-muted">Potencia del grupo en KVA. Solo dígitos.</small>
+                </div>
+            </div>
+            <div class="col">
+                
+            </div>            
+        </div> 
+    </nb-card-body>
+    <nb-card-footer>
+        <div class="form-group" style="float: right;margin-top: 5px">
+            <button nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+            <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+        </div>
+    </nb-card-footer>
+</nb-card>

@@ -49,6 +49,7 @@ import { DeliversComponent } from './delivers/delivers.component';
 // import { NewServiceComponent } from './new-service/new-service.component';
 import { WebcamModule } from 'ngx-webcam';
 import { AdminGeeComponent } from './admin-gee/admin-gee.component';
+// import { NewGeeComponent } from './new-gee/new-gee.component';
 
 @Injectable()
 export class DefaultIntl extends OwlDateTimeIntl {
@@ -167,7 +168,8 @@ export class DefaultIntl extends OwlDateTimeIntl {
     DeviceStatePipe,
     StateDescriptionPipe,
     // tslint:disable-next-line: max-line-length
-    ShortSerialPipe, ShortNamePipe, EnergyComponent, GeeComponent, AdminCompanyComponent, AdminServiceComponent, ComercialComponent, DeliversComponent, AdminGeeComponent,
+    ShortSerialPipe, ShortNamePipe, EnergyComponent, GeeComponent, AdminCompanyComponent, AdminServiceComponent, ComercialComponent, DeliversComponent, AdminGeeComponent, 
+    // NewGeeComponent,
     // NewCreceiptComponent,
     // NewCproductComponent, NewCproviderComponent,
     // WpartsComponent,
