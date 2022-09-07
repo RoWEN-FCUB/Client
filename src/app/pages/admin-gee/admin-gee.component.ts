@@ -33,4 +33,34 @@ export class AdminGeeComponent implements OnInit {
     });
   }
 
+  deleteGEE(id: number) {
+    Swal.fire({
+      title: 'Confirma que desea eliminar el grupo "' + this.gees[id].idgee + '"?',
+      text: 'Se eliminarán todos sus datos del sistema incluyendo el registro de operaciones .',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí­',
+      cancelButtonText: 'No',
+    } as SweetAlertOptions).then((result) => {
+      if (result.value) {
+        this.geeService.deleteGEE(this.gees[id].id).subscribe(res => {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 3000,
+          });
+          Toast.fire({
+            icon: 'success',
+            title: 'Grupo eliminado correctamente.',
+          } as SweetAlertOptions);
+          this.getGEEs();
+        });
+      }
+    });
+  }
+
 }

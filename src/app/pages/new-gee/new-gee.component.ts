@@ -5,6 +5,7 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { NbDialogRef } from '@nebular/theme';
 import { CompanyService } from '../../services/company.service';
 import { EserviceService } from '../../services/eservice.service';
+import { GeeService } from '../../services/gee.service';
 import { GEE } from '../../models/GEE';
 
 @Component({
@@ -32,7 +33,11 @@ export class NewGeeComponent implements OnInit {
   empresa_seleccionada = -1;
   servicio_seleccionado = -1;
 
-  constructor(protected dialogRef: NbDialogRef<any>, private companyService: CompanyService, private eservice: EserviceService) { }
+  constructor(
+    protected dialogRef: NbDialogRef<any>,
+    private companyService: CompanyService,
+    private eservice: EserviceService,
+    private geeService: GeeService) { }
 
   ngOnInit(): void {
     this.companyService.getCompanies().subscribe((comp: Company[]) => {
@@ -80,6 +85,24 @@ export class NewGeeComponent implements OnInit {
         title: 'Debe seleccionar el servicio al que pertenece el nuevo grupo.',
       } as SweetAlertOptions);
       this.service_status = 'danger';
+    } else if (this.idgee_status === 'danger' || !this.newGEE.idgee) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir el código identificador del grupo.',
+      } as SweetAlertOptions);
+      this.idgee_status = 'danger';
+    } else if (this.marca_status === 'danger' || !this.newGEE.marca) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir el nombre del fabricante del grupo.',
+      } as SweetAlertOptions);
+      this.marca_status = 'danger';
+    } else if (this.kva_status === 'danger' || !this.newGEE.kva) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir la capacidad de generación del grupo.',
+      } as SweetAlertOptions);
+      this.kva_status = 'danger';
     } else {
       this.save();
     }
@@ -93,7 +116,15 @@ export class NewGeeComponent implements OnInit {
       timerProgressBar: true,
       timer: 3000,
     });
-    
+    if (!this.newGEE.id) {
+      this.geeService.saveGEE(this.newGEE).subscribe(res => {
+        Toast.fire({
+          icon: 'success',
+          title: 'Grupo creado correctamente.',
+        } as SweetAlertOptions);
+        this.close();
+      });
+    }
   }
 
   idgee_change() {

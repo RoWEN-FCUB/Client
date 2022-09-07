@@ -159,7 +159,7 @@ export class NewErecordComponent implements OnInit {
   lectura_hpicd2_change() {
     const nameregexp = new RegExp(/^[1-9]{1}[0-9]*((\.[0-9]+)|[0-9]*)$/);
     // tslint:disable-next-line: max-line-length
-    if (nameregexp.test(this.newERecord.lectura_hpicd2.toString()) && Number(this.newERecord.lectura_hpicd2) > Number(this.newERecord.lectura_hpicd1)) {
+    if (nameregexp.test(this.newERecord.lectura_hpicd2.toString()) && Number(this.newERecord.lectura_hpicd2) >= Number(this.newERecord.lectura_hpicd1)) {
       this.lectura_hpicd2_status = 'success';
     } else {
       this.lectura_hpicd2_status = 'danger';
