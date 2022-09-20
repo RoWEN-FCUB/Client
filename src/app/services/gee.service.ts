@@ -14,6 +14,14 @@ export class GeeService {
     return this.http.get(ipserver + 'gee/list/', {responseType: 'json'});
   }
 
+  listGEEsByUser(id: number) {
+    return this.http.get(ipserver + 'gee/listGEEByUser/' + id, {responseType: 'json'});
+  }
+
+  listGEERecords(id: number) {
+    return this.http.get(ipserver + 'gee/listGEERecords/' + id, {responseType: 'json'});
+  }
+
   saveGEE(newGEE: GEE) {
     return this.http.post(ipserver + 'gee', newGEE);
   }

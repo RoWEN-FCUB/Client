@@ -11,11 +11,11 @@
           <thead>
             <tr>
               <th>#</th>
+              <th>ID</th>
               <th>EMPRESA</th>              
               <th>SERVICIO</th>
               <th>PROVINCIA</th>
               <th>MUNICIPIO</th>
-              <th>ID</th>
               <th>MARCA</th>
               <th>KVA</th>
               <th></th>
@@ -25,16 +25,16 @@
           <tbody>
             <tr *ngFor="let gee of gees; let i = index">
               <th scope="row">{{i+1}}</th>
+              <td>{{gee.idgee}}</td>
               <td>{{gee.empresa}}</td>
               <td>{{gee.servicio}}</td>
               <td>{{gee.provincia}}</td>
               <td>{{gee.municipio}}</td>
-              <td>{{gee.idgee}}</td>
               <td>{{gee.marca}}</td>
               <td>{{gee.kva}}</td>
               <td>
-                <nb-icon style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar GEE" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
-                <nb-icon style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar GEE" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                <nb-icon (click)="openEdit(i)" style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar GEE" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                <nb-icon (click)="deleteGEE(i)" style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar GEE" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
               </td>
             </tr>
           </tbody>

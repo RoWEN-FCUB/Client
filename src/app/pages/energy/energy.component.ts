@@ -295,7 +295,7 @@ export class EnergyComponent implements OnInit {
             workBook.xlsx.writeBuffer().then(data1 => {
               const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
               // tslint:disable-next-line: max-line-length
-              fsaver.saveAs(blobUpdate, 'Modelo 5 ' + servname + ' ' + moment.utc(fecha.toString().substring(0, fecha.toString().indexOf('T'))).format('DD-MM-YYYY') + '.xlsx');
+              fsaver.saveAs(blobUpdate, 'Modelo 5 ' + servname + ' Consumo ' + moment.utc(fecha.toString().substring(0, fecha.toString().indexOf('T'))).format('DD-MM-YYYY') + '.xlsx');
             });
           });
         };
@@ -348,19 +348,32 @@ export class EnergyComponent implements OnInit {
   }
 
   deleteERecord(id: number) {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timerProgressBar: true,
-      timer: 3000,
-    });
-    this.energyService.deleteERecord(id).subscribe(res => {
-      Toast.fire({
-        icon: 'success',
-        title: 'Registro eliminado.',
-      } as SweetAlertOptions);
-      this.generar_rango_inicial(true);
+    Swal.fire({
+      title: 'Confirma que desea eliminar el registro?',
+      text: 'Se eliminarán todos sus datos del sistema, incluyendo el plan diario.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí­',
+      cancelButtonText: 'No',
+    } as SweetAlertOptions).then((result) => {
+      if (result.value) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 3000,
+        });
+        this.energyService.deleteERecord(id).subscribe(res => {
+          Toast.fire({
+            icon: 'success',
+            title: 'Registro eliminado.',
+          } as SweetAlertOptions);
+          this.generar_rango_inicial(true);
+        });
+      }
     });
   }
 

@@ -9,4 +9,7 @@ export interface GEE {
     servicio?: string;
     provincia?: string;
     municipio?: string;
+    ic_scarga?: number;
+    ic_ccargad?: number;
+    ic_ccargan?: number;
 }

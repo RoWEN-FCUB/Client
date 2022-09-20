@@ -33,10 +33,17 @@ export class AdminGeeComponent implements OnInit {
     });
   }
 
+  openEdit(id: number) {
+    // tslint:disable-next-line: max-line-length
+    this.dialogService.open(NewGeeComponent, {context: {title: 'Editar grupo ' + this.gees[id].idgee, newGEE: this.gees[id]}}).onClose.subscribe(res => {
+      this.getGEEs();
+    });
+  }
+
   deleteGEE(id: number) {
     Swal.fire({
       title: 'Confirma que desea eliminar el grupo "' + this.gees[id].idgee + '"?',
-      text: 'Se eliminarán todos sus datos del sistema incluyendo el registro de operaciones .',
+      text: 'Se eliminarán todos sus datos del sistema incluyendo el registro de operaciones.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

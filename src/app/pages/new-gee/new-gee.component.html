@@ -6,7 +6,7 @@
                 <div class="form-group mb-3">
                     <label class="form-label">Empresa:</label>
                     <nb-select (selectedChange)="seleccionarEmpresa()" fullWidth placeholder="----" [(ngModel)]="empresa_seleccionada" [status]="company_status">
-                        <nb-option *ngFor="let company of companies; let i = index" [value]="i">{{company.siglas}}</nb-option>
+                        <nb-option *ngFor="let company of companies" [value]="company.id">{{company.siglas}}</nb-option>
                     </nb-select>
                 </div>
             </div>
@@ -14,7 +14,7 @@
                 <div class="form-group mb-3">
                     <label class="form-label">Servicio:</label>
                     <nb-select (selectedChange)="seleccionarServicio()" fullWidth placeholder="----" [(ngModel)]="servicio_seleccionado" [status]="service_status">
-                        <nb-option *ngFor="let serv of services; let i = index" [value]="i">{{serv.nombre}}</nb-option>
+                        <nb-option *ngFor="let serv of services" [value]="serv.id">{{serv.nombre}}</nb-option>
                     </nb-select>
                 </div>
             </div>            
@@ -44,8 +44,28 @@
                 </div>
             </div>
             <div class="col">
-                
+                <div class="form-group mb-3">
+                    <label class="form-label">Índice sin carga:</label>
+                    <input (input)="icsc_change()" maxlength="6" type="text" nbInput placeholder="0.0" class="form-control" aria-describedby="icscHelp" [(ngModel)]="newGEE.ic_scarga" [status]="icsc_status">
+                    <small id="icscHelp" class="form-text text-muted">Índice de consumo del grupo sin carga. Solo dígitos.</small>
+                </div>
             </div>            
+        </div> 
+        <div class="row">
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label class="form-label">Índice diurno con carga:</label>
+                    <input (input)="icccd_change()" maxlength="6" type="text" nbInput placeholder="0.0" class="form-control" aria-describedby="icccdHelp" [(ngModel)]="newGEE.ic_ccargad" [status]="icccd_status">
+                    <small id="icccdHelp" class="form-text text-muted">Índice de consumo diurno del grupo con carga. Solo dígitos.</small>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label class="form-label">Índice nocturno con carga:</label>
+                    <input (input)="icccn_change()" maxlength="6" type="text" nbInput placeholder="0.0" class="form-control" aria-describedby="icccnHelp" [(ngModel)]="newGEE.ic_ccargan" [status]="icccn_status">
+                    <small id="icccnHelp" class="form-text text-muted">Índice de consumo nocturno del grupo con carga. Solo dígitos.</small>
+                </div>
+            </div>           
         </div> 
     </nb-card-body>
     <nb-card-footer>

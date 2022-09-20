@@ -8,7 +8,7 @@ export class OnlyDatePipe implements PipeTransform {
   transform(value: Date): string {
     if (value) {
       const d = value.toString();
-      return d.substr(0, d.indexOf('T'));
+      return d.substring(0, d.indexOf('T'));
     }
     return '';
   }

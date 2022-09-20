@@ -22,6 +22,9 @@ export class NewGeeComponent implements OnInit {
     kva: 0,
     idgee: '',
     marca: '',
+    ic_scarga: 0,
+    ic_ccargad: 0,
+    ic_ccargan: 0,
   };
   companies: Company[];
   services: EService[];
@@ -30,6 +33,9 @@ export class NewGeeComponent implements OnInit {
   idgee_status = 'info';
   marca_status = 'info';
   kva_status = 'info';
+  icsc_status = 'info';
+  icccd_status = 'info';
+  icccn_status = 'info';
   empresa_seleccionada = -1;
   servicio_seleccionado = -1;
 
@@ -40,8 +46,16 @@ export class NewGeeComponent implements OnInit {
     private geeService: GeeService) { }
 
   ngOnInit(): void {
+    this.empresa_seleccionada = this.newGEE.id_emp;
+    this.servicio_seleccionado = this.newGEE.id_serv;
     this.companyService.getCompanies().subscribe((comp: Company[]) => {
       this.companies = comp;
+      if (this.empresa_seleccionada) {
+        this.eservice.getServices(this.empresa_seleccionada).subscribe((serv: EService[]) => {
+          this.services = serv;
+          this.servicio_seleccionado = this.newGEE.id_serv;
+        });
+      }
     });
   }
 
@@ -50,15 +64,13 @@ export class NewGeeComponent implements OnInit {
     this.service_status = 'info';
     this.services = [];
     this.servicio_seleccionado = -1;
-    this.newGEE.id_emp = this.companies[this.empresa_seleccionada].id;
-    this.eservice.getServices(this.companies[this.empresa_seleccionada].id).subscribe((serv: EService[]) => {
+    this.eservice.getServices(this.empresa_seleccionada).subscribe((serv: EService[]) => {
       this.services = serv;
     });
   }
 
   seleccionarServicio() {
     this.service_status = 'success';
-    this.newGEE.id_serv = this.services[this.servicio_seleccionado].id;
   }
 
   close() {
@@ -103,6 +115,24 @@ export class NewGeeComponent implements OnInit {
         title: 'Debe escribir la capacidad de generación del grupo.',
       } as SweetAlertOptions);
       this.kva_status = 'danger';
+    } else if (this.icsc_status === 'danger' || !this.newGEE.ic_scarga) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir el índice de consumo sin carga del grupo.',
+      } as SweetAlertOptions);
+      this.icsc_status = 'danger';
+    } else if (this.icccd_status === 'danger' || !this.newGEE.ic_ccargad) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir el índice de consumo diurno con carga del grupo.',
+      } as SweetAlertOptions);
+      this.icccd_status = 'danger';
+    } else if (this.icccn_status === 'danger' || !this.newGEE.ic_ccargan) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir el índice de consumo nocturno con carga del grupo.',
+      } as SweetAlertOptions);
+      this.icccn_status = 'danger';
     } else {
       this.save();
     }
@@ -116,6 +146,8 @@ export class NewGeeComponent implements OnInit {
       timerProgressBar: true,
       timer: 3000,
     });
+    this.newGEE.id_emp = this.empresa_seleccionada;
+    this.newGEE.id_serv = this.servicio_seleccionado;
     if (!this.newGEE.id) {
       this.geeService.saveGEE(this.newGEE).subscribe(res => {
         Toast.fire({
@@ -149,6 +181,33 @@ export class NewGeeComponent implements OnInit {
       this.kva_status = 'success';
     } else {
       this.kva_status = 'danger';
+    }
+  }
+
+  icsc_change() {
+    const icscregexp = new RegExp(/^\d+([.]\d+)?$/);
+    if (icscregexp.test(this.newGEE.ic_scarga.toString()) && this.newGEE.ic_scarga > 0) {
+      this.icsc_status = 'success';
+    } else {
+      this.icsc_status = 'danger';
+    }
+  }
+
+  icccd_change() {
+    const icccdregexp = new RegExp(/^\d+([.]\d+)?$/);
+    if (icccdregexp.test(this.newGEE.ic_ccargad.toString()) && this.newGEE.ic_ccargad > 0) {
+      this.icccd_status = 'success';
+    } else {
+      this.icccd_status = 'danger';
+    }
+  }
+
+  icccn_change() {
+    const icccnregexp = new RegExp(/^\d+([.]\d+)?$/);
+    if (icccnregexp.test(this.newGEE.ic_ccargan.toString()) && this.newGEE.ic_ccargan > 0) {
+      this.icccn_status = 'success';
+    } else {
+      this.icccn_status = 'danger';
     }
   }
 }

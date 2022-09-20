@@ -91,6 +91,7 @@ import ipserver from './ipserver';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NewGeeComponent } from './pages/new-gee/new-gee.component';
+// import { ShortTimePipe } from './pipes/short-time.pipe';
 
 // here is the default text string
 @Injectable()

@@ -27,6 +27,7 @@ import { ShortSerialPipe } from '../pipes/short-serial.pipe';
 import { ShortNamePipe } from '../pipes/short-name.pipe';
 import { DeviceStatePipe } from '../pipes/device-state.pipe';
 import { StateDescriptionPipe } from '../pipes/state-description.pipe';
+import { ShortTimePipe } from '../pipes/short-time.pipe';
 // import { UpdtWRecordComponent } from './updt-wrecord/updt-wrecord.component';
 // import { NewWRecordComponent } from './new-wrecord/new-wrecord.component';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -168,7 +169,8 @@ export class DefaultIntl extends OwlDateTimeIntl {
     DeviceStatePipe,
     StateDescriptionPipe,
     // tslint:disable-next-line: max-line-length
-    ShortSerialPipe, ShortNamePipe, EnergyComponent, GeeComponent, AdminCompanyComponent, AdminServiceComponent, ComercialComponent, DeliversComponent, AdminGeeComponent, 
+    ShortSerialPipe, ShortNamePipe, EnergyComponent, GeeComponent, AdminCompanyComponent, AdminServiceComponent, ComercialComponent, DeliversComponent, AdminGeeComponent,
+    ShortTimePipe,
     // NewGeeComponent,
     // NewCreceiptComponent,
     // NewCproductComponent, NewCproviderComponent,
