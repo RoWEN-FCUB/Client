@@ -1,0 +1,41 @@
+<nb-card accent="info">
+    <nb-card-header><div class="text-center">{{title}}</div></nb-card-header>
+    <nb-card-body>
+        <div class="row">
+            <div class="col">
+                <div class="form-group mb-3">
+                <label>Fecha:</label>
+                <input type="text" [nbDatepicker]="datepicker" nbInput fullWidth placeholder="Fecha entrada" class="form-control" aria-describedby="dateHelp">
+                <small id="dateHelp" class="form-text text-muted">Fecha en la que se raliza la operación.</small>   
+                <nb-datepicker #datepicker></nb-datepicker>   
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label>Tipo:</label>
+                    <nb-select fullWidth aria-describedby="tipoHelp">
+                        <nb-option value="IA" nbTooltip="Operación por Interrupción o Avería en el servicio eléctrico.">IA</nb-option>
+                        <nb-option value="PS" nbTooltip="Operación sin carga para dar mantenimiento a las baterías.">PS</nb-option>
+                        <nb-option value="PM" nbTooltip="Prueba de Puesta en Marcha de 4 horas con carga.">PM</nb-option>
+                        <nb-option value="LD" nbTooltip="Operación de Liberación de Demanda por Orden de la DGE UNE.">LD</nb-option>
+                        <nb-option value="SS" nbTooltip="Operación de Sincronización al SEN por Orden del DNC.">SS</nb-option>
+                        <nb-option value="GA" nbTooltip="Operación de los GEE que se encuentran aislados del SEN.">GA</nb-option>
+                        <nb-option value="RI" nbTooltip="Operación por Resumen de Operaciones por Interrupción.">RI</nb-option>
+                        <nb-option value="RP" nbTooltip="Operación por Resumen de Operaciones por Pruebas.">RP</nb-option>
+                        <nb-option value="IU" nbTooltip="Operación ocurrida por trabajos de rehabilitación de líneas.">IU</nb-option>
+                        <nb-option value="PC" nbTooltip="Operación realizada con carga para comprobar los parámetros del GEE.">PC</nb-option>
+                        <nb-option value="LC" nbTooltip="Prueba del litro con carga.">LC</nb-option>
+                        <nb-option value="LS" nbTooltip="Prueba del litro sin carga.">LS</nb-option>
+                    </nb-select>
+                    <small id="tipoHelp" class="form-text text-muted">Tipo de operación.</small> 
+                </div>
+            </div>
+          </div>
+    </nb-card-body>    
+    <nb-card-footer>
+        <div class="form-group" style="float: right;margin-top: 5px">
+            <button nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+            <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+        </div>
+    </nb-card-footer>
+</nb-card>

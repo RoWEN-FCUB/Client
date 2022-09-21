@@ -4,7 +4,7 @@
       <nb-select (selectedChange)="onChangeGee()" *ngIf="gees.length > 1" status="info" class="ms-2" [(ngModel)]="selectedGEE">
         <nb-option *ngFor="let gee of gees" [value]="gee.id">{{gee.idgee}}</nb-option>
       </nb-select>
-      <button class="ms-2" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
+      <button (click)="openNew()" class="ms-2" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
       <button class="ms-2" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
     </nb-card-header>
     <nb-card-body>

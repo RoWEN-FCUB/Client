@@ -91,6 +91,7 @@ import ipserver from './ipserver';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NewGeeComponent } from './pages/new-gee/new-gee.component';
+import { NewGrecordComponent } from './pages/new-grecord/new-grecord.component';
 // import { ShortTimePipe } from './pipes/short-time.pipe';
 
 // here is the default text string
@@ -162,7 +163,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     AppComponent, UploadImgComponent, NewTaskComponent, NewObsComponent, NewErecordComponent,
     LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
     UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent,
-    WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent],
+    WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   imports: [
     ReactiveFormsModule,
@@ -231,11 +232,11 @@ export class DefaultIntl extends OwlDateTimeIntl {
   exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
             NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent,
             NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent, WpartsComponent,
-            NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent],
+            NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent],
   entryComponents: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
                     NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent, NewCompanyComponent,
                     NewServiceComponent, AdminUserServicesComponent, WpartsComponent, NewCproductComponent, NewCproviderComponent,
-                    NewCreceiptComponent, NewGeeComponent],
+                    NewCreceiptComponent, NewGeeComponent, NewGrecordComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {

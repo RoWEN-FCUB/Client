@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { GeeService } from '../../services/gee.service';
 import { GEecord } from '../../models/GRecord';
+import { NbDialogService } from '@nebular/theme';
+import { NewGrecordComponent } from '../new-grecord/new-grecord.component';
 
 @Component({
   selector: 'gee',
@@ -14,7 +16,7 @@ export class GeeComponent implements OnInit {
   selectedGEE: number = -1;
   grecords: GEecord[] = [];
 
-  constructor(private geeService: GeeService, private authService: NbAuthService) { }
+  constructor(private geeService: GeeService, private authService: NbAuthService, private dialogService: NbDialogService) { }
 
   ngOnInit(): void {
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
@@ -38,6 +40,12 @@ export class GeeComponent implements OnInit {
     this.geeService.listGEERecords(this.selectedGEE).subscribe((grcords: GEecord[]) => {
       this.grecords = grcords;
       // console.log(this.grecords);
+    });
+  }
+
+  openNew() {
+    this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación'}}).onClose.subscribe(res => {
+      this.onChangeGee();
     });
   }
 
