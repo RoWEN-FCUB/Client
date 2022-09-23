@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { GeeService } from '../../services/gee.service';
-import { GEecord } from '../../models/GRecord';
+import { GRecord } from '../../models/GRecord';
 import { NbDialogService } from '@nebular/theme';
 import { NewGrecordComponent } from '../new-grecord/new-grecord.component';
 
@@ -14,7 +14,7 @@ export class GeeComponent implements OnInit {
   gees = [];
   user = {id: 0};
   selectedGEE: number = -1;
-  grecords: GEecord[] = [];
+  grecords: GRecord[] = [];
 
   constructor(private geeService: GeeService, private authService: NbAuthService, private dialogService: NbDialogService) { }
 
@@ -27,7 +27,7 @@ export class GeeComponent implements OnInit {
         }
         if (this.gees.length > 0) {
           this.selectedGEE = this.gees[0].id;
-          this.geeService.listGEERecords(this.selectedGEE).subscribe((grcords: GEecord[]) => {
+          this.geeService.listGEERecords(this.selectedGEE).subscribe((grcords: GRecord[]) => {
             this.grecords = grcords;
             // console.log(this.grecords);
           });
@@ -37,14 +37,18 @@ export class GeeComponent implements OnInit {
   }
 
   onChangeGee() {
-    this.geeService.listGEERecords(this.selectedGEE).subscribe((grcords: GEecord[]) => {
+    this.geeService.listGEERecords(this.selectedGEE).subscribe((grcords: GRecord[]) => {
       this.grecords = grcords;
       // console.log(this.grecords);
     });
   }
 
   openNew() {
-    this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación'}}).onClose.subscribe(res => {
+    const contexto = {title: 'Nueva operación'};
+    if (this.grecords.length > 0) {
+      Object.defineProperty(contexto, 'operacion_anterior', {value: this.grecords[0]});
+    }
+    this.dialogService.open(NewGrecordComponent, {context: contexto}).onClose.subscribe(res => {
       this.onChangeGee();
     });
   }

@@ -1,6 +1,6 @@
 import { Time } from '@angular/common';
 
-export interface GEecord {
+export interface GRecord {
     id?: number;
     id_gee?: number;
     D?: string;

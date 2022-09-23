@@ -4,16 +4,16 @@
         <div class="row">
             <div class="col">
                 <div class="form-group mb-3">
-                <label>Fecha:</label>
-                <input type="text" [nbDatepicker]="datepicker" nbInput fullWidth placeholder="Fecha entrada" class="form-control" aria-describedby="dateHelp">
-                <small id="dateHelp" class="form-text text-muted">Fecha en la que se raliza la operación.</small>   
-                <nb-datepicker #datepicker></nb-datepicker>   
+                    <label>Fecha:</label>
+                    <input [status]="fecha_status" [(ngModel)]="fecha" type="text" [nbDatepicker]="datepicker" nbInput fullWidth placeholder="Fecha de operación" class="form-control" aria-describedby="dateHelp">
+                    <small id="dateHelp" class="form-text text-muted">Fecha en la que se raliza la operación.</small>   
+                    <nb-datepicker #datepicker (dateChange)="onDateChange()"></nb-datepicker>   
                 </div>
             </div>
             <div class="col">
                 <div class="form-group mb-3">
                     <label>Tipo:</label>
-                    <nb-select fullWidth aria-describedby="tipoHelp">
+                    <nb-select (selectedChange)="onTypeChange()" fullWidth aria-describedby="tipoHelp" [status]="tipo_status" [(ngModel)]="nueva_operacion.tipo">
                         <nb-option value="IA" nbTooltip="Operación por Interrupción o Avería en el servicio eléctrico.">IA</nb-option>
                         <nb-option value="PS" nbTooltip="Operación sin carga para dar mantenimiento a las baterías.">PS</nb-option>
                         <nb-option value="PM" nbTooltip="Prueba de Puesta en Marcha de 4 horas con carga.">PM</nb-option>
@@ -30,7 +30,23 @@
                     <small id="tipoHelp" class="form-text text-muted">Tipo de operación.</small> 
                 </div>
             </div>
-          </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label>Horario: {{horas_trabajadas}}</label>
+                    <input [owlDateTime]="dh" (dateTimeChange)="onTimeChange()" selectMode="range" [owlDateTimeTrigger]="dh" nbInput [status]="hora_status" class="form-control" [formControl]="hora">
+                    <owl-date-time hour12Timer="false" #dh [pickerType]="'timer'"></owl-date-time>
+                    <small id="timeHelp" class="form-text text-muted">Horario en el que se realizó la operación.</small> 
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label>Horámetro inicial:</label>
+                    <input nbInput>
+                </div>
+            </div>
+        </div>
     </nb-card-body>    
     <nb-card-footer>
         <div class="form-group" style="float: right;margin-top: 5px">
