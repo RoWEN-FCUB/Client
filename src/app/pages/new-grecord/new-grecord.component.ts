@@ -18,18 +18,25 @@ export class NewGrecordComponent implements OnInit {
   horametro_final_status: string = 'info';
   hora = new FormControl();
   fecha;
-  operacion_anterior: GRecord;
+  operacion_anterior: GRecord = {};
   horas_trabajadas: number = 0;
   nueva_operacion: GRecord = {
     A: '',
     M: '',
     D: '',
     tipo: '',
+    horametro_inicial: 0,
+    horametro_final: 0,
   };
 
   constructor(protected dialogRef: NbDialogRef<any>) { }
 
   ngOnInit(): void {
+    // console.log(this.operacion_anterior);
+    if (this.operacion_anterior) {
+      this.nueva_operacion.horametro_inicial = this.operacion_anterior.horametro_final;
+      this.horametro_inicial_status = 'success';
+    }
   }
 
   close() {
@@ -57,7 +64,7 @@ export class NewGrecordComponent implements OnInit {
       this.nueva_operacion.hora_final = this.hora.value[1];
       this.horas_trabajadas = this.round(moment(this.hora.value[1]).diff(moment(this.hora.value[0]), 'minutes') / 60);
       this.hora_status = 'success';
-      console.log(this.nueva_operacion);
+      // console.log(this.nueva_operacion);
     }
   }
 

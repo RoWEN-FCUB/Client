@@ -302,7 +302,7 @@ export class TaskWeekComponent implements OnInit {
         this.eliminar_dias_relleno();
         const inicio = moment(this.dia_inicio).format('DD/MM/YYYY').toString();
         const fin = moment(this.dia_fin).format('DD/MM/YYYY').toString();
-        pdfMake.createPdf(this.docDefinition).download('PT ' + this.user.fullname + ' ' + inicio + '-' + fin);
+        pdfMake.createPdf(this.docDefinition).open('PT ' + this.user.fullname + ' ' + inicio + '-' + fin);
     });
     // console.log(usrtoprint);
 

@@ -148,11 +148,22 @@ export class NewGeeComponent implements OnInit {
     });
     this.newGEE.id_emp = this.empresa_seleccionada;
     this.newGEE.id_serv = this.servicio_seleccionado;
+    this.newGEE.ic_ccargad = Number(this.newGEE.ic_ccargad);
+    this.newGEE.ic_ccargan = Number(this.newGEE.ic_ccargan);
+    this.newGEE.ic_scarga = Number(this.newGEE.ic_scarga);
     if (!this.newGEE.id) {
       this.geeService.saveGEE(this.newGEE).subscribe(res => {
         Toast.fire({
           icon: 'success',
           title: 'Grupo creado correctamente.',
+        } as SweetAlertOptions);
+        this.close();
+      });
+    } else {
+      this.geeService.updateGEE(this.newGEE).subscribe(res => {
+        Toast.fire({
+          icon: 'success',
+          title: 'Grupo actualizado correctamente.',
         } as SweetAlertOptions);
         this.close();
       });

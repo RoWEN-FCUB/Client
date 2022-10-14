@@ -46,11 +46,17 @@ export class GeeComponent implements OnInit {
   openNew() {
     const contexto = {title: 'Nueva operación'};
     if (this.grecords.length > 0) {
-      Object.defineProperty(contexto, 'operacion_anterior', {value: this.grecords[0]});
+      // tslint:disable-next-line: max-line-length
+      this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', operacion_anterior: this.grecords[0]}}).onClose.subscribe(() => {
+        this.onChangeGee();
+      });
+      // Object.defineProperty(contexto, 'operacion_anterior', {value: this.grecords[0]});
+      // console.log(contexto);
+    } else {
+      this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación'}}).onClose.subscribe(res => {
+        this.onChangeGee();
+      });
     }
-    this.dialogService.open(NewGrecordComponent, {context: contexto}).onClose.subscribe(res => {
-      this.onChangeGee();
-    });
   }
 
 }

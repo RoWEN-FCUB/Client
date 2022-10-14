@@ -26,6 +26,10 @@ export class GeeService {
     return this.http.post(ipserver + 'gee', newGEE);
   }
 
+  updateGEE(newGEE: GEE) {
+    return this.http.put(ipserver + 'gee/' + newGEE.id, newGEE);
+  }
+
   deleteGEE(id: number) {
     return this.http.delete(ipserver + 'gee/' + id);
   }

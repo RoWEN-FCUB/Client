@@ -43,9 +43,20 @@
             <div class="col">
                 <div class="form-group mb-3">
                     <label>Horámetro inicial:</label>
-                    <input nbInput>
+                    <input [readonly]="operacion_anterior.horametro_final ? true : false" nbInput class="form-control" [status]="horametro_inicial_status" [(ngModel)]="nueva_operacion.horametro_inicial">
+                    <small id="hiniHelp" class="form-text text-muted">Lectura inicial del horámetro.</small>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label>Horámetro final:</label>
+                    <input nbInput class="form-control" [status]="horametro_final_status" [(ngModel)]="nueva_operacion.horametro_final">
+                    <small id="hfiniHelp" class="form-text text-muted">Lectura final del horámetro.</small>
+                </div>
+            </div>
+            <div class="col"></div>
         </div>
     </nb-card-body>    
     <nb-card-footer>
