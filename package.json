@@ -98,7 +98,7 @@
     "@angular/compiler-cli": "^12.1.2",
     "@angular/core": "^12.1.2",
     "@angular/forms": "^12.1.2",
-    "@angular/language-service": "12.1.2",
+    "@angular/language-service": "14.2.8",
     "@angular/localize": "^12.1.2",
     "@angular/router": "^12.1.2",
     "@angular/service-worker": "^12.1.2",
