@@ -56,8 +56,18 @@
         </div>
       </div>
       <div class="col">
-        <div class="form-group h-100" style="padding-top: 33px;">
-          <nb-checkbox [checked]="newrecord.externo" (checkedChange)="extern_change($event)" status="info">Fuera del taller</nb-checkbox>                    
+        <div class="row">
+          <div class="col" *ngIf="!newrecord.externo">
+            <div class="form-group">
+              <label>Cod:</label>
+              <input #cod type="text" [(ngModel)]="last_code" [status]="cod_status" nbInput fullWidth placeholder="#" class="form-control" aria-describedby="codHelp">
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group h-100" style="padding-top: 33px;">
+              <nb-checkbox [checked]="newrecord.externo" (checkedChange)="extern_change($event)" status="info">Fuera del taller</nb-checkbox>                    
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -150,7 +160,7 @@
           <nb-datepicker #datepicker></nb-datepicker>   
         </div>
       </div>
-      <div class="col">
+      <div class="col" *ngIf="!newrecord.externo">
         <div class="form-group">
           <label>Entrega:</label>
           <nb-form-field>
@@ -173,7 +183,7 @@
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row" *ngIf="!newrecord.externo">
       <div class="col">
         <div class="form-group">
           <label>Nombre:</label>

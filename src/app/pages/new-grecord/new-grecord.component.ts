@@ -19,7 +19,8 @@ export class NewGrecordComponent implements OnInit {
   hora = new FormControl();
   fecha;
   operacion_anterior: GRecord = {};
-  horas_trabajadas: number = 0;
+  horas_trabajadas: number = 0; // diferencia entre hora inicial y final
+  diferencia_horametro: number = 0; // diferencia entre horametros
   nueva_operacion: GRecord = {
     A: '',
     M: '',
@@ -27,6 +28,7 @@ export class NewGrecordComponent implements OnInit {
     tipo: '',
     horametro_inicial: 0,
     horametro_final: 0,
+    observaciones: '',
   };
 
   constructor(protected dialogRef: NbDialogRef<any>) { }
@@ -62,14 +64,27 @@ export class NewGrecordComponent implements OnInit {
       this.hora.value[1] = this.convertUTCDateToLocalDate(this.hora.value[1]);*/
       this.nueva_operacion.hora_inicial = this.hora.value[0];
       this.nueva_operacion.hora_final = this.hora.value[1];
-      this.horas_trabajadas = this.round(moment(this.hora.value[1]).diff(moment(this.hora.value[0]), 'minutes') / 60);
+      this.horas_trabajadas = this.round((moment(this.hora.value[1]).diff(moment(this.hora.value[0]), 'minutes') / 60), 1);
       this.hora_status = 'success';
       // console.log(this.nueva_operacion);
     }
   }
 
-  round(numb: number) {
-    return Math.round( ( numb + Number.EPSILON ) * 100 ) / 100;
+  onHorametroFinalChange() {
+    if (Number(this.nueva_operacion.horametro_final) && Number(this.nueva_operacion.horametro_inicial)) {
+      // tslint:disable-next-line: max-line-length
+      this.diferencia_horametro = this.round(Number(this.nueva_operacion.horametro_final) - Number(this.nueva_operacion.horametro_inicial), 1);
+      if (this.diferencia_horametro !== this.horas_trabajadas) {
+        this.horametro_final_status = 'danger';
+      } else {
+        this.horametro_final_status = 'success';
+      }
+    }
+  }
+
+  round(numb: number, precision: number) {
+    const exp: number = Math.pow(10, precision);
+    return Math.round( ( numb + Number.EPSILON ) * exp ) / exp;
   }
 
   convertUTCDateToLocalDate(date) {

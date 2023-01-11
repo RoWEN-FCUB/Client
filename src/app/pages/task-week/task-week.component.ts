@@ -302,7 +302,7 @@ export class TaskWeekComponent implements OnInit {
         this.eliminar_dias_relleno();
         const inicio = moment(this.dia_inicio).format('DD/MM/YYYY').toString();
         const fin = moment(this.dia_fin).format('DD/MM/YYYY').toString();
-        pdfMake.createPdf(this.docDefinition).open('PT ' + this.user.fullname + ' ' + inicio + '-' + fin);
+        pdfMake.createPdf(this.docDefinition).download('PT ' + this.user.fullname + ' ' + inicio + '-' + fin);
     });
     // console.log(usrtoprint);
 
@@ -452,7 +452,7 @@ export class TaskWeekComponent implements OnInit {
         cancelButtonText: 'No',
       } as SweetAlertOptions).then((result) => {
         if (result.value) {
-          this.taskService.copyTask({id: this.tasks[this.tarea_a_repetir].id, startD: e.start, endD: e.end}).subscribe(res => {
+          this.taskService.copyTask({id: this.tasks[this.tarea_a_repetir].id, startD: this.convertUTCDateToLocalDate(e.start), endD: this.convertUTCDateToLocalDate(e.end)}).subscribe(res => {
             const Toast = Swal.mixin({
               toast: true,
               position: 'top-end',
@@ -499,6 +499,12 @@ export class TaskWeekComponent implements OnInit {
   }
 
   openEdit(id: number) {
+    for (let i = 0; i < this.tasks.length; i++) {
+      if (this.tasks[i].id === id) {
+        id = i;
+        break;
+      }
+    }
     let range = 'range';
     let date;
     // console.log(moment(this.tasks[id].fecha_inicio).toLocaleString());
@@ -538,6 +544,12 @@ export class TaskWeekComponent implements OnInit {
   }
 
   validateTask(id: number) {
+    for (let i = 0; i < this.tasks.length; i++) {
+      if (this.tasks[i].id === id) {
+        id = i;
+        break;
+      }
+    }
     this.tasks[id].validada = true;
     this.taskService.updateTask(this.tasks[id].id, this.tasks[id]).subscribe(
       res => {

@@ -116,19 +116,24 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
 
   parseTime() {
     if (this.hora.value) {
-      this.hora.value[0] = new Date(this.hora.value[0]);
-      this.hora.value[1] = new Date(this.hora.value[1]);
-      this.hora.value[0] = this.convertUTCDateToLocalDate(this.hora.value[0]);
-      this.hora.value[1] = this.convertUTCDateToLocalDate(this.hora.value[1]);
+      //console.log(this.hora.value);
+      //this.hora.value[0] = new Date(this.hora.value[0]);
+      //this.hora.value[1] = new Date(this.hora.value[1]);
+      //this.hora.value[0] = new Date(Date.UTC(this.hora.value[0].getUTCFullYear(), this.hora.value[0].getUTCMonth(), this.hora.value[0].getUTCDate(), this.hora.value[0].getUTCHours(), this.hora.value[0].getUTCMinutes(), this.hora.value[0].getUTCSeconds()));
+      //this.hora.value[1] = new Date(Date.UTC(this.hora.value[1].getUTCFullYear(), this.hora.value[1].getUTCMonth(), this.hora.value[1].getUTCDate(), this.hora.value[1].getUTCHours(), this.hora.value[1].getUTCMinutes(), this.hora.value[1].getUTCSeconds()));
+      //this.hora.value[0] = this.convertUTCDateToLocalDate(this.hora.value[0]);
+      //this.hora.value[1] = this.convertUTCDateToLocalDate(this.hora.value[1]);
+      //console.log(this.hora.value);
       const tduracion = moment(this.hora.value[1]).diff(moment(this.hora.value[0]), 'minutes');
       this.task.duracion = tduracion;
       this.parseDate();
       const hora_inicio = moment(this.hora.value[0]).hour();
       const min_inicio = moment(this.hora.value[0]).minute();
-      this.task.fecha_inicio = moment(this.task.fecha_inicio).hour(hora_inicio).toDate();
-      this.task.fecha_fin = moment(this.task.fecha_fin).hour(hora_inicio).toDate();
-      this.task.fecha_inicio = moment(this.task.fecha_inicio).minute(min_inicio).toDate();
-      this.task.fecha_fin = moment(this.task.fecha_fin).minute(min_inicio).toDate();
+      this.task.fecha_inicio = this.convertUTCDateToLocalDate(moment(this.task.fecha_inicio).hour(hora_inicio).minute(min_inicio).toDate());
+      this.task.fecha_fin = this.convertUTCDateToLocalDate(moment(this.task.fecha_fin).hour(hora_inicio).minute(min_inicio).toDate());
+      //this.task.fecha_inicio = moment(this.task.fecha_inicio).minute(min_inicio).toDate();
+      //this.task.fecha_fin = moment(this.task.fecha_fin).minute(min_inicio).toDate();
+      //console.log(this.task.fecha_inicio);
     }
   }
 

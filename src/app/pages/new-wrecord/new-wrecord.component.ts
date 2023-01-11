@@ -44,6 +44,7 @@ export class NewWRecordComponent implements OnInit {
   inventaries: string[] = [];
   names: WPerson[] = [];
   newrecord: WRecord = {
+    cod: 0,
     cliente: '',
     equipo: '',
     marca: '',
@@ -69,6 +70,7 @@ export class NewWRecordComponent implements OnInit {
   };
   showPersonInfo: boolean = false;
   client_status: string = 'info';
+  cod_status: string = 'info';
   client_name_status: string = 'info';
   device_status: string = 'info';
   marc_status: string = 'info';
@@ -83,6 +85,7 @@ export class NewWRecordComponent implements OnInit {
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_sup: 0, id_emp: 0, id_serv: 0};
   show_client_name: boolean = false;
   save_lock = false;
+  last_code: number = 0;
   // tslint:disable-next-line: max-line-length
   constructor(private library: FaIconLibrary, protected dialogRef: NbDialogRef<any>, private workshopService: WorkshopService, private authService: NbAuthService) {
     this.library.addIcons(faTrashAlt);
@@ -587,21 +590,21 @@ export class NewWRecordComponent implements OnInit {
       } as SweetAlertOptions);
       this.serial_status = 'danger';
       return false;
-    } else if ((this.entrega_ci_status === 'danger' || !this.entrega.ci)) {
+    } else if ((this.entrega_ci_status === 'danger' || !this.entrega.ci) && !this.newrecord.externo) {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir correctamente el carnet de identidad de la persona que entrega el equipo.',
       } as SweetAlertOptions);
       this.entrega_ci_status = 'danger';
       return false;
-    } else if (this.showPersonInfo && (this.deliver_status === 'danger' || this.entrega.nombre === '')) {
+    } else if (this.showPersonInfo && (this.deliver_status === 'danger' || this.entrega.nombre === '') && !this.newrecord.externo) {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir correctamente el nombre de la persona que entrega el equipo.',
       } as SweetAlertOptions);
       this.deliver_status = 'danger';
       return false;
-    } else if (this.showPersonInfo && (this.entrega_cargo_status === 'danger' || !this.entrega.cargo)) {
+    } else if (this.showPersonInfo && (this.entrega_cargo_status === 'danger' || !this.entrega.cargo) && !this.newrecord.externo) {
       Toast.fire({
         icon: 'error',
         title: 'Debe escribir correctamente el cargo de la persona que entrega el equipo.',
@@ -624,6 +627,11 @@ export class NewWRecordComponent implements OnInit {
         timer: 3000,
       });
       this.newrecord.entregado = this.entrega.ci;
+      if (this.newrecord.externo) {
+        this.newrecord.cod = -1;
+      } else {
+        this.newrecord.cod = this.last_code;
+      }
       if (this.showPersonInfo) { // PERSONA NUEVA
         this.workshopService.getWPerson(this.entrega.ci).subscribe((per: WPerson) => {
           if (per) { // EXISTE EN LA BD

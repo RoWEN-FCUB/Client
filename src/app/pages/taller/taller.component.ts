@@ -539,7 +539,15 @@ export class TallerComponent implements OnInit {
 
   openNew() {
     // tslint:disable-next-line: max-line-length
-    this.dialogService.open(NewWRecordComponent).onClose.subscribe(
+    let lcode: number = 0;
+    for (let i = 0; i < this.wrecords.length; i++) {
+      if (this.wrecords[i].cod !== -1) {
+        lcode = this.wrecords[i].cod;
+        break;
+      }
+    }
+    lcode++;
+    this.dialogService.open(NewWRecordComponent, {context: {last_code : lcode}}).onClose.subscribe(
       (newWRecord) => {
         if (newWRecord) {
           this.search();

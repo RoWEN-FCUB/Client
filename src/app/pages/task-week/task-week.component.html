@@ -67,8 +67,8 @@
                     </td>
                     <td width="15%" align="right" style="cursor: pointer">
                       <nb-icon *ngIf="(task.estado==='Pendiente' && task.validada) || (user.role==='admin' && task.validada)" (click)="setTaskState(task.id,'Cumplida')" icon="checkmark-circle-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Completar tarea" nbTooltipIcon="checkmark-outline" nbTooltipStatus="success"></nb-icon>
-                      <nb-icon *ngIf="user.role==='admin' && !task.validada" icon="done-all-outline" (click)="validateTask(i)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Validar tarea" nbTooltipIcon="done-all-outline" nbTooltipStatus="info"></nb-icon>
-                      <nb-icon *ngIf="(task.estado==='Pendiente' && !task.validada) || user.role==='admin'" (click)="openEdit(i)" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Editar tarea" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                      <nb-icon *ngIf="user.role==='admin' && !task.validada" icon="done-all-outline" (click)="validateTask(task.id)" [options]="{animation:{type: 'zoom'}}" nbTooltip="Validar tarea" nbTooltipIcon="done-all-outline" nbTooltipStatus="info"></nb-icon>
+                      <nb-icon *ngIf="(task.estado==='Pendiente' && !task.validada) || user.role==='admin'" (click)="openEdit(task.id)" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Editar tarea" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
                       <nb-icon *ngIf="(task.estado==='Pendiente' && task.validada) || user.role==='admin'" (click)="clickposponer(task.id)" [owlDateTimeTrigger]="dt" icon="clock-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Posponer tarea" nbTooltipIcon="clock-outline" nbTooltipStatus="info"></nb-icon>
                       <input type="hidden" style="visibility: hidden" [owlDateTime]="dt" (dateTimeChange)="posponer($event)">      
                       <owl-date-time hour12Timer="true" #dt></owl-date-time>

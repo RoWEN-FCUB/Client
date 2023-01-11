@@ -51,12 +51,18 @@
         <div class="row">
             <div class="col">
                 <div class="form-group mb-3">
-                    <label>Horámetro final:</label>
-                    <input nbInput class="form-control" [status]="horametro_final_status" [(ngModel)]="nueva_operacion.horametro_final">
+                    <label>Horámetro final: {{diferencia_horametro}}</label>
+                    <input nbInput (input)="onHorametroFinalChange()" class="form-control" [status]="horametro_final_status" [(ngModel)]="nueva_operacion.horametro_final">
                     <small id="hfiniHelp" class="form-text text-muted">Lectura final del horámetro.</small>
                 </div>
             </div>
-            <div class="col"></div>
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label>Observaciones:</label>
+                    <textarea [(ngModel)]="nueva_operacion.observaciones" cols="5" rows="4" fullWidth nbInput status="info" class="form-control" aria-describedby="obsHelp" placeholder="Observación"></textarea>
+                    <small id="obsHelp" class="form-text text-muted">Observaciones de la nueva operación.</small>
+                </div>
+            </div>
         </div>
     </nb-card-body>    
     <nb-card-footer>
