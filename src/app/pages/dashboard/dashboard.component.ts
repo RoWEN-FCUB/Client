@@ -37,22 +37,23 @@ export class DashboardComponent implements OnInit {
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
       this.weather.getWeather(this.user.municipio).subscribe((res: any) => {
-        if (res.hasOwnProperty('coord')) { // verificar que la api haya devuelto datos de la ubicacion enviada
-          this.tiempo.latitud = Number(res.coord.lat);
-          this.tiempo.longitud = Number(res.coord.lon);
-          this.tiempo.descripcion = res.weather[0].description;
-          this.tiempo.icon = res.weather[0].icon;
-          this.tiempo.temperatura = Number(res.main.temp);
-          this.tiempo.sensacion_termica = Number(res.main.feels_like);
-          this.tiempo.presion = Number(res.main.pressure);
-          this.tiempo.humedad = Number(res.main.humidity);
-          this.tiempo.visibilidad = Number(res.visibility);
-          this.tiempo.velocidad = Math.round(Number(res.wind.speed) * 3.6);
-          this.tiempo.nubes = Number(res.clouds.all);
-          this.tiempo.grados = Number(res.wind.deg);
-          if (res.hasOwnProperty('rain')) {
+        console.log(res);
+        if (res.hasOwnProperty('latitude')) { // verificar que la api haya devuelto datos de la ubicacion enviada
+          this.tiempo.latitud = Number(res.latitude);
+          this.tiempo.longitud = Number(res.longitude);
+          //this.tiempo.descripcion = res.weather[0].description;
+          //this.tiempo.icon = res.weather[0].icon;
+          this.tiempo.temperatura = Number(res.current_weather.temperature);
+          //this.tiempo.sensacion_termica = Number(res.main.feels_like);
+          //this.tiempo.presion = Number(res.main.pressure);
+          //this.tiempo.humedad = Number(res.main.humidity);
+          //this.tiempo.visibilidad = Number(res.visibility);
+          this.tiempo.velocidad = Number(res.current_weather.windspeed);
+          //this.tiempo.nubes = Number(res.clouds.all);
+          this.tiempo.grados = Number(res.current_weather.winddirection);
+          /*if (res.hasOwnProperty('rain')) {
             this.tiempo.lluvia = Number(res.rain['1h']);
-          }
+          }*/
           this.tiempo.direccion = this.GradosADireccion(this.tiempo.grados);
           // console.log(this.tiempo);
         }

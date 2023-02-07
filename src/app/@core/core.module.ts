@@ -5,12 +5,12 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 // import { of as observableOf, from } from 'rxjs';
 
 import { throwIfAlreadyLoaded } from './module-import-guard';
-import { AnalyticsService } from './utils';
+//import { AnalyticsService } from './utils';
 // import { UserData } from './data/users';
 // import { UserService } from './mock/users.service';
 // import { MockDataModule } from './mock/mock-data.module';
 import { RoleProvider } from './role.provider';
-// import ipserver from '../ipserver';
+import ipserver from '../ipserver';
 
 const socialLinks = [
   {
@@ -50,7 +50,8 @@ export const NB_CORE_PROVIDERS = [
         // baseEndpoint: 'http://104.207.147.123:443/',
         // baseEndpoint: 'http://localhost:443/',
         // baseEndpoint: 'https://169.158.137.126:3128/',
-        baseEndpoint: 'http://169.158.143.141:443/',
+        // baseEndpoint: 'http://169.158.143.141:443/',
+        baseEndpoint: ipserver,
         login: {
           endpoint: 'user/login',
           method: 'post',
@@ -129,7 +130,7 @@ export const NB_CORE_PROVIDERS = [
       },
     },*/
   },
-  AnalyticsService,
+  //AnalyticsService,
 ];
 
 @NgModule({

@@ -46,7 +46,18 @@
                             <small id="reupHelp" class="form-text text-muted">Código del Registro Estatal de Empresas y Unidades Presupuestadas (REEUP).</small>
                         </div>
                     </div>
-                    <div class="col"></div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label">Latitud:</label>
+                                <input type="text" nbInput fullWidth placeholder="0.0" class="form-control" [(ngModel)]="newService.latitud" [status]="'info'">
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Longitud:</label>
+                                <input type="text" nbInput fullWidth placeholder="0.0" class="form-control" [(ngModel)]="newService.longitud" [status]="'info'">
+                            </div>
+                        </div>
+                    </div>
                 </div> 
             </nb-tab>
             <nb-tab tabTitle="Control eléctrico" id="Tab2" name="Tab2" #Tab2>

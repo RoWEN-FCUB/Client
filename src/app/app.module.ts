@@ -48,7 +48,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE, OwlDateTimeIntl } from '@danielmoncada/angular-datetime-picker';
 import { UserService } from './services/user.service';
 import { NotificationService } from './services/notification.service';
-// import { AuthInterceptor } from './services/authInterceptor';
+import { AuthInterceptor } from './services/authInterceptor';
+import { ErrorInterceptor } from './services/error.interceptor';
 import { UploadImgComponent } from './pages/upload-img/upload-img.component';
 import { NewTaskComponent } from './pages/new-task/new-task.component';
 import { NewObsComponent } from './pages/new-obs/new-obs.component';
@@ -220,7 +221,8 @@ export class DefaultIntl extends OwlDateTimeIntl {
         return (req.url === ipserver + 'user/refresh' || req.url === ipserver + 'user/login');
       },
     },
-    { provide: HTTP_INTERCEPTORS, useClass: NbAuthJWTInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     UserService,
     NotificationService,
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'es'},

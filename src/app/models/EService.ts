@@ -20,4 +20,6 @@ export interface EService {
     desc_parc_dia?: number;
     desc_gen_noche?: number;
     desc_parc_noche?: number;
+    latitud?: number;
+    longitud?: number;
 }

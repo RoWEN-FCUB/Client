@@ -18,6 +18,10 @@ export class EserviceService {
     return this.http.get(ipserver + 'service/get/' + id, {responseType: 'json'});
   }
 
+  getGeo(city: string) {
+    return this.http.get(ipserver + 'service/geo/' + city, {responseType: 'json'});
+  }
+
   userServices(userid: number) {
     return this.http.get(ipserver + 'service/user_services/' + userid, {responseType: 'json'});
   }

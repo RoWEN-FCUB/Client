@@ -35,6 +35,8 @@ export class NewServiceComponent implements OnInit {
     desc_gen_noche: 0,
     desc_parc_dia: 0,
     desc_parc_noche: 0,
+    latitud: 0,
+    longitud: 0,
   };
   title: string;
   nombre_emp_status = 'info';
@@ -234,6 +236,14 @@ export class NewServiceComponent implements OnInit {
   seleccionarMunicipio() {
     if (this.municipio_seleccionado >= 0) {
       this.municipio_status = 'success';
+      type city = Array<{ name: string; latitude: number, longitude: number, country: string, state: string}>;
+      this.eserviceService.getGeo(this.municipios[this.municipio_seleccionado]).subscribe((res: city) => {
+        if (res) {
+          console.log(res[0]);
+          this.newService.latitud = res[0].latitude;
+          this.newService.longitud = res[0].longitude;
+        }
+      });
     } else {
       this.municipio_status = 'danger';
     }

@@ -4,7 +4,7 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
 import { Component, HostListener, OnInit } from '@angular/core';
-import { AnalyticsService } from './@core/utils/analytics.service';
+//import { AnalyticsService } from './@core/utils/analytics.service';
 import { NbIconLibraries } from '@nebular/theme';
 import { UserIdleService } from 'angular-user-idle';
 import { Router } from '@angular/router';

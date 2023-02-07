@@ -1,79 +1,48 @@
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
-import { NbAuthJWTToken, NbAuthResult, NbAuthService } from '@nebular/auth';
-import { Router } from '@angular/router';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { NbAuthService, NbAuthToken, NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: NbAuthService, public router: Router) {}
 
-  /*intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let idToken = null;
-    this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
-      idToken = token;
-      if (idToken) {
-        if (!idToken.isValid()) {
-          this.router.navigate(['/auth/login']);
-        }
-        const cloned = req.clone({
-            headers: req.headers.set('Authorization', 'Bearer ' + idToken),
-        });
-        return next.handle(cloned);
-      }
-    });
-    // console.log('token invalido');
-    return next.handle(req);
-  }*/
+  constructor(private injector: Injector,
+              @Inject(NB_AUTH_TOKEN_INTERCEPTOR_FILTER) protected filter) {
+  }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
-
-
-    
-
-
-
-
-
-    return this.authService.getToken().pipe(
-      switchMap((token: NbAuthJWTToken) => {
-        // console.log(token);
-        if (token && !req.url.match(/refresh|login|public/)) {
-         this.authService.isAuthenticatedOrRefresh()
+    // do not intercept request whose urls are filtered by the injected filter
+      if (!this.filter(req)) {
+        return this.authService.isAuthenticatedOrRefresh()
           .pipe(
-            tap(authenticated => {
+            switchMap(authenticated => {
               if (authenticated) {
-                const cloned = req.clone({
-                  headers: req.headers.set('Authorization', 'Bearer ' + token),
-                });
-                return next.handle(cloned);
+                  return this.authService.getToken().pipe(
+                    switchMap((token: NbAuthToken) => {
+                      const JWT = `Bearer ${token.getValue()}`;
+                      req = req.clone({
+                        setHeaders: {
+                          Authorization: JWT,
+                        },
+                      });
+                      return next.handle(req);
+                    }),
+                  )
               } else {
-                this.router.navigate(['/auth/login']);
+                 // Request is sent to server without authentication so that the client code
+                 // receives the 401/403 error and can act as desired ('session expired', redirect to login, aso)
+                return next.handle(req);
               }
             }),
-          );
-
-          /*
-          if (!token.isValid()) {
-            this.authService.refreshToken('email', token).subscribe((result: NbAuthResult) => {
-              const rtoken = result.getToken();
-              const cloned = req.clone({
-                headers: req.headers.set('Authorization', 'Bearer ' + rtoken),
-              });
-              return next.handle(cloned);
-            });
-          } else {
-            const cloned = req.clone({
-              headers: req.headers.set('Authorization', 'Bearer ' + token),
-            });
-            return next.handle(cloned);
-          }*/
-        } else {
-          return next.handle(req);
-        }
-      }),
-    );
+          )
+      } else {
+      return next.handle(req);
+    }
   }
+
+  protected get authService(): NbAuthService {
+    return this.injector.get(NbAuthService);
+  }
+
 }

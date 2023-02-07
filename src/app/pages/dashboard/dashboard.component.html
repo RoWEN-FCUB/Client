@@ -6,7 +6,7 @@
       </nb-card>
     </div>
   </div>
-  <div class="row" *ngIf="tiempo.descripcion">
+  <div class="row" *ngIf="tiempo.latitud">
     <div class="col">
       <!--VERSION FULL-->
       <nb-card *ngIf="!isMobile">
@@ -31,35 +31,6 @@
                   <span class="h4" nbTooltip="Dirección del viento">{{tiempo.direccion}}</span>
                   <span style="margin-left: 5px;" class="h4" nbTooltip="Velocidad del viento">{{tiempo.velocidad}}Km/h</span>
                 </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <span>Latitud: {{tiempo.latitud}}</span>
-              </div>
-              <div class="col">
-                <span>Longitud: {{tiempo.longitud}}</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <span>Humedad: {{tiempo.humedad}}%</span>
-              </div>
-              <div class="col">
-                <span>Presión: {{tiempo.presion}}hPa</span>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <span>Visibilidad: {{tiempo.visibilidad / 1000}}Km</span>
-              </div>
-              <div class="col">
-                <span>Nubes: {{tiempo.nubes}}%</span>
-              </div>
-            </div>
-            <div class="row" *ngIf="tiempo.lluvia > 0">
-              <div class="col">
-                <span>Lluvia: {{tiempo.lluvia}}mm</span>
               </div>
             </div>
           </div>
