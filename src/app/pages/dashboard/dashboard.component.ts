@@ -43,6 +43,15 @@ export class DashboardComponent implements OnInit {
           this.tiempo.longitud = Number(res.longitude);
           //this.tiempo.descripcion = res.weather[0].description;
           //this.tiempo.icon = res.weather[0].icon;
+          if (res.current_weather.weathercode === 0) {
+            this.tiempo.icon = '01d';
+          } else if (res.current_weather.weathercode === 1) {
+            this.tiempo.icon = '02d';
+          } else if (res.current_weather.weathercode === 2) {
+            this.tiempo.icon = '03d';
+          } else if (res.current_weather.weathercode === 3) {
+            this.tiempo.icon = '04d';
+          }
           this.tiempo.temperatura = Number(res.current_weather.temperature);
           //this.tiempo.sensacion_termica = Number(res.main.feels_like);
           //this.tiempo.presion = Number(res.main.pressure);

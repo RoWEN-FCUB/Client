@@ -9,7 +9,7 @@
   <div class="row" *ngIf="tiempo.latitud">
     <div class="col">
       <!--VERSION FULL-->
-      <nb-card *ngIf="!isMobile">
+      <nb-card *ngIf="!isMobile" size="tiny">
         <nb-card-body>
           <div class="table" style="width: 350px;">
             <div class="row">
@@ -17,8 +17,8 @@
             </div>
             <div class="row">
               <div class="col text-center">
-                <img src="assets/icons/{{tiempo.icon}}.png" alt="{{tiempo.descripcion}}" nbTooltip="Estado del tiempo: {{tiempo.descripcion}}" width="90px" height="90px">
-                <div nbTooltip="Sensación térmica: {{tiempo.sensacion_termica}}º">
+                <img src="assets/icons/{{tiempo.icon}}.png" alt="{{tiempo.descripcion}}" width="90px" height="90px">
+                <div>
                   <nb-icon icon="thermometer-outline"></nb-icon>
                   <span class="h4">{{tiempo.temperatura}}º</span>
                 </div>
