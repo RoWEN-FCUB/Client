@@ -37,20 +37,36 @@ export class DashboardComponent implements OnInit {
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
       this.weather.getWeather(this.user.municipio).subscribe((res: any) => {
-        console.log(res);
+        //console.log(res);
         if (res.hasOwnProperty('latitude')) { // verificar que la api haya devuelto datos de la ubicacion enviada
           this.tiempo.latitud = Number(res.latitude);
           this.tiempo.longitud = Number(res.longitude);
           //this.tiempo.descripcion = res.weather[0].description;
           //this.tiempo.icon = res.weather[0].icon;
           if (res.current_weather.weathercode === 0) {
-            this.tiempo.icon = '01d';
+            this.tiempo.icon = 'day';
           } else if (res.current_weather.weathercode === 1) {
-            this.tiempo.icon = '02d';
+            this.tiempo.icon = 'cloudy-day-1';
           } else if (res.current_weather.weathercode === 2) {
-            this.tiempo.icon = '03d';
+            this.tiempo.icon = 'cloudy-day-3';
           } else if (res.current_weather.weathercode === 3) {
-            this.tiempo.icon = '04d';
+            this.tiempo.icon = 'cloudy';
+          }  else if (res.current_weather.weathercode === 61) {
+            this.tiempo.icon = 'rainy-1';
+          }  else if (res.current_weather.weathercode === 63) {
+            this.tiempo.icon = 'rainy-3';
+          }  else if (res.current_weather.weathercode === 65) {
+            this.tiempo.icon = 'rainy-4';
+          } else if (res.current_weather.weathercode === 80) {
+            this.tiempo.icon = 'rainy-5';
+          }  else if (res.current_weather.weathercode === 81) {
+            this.tiempo.icon = 'rainy-6';
+          }  else if (res.current_weather.weathercode === 82) {
+            this.tiempo.icon = 'rainy-7';
+          } else if (res.current_weather.weathercode === 95) {
+            this.tiempo.icon = 'thunder';
+          } else {
+            this.tiempo.icon = 'weather';
           }
           this.tiempo.temperatura = Number(res.current_weather.temperature);
           //this.tiempo.sensacion_termica = Number(res.main.feels_like);

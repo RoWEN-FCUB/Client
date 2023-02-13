@@ -150,7 +150,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     FontAwesomeModule,
     NbAutocompleteModule,
     // NgxScrollTopModule,
-    WebcamModule,
+    WebcamModule,    
   ],
   declarations: [
     PagesComponent,

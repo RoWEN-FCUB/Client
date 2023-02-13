@@ -3,7 +3,7 @@ import { NbCardModule, NbIconModule, NbTooltipModule } from '@nebular/theme';
 
 import { ThemeModule } from '../../@theme/theme.module';
 import { DashboardComponent } from './dashboard.component';
-
+import { AngularSvgIconModule } from 'angular-svg-icon';
 
 @NgModule({
   imports: [
@@ -11,6 +11,7 @@ import { DashboardComponent } from './dashboard.component';
     ThemeModule,
     NbIconModule,
     NbTooltipModule,
+    AngularSvgIconModule.forRoot(),
   ],
   declarations: [
     DashboardComponent,
