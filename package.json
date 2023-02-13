@@ -65,7 +65,7 @@
     "ionicons": "^5.5.2",
     "jquery": "^3.6.0",
     "leaflet": "1.7.1",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "ncu": "^0.2.1",
     "nebular-icons": "1.1.0",
     "ngx-device-detector": "^3.0.0",
