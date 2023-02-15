@@ -17,13 +17,13 @@
             <div class="row">
               <div class="col text-center">
                 <svg-icon src="assets/icons/{{tiempo.icon}}.svg" [svgStyle]="{ 'width.px':90 }"></svg-icon>
-                <span class="h4"><nb-icon icon="thermometer-outline"></nb-icon>{{tiempo.temperatura}}º</span>               
+                <div><span class="h4"><nb-icon icon="thermometer-outline"></nb-icon>{{tiempo.temperatura}}º</span></div>
               </div>
               <div class="col text-center">
                 <div class="align-self-center" style="margin-top: 15px;">
                   <img nbTooltip="Dirección del viento" src="assets/images/arrow.png" alt="{{tiempo.grados}}" width="25px" height="25px" [style.transform]="'rotate(' + tiempo.grados + 'deg)'">
                 </div>
-                <div>
+                <div style="margin-top: 9px;">
                   <span class="h4" nbTooltip="Dirección del viento">{{tiempo.direccion}}</span>
                   <span style="margin-left: 5px;" class="h4" nbTooltip="Velocidad del viento">{{tiempo.velocidad}}Km/h</span>
                 </div>

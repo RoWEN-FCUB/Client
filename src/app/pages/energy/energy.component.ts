@@ -295,7 +295,7 @@ export class EnergyComponent implements OnInit {
             workBook.xlsx.writeBuffer().then(data1 => {
               const blobUpdate = new Blob([data1], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
               // tslint:disable-next-line: max-line-length
-              fsaver.saveAs(blobUpdate, 'Modelo 5 ' + servname + ' Consumo ' + moment.utc(fecha.toString().substring(0, fecha.toString().indexOf('T'))).format('DD-MM-YYYY') + '.xlsx');
+              fsaver.saveAs(blobUpdate, 'Modelo 5 ' + servname + ' ' + moment().format('DD-MM-YYYY') + ' (Consumo del ' + moment.utc(fecha.toString().substring(0, fecha.toString().indexOf('T'))).format('DD-MM-YYYY') + ').xlsx');
             });
           });
         };
