@@ -1,62 +1,68 @@
-<nb-card fullwidth accent="info">
-    <nb-card-header>
-      Registro de operaciones del Grupo Electrónico de Emergencia
-      <nb-select (selectedChange)="onChangeGee()" *ngIf="gees.length > 1" status="info" class="ms-2" [(ngModel)]="selectedGEE">
-        <nb-option *ngFor="let gee of gees" [value]="gee.id">{{gee.idgee}}</nb-option>
-      </nb-select>
-      <button (click)="openNew()" class="ms-2" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
-      <button class="ms-2" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
-    </nb-card-header>
-    <nb-card-body>
-      <div class='table-responsive'>
-        <table class="table table-hover table-striped table-sm">
-          <thead>
-            <tr>
-              <th rowspan="2">D</th>
-              <th rowspan="2">M</th>
-              <th rowspan="2">A</th>
-              <th rowspan="2">TIPO</th>
-              <th colspan="2" style="text-align: center;">HORA</th>
-              <th colspan="2" style="text-align: center;">HORAMETRO</th>
-			        <th rowspan="2" style="width:10%">TIEMPO TRABAJADO</th>
-              <th rowspan="2" style="width:10%">ENERGIA GENERADA</th>
-              <th colspan="2" style="text-align: center;">COMBUSTIBLE</th>
-              <th rowspan="2">OBSERVACIONES</th>
-              <th></th>
-            </tr>
-            <tr>
-              <th>INICIAL</th>
-              <th>FINAL</th>
-              <th>INICIAL</th>
-              <th>FINAL</th>
-              <th>CONSUMIDO</th>
-              <th>EXISTENCIA</th>
-            </tr>
-          </thead>
-          <tbody>          
-            <tr *ngFor="let grecord of grecords">
-              <td>{{grecord.D}}</td>
-              <td>{{grecord.M}}</td>
-              <td>{{grecord.A}}</td>
-              <td>{{grecord.tipo}}</td>
-              <td>{{grecord.hora_inicial | shortTime}}</td>
-              <td>{{grecord.hora_final  | shortTime}}</td>
-              <td>{{grecord.horametro_inicial}}</td>
-              <td>{{grecord.horametro_final}}</td>
-              <td>{{grecord.tiempo_trabajado}}</td>
-              <td>{{grecord.energia_generada}}</td>
-              <td>{{grecord.combustible_consumido}}</td>
-              <td>{{grecord.combustible_existencia}}</td>
-              <td>{{grecord.observaciones}}</td>
-              <td>
-                <nb-icon style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar operación" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
-                <nb-icon style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar operación" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <pagination-controls maxSize="5" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
-      </div>
-    </nb-card-body>
-    <nb-card-footer>Total de registros: <b></b></nb-card-footer>
-  </nb-card>
+<nb-tabset fullWidth id="tabset" name="tabset" #tabset>
+  <nb-tab tabTitle="GEE" id="Tab1" name="Tab1" #Tab1>
+    <nb-card fullwidth accent="info">
+      <nb-card-header>
+        Registro de operaciones del Grupo Electrónico de Emergencia
+        <nb-select (selectedChange)="onChangeGee()" *ngIf="gees.length > 1" status="info" class="ms-2" [(ngModel)]="selectedGEE">
+          <nb-option *ngFor="let gee of gees" [value]="gee.id">{{gee.idgee}}</nb-option>
+        </nb-select>
+        <button (click)="openNew()" class="ms-2" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
+        <button class="ms-2" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
+        <button class="ms-2" nbTooltip="Asociar tarjeta de combustible" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="credit-card-outline"></nb-icon>Asociar tarjeta</button>
+      </nb-card-header>
+      <nb-card-body>
+        <div class='table-responsive'>
+          <table class="table table-hover table-striped table-sm">
+            <thead>
+              <tr>
+                <th rowspan="2">D</th>
+                <th rowspan="2">M</th>
+                <th rowspan="2">A</th>
+                <th rowspan="2">TIPO</th>
+                <th colspan="2" style="text-align: center;">HORA</th>
+                <th colspan="2" style="text-align: center;">HORAMETRO</th>
+                <th rowspan="2" style="width:10%">TIEMPO TRABAJADO</th>
+                <th rowspan="2" style="width:10%">ENERGIA GENERADA</th>
+                <th colspan="2" style="text-align: center;">COMBUSTIBLE</th>
+                <th rowspan="2">OBSERVACIONES</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th>INICIAL</th>
+                <th>FINAL</th>
+                <th>INICIAL</th>
+                <th>FINAL</th>
+                <th>CONSUMIDO</th>
+                <th>EXISTENCIA</th>
+              </tr>
+            </thead>
+            <tbody>          
+              <tr *ngFor="let grecord of grecords">
+                <td>{{grecord.D}}</td>
+                <td>{{grecord.M}}</td>
+                <td>{{grecord.A}}</td>
+                <td>{{grecord.tipo}}</td>
+                <td>{{grecord.hora_inicial | shortTime}}</td>
+                <td>{{grecord.hora_final  | shortTime}}</td>
+                <td>{{grecord.horametro_inicial}}</td>
+                <td>{{grecord.horametro_final}}</td>
+                <td>{{grecord.tiempo_trabajado}}</td>
+                <td>{{grecord.energia_generada}}</td>
+                <td>{{grecord.combustible_consumido}}</td>
+                <td>{{grecord.combustible_existencia}}</td>
+                <td>{{grecord.observaciones}}</td>
+                <td>
+                  <nb-icon style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar operación" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                  <nb-icon style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar operación" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <pagination-controls maxSize="5" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+        </div>
+      </nb-card-body>
+      <nb-card-footer>Total de registros: <b></b></nb-card-footer>
+    </nb-card>
+  </nb-tab>
+  <nb-tab tabTitle="Tarjeta" id="Tab2" name="Tab2" #Tab2></nb-tab>
+</nb-tabset>

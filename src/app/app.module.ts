@@ -93,6 +93,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NewGeeComponent } from './pages/new-gee/new-gee.component';
 import { NewGrecordComponent } from './pages/new-grecord/new-grecord.component';
+import { NewFuelCardComponent } from './pages/new-fuel-card/new-fuel-card.component';
 // import { ShortTimePipe } from './pipes/short-time.pipe';
 
 // here is the default text string
@@ -164,7 +165,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     AppComponent, UploadImgComponent, NewTaskComponent, NewObsComponent, NewErecordComponent,
     LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
     UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent,
-    WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent],
+    WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   imports: [
     ReactiveFormsModule,
@@ -234,11 +235,11 @@ export class DefaultIntl extends OwlDateTimeIntl {
   exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
             NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent,
             NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent, WpartsComponent,
-            NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent],
+            NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent],
   entryComponents: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
                     NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent, NewCompanyComponent,
                     NewServiceComponent, AdminUserServicesComponent, WpartsComponent, NewCproductComponent, NewCproviderComponent,
-                    NewCreceiptComponent, NewGeeComponent, NewGrecordComponent],
+                    NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {

@@ -1,0 +1,21 @@
+<form [formGroup]="magneticCardForm" (ngSubmit)="onSubmit()">
+    <nb-card>
+        <nb-card-header>Datos de la tarjeta magnética</nb-card-header>
+        <nb-card-body>
+            <div class="form-group">
+                <label for="cardNumber">Número de tarjeta</label>
+                <input nbInput type="text" id="cardNumber" formControlName="cardNumber">
+            </div>
+            <div class="form-group">
+                <label for="expirationDate">Fecha de vencimiento</label>
+                <input nbInput type="text" id="expirationDate" formControlName="expirationDate">
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <div class="form-group" style="float: right;margin-top: 5px">
+                <button nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+                <button style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+            </div>
+        </nb-card-footer>
+    </nb-card>
+</form>

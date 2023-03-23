@@ -4,6 +4,7 @@ import { GeeService } from '../../services/gee.service';
 import { GRecord } from '../../models/GRecord';
 import { NbDialogService } from '@nebular/theme';
 import { NewGrecordComponent } from '../new-grecord/new-grecord.component';
+import { NewFuelCardComponent } from '../new-fuel-card/new-fuel-card.component';
 
 @Component({
   selector: 'gee',
@@ -57,6 +58,13 @@ export class GeeComponent implements OnInit {
         this.onChangeGee();
       });
     }
+  }
+
+  openFuelCard() {
+    const contexto = {idgee: this.selectedGEE};
+    this.dialogService.open(NewFuelCardComponent, {context: {}}).onClose.subscribe(() => {
+      
+    });
   }
 
 }
