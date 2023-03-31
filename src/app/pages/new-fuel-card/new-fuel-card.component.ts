@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'new-fuel-card',
@@ -8,9 +8,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class NewFuelCardComponent implements OnInit {
 
-  magneticCardForm: FormGroup;
+  magneticCardForm: UntypedFormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: UntypedFormBuilder) {
     this.magneticCardForm = this.fb.group({
       cardNumber: ['', Validators.required],
       expirationDate: ['', Validators.required],      

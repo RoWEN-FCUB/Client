@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { Task } from '../../models/Task';
 import * as moment from 'moment';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
@@ -22,8 +22,8 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
   minutos: number = 0;
   horas: number = 0;
   checked: Boolean = false;
-  fecha = new FormControl();
-  hora = new FormControl();
+  fecha = new UntypedFormControl();
+  hora = new UntypedFormControl();
   rango: string = 'single';
   task: Task = {
     id_usuario: 0,
@@ -37,7 +37,7 @@ export class NewTaskComponent implements OnInit, AfterViewInit {
     fecha_fin: new Date(),
   };
   subordinados: User[] = [];
-  selectedSubs = new FormControl();
+  selectedSubs = new UntypedFormControl();
   editing: boolean = false;
   constructor(protected dialogRef: NbDialogRef<any>) {
   }

@@ -3,7 +3,7 @@ import { Task } from '../../models/Task';
 import { User } from '../../models/User';
 import { NbDialogRef } from '@nebular/theme';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'select-subs',
@@ -13,7 +13,7 @@ import { FormControl } from '@angular/forms';
 export class SelectSubsComponent implements OnInit {
   task: Task;
   subordinados: User[] = [];
-  seleccionados = new FormControl();
+  seleccionados = new UntypedFormControl();
   sub_status: string = 'info';
   constructor(protected dialogRef: NbDialogRef<any>) { }
 

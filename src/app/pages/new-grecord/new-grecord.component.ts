@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
 import * as moment from 'moment';
 import { GRecord } from '../../models/GRecord';
@@ -16,7 +16,7 @@ export class NewGrecordComponent implements OnInit {
   hora_status: string = 'info';
   horametro_inicial_status: string = 'info';
   horametro_final_status: string = 'info';
-  hora = new FormControl();
+  hora = new UntypedFormControl();
   fecha;
   operacion_anterior: GRecord = {};
   horas_trabajadas: number = 0; // diferencia entre hora inicial y final

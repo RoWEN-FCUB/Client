@@ -46,14 +46,14 @@
 @import 'themes';
 
 // framework component themes (styles tied to theme variables)
-@import '~@nebular/theme/styles/globals';
+@import '@nebular/theme/styles/globals';
 // @import '~@nebular/auth/styles/all';
-@import '~@nebular/auth/styles/globals';
+@import '@nebular/auth/styles/globals';
 
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-@import '~bootstrap/scss/mixins';
-@import '~bootstrap/scss/grid';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/grid';
 
 // loading progress bar theme
 @import './pace.theme';
@@ -62,7 +62,7 @@
 @import './overrides';
 
 // @import '~ng-pick-datetime/assets/style/picker.min.css';
-@import "~@danielmoncada/angular-datetime-picker/assets/style/picker.min.css";
+@import "@danielmoncada/angular-datetime-picker/assets/style/picker.min.css";
 
 // install the framework and custom global styles
 @include nb-install() {
@@ -79,4 +79,4 @@
 };
 
 /* Importing Bootstrap SCSS file. */
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';

@@ -17,7 +17,7 @@ import { SelectSubsComponent } from '../select-subs/select-subs.component';
 import { ActivatedRoute } from '@angular/router';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 @Component({
   // tslint:disable-next-line: component-selector
@@ -490,7 +490,7 @@ export class TaskWeekComponent implements OnInit {
 
   openNew(fecha_i?: Date) {
     // tslint:disable-next-line: max-line-length
-    this.dialogService.open(NewTaskComponent, {context: {subordinados: this.subordinados, id_creador: this.user.id, id_usuario: this.usuario_a_mostrar, fecha: new FormControl(fecha_i)}}).onClose.subscribe(
+    this.dialogService.open(NewTaskComponent, {context: {subordinados: this.subordinados, id_creador: this.user.id, id_usuario: this.usuario_a_mostrar, fecha: new UntypedFormControl(fecha_i)}}).onClose.subscribe(
       (newTask) => {
         if (newTask) {
           newTask.task.nombre_creador = this.user.name;
@@ -535,7 +535,7 @@ export class TaskWeekComponent implements OnInit {
       date = [this.tasks[id].fecha_inicio, this.tasks[id].fecha_fin];
     }
     // tslint:disable-next-line: max-line-length
-    this.dialogService.open(NewTaskComponent, {context: {editing: true, id_creador: this.user.id, id_usuario: this.usuario_a_mostrar, task: this.tasks[id], rango: range, hora: new FormControl(hour), fecha: new FormControl(date)}}).onClose.subscribe(
+    this.dialogService.open(NewTaskComponent, {context: {editing: true, id_creador: this.user.id, id_usuario: this.usuario_a_mostrar, task: this.tasks[id], rango: range, hora: new UntypedFormControl(hour), fecha: new UntypedFormControl(date)}}).onClose.subscribe(
       (newTask) => {
         if (newTask) {
           // newTask.task.nombre_creador = this.user.name;

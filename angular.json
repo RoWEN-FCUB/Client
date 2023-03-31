@@ -155,11 +155,13 @@
       }
     }
   },
-  "defaultProject": "ngx-admin-demo",
   "schematics": {
     "@schematics/angular:component": {
       "style": "scss"
     },
     "@schematics/angular:directive": {}
+  },
+  "cli": {
+    "analytics": false
   }
 }
