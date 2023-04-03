@@ -45,7 +45,7 @@
     "@nebular/security": "10.0.0",
     "@nebular/theme": "10.0.0",
     "@ng-bootstrap/ng-bootstrap": "13.1.1",
-    "@ngtools/webpack": "14.2.11",
+    "@ngtools/webpack": "15.2.4",
     "@swimlane/ngx-charts": "^20.1.2",
     "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git",
     "angular-svg-icon": "^12.0.0",
