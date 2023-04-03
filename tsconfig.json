@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "paths": { "path": [ "./node_modules/path-browserify" ] },
-  "compilerOptions": {    
+  "compilerOptions": {
     "importHelpers": false,
     "module": "esnext",
     "outDir": "./dist/out-tsc",
@@ -10,7 +10,7 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2020", // antes decia es2015
+    "target": "ES2022",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -18,9 +18,9 @@
       "es2017",
       "dom"
     ],
-    // "strictTemplates": true,
     "plugins": [
       {}
-    ]
+    ],
+    "useDefineForClassFields": false
   }
 }

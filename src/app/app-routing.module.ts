@@ -40,8 +40,7 @@ const routes: Routes = [
 ];
 
 const config: ExtraOptions = {
-    useHash: true,
-    relativeLinkResolution: 'legacy',
+    useHash: true
 };
 
 @NgModule({
