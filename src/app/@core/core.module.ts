@@ -11,6 +11,7 @@ import { throwIfAlreadyLoaded } from './module-import-guard';
 // import { MockDataModule } from './mock/mock-data.module';
 import { RoleProvider } from './role.provider';
 import ipserver from '../ipserver';
+import { HttpResponse } from '@angular/common/http';
 
 const socialLinks = [
   {
@@ -44,17 +45,13 @@ export const NB_CORE_PROVIDERS = [
         name: 'email',
         token: {
           class: NbAuthJWTToken,
-          // key: 'token',
         },
-        // baseEndpoint: 'http://app-f2a3c51f-6e3a-4980-a984-74bda65da601.cleverapps.io/',
-        // baseEndpoint: 'http://104.207.147.123:443/',
-        // baseEndpoint: 'http://localhost:443/',
-        // baseEndpoint: 'https://169.158.137.126:3128/',
-        // baseEndpoint: 'http://169.158.143.141:443/',
         baseEndpoint: ipserver,
         login: {
           endpoint: 'user/login',
           method: 'post',
+          defaultMessages: ['Accediendo al sistema...'],
+          defaultErrors: ['Datos de usuario incorrectos.'],
           redirect: {
             success: '/pages/dashboard',
             failure: 'user/login',
@@ -82,7 +79,7 @@ export const NB_CORE_PROVIDERS = [
         showMessages: {     // show/not show success/error messages
           success: true,
           error: true,
-        }, // social links at the bottom of a page
+        },
       },
       logout: {
         redirectDelay: 500,

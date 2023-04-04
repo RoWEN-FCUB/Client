@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { NbDialogRef } from '@nebular/theme';
 
 @Component({
   selector: 'new-fuel-card',
@@ -10,7 +11,7 @@ export class NewFuelCardComponent implements OnInit {
 
   magneticCardForm: UntypedFormGroup;
 
-  constructor(private fb: UntypedFormBuilder) {
+  constructor(private fb: UntypedFormBuilder, protected dialogRef: NbDialogRef<any>) {
     this.magneticCardForm = this.fb.group({
       cardNumber: ['', Validators.required],
       expirationDate: ['', Validators.required],      
@@ -22,6 +23,10 @@ export class NewFuelCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  close(){
+    this.dialogRef.close();   // Close the dialog 	  this.dialogRef.close(null);  // or simply.close()
   }
 
 }
