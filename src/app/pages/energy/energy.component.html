@@ -14,7 +14,7 @@
         <owl-date-time #dt="owlDateTime" [startView]="!show ? 'year' : 'multi-years'" (yearSelected)="chosenYearHandler($event, dt)" (monthSelected)="chosenMonthHandler($event, dt)" [pickerType]="'calendar'"></owl-date-time>
     </nb-card-header>
     <nb-card-body>
-        <div style="width: fit-content; height: 250px;" *ngIf="showgraph && !show" class="mb-2">
+        <div style="height: 250px;" *ngIf="showgraph && !show" class="mb-2">
             <ngx-charts-line-chart
                 [scheme]="colorScheme"
                 [results]="multi"
@@ -112,7 +112,7 @@
                 </tbody>
             </table>            
         </div>
-        <div style="width: fit-content; height: 250px;" *ngIf="showgraph && show" class="mb-2">
+        <div style="height: 250px;" *ngIf="showgraph && show" class="mb-2">
             <ngx-charts-line-chart
                 [scheme]="colorScheme"
                 [results]="multi2"

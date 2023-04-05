@@ -5,6 +5,8 @@ import { GRecord } from '../../models/GRecord';
 import { NbDialogService } from '@nebular/theme';
 import { NewGrecordComponent } from '../new-grecord/new-grecord.component';
 import { NewFuelCardComponent } from '../new-fuel-card/new-fuel-card.component';
+import { FCard } from '../../models/FCard';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 
 @Component({
   selector: 'gee',
@@ -16,6 +18,13 @@ export class GeeComponent implements OnInit {
   user = {id: 0};
   selectedGEE: number = -1;
   grecords: GRecord[] = [];
+  Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timerProgressBar: true,
+    timer: 3000,
+  });
 
   constructor(private geeService: GeeService, private authService: NbAuthService, private dialogService: NbDialogService) { }
 
@@ -61,9 +70,15 @@ export class GeeComponent implements OnInit {
   }
 
   openFuelCard() {
-    const contexto = {idgee: this.selectedGEE};
-    this.dialogService.open(NewFuelCardComponent, {context: {}}).onClose.subscribe(() => {
-      
+    this.dialogService.open(NewFuelCardComponent, {context: {id_gee: this.selectedGEE}}).onClose.subscribe((newCard: FCard) => {
+      if(newCard) {
+        this.geeService.saveFCard(newCard).subscribe(() => {
+          this.Toast.fire({
+            icon: 'success',
+            title: 'Tarjeta asociada correctamente.',
+          } as SweetAlertOptions);
+        });
+      }
     });
   }
 

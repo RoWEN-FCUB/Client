@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { GEE } from '../models/GEE';
 import {HttpClient} from '@angular/common/http';
 import ipserver from '../ipserver';
+import { FCard } from '../models/FCard';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,10 @@ export class GeeService {
 
   saveGEE(newGEE: GEE) {
     return this.http.post(ipserver + 'gee', newGEE);
+  }
+
+  saveFCard(newCard: FCard) {
+    return this.http.post(ipserver + 'gee/FCard', newCard);
   }
 
   updateGEE(newGEE: GEE) {

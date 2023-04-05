@@ -1,4 +1,4 @@
-<form [formGroup]="magneticCardForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="magneticCardForm">
     <nb-card>
         <nb-card-header>Datos de la tarjeta magnética</nb-card-header>
         <nb-card-body>
@@ -6,22 +6,33 @@
                 <div class="col">
                     <div class="form-group mb-3">
                         <label for="cardNumber" class="form-label">Número de tarjeta:</label>
-                        <input nbInput type="text" id="cardNumber" formControlName="cardNumber" class="form-control">
+                        <input nbInput type="text" id="cardNumber" formControlName="cardNumber" class="form-control" [status]="magneticCardForm.controls.cardNumber.valid ? 'success' : (magneticCardForm.controls.cardNumber.pristine ? 'info' : 'danger')">
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <div class="form-group mb-3">
-                        <label for="expirationDate" class="form-label">Fecha de vencimiento:</label>
-                        <input nbInput type="text" id="expirationDate" formControlName="expirationDate" class="form-control">
+                        <label for="fuelType" class="form-label">Tipo de combustible:</label>
+                        <nb-select id="fuelType" formControlName="fuelType" fullWidth placeholder="----" [status]="magneticCardForm.controls.fuelType.valid ? 'success' : (magneticCardForm.controls.fuelType.pristine ? 'info' : 'danger')">                            
+                            <nb-option value="Diesel">Diesel</nb-option>
+                            <nb-option value="Gasolina">Gasolina</nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-3">
+                        <label for="cardBalance" class="form-label">Saldo:</label>
+                        <input nbInput type="text" id="cardBalance" formControlName="cardBalance" class="form-control" [status]="magneticCardForm.controls.cardBalance.valid ? 'success' : (magneticCardForm.controls.cardBalance.pristine ? 'info' : 'danger')">
                     </div>
                 </div>
             </div>
         </nb-card-body>
         <nb-card-footer>
             <div class="form-group" style="float: right;margin-top: 5px">
-                <button nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+                <button (click)="onSubmit()" [disabled]="magneticCardForm.invalid" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
                 <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
             </div>
         </nb-card-footer>
