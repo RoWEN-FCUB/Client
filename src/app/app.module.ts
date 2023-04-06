@@ -83,7 +83,7 @@ import { WpartsComponent } from './pages/wparts/wparts.component';
 import { NewCproductComponent } from './pages/new-cproduct/new-cproduct.component';
 import { NewCproviderComponent } from './pages/new-cprovider/new-cprovider.component';
 import { NewCreceiptComponent } from './pages/new-creceipt/new-creceipt.component';
-import { NbAuthJWTInterceptor, NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';
+import { NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';
 import { UserIdleModule } from 'angular-user-idle';
 // import { environment } from '../environments/environment';
 // import { CountdownPipe } from './pipes/countdown.pipe';
@@ -94,7 +94,8 @@ import { environment } from '../environments/environment';
 import { NewGeeComponent } from './pages/new-gee/new-gee.component';
 import { NewGrecordComponent } from './pages/new-grecord/new-grecord.component';
 import { NewFuelCardComponent } from './pages/new-fuel-card/new-fuel-card.component';
-// import { ShortTimePipe } from './pipes/short-time.pipe';
+// import { QuartetsPipe } from './pipes/quartets.pipe';
+import { ShortTimePipe } from './pipes/short-time.pipe';
 
 // here is the default text string
 @Injectable()
@@ -165,7 +166,8 @@ export class DefaultIntl extends OwlDateTimeIntl {
         AppComponent, UploadImgComponent, NewTaskComponent, NewObsComponent, NewErecordComponent,
         LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
         UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent,
-        WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent
+        WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent,
+        ShortTimePipe,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [

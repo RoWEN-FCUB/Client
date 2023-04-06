@@ -15,6 +15,7 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 })
 export class GeeComponent implements OnInit {
   gees = [];
+  cards: FCard[] = [];
   user = {id: 0};
   selectedGEE: number = -1;
   grecords: GRecord[] = [];
@@ -39,7 +40,9 @@ export class GeeComponent implements OnInit {
           this.selectedGEE = this.gees[0].id;
           this.geeService.listGEERecords(this.selectedGEE).subscribe((grcords: GRecord[]) => {
             this.grecords = grcords;
-            // console.log(this.grecords);
+          });
+          this.geeService.listCardsByGEE(this.selectedGEE).subscribe((cards: FCard[]) => {
+            this.cards = cards;
           });
         }
       });

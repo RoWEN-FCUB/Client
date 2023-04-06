@@ -21,7 +21,7 @@ export class NewFuelCardComponent implements OnInit {
 
   constructor(private fb: UntypedFormBuilder, protected dialogRef: NbDialogRef<any>) {
     this.magneticCardForm = this.fb.group({
-      cardNumber: ['', [Validators.pattern(/[0-9]{11}/), Validators.required]],
+      cardNumber: ['', [Validators.pattern(/^[0-9]{16}$/), Validators.required]],
       fuelType: ['', Validators.required],
       cardBalance: ['', [Validators.pattern(/^(?!0\d)\d*(\.\d+)?(?:[1-9]0|0)?$/), Validators.required]],
     });

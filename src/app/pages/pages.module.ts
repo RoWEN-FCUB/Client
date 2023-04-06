@@ -10,7 +10,7 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { OwlDateTimeIntl, OwlDateTimeModule, OwlNativeDateTimeModule, OWL_DATE_TIME_LOCALE } from '@danielmoncada/angular-datetime-picker';
 // import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
+import { NbSecurityModule } from '@nebular/security';
 import { AdminUsersComponent } from './admin-users/admin-users.component';
 import { TaskWeekComponent } from './task-week/task-week.component';
 import { AllNotificationsComponent } from './all-notifications/all-notifications.component';
@@ -28,6 +28,7 @@ import { ShortNamePipe } from '../pipes/short-name.pipe';
 import { DeviceStatePipe } from '../pipes/device-state.pipe';
 import { StateDescriptionPipe } from '../pipes/state-description.pipe';
 import { ShortTimePipe } from '../pipes/short-time.pipe';
+import { QuartetsPipe } from '../pipes/quartets.pipe';
 // import { UpdtWRecordComponent } from './updt-wrecord/updt-wrecord.component';
 // import { NewWRecordComponent } from './new-wrecord/new-wrecord.component';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -172,7 +173,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     StateDescriptionPipe,
     // tslint:disable-next-line: max-line-length
     ShortSerialPipe, ShortNamePipe, EnergyComponent, GeeComponent, AdminCompanyComponent, AdminServiceComponent, ComercialComponent, DeliversComponent, AdminGeeComponent,
-    ShortTimePipe,
+    ShortTimePipe, QuartetsPipe
     // NewFuelCardComponent,
     // NewGrecordComponent,
     // NewGeeComponent,
