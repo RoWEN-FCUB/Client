@@ -94,8 +94,8 @@ import { environment } from '../environments/environment';
 import { NewGeeComponent } from './pages/new-gee/new-gee.component';
 import { NewGrecordComponent } from './pages/new-grecord/new-grecord.component';
 import { NewFuelCardComponent } from './pages/new-fuel-card/new-fuel-card.component';
-// import { QuartetsPipe } from './pipes/quartets.pipe';
-import { ShortTimePipe } from './pipes/short-time.pipe';
+import { QuartetsPipe } from './pipes/quartets.pipe';
+// import { ShortTimePipe } from './pipes/short-time.pipe';
 
 // here is the default text string
 @Injectable()
@@ -167,7 +167,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
         LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
         UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent,
         WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent,
-        ShortTimePipe,
+        QuartetsPipe
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [
