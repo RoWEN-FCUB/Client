@@ -6,7 +6,7 @@
         <nb-select (selectedChange)="onChangeGee()" *ngIf="gees.length > 1" status="info" class="ms-2" [(ngModel)]="selectedGEE">
           <nb-option *ngFor="let gee of gees" [value]="gee.id">{{gee.idgee}}</nb-option>
         </nb-select>
-        <button (click)="openNew()" class="ms-2" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
+        <button (click)="openNew()" class="ms-2" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
         <button class="ms-2" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
         <button class="ms-2" (click)="openFuelCard()" nbTooltip="Asociar tarjeta de combustible" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="credit-card-outline"></nb-icon>Asociar tarjeta</button>
       </nb-card-header>
@@ -64,9 +64,17 @@
       <nb-card-footer>Total de registros: <b></b></nb-card-footer>
     </nb-card>
   </nb-tab>
-  <nb-tab tabTitle="Tarjeta" id="Tab2" name="Tab2" #Tab2>
+  <nb-tab tabTitle="Tarjeta" id="Tab2" name="Tab2" #Tab2 [disabled]="cards.length === 0 ? true : false">
     <nb-card fullwidth accent="info">
-      <nb-card-header>Registro de operaciones de tarjetas magnéticas</nb-card-header>
+      <nb-card-header>
+        Registro de operaciones de tarjetas magnéticas
+        <span class="mr-2">Tarjeta: <span *ngIf="cards.length === 1">{{cards[0].numero}}</span>
+          <nb-select id="cardNumber" placeholder="----" [status]="'info'" [(ngModel)]="selectedCard" *ngIf="cards.length > 1">                            
+            <nb-option *ngFor="let card of cards" [value]="card.id">{{card.numero}}</nb-option>
+          </nb-select>
+        </span>
+        <button class="ms-2" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+      </nb-card-header>
       <nb-card-body></nb-card-body>      
     </nb-card>
   </nb-tab>

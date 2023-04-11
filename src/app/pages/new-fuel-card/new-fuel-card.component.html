@@ -6,7 +6,7 @@
                 <div class="col">
                     <div class="form-group mb-3">
                         <label for="cardNumber" class="form-label">Número de tarjeta:</label>
-                        <input nbInput maxlength="16" type="text" [value]="magneticCardForm.get('cardNumber').value | quartets" placeholder="0000 0000 0000 0000"  id="cardNumber" formControlName="cardNumber" class="form-control" [status]="magneticCardForm.controls.cardNumber.valid ? 'success' : (magneticCardForm.controls.cardNumber.pristine ? 'info' : 'danger')">
+                        <input nbInput maxlength="19" type="text" [value]="magneticCardForm.get('cardNumber').value | quartets" placeholder="0000 0000 0000 0000"  id="cardNumber" formControlName="cardNumber" class="form-control" [status]="magneticCardForm.controls.cardNumber.valid ? 'success' : (magneticCardForm.controls.cardNumber.pristine ? 'info' : 'danger')">
                     </div>
                 </div>
             </div>

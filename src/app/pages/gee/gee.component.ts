@@ -26,6 +26,7 @@ export class GeeComponent implements OnInit {
     timerProgressBar: true,
     timer: 3000,
   });
+  selectedCard: number = -1;
 
   constructor(private geeService: GeeService, private authService: NbAuthService, private dialogService: NbDialogService) { }
 
@@ -41,11 +42,18 @@ export class GeeComponent implements OnInit {
           this.geeService.listGEERecords(this.selectedGEE).subscribe((grcords: GRecord[]) => {
             this.grecords = grcords;
           });
-          this.geeService.listCardsByGEE(this.selectedGEE).subscribe((cards: FCard[]) => {
-            this.cards = cards;
-          });
+          this.getCards();
         }
       });
+    });
+  }
+
+  getCards() {
+    this.geeService.listCardsByGEE(this.selectedGEE).subscribe((cards: FCard[]) => {
+      this.cards = cards;
+      if (this.cards.length > 0) {
+        this.selectedCard = this.cards[0].id;
+      }
     });
   }
 
@@ -80,6 +88,7 @@ export class GeeComponent implements OnInit {
             icon: 'success',
             title: 'Tarjeta asociada correctamente.',
           } as SweetAlertOptions);
+          this.getCards();
         });
       }
     });

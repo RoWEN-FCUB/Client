@@ -21,7 +21,7 @@ export class NewFuelCardComponent implements OnInit {
 
   constructor(private fb: UntypedFormBuilder, protected dialogRef: NbDialogRef<any>) {
     this.magneticCardForm = this.fb.group({
-      cardNumber: ['', [Validators.pattern(/^[0-9]{16}$/), Validators.required]],
+      cardNumber: ['', [Validators.pattern(/^[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$/), Validators.required]],
       fuelType: ['', Validators.required],
       cardBalance: ['', [Validators.pattern(/^(?!0\d)\d*(\.\d+)?(?:[1-9]0|0)?$/), Validators.required]],
     });
@@ -29,7 +29,7 @@ export class NewFuelCardComponent implements OnInit {
 
   onSubmit() {
     // Lógica para enviar los datos al servidor
-    this.newCard.numero = this.magneticCardForm.get('cardNumber')?.value;
+    this.newCard.numero = this.magneticCardForm.get('cardNumber')?.value.replace(/\s/g, "");
     this.newCard.tipo_combustible = this.magneticCardForm.get('fuelType')?.value;
     this.newCard.saldo = Number(this.magneticCardForm.get('cardBalance')?.value);
     this.newCard.id_gee = this.id_gee; // id de la gee del cliente.
