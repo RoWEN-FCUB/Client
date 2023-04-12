@@ -7,6 +7,7 @@ export interface GEE {
     kva?: number;
     empresa?: string;
     servicio?: string;
+    oace?: string;
     provincia?: string;
     municipio?: string;
     ic_scarga?: number;

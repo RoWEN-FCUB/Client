@@ -3,8 +3,8 @@
     <nb-card fullwidth accent="info">
       <nb-card-header>
         Registro de operaciones del Grupo Electrónico de Emergencia
-        <nb-select (selectedChange)="onChangeGee()" *ngIf="gees.length > 1" status="info" class="ms-2" [(ngModel)]="selectedGEE">
-          <nb-option *ngFor="let gee of gees" [value]="gee.id">{{gee.idgee}}</nb-option>
+        <nb-select (selectedChange)="onChangeGee($event)" *ngIf="gees.length > 1" status="info" class="ms-2" [(ngModel)]="selectedGEE">
+          <nb-option *ngFor="let gee of gees" [value]="gee">{{gee.idgee}}</nb-option>
         </nb-select>
         <button (click)="openNew()" class="ms-2" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
         <button class="ms-2" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
@@ -70,12 +70,47 @@
         Registro de operaciones de tarjetas magnéticas
         <span class="mr-2">Tarjeta: <span *ngIf="cards.length === 1">{{cards[0].numero}}</span>
           <nb-select id="cardNumber" placeholder="----" [status]="'info'" [(ngModel)]="selectedCard" *ngIf="cards.length > 1">                            
-            <nb-option *ngFor="let card of cards" [value]="card.id">{{card.numero}}</nb-option>
+            <nb-option *ngFor="let card of cards" [value]="card">{{card.numero}}</nb-option>
           </nb-select>
         </span>
         <button class="ms-2" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
       </nb-card-header>
-      <nb-card-body></nb-card-body>      
+      <nb-card-body>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th colspan="4">Empresa: {{selectedGEE.empresa + ' ' + selectedGEE.servicio}}</th>
+              <th colspan="4">Organismo: {{selectedGEE.oace}}</th>
+            </tr>
+            <tr>
+              <th colspan="3">Tarjeta No.: {{selectedCard.numero}}</th>
+              <th colspan="5">Tipo de combustible: {{selectedCard.tipo_combustible}}</th>
+            </tr>
+            <tr>
+              <th>Fecha</th>
+              <th>Saldo Inicial Pesos/Litros</th>
+              <th>Recarga Pesos/Litros</th>
+              <th>SaldoPesos/Litros</th>
+              <th>Consumo Pesos/Litros</th>
+              <th>Saldo Final Pesos/Litros</th>
+              <th>Observ.</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let card_record of card_records">
+              <td>{{card_record.fecha | date:'dd-MM-yyyy':'UTC'}}</td>
+              <td>{{card_record.sinicial_pesos ? card_record.sinicial_pesos + '/' + card_record.sinicial_litros : '--'}}</td>
+              <td>{{card_record.recarga_pesos ? card_record.recarga_pesos + '/' + card_record.recarga_litros : '--'}}</td>
+              <td>{{card_record.saldo_pesos ? card_saldo.sinicial_pesos + '/' + card_saldo.sinicial_litros : '--'}}</td>
+              <td>{{card_record.consumo_pesos ? card_record.consumo_pesos + '/' + card_record.consumo_litros : '--'}}</td>
+              <td>{{card_record.sfinal_pesos ? card_record.sfinal_pesos + '/' + card_record.sfinal_litros : '--'}}</td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </nb-card-body>      
     </nb-card>
   </nb-tab>
 </nb-tabset>

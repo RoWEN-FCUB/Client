@@ -7,6 +7,8 @@ import { NewGrecordComponent } from '../new-grecord/new-grecord.component';
 import { NewFuelCardComponent } from '../new-fuel-card/new-fuel-card.component';
 import { FCard } from '../../models/FCard';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
+import { CRecord } from '../../models/CRecord';
+import { GEE } from '../../models/GEE';
 
 @Component({
   selector: 'gee',
@@ -14,10 +16,11 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
   styleUrls: ['./gee.component.css'],
 })
 export class GeeComponent implements OnInit {
-  gees = [];
+  gees: GEE[] = [];
   cards: FCard[] = [];
+  card_records: CRecord[] = [];
   user = {id: 0};
-  selectedGEE: number = -1;
+  selectedGEE: GEE = {};
   grecords: GRecord[] = [];
   Toast = Swal.mixin({
     toast: true,
@@ -26,20 +29,18 @@ export class GeeComponent implements OnInit {
     timerProgressBar: true,
     timer: 3000,
   });
-  selectedCard: number = -1;
+  selectedCard: FCard = {};
 
   constructor(private geeService: GeeService, private authService: NbAuthService, private dialogService: NbDialogService) { }
 
   ngOnInit(): void {
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
-      this.geeService.listGEEsByUser(this.user.id).subscribe((res: any[]) => {
-        for (let i = 0; i < res.length; i++) {
-          this.gees.push(res[i]);
-        }
+      this.geeService.listGEEsByUser(this.user.id).subscribe((res: GEE[]) => {
+        this.gees = res;
         if (this.gees.length > 0) {
-          this.selectedGEE = this.gees[0].id;
-          this.geeService.listGEERecords(this.selectedGEE).subscribe((grcords: GRecord[]) => {
+          this.selectedGEE = this.gees[0];
+          this.geeService.listGEERecords(this.selectedGEE.id).subscribe((grcords: GRecord[]) => {
             this.grecords = grcords;
           });
           this.getCards();
@@ -49,18 +50,28 @@ export class GeeComponent implements OnInit {
   }
 
   getCards() {
-    this.geeService.listCardsByGEE(this.selectedGEE).subscribe((cards: FCard[]) => {
+    this.geeService.listCardsByGEE(this.selectedGEE.id).subscribe((cards: FCard[]) => {
       this.cards = cards;
       if (this.cards.length > 0) {
-        this.selectedCard = this.cards[0].id;
+        this.selectedCard = this.cards[0];
+        this.geeService.listCardsRecords(this.selectedCard.id).subscribe((records: CRecord[]) => {
+          this.card_records = records;
+        });
       }
     });
   }
 
-  onChangeGee() {
-    this.geeService.listGEERecords(this.selectedGEE).subscribe((grcords: GRecord[]) => {
+  onChangeGee(selected: GEE) {
+    this.geeService.listGEERecords(selected.id).subscribe((grcords: GRecord[]) => {
       this.grecords = grcords;
       // console.log(this.grecords);
+    });
+    this.getCards();
+  }
+
+  onChangeCard(selected: FCard) {
+    this.geeService.listCardsRecords(selected.id).subscribe((records: CRecord[]) => {
+      this.card_records = records;
     });
   }
 
@@ -69,19 +80,19 @@ export class GeeComponent implements OnInit {
     if (this.grecords.length > 0) {
       // tslint:disable-next-line: max-line-length
       this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', operacion_anterior: this.grecords[0]}}).onClose.subscribe(() => {
-        this.onChangeGee();
+        this.onChangeGee(this.selectedGEE);
       });
       // Object.defineProperty(contexto, 'operacion_anterior', {value: this.grecords[0]});
       // console.log(contexto);
     } else {
       this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación'}}).onClose.subscribe(res => {
-        this.onChangeGee();
+        this.onChangeGee(this.selectedGEE);
       });
     }
   }
 
   openFuelCard() {
-    this.dialogService.open(NewFuelCardComponent, {context: {id_gee: this.selectedGEE}}).onClose.subscribe((newCard: FCard) => {
+    this.dialogService.open(NewFuelCardComponent, {context: {id_gee: this.selectedGEE.id}}).onClose.subscribe((newCard: FCard) => {
       if(newCard) {
         this.geeService.saveFCard(newCard).subscribe(() => {
           this.Toast.fire({
