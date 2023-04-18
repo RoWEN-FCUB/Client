@@ -6,7 +6,7 @@
         <nb-select (selectedChange)="onChangeGee($event)" *ngIf="gees.length > 1" status="info" class="ms-2" [(ngModel)]="selectedGEE">
           <nb-option *ngFor="let gee of gees" [value]="gee">{{gee.idgee}}</nb-option>
         </nb-select>
-        <button (click)="openNew()" class="ms-2" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+        <button (click)="openNew()" class="ms-2" nbTooltip="Agregar una operación" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
         <button class="ms-2" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
         <button class="ms-2" (click)="openFuelCard()" nbTooltip="Asociar tarjeta de combustible" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="credit-card-outline"></nb-icon>Asociar tarjeta</button>
       </nb-card-header>
@@ -69,11 +69,11 @@
       <nb-card-header>
         Registro de operaciones de tarjetas magnéticas
         <span class="mr-2">Tarjeta: <span *ngIf="cards.length === 1">{{cards[0].numero}}</span>
-          <nb-select id="cardNumber" placeholder="----" [status]="'info'" [(ngModel)]="selectedCard" *ngIf="cards.length > 1">                            
+          <nb-select (selectedChange)="onChangeCard($event)" id="cardNumber" placeholder="----" [status]="'info'" [(ngModel)]="selectedCard" *ngIf="cards.length > 1">                            
             <nb-option *ngFor="let card of cards" [value]="card">{{card.numero}}</nb-option>
           </nb-select>
         </span>
-        <button class="ms-2" nbTooltip="Agregar un registro" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nuevo</button>
+        <button class="ms-2" (click)="openCRecord()" nbTooltip="Agregar una operación" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
       </nb-card-header>
       <nb-card-body>
         <table class="table table-striped">
@@ -87,14 +87,21 @@
               <th colspan="5">Tipo de combustible: {{selectedCard.tipo_combustible}}</th>
             </tr>
             <tr>
-              <th>Fecha</th>
-              <th>Saldo Inicial Pesos/Litros</th>
-              <th>Recarga Pesos/Litros</th>
-              <th>SaldoPesos/Litros</th>
-              <th>Consumo Pesos/Litros</th>
-              <th>Saldo Final Pesos/Litros</th>
-              <th>Observ.</th>
-              <th></th>
+              <th rowspan="2" style="text-align: center; vertical-align: middle;">Fecha</th>
+              <th>Saldo Inicial</th>
+              <th>Recarga</th>
+              <th>Saldo</th>
+              <th>Consumo</th>
+              <th>Saldo Final</th>
+              <th rowspan="2" style="text-align: center; vertical-align: middle;">Observ.</th>
+              <th rowspan="2"></th>
+            </tr>
+            <tr>
+              <th>Pesos/Litros</th>
+              <th>Pesos/Litros</th>
+              <th>Pesos/Litros</th>
+              <th>Pesos/Litros</th>
+              <th>Pesos/Litros</th>
             </tr>
           </thead>
           <tbody>
@@ -102,10 +109,10 @@
               <td>{{card_record.fecha | date:'dd-MM-yyyy':'UTC'}}</td>
               <td>{{card_record.sinicial_pesos ? card_record.sinicial_pesos + '/' + card_record.sinicial_litros : '--'}}</td>
               <td>{{card_record.recarga_pesos ? card_record.recarga_pesos + '/' + card_record.recarga_litros : '--'}}</td>
-              <td>{{card_record.saldo_pesos ? card_saldo.sinicial_pesos + '/' + card_saldo.sinicial_litros : '--'}}</td>
+              <td>{{card_record.saldo_pesos ? card_record.sinicial_pesos + '/' + card_record.sinicial_litros : '--'}}</td>
               <td>{{card_record.consumo_pesos ? card_record.consumo_pesos + '/' + card_record.consumo_litros : '--'}}</td>
               <td>{{card_record.sfinal_pesos ? card_record.sfinal_pesos + '/' + card_record.sfinal_litros : '--'}}</td>
-              <td></td>
+              <td><span *ngIf="card_record.observacion" nbTooltip="{{card_record.observacion}}">***</span></td>
               <td></td>
             </tr>
           </tbody>

@@ -71,7 +71,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.companyService.getOne(this.user.id_emp).subscribe((res: Company) => {
           this.company = res;
         });
-        this.userpicture = ipserver + 'public/' + this.user.picture;
+        try {
+          fetch(ipserver + 'public/' + this.user.picture, { method: 'HEAD' }).then(res => {
+              if (res.ok) {
+                  this.userpicture = ipserver + 'public/' + this.user.picture
+              } else {
+                  this.userpicture = 'assets/avatars/empty.png';
+              }
+          });
+        } catch (error){}
         this.notificationService.searchNewNotifications(this.user.id);
         this.notificationService.getNotifications().subscribe((res) => {
           if (this.updating_notif) {

@@ -94,6 +94,7 @@ import { environment } from '../environments/environment';
 import { NewGeeComponent } from './pages/new-gee/new-gee.component';
 import { NewGrecordComponent } from './pages/new-grecord/new-grecord.component';
 import { NewFuelCardComponent } from './pages/new-fuel-card/new-fuel-card.component';
+import { NewCrecordComponent } from './pages/new-crecord/new-crecord.component';
 import { QuartetsPipe } from './pipes/quartets.pipe';
 // import { ShortTimePipe } from './pipes/short-time.pipe';
 
@@ -167,7 +168,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
         LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
         UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent,
         WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent,
-        QuartetsPipe
+        QuartetsPipe, NewCrecordComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [
@@ -238,7 +239,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
         NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent,
         NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent, WpartsComponent,
-        NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent],
+        NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent, NewCrecordComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {

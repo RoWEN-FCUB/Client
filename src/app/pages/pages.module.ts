@@ -51,6 +51,7 @@ import { DeliversComponent } from './delivers/delivers.component';
 // import { NewServiceComponent } from './new-service/new-service.component';
 import { WebcamModule } from 'ngx-webcam';
 import { AdminGeeComponent } from './admin-gee/admin-gee.component';
+// import { NewCrecordComponent } from './new-crecord/new-crecord.component';
 // import { NewFuelCardComponent } from './new-fuel-card/new-fuel-card.component';
 // import { NewGrecordComponent } from './new-grecord/new-grecord.component';
 // import { NewGeeComponent } from './new-gee/new-gee.component';
@@ -174,6 +175,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     // tslint:disable-next-line: max-line-length
     ShortSerialPipe, ShortNamePipe, EnergyComponent, GeeComponent, AdminCompanyComponent, AdminServiceComponent, ComercialComponent, DeliversComponent, AdminGeeComponent,
     ShortTimePipe,
+    // NewCrecordComponent,
     // NewFuelCardComponent,
     // NewGrecordComponent,
     // NewGeeComponent,

@@ -3,6 +3,7 @@ import { GEE } from '../models/GEE';
 import {HttpClient} from '@angular/common/http';
 import ipserver from '../ipserver';
 import { FCard } from '../models/FCard';
+import { CRecord } from '../models/CRecord';
 
 @Injectable({
   providedIn: 'root',
@@ -37,6 +38,10 @@ export class GeeService {
 
   saveFCard(newCard: FCard) {
     return this.http.post(ipserver + 'gee/FCard', newCard);
+  }
+
+  saveFCardRecord(newCardRecord: CRecord) {
+    return this.http.post(ipserver + 'gee/FCardRecord', newCardRecord);
   }
 
   updateGEE(newGEE: GEE) {

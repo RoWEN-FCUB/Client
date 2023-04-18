@@ -5,6 +5,7 @@ import { GRecord } from '../../models/GRecord';
 import { NbDialogService } from '@nebular/theme';
 import { NewGrecordComponent } from '../new-grecord/new-grecord.component';
 import { NewFuelCardComponent } from '../new-fuel-card/new-fuel-card.component';
+import { NewCrecordComponent } from '../new-crecord/new-crecord.component';
 import { FCard } from '../../models/FCard';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { CRecord } from '../../models/CRecord';
@@ -102,6 +103,40 @@ export class GeeComponent implements OnInit {
           this.getCards();
         });
       }
+    });
+  }
+
+  openCRecord() {
+    this.dialogService.open(NewCrecordComponent, {}).onClose.subscribe((newCrecord: CRecord) => {
+      newCrecord.id_gee = this.selectedGEE.id;
+      newCrecord.id_tarjeta = this.selectedCard.id;
+      newCrecord.id_usuario = this.user.id;
+      newCrecord.consumo_litros = null;
+      newCrecord.recarga_litros = null;
+      newCrecord.saldo_litros = null;
+      newCrecord.sfinal_litros = null;
+      newCrecord.sinicial_litros = null;
+      if(this.card_records.length > 0) {
+        newCrecord.sinicial_pesos = this.card_records[this.card_records.length - 1].sfinal_pesos;
+      } else {
+        newCrecord.sinicial_pesos = 0;
+      }
+      if(newCrecord.recarga_pesos) {
+        newCrecord.saldo_pesos = newCrecord.sinicial_pesos + newCrecord.recarga_pesos;
+        newCrecord.sfinal_pesos = newCrecord.saldo_pesos;
+      }
+      if(newCrecord.consumo_pesos) {
+        newCrecord.sfinal_pesos = newCrecord.sinicial_pesos - newCrecord.consumo_pesos;
+      }
+      this.geeService.saveFCardRecord(newCrecord).subscribe(() => {
+        this.Toast.fire({
+          icon:'success',
+          title: 'Registro guardado correctamente.',
+        } as SweetAlertOptions);
+        this.geeService.listCardsRecords(this.selectedCard.id).subscribe((records: CRecord[]) => {
+          this.card_records = records;
+        });
+      });
     });
   }
 

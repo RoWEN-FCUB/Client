@@ -1,0 +1,49 @@
+<form [formGroup]="newCardRecordForm">
+    <nb-card>
+        <nb-card-header>Nueva operación</nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-3">
+                        <label for="fecha" class="form-label">Fecha:</label>
+                        <input nbInput [owlDateTime]="dt" [selectMode]="'single'" [owlDateTimeTrigger]="dt" type="text" placeholder="dd/MM/yyyy"  id="fecha" formControlName="fecha" class="form-control" [status]="newCardRecordForm.controls.fecha.valid ? 'success' : (newCardRecordForm.controls.fecha.pristine ? 'info' : 'danger')">
+                        <owl-date-time #dt [pickerType]="'calendar'"></owl-date-time>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-3">
+                        <label for="tipo" class="form-label">Tipo de Operación:</label>
+                        <nb-select id="tipo" formControlName="tipo" fullWidth placeholder="----" [status]="newCardRecordForm.controls.tipo.valid ? 'success' : (newCardRecordForm.controls.tipo.pristine ? 'info' : 'danger')">                            
+                            <nb-option value="Carga">Carga</nb-option>
+                            <nb-option value="Extraccion">Extracción</nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-3">
+                        <label for="saldo" class="form-label">Saldo:</label>
+                        <input nbInput type="text" id="saldo" formControlName="saldo" class="form-control" [status]="newCardRecordForm.controls.saldo.valid ? 'success' : (newCardRecordForm.controls.saldo.pristine ? 'info' : 'danger')">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-3">
+                        <label for="observ" class="form-label">Observación:</label>
+                        <textarea id="observ" formControlName="observ" class="form-control" cols="30" rows="3" fullWidth nbInput [status]="'info'" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <div class="form-group" style="float: right;margin-top: 5px">
+                <button (click)="onSubmit()" [disabled]="newCardRecordForm.invalid" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+                <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+            </div>
+        </nb-card-footer>
+    </nb-card>
+</form>
