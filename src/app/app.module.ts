@@ -96,6 +96,7 @@ import { NewGrecordComponent } from './pages/new-grecord/new-grecord.component';
 import { NewFuelCardComponent } from './pages/new-fuel-card/new-fuel-card.component';
 import { NewCrecordComponent } from './pages/new-crecord/new-crecord.component';
 import { QuartetsPipe } from './pipes/quartets.pipe';
+import { FuelPriceComponent } from './pages/fuel-price/fuel-price.component';
 // import { ShortTimePipe } from './pipes/short-time.pipe';
 
 // here is the default text string
@@ -168,7 +169,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
         LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
         UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent,
         WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent,
-        QuartetsPipe, NewCrecordComponent
+        QuartetsPipe, NewCrecordComponent, FuelPriceComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [
@@ -239,7 +240,9 @@ export class DefaultIntl extends OwlDateTimeIntl {
     exports: [UploadImgComponent, NewTaskComponent, NewObsComponent, NewUserComponent, SelectSubsComponent,
         NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent,
         NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent, WpartsComponent,
-        NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent, NewCrecordComponent],
+        NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent, NewCrecordComponent,
+        FuelPriceComponent,
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

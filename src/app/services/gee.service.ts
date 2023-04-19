@@ -16,6 +16,10 @@ export class GeeService {
     return this.http.get(ipserver + 'gee/list/', {responseType: 'json'});
   }
 
+  getFuelPrices() {
+    return this.http.get(ipserver + 'gee/fuelPrices/', {responseType: 'json'});
+  }
+
   listGEEsByUser(id: number) {
     return this.http.get(ipserver + 'gee/listGEEByUser/' + id, {responseType: 'json'});
   }
@@ -50,5 +54,9 @@ export class GeeService {
 
   deleteGEE(id: number) {
     return this.http.delete(ipserver + 'gee/' + id);
+  }
+
+  deleteCardRecord(id: number) {
+    return this.http.delete(ipserver + 'gee/deleteCardRecord/' + id);
   }
 }

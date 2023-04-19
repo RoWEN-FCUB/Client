@@ -1,0 +1,39 @@
+<form [formGroup]="newPriceForm">
+    <nb-card>
+        <nb-card-header><div class="text-center">Cambio de precio</div></nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-3">
+                        <label for="fuelType" class="form-label">Tipo de combustible:</label>
+                        <nb-select (selectedChange)="onSelectedFuelChange($event)" id="fuelType" formControlName="fuelType" fullWidth placeholder="----" [status]="newPriceForm.controls.fuelType.valid ? 'success' : (newPriceForm.controls.fuelType.pristine ? 'info' : 'danger')">                            
+                            <nb-option value="Diesel Regular">Diesel Regular</nb-option>
+                            <nb-option value="Gasolina">Gasolina</nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-3">
+                        <label for="antiguo_precio" class="form-label">Precio anterior: {{precio_anterior}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-3">
+                        <label for="nuevo_precio" class="form-label">Nuevo precio:</label>
+                        <input nbInput type="text" id="nuevo_precio" formControlName="nuevo_precio" class="form-control" [status]="newPriceForm.controls.nuevo_precio.valid ? 'success' : (newPriceForm.controls.nuevo_precio.pristine ? 'info' : 'danger')">
+                    </div>
+                </div>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <div class="form-group" style="float: right;margin-top: 5px">
+                <button (click)="onSubmit()" [disabled]="newPriceForm.invalid" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+                <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+            </div>
+        </nb-card-footer>
+    </nb-card>
+</form>

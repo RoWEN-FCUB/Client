@@ -5,6 +5,7 @@ import { NbAuthService } from '@nebular/auth';
 import { GEE } from '../../models/GEE';
 import { GeeService } from '../../services/gee.service';
 import { NewGeeComponent } from '../new-gee/new-gee.component';
+import { FuelPriceComponent } from '../fuel-price/fuel-price.component';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -14,11 +15,18 @@ import { NewGeeComponent } from '../new-gee/new-gee.component';
 })
 export class AdminGeeComponent implements OnInit {
   gees: GEE[];
+  fuelPrices: any = {
+    precio_dregular: 0,
+    precio_gregular: 0,
+  };
 
   constructor(private authService: NbAuthService, private geeService: GeeService, private dialogService: NbDialogService) { }
 
   ngOnInit(): void {
     this.getGEEs();
+    this.geeService.getFuelPrices().subscribe(res => {
+      this.fuelPrices = res;
+    });
   }
 
   getGEEs() {
@@ -30,6 +38,14 @@ export class AdminGeeComponent implements OnInit {
   openNew() {
     this.dialogService.open(NewGeeComponent, {context: {title: 'Nuevo GEE'}}).onClose.subscribe(res => {
       this.getGEEs();
+    });
+  }
+
+  openChangePrice() {
+    this.dialogService.open(FuelPriceComponent, {context: {fuelPrices: this.fuelPrices}}).onClose.subscribe(res => {
+      if (res) {
+        
+      }
     });
   }
 

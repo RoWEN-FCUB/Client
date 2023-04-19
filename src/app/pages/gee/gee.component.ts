@@ -140,4 +140,29 @@ export class GeeComponent implements OnInit {
     });
   }
 
+  deleteCardRecord(cardRecord: CRecord){
+    Swal.fire({
+      title: 'Confirma que desea eliminar el registro?',
+      text: 'Se eliminarán todos sus datos del sistema.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí­',
+      cancelButtonText: 'No',
+    } as SweetAlertOptions).then((result) => {
+      if (result.value) {
+        this.geeService.deleteCardRecord(cardRecord.id).subscribe(() => {
+          this.Toast.fire({
+            icon:'success',
+            title: 'Registro borrado correctamente.',
+          } as SweetAlertOptions);
+          this.geeService.listCardsRecords(this.selectedCard.id).subscribe((records: CRecord[]) => {
+            this.card_records = records;
+          });
+        });
+      }
+    });
+  }
+
 }
