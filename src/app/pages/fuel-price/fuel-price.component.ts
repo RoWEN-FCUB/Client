@@ -24,7 +24,7 @@ export class FuelPriceComponent {
 
   onSubmit() {
     // Lógica para enviar los datos al servidor
-    this.dialogRef.close({fuelType: this.newPriceForm.controls.fuelType, newPrice: this.newPriceForm.controls.nuevo_precio.value});
+    this.dialogRef.close({fuelType: this.newPriceForm.controls.fuelType.value, prevPrice: this.precio_anterior, newPrice: this.newPriceForm.controls.nuevo_precio.value});
   }
 
   onSelectedFuelChange(fuelType: string) {

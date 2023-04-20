@@ -48,6 +48,10 @@ export class GeeService {
     return this.http.post(ipserver + 'gee/FCardRecord', newCardRecord);
   }
 
+  changeFuelPrice(data: any) {
+    return this.http.post(ipserver + 'gee/changeFuelPrice', data);
+  }
+
   updateGEE(newGEE: GEE) {
     return this.http.put(ipserver + 'gee/' + newGEE.id, newGEE);
   }

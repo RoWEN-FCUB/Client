@@ -109,7 +109,7 @@
               <td>{{card_record.fecha | date:'dd-MM-yyyy':'UTC'}}</td>
               <td>{{card_record.sinicial_pesos ? card_record.sinicial_pesos + '/' + card_record.sinicial_litros : '--'}}</td>
               <td>{{card_record.recarga_pesos ? card_record.recarga_pesos + '/' + card_record.recarga_litros : '--'}}</td>
-              <td>{{card_record.saldo_pesos ? card_record.sinicial_pesos + '/' + card_record.sinicial_litros : '--'}}</td>
+              <td>{{card_record.saldo_pesos ? card_record.saldo_pesos + '/' + card_record.saldo_litros : '--'}}</td>
               <td>{{card_record.consumo_pesos ? card_record.consumo_pesos + '/' + card_record.consumo_litros : '--'}}</td>
               <td>{{card_record.sfinal_pesos ? card_record.sfinal_pesos + '/' + card_record.sfinal_litros : '--'}}</td>
               <td><span *ngIf="card_record.observacion" nbTooltip="{{card_record.observacion}}">***</span></td>

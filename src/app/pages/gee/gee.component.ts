@@ -95,6 +95,7 @@ export class GeeComponent implements OnInit {
   openFuelCard() {
     this.dialogService.open(NewFuelCardComponent, {context: {id_gee: this.selectedGEE.id}}).onClose.subscribe((newCard: FCard) => {
       if(newCard) {
+        newCard.id_usuario = this.user.id;
         this.geeService.saveFCard(newCard).subscribe(() => {
           this.Toast.fire({
             icon: 'success',

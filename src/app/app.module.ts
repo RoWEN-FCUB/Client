@@ -97,6 +97,7 @@ import { NewFuelCardComponent } from './pages/new-fuel-card/new-fuel-card.compon
 import { NewCrecordComponent } from './pages/new-crecord/new-crecord.component';
 import { QuartetsPipe } from './pipes/quartets.pipe';
 import { FuelPriceComponent } from './pages/fuel-price/fuel-price.component';
+import { AdminFcardComponent } from './pages/admin-fcard/admin-fcard.component';
 // import { ShortTimePipe } from './pipes/short-time.pipe';
 
 // here is the default text string
@@ -169,7 +170,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
         LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
         UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent,
         WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent,
-        QuartetsPipe, NewCrecordComponent, FuelPriceComponent
+        QuartetsPipe, NewCrecordComponent, FuelPriceComponent, AdminFcardComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [
@@ -241,7 +242,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
         NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent,
         NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent, WpartsComponent,
         NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent, NewCrecordComponent,
-        FuelPriceComponent,
+        FuelPriceComponent, AdminFcardComponent
     ],
     bootstrap: [AppComponent]
 })

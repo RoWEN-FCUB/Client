@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
-import { NbAuthService } from '@nebular/auth';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { GEE } from '../../models/GEE';
 import { GeeService } from '../../services/gee.service';
 import { NewGeeComponent } from '../new-gee/new-gee.component';
@@ -19,10 +19,21 @@ export class AdminGeeComponent implements OnInit {
     precio_dregular: 0,
     precio_gregular: 0,
   };
+  user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: ''};
+  Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timerProgressBar: true,
+    timer: 3000,
+  });
 
   constructor(private authService: NbAuthService, private geeService: GeeService, private dialogService: NbDialogService) { }
 
   ngOnInit(): void {
+    const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
+      this.user = token.getPayload();
+    });
     this.getGEEs();
     this.geeService.getFuelPrices().subscribe(res => {
       this.fuelPrices = res;
@@ -41,10 +52,28 @@ export class AdminGeeComponent implements OnInit {
     });
   }
 
+  openAssociatedCards(i: number) {
+    this.dialogService.open(AdminGeeComponent, {context: {}}).onClose.subscribe(res => {
+      
+    });
+  }
+
   openChangePrice() {
     this.dialogService.open(FuelPriceComponent, {context: {fuelPrices: this.fuelPrices}}).onClose.subscribe(res => {
       if (res) {
-        
+        console.log(res);
+        const datos = {
+          prevPrice: res.prevPrice,
+          newPrice: res.newPrice,
+          fuelType: res.fuelType,
+          id_usuario: this.user.id,
+        }
+        this.geeService.changeFuelPrice(datos).subscribe(res => {
+          this.Toast.fire({
+            icon:'success',
+            title: 'Precio actualizado correctamente. Se adicionó un nuevo registro para cada tarjeta de ' + datos.fuelType,
+          } as SweetAlertOptions);
+        });
       }
     });
   }
