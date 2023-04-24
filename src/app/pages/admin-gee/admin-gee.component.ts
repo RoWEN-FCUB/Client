@@ -6,6 +6,7 @@ import { GEE } from '../../models/GEE';
 import { GeeService } from '../../services/gee.service';
 import { NewGeeComponent } from '../new-gee/new-gee.component';
 import { FuelPriceComponent } from '../fuel-price/fuel-price.component';
+import { AdminFcardComponent } from '../admin-fcard/admin-fcard.component';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -53,7 +54,7 @@ export class AdminGeeComponent implements OnInit {
   }
 
   openAssociatedCards(i: number) {
-    this.dialogService.open(AdminGeeComponent, {context: {}}).onClose.subscribe(res => {
+    this.dialogService.open(AdminFcardComponent, {context: {gee: this.gees[i]}}).onClose.subscribe(res => {
       
     });
   }

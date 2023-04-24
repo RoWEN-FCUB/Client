@@ -63,4 +63,8 @@ export class GeeService {
   deleteCardRecord(id: number) {
     return this.http.delete(ipserver + 'gee/deleteCardRecord/' + id);
   }
+
+  deleteFuelCard(id: number) {
+    return this.http.delete(ipserver + 'gee/deleteFuelCard/' + id);
+  }
 }

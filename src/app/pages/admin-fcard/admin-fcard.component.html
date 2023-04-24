@@ -1,11 +1,30 @@
 <nb-card>
-    <nb-card-header><div class="text-center">Tarjetas asociadas al GEE</div></nb-card-header>
+    <nb-card-header><div class="text-center">Tarjetas asociadas al GEE {{gee.idgee}}</div></nb-card-header>
     <nb-card-body>
-        
+        <div class='table-responsive'>
+            <table class="table table-hover table-borderless table-striped table-sm">
+                <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>SALDO</th>
+                      <th>TIPO DE COMBUSTIBLE</th>              
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor='let card of cards'>
+                        <td>{{card.numero}}</td>
+                        <td>{{card.saldo}}</td>
+                        <td>{{card.tipo_combustible}}</td>
+                        <td><nb-icon (click)="deleteCard(card)" style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar tarjeta" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon></td>
+                    </tr>
+                  </tbody>
+            </table>
+        </div>
     </nb-card-body>
     <nb-card-footer>
         <div class="form-group" style="float: right;margin-top: 5px">
-            <button style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+            <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
         </div>
     </nb-card-footer>
 </nb-card>
