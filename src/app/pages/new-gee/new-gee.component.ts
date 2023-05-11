@@ -25,6 +25,9 @@ export class NewGeeComponent implements OnInit {
     ic_scarga: 0,
     ic_ccargad: 0,
     ic_ccargan: 0,
+    cap_tanque: 0,
+    tanque_ext: false,
+    cap_tanque_ext: 0,
   };
   companies: Company[];
   services: EService[];
@@ -35,7 +38,10 @@ export class NewGeeComponent implements OnInit {
   kva_status = 'info';
   icsc_status = 'info';
   icccd_status = 'info';
+  cap_tanque_status = 'info';
+  tanque_ext_status = 'info';
   icccn_status = 'info';
+  cap_tanque_ext_status = 'info';
   empresa_seleccionada = -1;
   servicio_seleccionado = -1;
 
@@ -138,6 +144,18 @@ export class NewGeeComponent implements OnInit {
         title: 'Debe escribir el índice de consumo nocturno con carga del grupo.',
       } as SweetAlertOptions);
       this.icccn_status = 'danger';
+    } else if (this.cap_tanque_status === 'danger' || !this.newGEE.cap_tanque) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir la capacidad del tanque interior del grupo.',
+      } as SweetAlertOptions);
+      this.cap_tanque_status = 'danger';
+    } else if (this.cap_tanque_ext_status === 'danger' || (this.newGEE.tanque_ext && !this.newGEE.cap_tanque_ext)) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir la capacidad del tanque exterior del grupo.',
+      } as SweetAlertOptions);
+      this.cap_tanque_ext_status = 'danger';
     } else {
       this.save();
     }
@@ -151,6 +169,10 @@ export class NewGeeComponent implements OnInit {
       timerProgressBar: true,
       timer: 3000,
     });
+    this.newGEE.cap_tanque = Number(this.newGEE.cap_tanque);
+    if (this.newGEE.tanque_ext) {
+      this.newGEE.cap_tanque_ext = Number(this.newGEE.cap_tanque_ext);
+    }
     if (!this.newGEE.id) {
       this.geeService.saveGEE(this.newGEE).subscribe(res => {
         Toast.fire({
@@ -219,6 +241,28 @@ export class NewGeeComponent implements OnInit {
       this.icccn_status = 'success';
     } else {
       this.icccn_status = 'danger';
+    }
+  }
+
+  tanque_ext_change(e: boolean) {
+    this.newGEE.tanque_ext = e;
+  }
+
+  cap_tanque_change() {
+    const icccnregexp = new RegExp(/^[1-9]+[0-9]*$/);
+    if (icccnregexp.test(this.newGEE.cap_tanque.toString()) && this.newGEE.cap_tanque > 0) {
+      this.cap_tanque_status = 'success';
+    } else {
+      this.cap_tanque_status = 'danger';
+    }
+  }
+
+  cap_tanque_ext_change() {
+    const icccnregexp = new RegExp(/^[1-9]+[0-9]*$/);
+    if (icccnregexp.test(this.newGEE.cap_tanque_ext.toString()) && this.newGEE.cap_tanque_ext > 0) {
+      this.cap_tanque_ext_status = 'success';
+    } else {
+      this.cap_tanque_ext_status = 'danger';
     }
   }
 }
