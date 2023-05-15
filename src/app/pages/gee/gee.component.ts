@@ -10,6 +10,7 @@ import { FCard } from '../../models/FCard';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { CRecord } from '../../models/CRecord';
 import { GEE } from '../../models/GEE';
+import { GeeTank } from '../../models/GeeTank';
 
 @Component({
   selector: 'gee',
@@ -20,6 +21,7 @@ export class GeeComponent implements OnInit {
   gees: GEE[] = [];
   cards: FCard[] = [];
   card_records: CRecord[] = [];
+  geeTank: GeeTank[] = [];
   user = {id: 0};
   selectedGEE: GEE = {};
   grecords: GRecord[] = [];
@@ -45,6 +47,7 @@ export class GeeComponent implements OnInit {
             this.grecords = grcords;
           });
           this.getCards();
+          this.getTanks();
         }
       });
     });
@@ -62,12 +65,20 @@ export class GeeComponent implements OnInit {
     });
   }
 
+  getTanks() {
+    this.geeService.listTanksByGEE(this.selectedGEE.id).subscribe((tanks: GeeTank[]) => {
+      this.geeTank = tanks;
+      // console.log(this.geeTank);
+    });
+  }
+
   onChangeGee(selected: GEE) {
     this.geeService.listGEERecords(selected.id).subscribe((grcords: GRecord[]) => {
       this.grecords = grcords;
       // console.log(this.grecords);
     });
     this.getCards();
+    this.getTanks();
   }
 
   onChangeCard(selected: FCard) {
@@ -137,6 +148,7 @@ export class GeeComponent implements OnInit {
         this.geeService.listCardsRecords(this.selectedCard.id).subscribe((records: CRecord[]) => {
           this.card_records = records;
         });
+        this.getTanks();
       });
     });
   }

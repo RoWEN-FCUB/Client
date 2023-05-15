@@ -1,0 +1,15 @@
+.icon_cursor {
+    cursor: pointer; /* or hand */
+}
+
+.text_to_middle {
+    text-align: left; vertical-align: middle; /* align text to left and middle */
+}
+
+.text_to_center {
+    text-align: center; /* align text to center */
+}
+
+.width10 {
+    width:10%;
+}

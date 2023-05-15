@@ -32,6 +32,10 @@ export class GeeService {
     return this.http.get(ipserver + 'gee/listCardsByGEE/' + id_gee, {responseType: 'json'});
   }
 
+  listTanksByGEE(id_gee: number) {
+    return this.http.get(ipserver + 'gee/listTanksByGEE/' + id_gee, {responseType: 'json'});
+  }
+
   listCardsRecords(id_card: number) {
     return this.http.get(ipserver + 'gee/listCardsRecords/' + id_card, {responseType: 'json'});
   }

@@ -1,5 +1,5 @@
 <nb-tabset fullWidth id="tabset" name="tabset" #tabset>
-  <nb-tab tabTitle="GEE" id="Tab1" name="Tab1" #Tab1>
+  <nb-tab tabIcon="charging-outline" tabTitle="GEE" id="Tab1" name="Tab1" #Tab1>
     <nb-card fullwidth accent="info">
       <nb-card-header>
         Registro de operaciones del Grupo Electrónico de Emergencia
@@ -19,11 +19,11 @@
                 <th rowspan="2">M</th>
                 <th rowspan="2">A</th>
                 <th rowspan="2">TIPO</th>
-                <th colspan="2" style="text-align: center;">HORA</th>
-                <th colspan="2" style="text-align: center;">HORAMETRO</th>
-                <th rowspan="2" style="width:10%">TIEMPO TRABAJADO</th>
-                <th rowspan="2" style="width:10%">ENERGIA GENERADA</th>
-                <th colspan="2" style="text-align: center;">COMBUSTIBLE</th>
+                <th colspan="2" class="text_to_center">HORA</th>
+                <th colspan="2" class="text_to_center">HORAMETRO</th>
+                <th rowspan="2" class="width10">TIEMPO TRABAJADO</th>
+                <th rowspan="2" class="width10">ENERGIA GENERADA</th>
+                <th colspan="2" class="text_to_center">COMBUSTIBLE</th>
                 <th rowspan="2">OBSERVACIONES</th>
                 <th></th>
               </tr>
@@ -52,8 +52,8 @@
                 <td>{{grecord.combustible_existencia}}</td>
                 <td>{{grecord.observaciones}}</td>
                 <td>
-                  <nb-icon style="cursor: pointer" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar operación" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
-                  <nb-icon style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar operación" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                  <nb-icon class="icon_cursor" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar operación" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                  <nb-icon class="icon_cursor" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar operación" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
                 </td>
               </tr>
             </tbody>
@@ -64,7 +64,7 @@
       <nb-card-footer>Total de registros: <b></b></nb-card-footer>
     </nb-card>
   </nb-tab>
-  <nb-tab tabTitle="Tarjeta" id="Tab2" name="Tab2" #Tab2 [disabled]="cards.length === 0 ? true : false">
+  <nb-tab tabIcon="credit-card-outline" tabTitle="Tarjeta" id="Tab2" name="Tab2" #Tab2 [disabled]="cards.length === 0 ? true : false">
     <nb-card fullwidth accent="info">
       <nb-card-header>
         Registro de operaciones de tarjetas magnéticas
@@ -87,13 +87,13 @@
               <th colspan="5">Tipo de combustible: {{selectedCard.tipo_combustible}}</th>
             </tr>
             <tr>
-              <th rowspan="2" style="text-align: left; vertical-align: middle;">Fecha</th>
+              <th rowspan="2" class="text_to_middle">Fecha</th>
               <th>Saldo Inicial</th>
               <th>Recarga</th>
               <th>Saldo</th>
               <th>Consumo</th>
               <th>Saldo Final</th>
-              <th rowspan="2" style="text-align: left; vertical-align: middle;">Observ.</th>
+              <th rowspan="2" class="text_to_middle">Observ.</th>
               <th rowspan="2"></th>
             </tr>
             <tr>
@@ -113,7 +113,41 @@
               <td>{{card_record.consumo_pesos ? card_record.consumo_pesos + '/' + card_record.consumo_litros : '--'}}</td>
               <td>{{card_record.sfinal_pesos ? card_record.sfinal_pesos + '/' + card_record.sfinal_litros : '--'}}</td>
               <td><span *ngIf="card_record.observacion" nbTooltip="{{card_record.observacion}}">***</span></td>
-              <td><nb-icon (click)="deleteCardRecord(card_record)" *ngIf="isLast" style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar operación" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon></td>
+              <td><nb-icon (click)="deleteCardRecord(card_record)" *ngIf="isLast" class="icon_cursor" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar operación" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon></td>
+            </tr>
+          </tbody>
+        </table>
+      </nb-card-body>      
+    </nb-card>
+  </nb-tab>
+  <nb-tab tabIcon="droplet-outline" tabTitle="Tanque" id="Tab3" name="Tab3" #Tab3 [disabled]="cards.length === 0 ? true : false">
+    <nb-card fullwidth accent="info">
+      <nb-card-header>
+        Registro del tanque de combustible
+        <button class="ms-2" nbTooltip="Ajustar la existencia de combustible en tanque." nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="droplet-outline"></nb-icon>Ajustar</button>
+      </nb-card-header>
+      <nb-card-body>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>D</th>
+              <th>M</th>
+              <th>A</th>
+              <th>ENTRADA</th>
+              <th>SALIDA</th>
+              <th>EXISTENCIA</th>
+              <th>OBSERVACION</th>
+            </tr>            
+          </thead>
+          <tbody>
+            <tr *ngFor="let tank of geeTank">
+              <td>{{tank.fecha | date: 'dd':'UTC'}}</td>
+              <td>{{tank.fecha | date: 'MM'}}</td>
+              <td>{{tank.fecha | date: 'YY'}}</td>
+              <td>{{tank.entrada ? tank.entrada : '--'}}</td>
+              <td>{{tank.salida ? tank.salida : '--'}}</td>
+              <td>{{tank.existencia}}</td>
+              <td><span *ngIf="tank.observacion" nbTooltip="{{tank.observacion}}">***</span></td>
             </tr>
           </tbody>
         </table>
