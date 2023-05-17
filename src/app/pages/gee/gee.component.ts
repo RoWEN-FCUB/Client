@@ -33,6 +33,7 @@ export class GeeComponent implements OnInit {
     timer: 3000,
   });
   selectedCard: FCard = {};
+  existencia_combustible_total: number = 0;
 
   constructor(private geeService: GeeService, private authService: NbAuthService, private dialogService: NbDialogService) { }
 
@@ -48,8 +49,16 @@ export class GeeComponent implements OnInit {
           });
           this.getCards();
           this.getTanks();
+          this.actualizar_existencia_combustible();
         }
       });
+    });
+  }
+
+  actualizar_existencia_combustible() {
+    this.geeService.getGEEFuelExistence(this.selectedGEE.id).subscribe((res: any) => {
+      this.existencia_combustible_total = res.existencia;
+      // console.log(this.existencia_combustible_total);
     });
   }
 
@@ -79,6 +88,7 @@ export class GeeComponent implements OnInit {
     });
     this.getCards();
     this.getTanks();
+    this.actualizar_existencia_combustible();
   }
 
   onChangeCard(selected: FCard) {
@@ -91,13 +101,13 @@ export class GeeComponent implements OnInit {
     const contexto = {title: 'Nueva operación'};
     if (this.grecords.length > 0) {
       // tslint:disable-next-line: max-line-length
-      this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', operacion_anterior: this.grecords[0]}}).onClose.subscribe(() => {
+      this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', operacion_anterior: this.grecords[0], existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE}}).onClose.subscribe(() => {
         this.onChangeGee(this.selectedGEE);
       });
       // Object.defineProperty(contexto, 'operacion_anterior', {value: this.grecords[0]});
       // console.log(contexto);
     } else {
-      this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación'}}).onClose.subscribe(res => {
+      this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE}}).onClose.subscribe(res => {
         this.onChangeGee(this.selectedGEE);
       });
     }

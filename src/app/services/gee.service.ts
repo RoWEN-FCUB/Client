@@ -28,6 +28,10 @@ export class GeeService {
     return this.http.get(ipserver + 'gee/listGEERecords/' + id, {responseType: 'json'});
   }
 
+  getGEEFuelExistence(id: number) {
+    return this.http.get(ipserver + 'gee/getTotalExistence/' + id, {responseType: 'json'});
+  }
+
   listCardsByGEE(id_gee: number) {
     return this.http.get(ipserver + 'gee/listCardsByGEE/' + id_gee, {responseType: 'json'});
   }

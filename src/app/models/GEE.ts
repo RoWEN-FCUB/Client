@@ -13,6 +13,7 @@ export interface GEE {
     ic_scarga?: number;
     ic_ccargad?: number;
     ic_ccargan?: number;
+    dl?: number; //Demanda liberada
     cap_tanque?: number;
     tanque_ext?: boolean;
     cap_tanque_ext?: number;

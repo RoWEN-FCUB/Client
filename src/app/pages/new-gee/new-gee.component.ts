@@ -25,6 +25,7 @@ export class NewGeeComponent implements OnInit {
     ic_scarga: 0,
     ic_ccargad: 0,
     ic_ccargan: 0,
+    dl: 0,
     cap_tanque: 0,
     tanque_ext: false,
     cap_tanque_ext: 0,
@@ -38,6 +39,7 @@ export class NewGeeComponent implements OnInit {
   kva_status = 'info';
   icsc_status = 'info';
   icccd_status = 'info';
+  dl_status = 'info';
   cap_tanque_status = 'info';
   tanque_ext_status = 'info';
   icccn_status = 'info';
@@ -144,6 +146,12 @@ export class NewGeeComponent implements OnInit {
         title: 'Debe escribir el índice de consumo nocturno con carga del grupo.',
       } as SweetAlertOptions);
       this.icccn_status = 'danger';
+    } else if (this.dl_status === 'danger' || !this.newGEE.dl) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe escribir el índice de demanda liberada del grupo.',
+      } as SweetAlertOptions);
+      this.dl_status = 'danger';
     } else if (this.cap_tanque_status === 'danger' || !this.newGEE.cap_tanque) {
       Toast.fire({
         icon: 'error',
@@ -241,6 +249,15 @@ export class NewGeeComponent implements OnInit {
       this.icccn_status = 'success';
     } else {
       this.icccn_status = 'danger';
+    }
+  }
+
+  dl_change() {
+    const icccnregexp = new RegExp(/^\d+([.]\d+)?$/);
+    if (icccnregexp.test(this.newGEE.dl.toString()) && this.newGEE.dl > 0) {
+      this.dl_status = 'success';
+    } else {
+      this.dl_status = 'danger';
     }
   }
 

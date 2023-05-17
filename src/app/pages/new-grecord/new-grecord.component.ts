@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
 import * as moment from 'moment';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { GRecord } from '../../models/GRecord';
+import { GEE } from '../../models/GEE';
 
 @Component({
   selector: 'new-grecord',
@@ -28,8 +30,14 @@ export class NewGrecordComponent implements OnInit {
     tipo: '',
     horametro_inicial: 0,
     horametro_final: 0,
+    combustible_consumido: 0,
+    combustible_existencia: 0,
+    tiempo_trabajado: 0,
+    energia_generada: 0,
     observaciones: '',
   };
+  existencia_combustible: number = 0;
+  gee: GEE = {};
 
   constructor(protected dialogRef: NbDialogRef<any>) { }
 
@@ -45,6 +53,61 @@ export class NewGrecordComponent implements OnInit {
     this.dialogRef.close(null);
   }
 
+  save() {
+     //guarda el nuevo registro nueva_operacion almacenado en la base de datos (db.js)
+     const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timerProgressBar: true,
+      timer: 3000,
+    });
+     if (this.fecha_status != 'success') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe establecer la fecha de la operación.',
+      } as SweetAlertOptions);
+      this.fecha_status = 'danger';
+     } else if (this.tipo_status != 'success') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe seleccionar el tipo de operación.',
+      } as SweetAlertOptions);
+      this.tipo_status = 'danger';
+     } else if (this.hora_status != 'success') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe establecer la hora de la operación.',
+      } as SweetAlertOptions);
+      this.hora_status = 'danger';
+     } else if (this.tipo_status != 'success') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe seleccionar el tipo de operación.',
+      } as SweetAlertOptions);
+      this.tipo_status = 'danger';
+     } else if (this.horametro_inicial_status != 'success') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe establecer el horámetro inicial de la operación.',
+      } as SweetAlertOptions);
+      this.horametro_inicial_status = 'danger';
+     } else if (this.horametro_final_status != 'success') {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe establecer el horámetro final de la operación.',
+      } as SweetAlertOptions);
+      this.horametro_final_status = 'danger';
+     } else {
+      this.nueva_operacion.tiempo_trabajado = this.horas_trabajadas;  //guarda el tiempo total de ejecucion de la operación
+      if (this.nueva_operacion.tipo === 'PS' || this.nueva_operacion.tipo === 'LS') {
+        this.nueva_operacion.combustible_consumido = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.ic_scarga, 2);  //guarda el combustible consumido de la operación
+      } else {
+        this.nueva_operacion.combustible_consumido = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargad, 2);  //guarda el combustible consumido de la operación
+      }
+     }
+  }
+
   onDateChange() {
     this.fecha_status = 'success';
     this.nueva_operacion.A = moment(this.fecha).get('year').toString().substring(2);
@@ -57,7 +120,8 @@ export class NewGrecordComponent implements OnInit {
   }
 
   onTimeChange() {
-    if (this.hora.value) {
+    // console.log(this.hora.value);
+    if (this.hora.value.length === 2) {
       /*this.hora.value[0] = new Date(this.hora.value[0]);
       this.hora.value[1] = new Date(this.hora.value[1]);
       this.hora.value[0] = this.convertUTCDateToLocalDate(this.hora.value[0]);
