@@ -22,4 +22,5 @@ export interface EService {
     desc_parc_noche?: number;
     latitud?: number;
     longitud?: number;
+    horario_diurno?: string;
 }

@@ -11,6 +11,8 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { CRecord } from '../../models/CRecord';
 import { GEE } from '../../models/GEE';
 import { GeeTank } from '../../models/GeeTank';
+import { EService } from '../../models/EService';
+import { EserviceService } from '../../services/eservice.service';
 
 @Component({
   selector: 'gee',
@@ -25,6 +27,7 @@ export class GeeComponent implements OnInit {
   user = {id: 0};
   selectedGEE: GEE = {};
   grecords: GRecord[] = [];
+  service: EService = {};
   Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -35,7 +38,8 @@ export class GeeComponent implements OnInit {
   selectedCard: FCard = {};
   existencia_combustible_total: number = 0;
 
-  constructor(private geeService: GeeService, private authService: NbAuthService, private dialogService: NbDialogService) { }
+  constructor(private geeService: GeeService, private authService: NbAuthService, private dialogService: NbDialogService,
+     private eService: EserviceService) { }
 
   ngOnInit(): void {
     const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
@@ -44,6 +48,9 @@ export class GeeComponent implements OnInit {
         this.gees = res;
         if (this.gees.length > 0) {
           this.selectedGEE = this.gees[0];
+          this.eService.getOne(this.selectedGEE.id_serv).subscribe((serv: EService) => {
+            this.service = serv;
+          });
           this.geeService.listGEERecords(this.selectedGEE.id).subscribe((grcords: GRecord[]) => {
             this.grecords = grcords;
           });
@@ -89,6 +96,9 @@ export class GeeComponent implements OnInit {
     this.getCards();
     this.getTanks();
     this.actualizar_existencia_combustible();
+    this.eService.getOne(this.selectedGEE.id_serv).subscribe((serv: EService) => {
+      this.service = serv;
+    });
   }
 
   onChangeCard(selected: FCard) {
@@ -101,13 +111,13 @@ export class GeeComponent implements OnInit {
     const contexto = {title: 'Nueva operación'};
     if (this.grecords.length > 0) {
       // tslint:disable-next-line: max-line-length
-      this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', operacion_anterior: this.grecords[0], existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE}}).onClose.subscribe(() => {
+      this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', operacion_anterior: this.grecords[0], existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE, horario_diurno: this.service.horario_diurno}}).onClose.subscribe(() => {
         this.onChangeGee(this.selectedGEE);
       });
       // Object.defineProperty(contexto, 'operacion_anterior', {value: this.grecords[0]});
       // console.log(contexto);
     } else {
-      this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE}}).onClose.subscribe(res => {
+      this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE, horario_diurno: this.service.horario_diurno}}).onClose.subscribe(res => {
         this.onChangeGee(this.selectedGEE);
       });
     }

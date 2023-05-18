@@ -5,6 +5,8 @@ import * as moment from 'moment';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { GRecord } from '../../models/GRecord';
 import { GEE } from '../../models/GEE';
+import { Time } from '@angular/common';
+import { time } from 'console';
 
 @Component({
   selector: 'new-grecord',
@@ -36,6 +38,7 @@ export class NewGrecordComponent implements OnInit {
     energia_generada: 0,
     observaciones: '',
   };
+  horario_diurno: string = '';
   existencia_combustible: number = 0;
   gee: GEE = {};
 
@@ -104,6 +107,51 @@ export class NewGrecordComponent implements OnInit {
         this.nueva_operacion.combustible_consumido = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.ic_scarga, 2);  //guarda el combustible consumido de la operación
       } else {
         this.nueva_operacion.combustible_consumido = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargad, 2);  //guarda el combustible consumido de la operación
+        let hinicial: Time = {hours: 0, minutes: 0};
+        let hfinal: Time = {hours: 0, minutes: 0};
+        const horas = this.horario_diurno.split('-');
+        hinicial.hours = parseInt(horas[0].split(':')[0], 10); //hours from 00 to 23. 00 = 00:00:00 - 23:59
+        hinicial.minutes = (parseInt(horas[0].split(':')[1], 10)); //minutes from 00 to 59.
+        hfinal.hours = (parseInt(horas[1].split(':')[0], 10)); //hours from 00 to 23. 00 = 00
+        hfinal.minutes = (parseInt(horas[1].split(':')[1], 10)); //minutes from 00 to 59.
+        const ohi = moment(this.nueva_operacion.hora_inicial).set('seconds', 0);
+        const ohf = moment(this.nueva_operacion.hora_final).set('seconds', 0);
+        if (ohi.isBefore(hinicial, 'minutes')) { //operacion comienza antes del horario laboral
+          if (ohf.isSameOrBefore(hinicial, 'minutes')) { //y termna antes del horario laboral
+            //caso 1 la operacion es antes del horario laboral
+            this.nueva_operacion.combustible_consumido = this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargan, 1; //combustible consumido fuera del horario laboral
+          } else if (ohf.isAfter(hinicial,'minutes')) {
+            this.nueva_operacion.combustible_consumido = moment(hinicial).diff(ohi, 'minutes') / 60 * this.gee.ic_ccargan;
+            if (ohf.isSameOrBefore(hfinal, 'minutes')) {
+              //caso 2 la operacion empieza antes del horario laboral y termina dentro del mismo
+              this.nueva_operacion.combustible_consumido += ohf.diff(moment(hinicial), 'minutes') / 60 * this.gee.ic_ccargad; 
+            } else {
+              //caso 3 la operacion empieza antes del hrario laboral y termina despues del mismo
+              this.nueva_operacion.combustible_consumido += moment(hfinal).diff(moment(hinicial), 'minutes') / 60 * this.gee.ic_ccargad;
+              this.nueva_operacion.combustible_consumido += ohf.diff(moment(hfinal), 'minutes') / 60 * this.gee.ic_ccargan; 
+            }
+          }
+        } else if (ohi.isSameOrAfter(hinicial, 'minutes') && ohi.isBefore(hfinal, 'minutes')) { //operacion comienza dentro del horario laboral
+          if (ohf.isSameOrBefore(hfinal, 'minutes')) {
+            //caso 4 la operacion es dentro del horario laboral
+            this.nueva_operacion.combustible_consumido = this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargad; //combustible consumido dentro del horario laboral
+          } else {
+            //caso 5 la operacion comienza en el horario laboral y termina fuera del mismo
+            this.nueva_operacion.combustible_consumido = moment(hfinal).diff(ohi, 'minutes') / 60 * this.gee.ic_ccargad;
+            this.nueva_operacion.combustible_consumido += ohf.diff(moment(hfinal), 'minutes') / 60 * this.gee.ic_ccargan; 
+          }
+        } else {
+          //caso 6 la operacion es despues del horario laboral
+          this.nueva_operacion.combustible_consumido = this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargan, 1; //combustible consumido fuera del horario laboral
+        }
+        this.nueva_operacion.combustible_consumido = this.round(this.nueva_operacion.combustible_consumido, 1); //round to 1 decimals
+        this.nueva_operacion.energia_generada = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.dl, 2); //round to 2 decimals
+        this.nueva_operacion.horametro_inicial = Number(this.nueva_operacion.horametro_inicial); //convertir a numero
+        this.nueva_operacion.horametro_final = Number(this.nueva_operacion.horametro_final); //convertir a numero
+        this.nueva_operacion.combustible_existencia = this.existencia_combustible - this.nueva_operacion.combustible_consumido; //combustible existencia
+        this.nueva_operacion.hora_inicial = {hours: ohi.get('hours'), minutes: ohi.get('minutes')};
+        this.nueva_operacion.hora_final = {hours: ohf.get('hours'), minutes: ohf.get('minutes')};
+        console.log(this.nueva_operacion);
       }
      }
   }
@@ -129,8 +177,7 @@ export class NewGrecordComponent implements OnInit {
       this.nueva_operacion.hora_inicial = this.hora.value[0];
       this.nueva_operacion.hora_final = this.hora.value[1];
       this.horas_trabajadas = this.round((moment(this.hora.value[1]).diff(moment(this.hora.value[0]), 'minutes') / 60), 1);
-      this.hora_status = 'success';
-      // console.log(this.nueva_operacion);
+      this.hora_status = 'success';      
     }
   }
 

@@ -4,6 +4,7 @@ import { EService } from '../../models/EService';
 import { Company } from '../../models/Company';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { EserviceService } from '../../services/eservice.service';
+import { UntypedFormControl } from '@angular/forms';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -37,6 +38,7 @@ export class NewServiceComponent implements OnInit {
     desc_parc_noche: 0,
     latitud: 0,
     longitud: 0,
+    horario_diurno: '',
   };
   title: string;
   nombre_emp_status = 'info';
@@ -53,10 +55,12 @@ export class NewServiceComponent implements OnInit {
   descPD_status = 'info';
   descGN_status = 'info';
   descPN_status = 'info';
+  hdiurno_status = 'info';
   provincia_seleccionada = -1;
   municipio_seleccionado = -1;
   empresa_seleccionada = -1;
   municipios: string[] = [];
+  horario_diurno = new UntypedFormControl();
   provincias = [
   {
     nombre: 'Municipio especial',
@@ -133,6 +137,22 @@ export class NewServiceComponent implements OnInit {
           }
         }
       }
+      let hinicial: Date = new Date();
+      let hfinal: Date = new Date();
+      const horas = this.newService.horario_diurno.split('-');
+      hinicial.setHours(parseInt(horas[0].split(':')[0], 10)); //hours from 00 to 23. 00 = 00:00:00 - 23:59
+      hinicial.setMinutes(parseInt(horas[0].split(':')[1], 10)); //minutes from 00 to 59.
+      hfinal.setHours(parseInt(horas[1].split(':')[0], 10)); //hours from 00 to 23. 00 = 00
+      hfinal.setMinutes(parseInt(horas[1].split(':')[1], 10)); //minutes from 00 to 59.
+      this.horario_diurno.setValue([hinicial, hfinal]);
+    }
+  }
+
+  onTimeChange() {
+    if (this.horario_diurno.value.length === 2) {
+      this.newService.horario_diurno = this.horario_diurno.value[0].getHours() + ':' + this.horario_diurno.value[0].getMinutes() + '-' + this.horario_diurno.value[1].getHours() + ':' + this.horario_diurno.value[1].getMinutes();
+      //console.log(this.horario_diurno.value[0].getHours() + ':' + this.horario_diurno.value[0].getMinutes());
+      this.hdiurno_status = 'success';
     }
   }
 
@@ -309,7 +329,7 @@ export class NewServiceComponent implements OnInit {
       this.eserviceService.updateService(this.newService.id, this.newService).subscribe(res => {
         Toast.fire({
           icon: 'success',
-          title: 'Empresa actualizada correctamente.',
+          title: 'Servicio actualizado correctamente.',
         } as SweetAlertOptions);
         this.close();
       });
@@ -421,6 +441,13 @@ export class NewServiceComponent implements OnInit {
       } as SweetAlertOptions);
       this.tdesc_status = 'danger';
       this.tabsetEl.selectTab(this.Tab2El);
+    } else if (this.hdiurno_status != 'success' || this.horario_diurno.value.length != 2) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe establecer el horario de trabajo diurno.',
+      } as SweetAlertOptions);
+      this.hdiurno_status = 'danger';
+      this.tabsetEl.selectTab(this.Tab1El);
     } else {
       this.save();
     }

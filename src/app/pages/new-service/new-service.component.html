@@ -58,7 +58,18 @@
                             </div>
                         </div>
                     </div>
-                </div> 
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group mb-3">
+                            <label class="form-label">Horario diurno:</label>
+                            <input (dateTimeChange)="onTimeChange()" [owlDateTime]="dh" selectMode="range" [owlDateTimeTrigger]="dh" maxlength="200" type="text" nbInput fullWidth placeholder="00:00-00:00" class="form-control" aria-describedby="hdHelp" [formControl]="horario_diurno" [status]="hdiurno_status">
+                            <owl-date-time hour12Timer="false" #dh [pickerType]="'timer'"></owl-date-time>
+                            <small id="hdHelp" class="form-text text-muted">Horario de trabajo diurno.</small>
+                        </div>
+                    </div>
+                    <div class="col"></div>
+                </div>
             </nb-tab>
             <nb-tab tabTitle="Control eléctrico" id="Tab2" name="Tab2" #Tab2>
                 <div class="row">

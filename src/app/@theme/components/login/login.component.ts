@@ -28,7 +28,7 @@ export class LoginComponent extends NbLoginComponent {
 
     this.service.authenticate(this.strategy, this.user).subscribe((result: NbAuthResult) => {
       this.submitted = false;
-      console.log(result);
+      // console.log(result);
       if (result.isSuccess()) {
         this.messages = result.getMessages();
         this.userIdle.resetTimer();
