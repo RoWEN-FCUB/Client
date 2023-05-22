@@ -102,57 +102,219 @@ export class NewGrecordComponent implements OnInit {
       } as SweetAlertOptions);
       this.horametro_final_status = 'danger';
      } else {
+      let nuevas_operaciones : GRecord[] = [];
       this.nueva_operacion.tiempo_trabajado = this.horas_trabajadas;  //guarda el tiempo total de ejecucion de la operación
-      if (this.nueva_operacion.tipo === 'PS' || this.nueva_operacion.tipo === 'LS') {
+      let hinicial: Time = {hours: 0, minutes: 0}; //horario de trabajo diurno inicial
+      let hfinal: Time = {hours: 0, minutes: 0}; //horario de trabajo diurno final
+      const horas = this.horario_diurno.split('-');
+      hinicial.hours = parseInt(horas[0].split(':')[0], 10); //hours from 00 to 23. 00 = 00:00:00 - 23:59
+      hinicial.minutes = (parseInt(horas[0].split(':')[1], 10)); //minutes from 00 to 59.
+      hfinal.hours = (parseInt(horas[1].split(':')[0], 10)); //hours from 00 to 23. 00 = 00
+      hfinal.minutes = (parseInt(horas[1].split(':')[1], 10)); //minutes from 00 to 59.
+      const ohi = moment(this.nueva_operacion.hora_inicial).set('seconds', 0); //operacion horario inicial
+      const ohf = moment(this.nueva_operacion.hora_final).set('seconds', 0); //operacion horario final
+      if (this.nueva_operacion.tipo === 'PS' || this.nueva_operacion.tipo === 'LS') { //operaciones sin carga
         this.nueva_operacion.combustible_consumido = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.ic_scarga, 2);  //guarda el combustible consumido de la operación
+        this.nueva_operacion.energia_generada = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.dl, 2); //round to 2 decimals
+        this.nueva_operacion.horametro_inicial = Number(this.nueva_operacion.horametro_inicial); //convertir a numero
+        this.nueva_operacion.horametro_final = Number(this.nueva_operacion.horametro_final); //convertir a numero
+        this.nueva_operacion.combustible_existencia = this.round(this.existencia_combustible - this.nueva_operacion.combustible_consumido, 2); //combustible existencia
+        this.nueva_operacion.hora_inicial = {hours: ohi.get('hours'), minutes: ohi.get('minutes')};
+        this.nueva_operacion.hora_final = {hours: ohf.get('hours'), minutes: ohf.get('minutes')};
+        nuevas_operaciones.push(this.nueva_operacion); //guarda la nueva operación
       } else {
-        this.nueva_operacion.combustible_consumido = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargad, 2);  //guarda el combustible consumido de la operación
-        let hinicial: Time = {hours: 0, minutes: 0};
-        let hfinal: Time = {hours: 0, minutes: 0};
-        const horas = this.horario_diurno.split('-');
-        hinicial.hours = parseInt(horas[0].split(':')[0], 10); //hours from 00 to 23. 00 = 00:00:00 - 23:59
-        hinicial.minutes = (parseInt(horas[0].split(':')[1], 10)); //minutes from 00 to 59.
-        hfinal.hours = (parseInt(horas[1].split(':')[0], 10)); //hours from 00 to 23. 00 = 00
-        hfinal.minutes = (parseInt(horas[1].split(':')[1], 10)); //minutes from 00 to 59.
-        const ohi = moment(this.nueva_operacion.hora_inicial).set('seconds', 0);
-        const ohf = moment(this.nueva_operacion.hora_final).set('seconds', 0);
         if (ohi.isBefore(hinicial, 'minutes')) { //operacion comienza antes del horario laboral
           if (ohf.isSameOrBefore(hinicial, 'minutes')) { //y termna antes del horario laboral
             //caso 1 la operacion es antes del horario laboral
-            this.nueva_operacion.combustible_consumido = this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargan, 1; //combustible consumido fuera del horario laboral
+            this.nueva_operacion.combustible_consumido = this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargan, 2; //combustible consumido fuera del horario laboral
+            this.nueva_operacion.energia_generada = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.dl, 2); //round to 2 decimals
+            this.nueva_operacion.horametro_inicial = Number(this.nueva_operacion.horametro_inicial); //convertir a numero
+            this.nueva_operacion.horametro_final = Number(this.nueva_operacion.horametro_final); //convertir a numero
+            this.nueva_operacion.combustible_existencia = this.round(this.existencia_combustible - this.nueva_operacion.combustible_consumido, 2); //combustible existencia
+            this.nueva_operacion.hora_inicial = {hours: ohi.get('hours'), minutes: ohi.get('minutes')};
+            this.nueva_operacion.hora_final = {hours: ohf.get('hours'), minutes: ohf.get('minutes')};
+            nuevas_operaciones.push(this.nueva_operacion); //guarda la nueva operación
           } else if (ohf.isAfter(hinicial,'minutes')) {
-            this.nueva_operacion.combustible_consumido = moment(hinicial).diff(ohi, 'minutes') / 60 * this.gee.ic_ccargan;
             if (ohf.isSameOrBefore(hfinal, 'minutes')) {
               //caso 2 la operacion empieza antes del horario laboral y termina dentro del mismo
-              this.nueva_operacion.combustible_consumido += ohf.diff(moment(hinicial), 'minutes') / 60 * this.gee.ic_ccargad; 
+              let n_op1: GRecord = {
+                A: this.nueva_operacion.A,
+                M: this.nueva_operacion.M,
+                D: this.nueva_operacion.D,
+                tipo: this.nueva_operacion.tipo,
+                horametro_inicial: 	Number(this.nueva_operacion.horametro_inicial), 	//horas, minutos y segundos
+                tiempo_trabajado: this.round(moment(hinicial).diff(ohi, 'minutes') / 60, 2),
+                horametro_final: 0,
+                energia_generada: 0,
+                combustible_consumido: 0,
+                combustible_existencia: 0,
+                hora_inicial: {hours: ohi.get('hours'), minutes: ohi.get('minutes')},
+                hora_final: {hours: hinicial.hours, minutes: hinicial.minutes},
+                observaciones: '',
+              };
+              n_op1.horametro_final = Number(n_op1.horametro_inicial + n_op1.tiempo_trabajado);
+              n_op1.energia_generada = n_op1.tiempo_trabajado * this.gee.dl;
+              n_op1.combustible_consumido = n_op1.tiempo_trabajado * this.gee.ic_ccargan;
+              n_op1.combustible_existencia = this.round(this.existencia_combustible - n_op1.combustible_consumido, 2);
+              this.existencia_combustible -= n_op1.combustible_consumido; //resta combustible consumido a existencia combustible actual
+              nuevas_operaciones.push(n_op1); //guarda la nueva operación
+              let n_op2: GRecord = {
+                A: this.nueva_operacion.A,
+                M: this.nueva_operacion.M,
+                D: this.nueva_operacion.D,
+                tipo: this.nueva_operacion.tipo,
+                horametro_inicial: 	n_op1.horametro_final, 	//horas, minutos y segundos
+                tiempo_trabajado: this.round(ohf.diff(moment(hinicial), 'minutes') / 60, 2),
+                horametro_final: 0,
+                energia_generada: 0,
+                combustible_consumido: 0,
+                combustible_existencia: 0,
+                hora_inicial: {hours: hinicial.hours, minutes: hinicial.minutes},
+                hora_final: {hours: ohf.get('hours'), minutes: ohf.get('minutes')},
+                observaciones: '',
+              };
+              n_op2.horametro_final = Number(n_op2.horametro_inicial + n_op2.tiempo_trabajado);
+              n_op2.energia_generada = n_op2.tiempo_trabajado * this.gee.dl;
+              n_op2.combustible_consumido = n_op2.tiempo_trabajado * this.gee.ic_ccargad;
+              n_op2.combustible_existencia = this.round(this.existencia_combustible - n_op2.combustible_consumido, 2);
+              this.existencia_combustible -= n_op2.combustible_consumido; //resta combustible consumido a existencia combustible actual
+              nuevas_operaciones.push(n_op2); //guarda la nueva operación 
             } else {
               //caso 3 la operacion empieza antes del hrario laboral y termina despues del mismo
-              this.nueva_operacion.combustible_consumido += moment(hfinal).diff(moment(hinicial), 'minutes') / 60 * this.gee.ic_ccargad;
-              this.nueva_operacion.combustible_consumido += ohf.diff(moment(hfinal), 'minutes') / 60 * this.gee.ic_ccargan; 
+              let n_op1: GRecord = {
+                A: this.nueva_operacion.A,
+                M: this.nueva_operacion.M,
+                D: this.nueva_operacion.D,
+                tipo: this.nueva_operacion.tipo,
+                horametro_inicial: 	Number(this.nueva_operacion.horametro_inicial), 	//horas, minutos y segundos
+                tiempo_trabajado: this.round(moment(hinicial).diff(ohi, 'minutes') / 60, 2),
+                horametro_final: 0,
+                energia_generada: 0,
+                combustible_consumido: 0,
+                combustible_existencia: 0,
+                hora_inicial: {hours: ohi.get('hours'), minutes: ohi.get('minutes')},
+                hora_final: {hours: hinicial.hours, minutes: hinicial.minutes},
+                observaciones: '',
+              };
+              n_op1.horametro_final = Number(n_op1.horametro_inicial + n_op1.tiempo_trabajado);
+              n_op1.energia_generada = n_op1.tiempo_trabajado * this.gee.dl;
+              n_op1.combustible_consumido = n_op1.tiempo_trabajado * this.gee.ic_ccargan;
+              n_op1.combustible_existencia = this.round(this.existencia_combustible - n_op1.combustible_consumido, 2);
+              this.existencia_combustible -= n_op1.combustible_consumido; //resta combustible consumido a existencia combustible actual
+              nuevas_operaciones.push(n_op1); //guarda la nueva operación
+              let n_op2: GRecord = {
+                A: this.nueva_operacion.A,
+                M: this.nueva_operacion.M,
+                D: this.nueva_operacion.D,
+                tipo: this.nueva_operacion.tipo,
+                horametro_inicial: 	n_op1.horametro_final, 	//horas, minutos y segundos
+                tiempo_trabajado: this.round(moment(hfinal).diff(moment(hinicial), 'minutes') / 60, 2),
+                horametro_final: 0,
+                energia_generada: 0,
+                combustible_consumido: 0,
+                combustible_existencia: 0,
+                hora_inicial: {hours: hinicial.hours, minutes: hinicial.minutes},
+                hora_final: {hours: hfinal.hours, minutes: hfinal.minutes},
+                observaciones: '',
+              };
+              n_op2.horametro_final = Number(n_op2.horametro_inicial + n_op2.tiempo_trabajado);
+              n_op2.energia_generada = n_op2.tiempo_trabajado * this.gee.dl;
+              n_op2.combustible_consumido = n_op2.tiempo_trabajado * this.gee.ic_ccargad;
+              n_op2.combustible_existencia = this.round(this.existencia_combustible - n_op2.combustible_consumido, 2);
+              this.existencia_combustible -= n_op2.combustible_consumido; //resta combustible consumido a existencia combustible actual
+              nuevas_operaciones.push(n_op2); //guarda la nueva operación 
+              let n_op3: GRecord = {
+                A: this.nueva_operacion.A,
+                M: this.nueva_operacion.M,
+                D: this.nueva_operacion.D,
+                tipo: this.nueva_operacion.tipo,
+                horametro_inicial: 	n_op2.horametro_final, 	//horas, minutos y segundos
+                tiempo_trabajado: this.round(ohf.diff(moment(hfinal), 'minutes') / 60, 2),
+                horametro_final: 0,
+                energia_generada: 0,
+                combustible_consumido: 0,
+                combustible_existencia: 0,
+                hora_inicial: {hours: hfinal.hours, minutes: hfinal.minutes},
+                hora_final: {hours: ohf.get('hours'), minutes: ohf.get('minutes')},
+                observaciones: '',
+              };
+              n_op3.horametro_final = Number(n_op3.horametro_inicial + n_op3.tiempo_trabajado);
+              n_op3.energia_generada = n_op3.tiempo_trabajado * this.gee.dl;
+              n_op3.combustible_consumido = n_op3.tiempo_trabajado * this.gee.ic_ccargan;
+              n_op3.combustible_existencia = this.round(this.existencia_combustible - n_op3.combustible_consumido, 2);
+              this.existencia_combustible -= n_op3.combustible_consumido; //resta combustible consumido a existencia combustible actual
+              nuevas_operaciones.push(n_op3); //guarda la nueva operación              
             }
           }
         } else if (ohi.isSameOrAfter(hinicial, 'minutes') && ohi.isBefore(hfinal, 'minutes')) { //operacion comienza dentro del horario laboral
           if (ohf.isSameOrBefore(hfinal, 'minutes')) {
             //caso 4 la operacion es dentro del horario laboral
-            this.nueva_operacion.combustible_consumido = this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargad; //combustible consumido dentro del horario laboral
+            this.nueva_operacion.combustible_consumido = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargad, 2);  //guarda el combustible consumido de la operación
+            this.nueva_operacion.energia_generada = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.dl, 2); //round to 2 decimals
+            this.nueva_operacion.horametro_inicial = Number(this.nueva_operacion.horametro_inicial); //convertir a numero
+            this.nueva_operacion.horametro_final = Number(this.nueva_operacion.horametro_final); //convertir a numero
+            this.nueva_operacion.combustible_existencia = this.round(this.existencia_combustible - this.nueva_operacion.combustible_consumido, 2); //combustible existencia
+            this.nueva_operacion.hora_inicial = {hours: ohi.get('hours'), minutes: ohi.get('minutes')};
+            this.nueva_operacion.hora_final = {hours: ohf.get('hours'), minutes: ohf.get('minutes')};
+            nuevas_operaciones.push(this.nueva_operacion); //guarda la nueva operación
           } else {
             //caso 5 la operacion comienza en el horario laboral y termina fuera del mismo
-            this.nueva_operacion.combustible_consumido = moment(hfinal).diff(ohi, 'minutes') / 60 * this.gee.ic_ccargad;
-            this.nueva_operacion.combustible_consumido += ohf.diff(moment(hfinal), 'minutes') / 60 * this.gee.ic_ccargan; 
+            let n_op1: GRecord = {
+              A: this.nueva_operacion.A,
+              M: this.nueva_operacion.M,
+              D: this.nueva_operacion.D,
+              tipo: this.nueva_operacion.tipo,
+              horametro_inicial: 	Number(this.nueva_operacion.horametro_inicial), 	//horas, minutos y segundos
+              tiempo_trabajado: this.round(moment(hfinal).diff(ohi, 'minutes') / 60, 2),
+              horametro_final: 0,
+              energia_generada: 0,
+              combustible_consumido: 0,
+              combustible_existencia: 0,
+              hora_inicial: {hours: ohi.get('hours'), minutes: ohi.get('minutes')},
+              hora_final: {hours: hfinal.hours, minutes: hfinal.minutes},
+              observaciones: '',
+            };
+            n_op1.horametro_final = Number(n_op1.horametro_inicial + n_op1.tiempo_trabajado);
+            n_op1.energia_generada = n_op1.tiempo_trabajado * this.gee.dl;
+            n_op1.combustible_consumido = n_op1.tiempo_trabajado * this.gee.ic_ccargad;
+            n_op1.combustible_existencia = this.round(this.existencia_combustible - n_op1.combustible_consumido,2 );
+            this.existencia_combustible -= n_op1.combustible_consumido; //resta combustible consumido a existencia combustible actual
+            nuevas_operaciones.push(n_op1); //guarda la nueva operación
+            let n_op2: GRecord = {
+              A: this.nueva_operacion.A,
+              M: this.nueva_operacion.M,
+              D: this.nueva_operacion.D,
+              tipo: this.nueva_operacion.tipo,
+              horametro_inicial: 	n_op1.horametro_final, 	//horas, minutos y segundos
+              tiempo_trabajado: this.round(ohf.diff(moment(hfinal), 'minutes') / 60, 2),
+              horametro_final: 0,
+              energia_generada: 0,
+              combustible_consumido: 0,
+              combustible_existencia: 0,
+              hora_inicial: {hours: hfinal.hours, minutes: hfinal.minutes},
+              hora_final: {hours: ohf.get('hours'), minutes: ohf.get('minutes')},
+              observaciones: '',
+            };
+            n_op2.horametro_final = Number(n_op2.horametro_inicial + n_op2.tiempo_trabajado);
+            n_op2.energia_generada = n_op2.tiempo_trabajado * this.gee.dl;
+            n_op2.combustible_consumido = n_op2.tiempo_trabajado * this.gee.ic_ccargan;
+            n_op2.combustible_existencia = this.round(this.existencia_combustible - n_op2.combustible_consumido, 2);
+            this.existencia_combustible -= n_op2.combustible_consumido; //resta combustible consumido a existencia combustible actual
+            nuevas_operaciones.push(n_op2); //guarda la nueva operación 
           }
         } else {
           //caso 6 la operacion es despues del horario laboral
-          this.nueva_operacion.combustible_consumido = this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargan, 1; //combustible consumido fuera del horario laboral
+          this.nueva_operacion.combustible_consumido = this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargan, 2; //combustible consumido fuera del horario laboral
+          this.nueva_operacion.energia_generada = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.dl, 2); //round to 2 decimals
+          this.nueva_operacion.horametro_inicial = Number(this.nueva_operacion.horametro_inicial); //convertir a numero
+          this.nueva_operacion.horametro_final = Number(this.nueva_operacion.horametro_final); //convertir a numero
+          this.nueva_operacion.combustible_existencia = this.round(this.existencia_combustible - this.nueva_operacion.combustible_consumido, 2); //combustible existencia
+          this.nueva_operacion.hora_inicial = {hours: ohi.get('hours'), minutes: ohi.get('minutes')};
+          this.nueva_operacion.hora_final = {hours: ohf.get('hours'), minutes: ohf.get('minutes')};
+          nuevas_operaciones.push(this.nueva_operacion); //guarda la nueva operación
         }
-        this.nueva_operacion.combustible_consumido = this.round(this.nueva_operacion.combustible_consumido, 1); //round to 1 decimals
-        this.nueva_operacion.energia_generada = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.dl, 2); //round to 2 decimals
-        this.nueva_operacion.horametro_inicial = Number(this.nueva_operacion.horametro_inicial); //convertir a numero
-        this.nueva_operacion.horametro_final = Number(this.nueva_operacion.horametro_final); //convertir a numero
-        this.nueva_operacion.combustible_existencia = this.existencia_combustible - this.nueva_operacion.combustible_consumido; //combustible existencia
-        this.nueva_operacion.hora_inicial = {hours: ohi.get('hours'), minutes: ohi.get('minutes')};
-        this.nueva_operacion.hora_final = {hours: ohf.get('hours'), minutes: ohf.get('minutes')};
-        console.log(this.nueva_operacion);
       }
+      console.log(nuevas_operaciones); //imprime la lista de operaciones nuevas
      }
   }
 
