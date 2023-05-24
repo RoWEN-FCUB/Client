@@ -25,8 +25,8 @@ export class GeeService {
     return this.http.get(ipserver + 'gee/listGEEByUser/' + id, {responseType: 'json'});
   }
 
-  listGEERecords(id: number) {
-    return this.http.get(ipserver + 'gee/listGEERecords/' + id, {responseType: 'json'});
+  listGEERecords(id: number, page: number, limit: number) {
+    return this.http.get(ipserver + 'gee/listGEERecords/' + id + '&' + page + '&' + limit, {responseType: 'json'});
   }
 
   getGEEFuelExistence(id: number) {

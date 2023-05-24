@@ -37,7 +37,7 @@
               </tr>
             </thead>
             <tbody>          
-              <tr *ngFor="let grecord of grecords">
+              <tr *ngFor="let grecord of grecords | paginate: config; let i = index">
                 <td>{{grecord.D}}</td>
                 <td>{{grecord.M}}</td>
                 <td>{{grecord.A}}</td>
@@ -58,10 +58,10 @@
               </tr>
             </tbody>
           </table>
-          <pagination-controls maxSize="5" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+          <pagination-controls maxSize="5" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageChanged($event)"></pagination-controls>
         </div>
       </nb-card-body>
-      <nb-card-footer>Total de registros: <b></b></nb-card-footer>
+      <nb-card-footer>Total de registros: {{config.totalItems}}<b></b></nb-card-footer>
     </nb-card>
   </nb-tab>
   <nb-tab tabIcon="credit-card-outline" tabTitle="Tarjeta" id="Tab2" name="Tab2" #Tab2 [disabled]="cards.length === 0 ? true : false">

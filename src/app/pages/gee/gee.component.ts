@@ -37,6 +37,11 @@ export class GeeComponent implements OnInit {
   });
   selectedCard: FCard = {};
   existencia_combustible_total: number = 0;
+  config = {
+    itemsPerPage: 3,
+    currentPage: 1,
+    totalItems: 0,
+  };
 
   constructor(private geeService: GeeService, private authService: NbAuthService, private dialogService: NbDialogService,
      private eService: EserviceService) { }
@@ -51,9 +56,7 @@ export class GeeComponent implements OnInit {
           this.eService.getOne(this.selectedGEE.id_serv).subscribe((serv: EService) => {
             this.service = serv;
           });
-          this.geeService.listGEERecords(this.selectedGEE.id).subscribe((grcords: GRecord[]) => {
-            this.grecords = grcords;
-          });
+          this.getGRecords();
           this.getCards();
           this.getTanks();
           this.actualizar_existencia_combustible();
@@ -62,10 +65,22 @@ export class GeeComponent implements OnInit {
     });
   }
 
+  pageChanged(event) {
+    this.config.currentPage = event;
+    this.getGRecords();
+  }
+
   actualizar_existencia_combustible() {
     this.geeService.getGEEFuelExistence(this.selectedGEE.id).subscribe((res: any) => {
       this.existencia_combustible_total = res.existencia;
       // console.log(this.existencia_combustible_total);
+    });
+  }
+
+  getGRecords() {
+    this.geeService.listGEERecords(this.selectedGEE.id, this.config.currentPage, this.config.itemsPerPage).subscribe((res: {records: GRecord[], total_items: number}) => {
+      this.grecords = res.records;
+      this.config.totalItems = res.total_items;
     });
   }
 
@@ -89,10 +104,7 @@ export class GeeComponent implements OnInit {
   }
 
   onChangeGee(selected: GEE) {
-    this.geeService.listGEERecords(selected.id).subscribe((grcords: GRecord[]) => {
-      this.grecords = grcords;
-      // console.log(this.grecords);
-    });
+    this.getGRecords();
     this.getCards();
     this.getTanks();
     this.actualizar_existencia_combustible();
