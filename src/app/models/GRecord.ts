@@ -3,6 +3,7 @@ import { Time } from '@angular/common';
 export interface GRecord {
     id?: number;
     id_gee?: number;
+    id_usuario?: number;
     D?: string;
     M?: string;
     A?: string;

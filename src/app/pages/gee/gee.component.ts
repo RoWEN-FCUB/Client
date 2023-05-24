@@ -109,18 +109,23 @@ export class GeeComponent implements OnInit {
 
   openNew() {
     const contexto = {title: 'Nueva operación'};
+    let op_anterior: GRecord;
     if (this.grecords.length > 0) {
-      // tslint:disable-next-line: max-line-length
-      this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', operacion_anterior: this.grecords[0], existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE, horario_diurno: this.service.horario_diurno}}).onClose.subscribe(() => {
-        this.onChangeGee(this.selectedGEE);
-      });
-      // Object.defineProperty(contexto, 'operacion_anterior', {value: this.grecords[0]});
-      // console.log(contexto);
+      op_anterior = this.grecords[0];
     } else {
-      this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE, horario_diurno: this.service.horario_diurno}}).onClose.subscribe(res => {
-        this.onChangeGee(this.selectedGEE);
-      });
+      op_anterior = null;
     }
+    this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', user: this.user, operacion_anterior: op_anterior, existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE, horario_diurno: this.service.horario_diurno}}).onClose.subscribe((nuevas_operaciones: any[]) => {
+      if(nuevas_operaciones) {
+        this.geeService.saveGEERecord(nuevas_operaciones).subscribe(() => {
+          this.onChangeGee(this.selectedGEE);
+          this.Toast.fire({
+            icon: 'success',
+            title: 'Registro creado correctamente.',
+          } as SweetAlertOptions);
+        });
+      }
+    });
   }
 
   openFuelCard() {

@@ -6,7 +6,7 @@
         <nb-select (selectedChange)="onChangeGee($event)" *ngIf="gees.length > 1" status="info" class="ms-2" [(ngModel)]="selectedGEE">
           <nb-option *ngFor="let gee of gees" [value]="gee">{{gee.idgee}}</nb-option>
         </nb-select>
-        <button (click)="openNew()" class="ms-2" nbTooltip="Agregar una operación" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
+        <button [disabled]="geeTank.length === 0" (click)="openNew()" class="ms-2" nbTooltip="Agregar una operación" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
         <button class="ms-2" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
         <button class="ms-2" (click)="openFuelCard()" nbTooltip="Asociar tarjeta de combustible" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="credit-card-outline"></nb-icon>Asociar tarjeta</button>
       </nb-card-header>
