@@ -6,7 +6,6 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { GRecord } from '../../models/GRecord';
 import { GEE } from '../../models/GEE';
 import { Time } from '@angular/common';
-import { time } from 'console';
 
 @Component({
   selector: 'new-grecord',
@@ -20,7 +19,7 @@ export class NewGrecordComponent implements OnInit {
   hora_status: string = 'info';
   horametro_inicial_status: string = 'info';
   horametro_final_status: string = 'info';
-  hora = new UntypedFormControl();
+  hora = new UntypedFormControl([]);
   fecha;
   operacion_anterior: GRecord = {};
   horas_trabajadas: number = 0; // diferencia entre hora inicial y final
@@ -57,6 +56,13 @@ export class NewGrecordComponent implements OnInit {
     }
     if (this.gee) {
       this.nueva_operacion.id_gee = this.gee.id;
+    }
+    if (this.nueva_operacion.id) {
+      this.fecha = moment(this.nueva_operacion.A + '-' + this.nueva_operacion.M + '-' + this.nueva_operacion.D, 'YYYY-MM-DD').toDate();
+      // this.hora = new UntypedFormControl([moment(this.nueva_operacion.hora_inicial, 'HH:mm:ss'), moment(this.nueva_operacion.hora_final, 'HH:mm:ss')]);
+      this.hora.value.push(moment.parseZone(this.nueva_operacion.hora_inicial, 'HH:mm:ss').local(true).format());
+      this.hora.value.push(moment.parseZone(this.nueva_operacion.hora_final, 'HH:mm:ss').local(true).format());
+      console.log(this.hora);
     }
   }
 
@@ -153,8 +159,8 @@ export class NewGrecordComponent implements OnInit {
                 id_gee: this.gee.id,
                 id_usuario: this.user.id,
                 D: this.nueva_operacion.D,
-M: this.nueva_operacion.M,
-A: this.nueva_operacion.A,
+                M: this.nueva_operacion.M,
+                A: this.nueva_operacion.A,
                 tipo: this.nueva_operacion.tipo,
                 hora_inicial: {hours: ohi.get('hours'), minutes: ohi.get('minutes')},
                 hora_final: {hours: hinicial.hours, minutes: hinicial.minutes},

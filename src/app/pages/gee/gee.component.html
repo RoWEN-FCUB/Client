@@ -6,7 +6,7 @@
         <nb-select (selectedChange)="onChangeGee($event)" *ngIf="gees.length > 1" status="info" class="ms-2" [(ngModel)]="selectedGEE">
           <nb-option *ngFor="let gee of gees" [value]="gee">{{gee.idgee}}</nb-option>
         </nb-select>
-        <button [disabled]="geeTank.length === 0" (click)="openNew()" class="ms-2" nbTooltip="Agregar una operación" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
+        <button [disabled]="geeTank.length === 0" (click)="openNewGRecord()" class="ms-2" nbTooltip="Agregar una operación" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
         <button class="ms-2" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
         <button class="ms-2" (click)="openFuelCard()" nbTooltip="Asociar tarjeta de combustible" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="credit-card-outline"></nb-icon>Asociar tarjeta</button>
       </nb-card-header>
@@ -52,13 +52,13 @@
                 <td>{{grecord.combustible_existencia}}</td>
                 <td>{{grecord.observaciones}}</td>
                 <td>
-                  <nb-icon class="icon_cursor" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar operación" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
-                  <nb-icon class="icon_cursor" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar operación" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                  <nb-icon (click)="openEditGRecord(grecord)" class="icon_cursor" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar operación" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                  <nb-icon (click)="deleteGEERecord(grecord)" class="icon_cursor" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar operación" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
                 </td>
               </tr>
             </tbody>
           </table>
-          <pagination-controls maxSize="5" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageChanged($event)"></pagination-controls>
+          <pagination-controls id="grecords" maxSize="5" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageChanged($event)"></pagination-controls>
         </div>
       </nb-card-body>
       <nb-card-footer>Total de registros: {{config.totalItems}}<b></b></nb-card-footer>
@@ -105,7 +105,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let card_record of card_records; first as isFirst">
+            <tr *ngFor="let card_record of card_records | paginate: config2; let i = index; first as isFirst">
               <td>{{card_record.fecha | date:'dd-MM-yyyy':'UTC'}}</td>
               <td>{{card_record.sinicial_pesos ? card_record.sinicial_pesos + '/' + card_record.sinicial_litros : '--'}}</td>
               <td>{{card_record.recarga_pesos ? card_record.recarga_pesos + '/' + card_record.recarga_litros : '--'}}</td>
@@ -117,7 +117,9 @@
             </tr>
           </tbody>
         </table>
-      </nb-card-body>      
+        <pagination-controls id="crecords" maxSize="5" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageChanged2($event)"></pagination-controls>
+      </nb-card-body>
+      <nb-card-footer>Total de registros: {{config2.totalItems}}<b></b></nb-card-footer>    
     </nb-card>
   </nb-tab>
   <nb-tab tabIcon="droplet-outline" tabTitle="Tanque" id="Tab3" name="Tab3" #Tab3 [disabled]="cards.length === 0 ? true : false">
@@ -140,7 +142,7 @@
             </tr>            
           </thead>
           <tbody>
-            <tr *ngFor="let tank of geeTank">
+            <tr *ngFor="let tank of geeTank | paginate: config3; let i = index">
               <td>{{tank.fecha | date: 'dd':'UTC'}}</td>
               <td>{{tank.fecha | date: 'MM'}}</td>
               <td>{{tank.fecha | date: 'YY'}}</td>
@@ -151,7 +153,9 @@
             </tr>
           </tbody>
         </table>
-      </nb-card-body>      
+        <pagination-controls id="trecords" maxSize="5" previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="pageChanged3($event)"></pagination-controls>
+      </nb-card-body>
+      <nb-card-footer>Total de registros: {{config3.totalItems}}<b></b></nb-card-footer>    
     </nb-card>
   </nb-tab>
 </nb-tabset>

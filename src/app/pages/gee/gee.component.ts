@@ -38,6 +38,19 @@ export class GeeComponent implements OnInit {
   selectedCard: FCard = {};
   existencia_combustible_total: number = 0;
   config = {
+    id: 'grecords',
+    itemsPerPage: 3,
+    currentPage: 1,
+    totalItems: 0,
+  };
+  config2 = {
+    id: 'crecords',
+    itemsPerPage: 3,
+    currentPage: 1,
+    totalItems: 0,
+  };
+  config3 = {
+    id: 'trecords',
     itemsPerPage: 3,
     currentPage: 1,
     totalItems: 0,
@@ -70,6 +83,16 @@ export class GeeComponent implements OnInit {
     this.getGRecords();
   }
 
+  pageChanged2(event) {
+    this.config2.currentPage = event;
+    this.getCardsRecords();
+  }
+
+  pageChanged3(event) {
+    this.config3.currentPage = event;
+    this.getTanks();
+  }
+
   actualizar_existencia_combustible() {
     this.geeService.getGEEFuelExistence(this.selectedGEE.id).subscribe((res: any) => {
       this.existencia_combustible_total = res.existencia;
@@ -84,21 +107,27 @@ export class GeeComponent implements OnInit {
     });
   }
 
+  getCardsRecords() {
+    this.geeService.listCardsRecords(this.selectedCard.id, this.config2.currentPage, this.config2.itemsPerPage).subscribe((res: {records: CRecord[], total_items: number}) => {
+      this.card_records = res.records;
+      this.config2.totalItems = res.total_items;
+    });
+  }
+
   getCards() {
     this.geeService.listCardsByGEE(this.selectedGEE.id).subscribe((cards: FCard[]) => {
       this.cards = cards;
       if (this.cards.length > 0) {
         this.selectedCard = this.cards[0];
-        this.geeService.listCardsRecords(this.selectedCard.id).subscribe((records: CRecord[]) => {
-          this.card_records = records;
-        });
+        this.getCardsRecords();
       }
     });
   }
 
   getTanks() {
-    this.geeService.listTanksByGEE(this.selectedGEE.id).subscribe((tanks: GeeTank[]) => {
-      this.geeTank = tanks;
+    this.geeService.listTanksByGEE(this.selectedGEE.id, this.config3.currentPage, this.config3.itemsPerPage).subscribe((res: {records: GeeTank[], total_items: number}) => {
+      this.geeTank = res.records;
+      this.config3.totalItems = res.total_items;
       // console.log(this.geeTank);
     });
   }
@@ -114,12 +143,11 @@ export class GeeComponent implements OnInit {
   }
 
   onChangeCard(selected: FCard) {
-    this.geeService.listCardsRecords(selected.id).subscribe((records: CRecord[]) => {
-      this.card_records = records;
-    });
+    this.config2.currentPage = 1;
+    this.getCardsRecords();
   }
 
-  openNew() {
+  openNewGRecord() {
     const contexto = {title: 'Nueva operación'};
     let op_anterior: GRecord;
     if (this.grecords.length > 0) {
@@ -130,12 +158,29 @@ export class GeeComponent implements OnInit {
     this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', user: this.user, operacion_anterior: op_anterior, existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE, horario_diurno: this.service.horario_diurno}}).onClose.subscribe((nuevas_operaciones: any[]) => {
       if(nuevas_operaciones) {
         this.geeService.saveGEERecord(nuevas_operaciones).subscribe(() => {
-          this.onChangeGee(this.selectedGEE);
+          this.getCardsRecords();
+          this.getTanks();
+          this.actualizar_existencia_combustible();
           this.Toast.fire({
             icon: 'success',
             title: 'Registro creado correctamente.',
           } as SweetAlertOptions);
         });
+      }
+    });
+  }
+
+  openEditGRecord(geeRecord: GRecord) {
+    const contexto = {title: 'Editar operación'};
+    let op_anterior: GRecord;
+    if (this.grecords.length > 0) {
+      op_anterior = this.grecords[0];
+    } else {
+      op_anterior = null;
+    }
+    this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', user: this.user, nueva_operacion: geeRecord, operacion_anterior: op_anterior, existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE, horario_diurno: this.service.horario_diurno}}).onClose.subscribe((nuevas_operaciones: any[]) => {
+      if(nuevas_operaciones) {
+        
       }
     });
   }
@@ -182,9 +227,7 @@ export class GeeComponent implements OnInit {
           icon:'success',
           title: 'Registro guardado correctamente.',
         } as SweetAlertOptions);
-        this.geeService.listCardsRecords(this.selectedCard.id).subscribe((records: CRecord[]) => {
-          this.card_records = records;
-        });
+        this.getCardsRecords();
         this.getTanks();
       });
     });
@@ -192,7 +235,7 @@ export class GeeComponent implements OnInit {
 
   deleteCardRecord(cardRecord: CRecord){
     Swal.fire({
-      title: 'Confirma que desea eliminar el registro?',
+      title: 'Confirma que desea eliminar la operación?',
       text: 'Se eliminarán todos sus datos del sistema.',
       icon: 'warning',
       showCancelButton: true,
@@ -205,11 +248,32 @@ export class GeeComponent implements OnInit {
         this.geeService.deleteCardRecord(cardRecord.id).subscribe(() => {
           this.Toast.fire({
             icon:'success',
-            title: 'Registro borrado correctamente.',
+            title: 'Operación eliminada correctamente.',
           } as SweetAlertOptions);
-          this.geeService.listCardsRecords(this.selectedCard.id).subscribe((records: CRecord[]) => {
-            this.card_records = records;
-          });
+          this.getCardsRecords();
+        });
+      }
+    });
+  }
+
+  deleteGEERecord(geeRecord: GRecord){
+    Swal.fire({
+      title: 'Confirma que desea eliminar la operación?',
+      text: 'Se eliminarán todos sus datos del sistema.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí­',
+      cancelButtonText: 'No',
+    } as SweetAlertOptions).then((result) => {
+      if (result.value) {
+        this.geeService.deleteGEERecord(geeRecord.id).subscribe(() => {
+          this.Toast.fire({
+            icon:'success',
+            title: 'Operación eliminada correctamente.',
+          } as SweetAlertOptions);
+          this.getGRecords();
         });
       }
     });

@@ -37,12 +37,12 @@ export class GeeService {
     return this.http.get(ipserver + 'gee/listCardsByGEE/' + id_gee, {responseType: 'json'});
   }
 
-  listTanksByGEE(id_gee: number) {
-    return this.http.get(ipserver + 'gee/listTanksByGEE/' + id_gee, {responseType: 'json'});
+  listTanksByGEE(id_gee: number, page: number, limit: number) {
+    return this.http.get(ipserver + 'gee/listTanksByGEE/' + id_gee + '&' + page + '&' + limit, {responseType: 'json'});
   }
 
-  listCardsRecords(id_card: number) {
-    return this.http.get(ipserver + 'gee/listCardsRecords/' + id_card, {responseType: 'json'});
+  listCardsRecords(id_card: number, page: number, limit: number) {
+    return this.http.get(ipserver + 'gee/listCardsRecords/' + id_card + '&' + page + '&' + limit, {responseType: 'json'});
   }
 
   saveGEE(newGEE: GEE) {
@@ -71,6 +71,10 @@ export class GeeService {
 
   deleteGEE(id: number) {
     return this.http.delete(ipserver + 'gee/' + id);
+  }
+
+  deleteGEERecord(id: number) {
+    return this.http.delete(ipserver + 'gee/deleteGEERecord/' + id);
   }
 
   deleteCardRecord(id: number) {
