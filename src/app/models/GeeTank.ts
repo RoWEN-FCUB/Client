@@ -1,6 +1,7 @@
 export interface GeeTank {
     id?: number;    
-    id_gee?: number;  
+    id_gee?: number;
+    id_operacion?: number;
     fecha?: Date;
     entrada?: number;
     salida?: number;

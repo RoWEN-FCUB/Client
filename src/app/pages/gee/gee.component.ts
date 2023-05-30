@@ -148,7 +148,6 @@ export class GeeComponent implements OnInit {
   }
 
   openNewGRecord() {
-    const contexto = {title: 'Nueva operación'};
     let op_anterior: GRecord;
     if (this.grecords.length > 0) {
       op_anterior = this.grecords[0];
@@ -171,16 +170,18 @@ export class GeeComponent implements OnInit {
   }
 
   openEditGRecord(geeRecord: GRecord) {
-    const contexto = {title: 'Editar operación'};
-    let op_anterior: GRecord;
-    if (this.grecords.length > 0) {
-      op_anterior = this.grecords[0];
-    } else {
-      op_anterior = null;
-    }
-    this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', user: this.user, nueva_operacion: geeRecord, operacion_anterior: op_anterior, existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE, horario_diurno: this.service.horario_diurno}}).onClose.subscribe((nuevas_operaciones: any[]) => {
-      if(nuevas_operaciones) {
-        
+    this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', user: this.user, nueva_operacion: Object.assign({}, geeRecord), existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE, horario_diurno: this.service.horario_diurno}}).onClose.subscribe((nuevas_operaciones: any[]) => {
+      if (nuevas_operaciones) {
+        if(nuevas_operaciones.length > 1) {
+          this.deleteGEERecord(geeRecord);
+          this.geeService.saveGEERecord(nuevas_operaciones).subscribe(() => {
+            this.getCardsRecords();
+            this.getTanks();
+            this.actualizar_existencia_combustible();
+          });
+        } else if (nuevas_operaciones.length === 1) {
+  
+        }
       }
     });
   }
@@ -256,27 +257,32 @@ export class GeeComponent implements OnInit {
     });
   }
 
-  deleteGEERecord(geeRecord: GRecord){
-    Swal.fire({
-      title: 'Confirma que desea eliminar la operación?',
-      text: 'Se eliminarán todos sus datos del sistema.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí­',
-      cancelButtonText: 'No',
-    } as SweetAlertOptions).then((result) => {
-      if (result.value) {
-        this.geeService.deleteGEERecord(geeRecord.id).subscribe(() => {
-          this.Toast.fire({
-            icon:'success',
-            title: 'Operación eliminada correctamente.',
-          } as SweetAlertOptions);
-          this.getGRecords();
-        });
-      }
-    });
+  deleteGEERecord(geeRecord: GRecord, showMessage?: boolean){
+    if (showMessage) {
+      Swal.fire({
+        title: 'Confirma que desea eliminar la operación?',
+        text: 'Se eliminarán todos sus datos del sistema.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí­',
+        cancelButtonText: 'No',
+      } as SweetAlertOptions).then((result) => {
+        if (result.value) {
+          this.geeService.deleteGEERecord(geeRecord.id).subscribe(() => {
+            this.Toast.fire({
+              icon:'success',
+              title: 'Operación eliminada correctamente.',
+            } as SweetAlertOptions);
+            this.getGRecords();
+            this.getTanks();
+          });
+        }
+      });
+    } else {
+      this.geeService.deleteGEERecord(geeRecord.id).subscribe();
+    }
   }
 
 }

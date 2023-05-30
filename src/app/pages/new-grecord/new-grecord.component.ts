@@ -50,7 +50,7 @@ export class NewGrecordComponent implements OnInit {
 
   ngOnInit(): void {
     // console.log(this.operacion_anterior);
-    if (this.operacion_anterior) {
+    if (this.operacion_anterior.id) {
       this.nueva_operacion.horametro_inicial = this.operacion_anterior.horametro_final;
       this.horametro_inicial_status = 'success';
     }
@@ -62,7 +62,7 @@ export class NewGrecordComponent implements OnInit {
       // this.hora = new UntypedFormControl([moment(this.nueva_operacion.hora_inicial, 'HH:mm:ss'), moment(this.nueva_operacion.hora_final, 'HH:mm:ss')]);
       this.hora.value.push(moment.parseZone(this.nueva_operacion.hora_inicial, 'HH:mm:ss').local(true).format());
       this.hora.value.push(moment.parseZone(this.nueva_operacion.hora_final, 'HH:mm:ss').local(true).format());
-      console.log(this.hora);
+      //console.log(this.hora);
     }
   }
 
@@ -79,37 +79,31 @@ export class NewGrecordComponent implements OnInit {
       timerProgressBar: true,
       timer: 3000,
     });
-     if (this.fecha_status != 'success') {
+     if (this.fecha_status != 'success' && !this.fecha) {
       Toast.fire({
         icon: 'error',
         title: 'Debe establecer la fecha de la operación.',
       } as SweetAlertOptions);
       this.fecha_status = 'danger';
-     } else if (this.tipo_status != 'success') {
+     } else if (this.tipo_status != 'success' && !this.nueva_operacion.tipo) {
       Toast.fire({
         icon: 'error',
         title: 'Debe seleccionar el tipo de operación.',
       } as SweetAlertOptions);
       this.tipo_status = 'danger';
-     } else if (this.hora_status != 'success') {
+     } else if (this.hora_status != 'success' && !this.hora) {
       Toast.fire({
         icon: 'error',
         title: 'Debe establecer la hora de la operación.',
       } as SweetAlertOptions);
       this.hora_status = 'danger';
-     } else if (this.tipo_status != 'success') {
-      Toast.fire({
-        icon: 'error',
-        title: 'Debe seleccionar el tipo de operación.',
-      } as SweetAlertOptions);
-      this.tipo_status = 'danger';
-     } else if (this.horametro_inicial_status != 'success') {
+     } else if (this.horametro_inicial_status != 'success' && !this.nueva_operacion.horametro_inicial) {
       Toast.fire({
         icon: 'error',
         title: 'Debe establecer el horámetro inicial de la operación.',
       } as SweetAlertOptions);
       this.horametro_inicial_status = 'danger';
-     } else if (this.horametro_final_status != 'success') {
+     } else if (this.horametro_final_status != 'success' && !this.nueva_operacion.horametro_final) {
       Toast.fire({
         icon: 'error',
         title: 'Debe establecer el horámetro final de la operación.',
@@ -367,17 +361,13 @@ export class NewGrecordComponent implements OnInit {
   }
 
   onTimeChange() {
-    // console.log(this.hora.value);
+    //console.log(this.hora.value);
     if (this.hora.value.length === 2) {
-      /*this.hora.value[0] = new Date(this.hora.value[0]);
-      this.hora.value[1] = new Date(this.hora.value[1]);
-      this.hora.value[0] = this.convertUTCDateToLocalDate(this.hora.value[0]);
-      this.hora.value[1] = this.convertUTCDateToLocalDate(this.hora.value[1]);*/
-      this.nueva_operacion.hora_inicial = this.hora.value[0];
-      this.nueva_operacion.hora_final = this.hora.value[1];
+      this.nueva_operacion.hora_inicial = {hours: this.hora.value[0].getHours(), minutes: this.hora.value[0].getMinutes()};
+      this.nueva_operacion.hora_final = {hours: this.hora.value[1].getHours(), minutes: this.hora.value[1].getMinutes()};
       this.horas_trabajadas = this.round((moment(this.hora.value[1]).diff(moment(this.hora.value[0]), 'minutes') / 60), 1);
       this.hora_status = 'success';
-      if (this.diferencia_horametro > 0 && this.diferencia_horametro !== this.horas_trabajadas) {
+      if (this.diferencia_horametro !== this.horas_trabajadas) {
         this.horametro_final_status = 'danger';
       } else {
         this.horametro_final_status = 'success';
@@ -396,7 +386,7 @@ export class NewGrecordComponent implements OnInit {
       }
     }
   }
-
+  
   round(numb: number, precision: number) {
     const exp: number = Math.pow(10, precision);
     return Math.round( ( numb + Number.EPSILON ) * exp ) / exp;
