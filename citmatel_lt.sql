@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-05-2023 a las 19:21:07
+-- Tiempo de generación: 01-06-2023 a las 17:17:48
 -- Versión del servidor: 10.4.11-MariaDB
 -- Versión de PHP: 7.4.3
 
@@ -21,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `citmatel_lt`
 --
-CREATE DATABASE IF NOT EXISTS `citmatel_lt` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `citmatel_lt`;
 
 -- --------------------------------------------------------
 
@@ -30,7 +28,6 @@ USE `citmatel_lt`;
 -- Estructura de tabla para la tabla `cities_weather`
 --
 
-DROP TABLE IF EXISTS `cities_weather`;
 CREATE TABLE `cities_weather` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
@@ -56,7 +53,6 @@ CREATE TABLE `cities_weather` (
 -- Estructura de tabla para la tabla `comercial_conciliacion`
 --
 
-DROP TABLE IF EXISTS `comercial_conciliacion`;
 CREATE TABLE `comercial_conciliacion` (
   `id` int(11) NOT NULL,
   `id_prov` int(11) NOT NULL,
@@ -74,7 +70,6 @@ CREATE TABLE `comercial_conciliacion` (
 -- Estructura de tabla para la tabla `comercial_producto`
 --
 
-DROP TABLE IF EXISTS `comercial_producto`;
 CREATE TABLE `comercial_producto` (
   `id` int(11) NOT NULL,
   `id_proveedor` int(11) NOT NULL,
@@ -92,7 +87,6 @@ CREATE TABLE `comercial_producto` (
 -- Estructura de tabla para la tabla `comercial_proveedor`
 --
 
-DROP TABLE IF EXISTS `comercial_proveedor`;
 CREATE TABLE `comercial_proveedor` (
   `id` int(11) NOT NULL,
   `id_serv` int(11) NOT NULL,
@@ -109,7 +103,6 @@ CREATE TABLE `comercial_proveedor` (
 -- Estructura de tabla para la tabla `comercial_vale`
 --
 
-DROP TABLE IF EXISTS `comercial_vale`;
 CREATE TABLE `comercial_vale` (
   `id` int(11) NOT NULL,
   `id_proveedor` int(11) NOT NULL,
@@ -134,7 +127,6 @@ CREATE TABLE `comercial_vale` (
 -- Estructura de tabla para la tabla `comercial_vale_productos`
 --
 
-DROP TABLE IF EXISTS `comercial_vale_productos`;
 CREATE TABLE `comercial_vale_productos` (
   `id` int(11) NOT NULL,
   `id_vale` int(11) NOT NULL,
@@ -148,7 +140,6 @@ CREATE TABLE `comercial_vale_productos` (
 -- Estructura de tabla para la tabla `configuracion`
 --
 
-DROP TABLE IF EXISTS `configuracion`;
 CREATE TABLE `configuracion` (
   `id` int(11) NOT NULL,
   `dia_actual` datetime NOT NULL,
@@ -162,7 +153,6 @@ CREATE TABLE `configuracion` (
 -- Estructura de tabla para la tabla `empresas`
 --
 
-DROP TABLE IF EXISTS `empresas`;
 CREATE TABLE `empresas` (
   `id` int(11) NOT NULL,
   `siglas` varchar(50) NOT NULL,
@@ -181,7 +171,6 @@ CREATE TABLE `empresas` (
 -- Estructura de tabla para la tabla `energia`
 --
 
-DROP TABLE IF EXISTS `energia`;
 CREATE TABLE `energia` (
   `id` int(11) NOT NULL,
   `fecha` date NOT NULL,
@@ -204,7 +193,6 @@ CREATE TABLE `energia` (
 -- Estructura de tabla para la tabla `gee`
 --
 
-DROP TABLE IF EXISTS `gee`;
 CREATE TABLE `gee` (
   `id` int(11) NOT NULL,
   `id_emp` int(11) NOT NULL,
@@ -227,7 +215,6 @@ CREATE TABLE `gee` (
 -- Estructura de tabla para la tabla `gee_registro`
 --
 
-DROP TABLE IF EXISTS `gee_registro`;
 CREATE TABLE `gee_registro` (
   `id` int(11) NOT NULL,
   `id_gee` int(11) NOT NULL,
@@ -250,14 +237,12 @@ CREATE TABLE `gee_registro` (
 --
 -- Disparadores `gee_registro`
 --
-DROP TRIGGER IF EXISTS `eliminar_en_tanque`;
 DELIMITER $$
 CREATE TRIGGER `eliminar_en_tanque` BEFORE DELETE ON `gee_registro` FOR EACH ROW BEGIN
 DELETE FROM gee_tanque WHERE id_operacion = OLD.id;
 END
 $$
 DELIMITER ;
-DROP TRIGGER IF EXISTS `insertar_en_tanque`;
 DELIMITER $$
 CREATE TRIGGER `insertar_en_tanque` AFTER INSERT ON `gee_registro` FOR EACH ROW BEGIN
 INSERT INTO gee_tanque (id_gee, id_operacion, fecha, salida, id_usuario) VALUES (NEW.id_gee, NEW.id, STR_TO_DATE(CONCAT(NEW.D , '-' , NEW.M , '-' , NEW.A), '%d-%m-%Y'), NEW.combustible_consumido, NEW.id_usuario);
@@ -271,7 +256,6 @@ DELIMITER ;
 -- Estructura de tabla para la tabla `gee_tanque`
 --
 
-DROP TABLE IF EXISTS `gee_tanque`;
 CREATE TABLE `gee_tanque` (
   `id` int(11) NOT NULL,
   `id_gee` int(11) NOT NULL,
@@ -287,7 +271,6 @@ CREATE TABLE `gee_tanque` (
 --
 -- Disparadores `gee_tanque`
 --
-DROP TRIGGER IF EXISTS `act_existencia`;
 DELIMITER $$
 CREATE TRIGGER `act_existencia` BEFORE INSERT ON `gee_tanque` FOR EACH ROW BEGIN
 IF (NEW.entrada IS NOT NULL) THEN
@@ -314,7 +297,6 @@ DELIMITER ;
 -- Estructura de tabla para la tabla `notificaciones`
 --
 
-DROP TABLE IF EXISTS `notificaciones`;
 CREATE TABLE `notificaciones` (
   `id` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
@@ -331,7 +313,6 @@ CREATE TABLE `notificaciones` (
 -- Estructura de tabla para la tabla `observaciones_tareas`
 --
 
-DROP TABLE IF EXISTS `observaciones_tareas`;
 CREATE TABLE `observaciones_tareas` (
   `id` int(11) NOT NULL,
   `id_tarea` int(11) NOT NULL,
@@ -344,7 +325,6 @@ CREATE TABLE `observaciones_tareas` (
 -- Estructura de tabla para la tabla `registro_vale`
 --
 
-DROP TABLE IF EXISTS `registro_vale`;
 CREATE TABLE `registro_vale` (
   `id` int(11) NOT NULL,
   `code` varchar(200) NOT NULL,
@@ -357,7 +337,6 @@ CREATE TABLE `registro_vale` (
 -- Estructura de tabla para la tabla `servicios`
 --
 
-DROP TABLE IF EXISTS `servicios`;
 CREATE TABLE `servicios` (
   `id` int(11) NOT NULL,
   `id_emp` int(11) NOT NULL,
@@ -390,7 +369,6 @@ CREATE TABLE `servicios` (
 -- Estructura de tabla para la tabla `taller_clientes`
 --
 
-DROP TABLE IF EXISTS `taller_clientes`;
 CREATE TABLE `taller_clientes` (
   `id` int(11) NOT NULL,
   `siglas` varchar(50) NOT NULL,
@@ -403,7 +381,6 @@ CREATE TABLE `taller_clientes` (
 -- Estructura de tabla para la tabla `taller_clientes_personas`
 --
 
-DROP TABLE IF EXISTS `taller_clientes_personas`;
 CREATE TABLE `taller_clientes_personas` (
   `id` int(11) NOT NULL,
   `nombre` varchar(250) NOT NULL,
@@ -418,7 +395,6 @@ CREATE TABLE `taller_clientes_personas` (
 -- Estructura de tabla para la tabla `taller_equipos`
 --
 
-DROP TABLE IF EXISTS `taller_equipos`;
 CREATE TABLE `taller_equipos` (
   `id` int(11) NOT NULL,
   `equipo` varchar(250) NOT NULL,
@@ -434,7 +410,6 @@ CREATE TABLE `taller_equipos` (
 -- Estructura de tabla para la tabla `taller_registro`
 --
 
-DROP TABLE IF EXISTS `taller_registro`;
 CREATE TABLE `taller_registro` (
   `id` int(11) NOT NULL,
   `cod` int(11) NOT NULL DEFAULT 1,
@@ -460,7 +435,6 @@ CREATE TABLE `taller_registro` (
 --
 -- Disparadores `taller_registro`
 --
-DROP TRIGGER IF EXISTS `insertar_equipo`;
 DELIMITER $$
 CREATE TRIGGER `insertar_equipo` BEFORE INSERT ON `taller_registro` FOR EACH ROW IF NOT EXISTS(SELECT 1 FROM taller_equipos WHERE taller_equipos.equipo = NEW.equipo AND taller_equipos.marca = NEW.marca AND taller_equipos.modelo = NEW.modelo AND taller_equipos.serie = NEW.serie AND taller_equipos.inventario = NEW.inventario) THEN
 INSERT INTO taller_equipos(equipo, marca, modelo, serie, inventario) VALUES (NEW.equipo, NEW.marca, NEW.modelo, NEW.serie, NEW.inventario);
@@ -474,7 +448,6 @@ DELIMITER ;
 -- Estructura de tabla para la tabla `taller_registro_partes`
 --
 
-DROP TABLE IF EXISTS `taller_registro_partes`;
 CREATE TABLE `taller_registro_partes` (
   `id` int(11) NOT NULL,
   `parte` varchar(100) NOT NULL,
@@ -492,7 +465,6 @@ CREATE TABLE `taller_registro_partes` (
 -- Estructura de tabla para la tabla `tareas`
 --
 
-DROP TABLE IF EXISTS `tareas`;
 CREATE TABLE `tareas` (
   `id` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
@@ -512,7 +484,6 @@ CREATE TABLE `tareas` (
 -- Estructura de tabla para la tabla `tarjetas`
 --
 
-DROP TABLE IF EXISTS `tarjetas`;
 CREATE TABLE `tarjetas` (
   `id` int(11) NOT NULL,
   `id_gee` int(11) NOT NULL,
@@ -527,7 +498,6 @@ CREATE TABLE `tarjetas` (
 -- Estructura de tabla para la tabla `tarjetas_registro`
 --
 
-DROP TABLE IF EXISTS `tarjetas_registro`;
 CREATE TABLE `tarjetas_registro` (
   `id` int(11) NOT NULL,
   `id_tarjeta` int(11) NOT NULL,
@@ -550,10 +520,43 @@ CREATE TABLE `tarjetas_registro` (
 --
 -- Disparadores `tarjetas_registro`
 --
-DROP TRIGGER IF EXISTS `actualizar_tarjeta`;
 DELIMITER $$
-CREATE TRIGGER `actualizar_tarjeta` BEFORE INSERT ON `tarjetas_registro` FOR EACH ROW BEGIN
+CREATE TRIGGER `actualizar_litros` BEFORE INSERT ON `tarjetas_registro` FOR EACH ROW BEGIN
+SELECT tipo_combustible, id_gee INTO @tipo_combustible, @id_gee FROM tarjetas WHERE id = NEW.id_tarjeta;
+SELECT precio_dregular, precio_gregular INTO @precio_dregular, @precio_gregular FROM configuracion LIMIT 1;
+IF @tipo_combustible = 'Diesel Regular' THEN
+SET @precio_combustible = @precio_dregular;
+END iF;
+IF @tipo_combustible = 'Gasolina Regular' THEN
+SET @precio_combustible = @precio_gregular;
+END iF;
+SET NEW.sinicial_litros = ROUND(NEW.sinicial_pesos / @precio_combustible, 2);
+SET NEW.sfinal_litros = ROUND(NEW.sfinal_pesos / @precio_combustible, 2);
+IF NEW.recarga_pesos IS NOT NULL THEN
+SET NEW.recarga_litros = ROUND(NEW.recarga_pesos / @precio_combustible, 2);
+SET NEW.saldo_litros = ROUND(NEW.saldo_pesos / @precio_combustible, 2);
+END IF;
+IF NEW.consumo_pesos IS NOT NULL THEN
+SET NEW.consumo_litros = ROUND(NEW.consumo_pesos / @precio_combustible, 2);
+END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `actualizar_saldo_tarjeta` BEFORE INSERT ON `tarjetas_registro` FOR EACH ROW BEGIN
 UPDATE tarjetas SET saldo = NEW.sfinal_pesos WHERE id = NEW.id_tarjeta;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `actualizar_tanque` AFTER INSERT ON `tarjetas_registro` FOR EACH ROW BEGIN
+INSERT INTO gee_tanque (id_gee, id_operacion, fecha, entrada, id_usuario) VALUES (NEW.id_gee, NEW.id, NEW.fecha, NEW.consumo_litros, NEW.id_usuario);
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `eliminar_en_tanque2` BEFORE DELETE ON `tarjetas_registro` FOR EACH ROW BEGIN
+DELETE FROM gee_tanque WHERE id_operacion = OLD.id;
 END
 $$
 DELIMITER ;
@@ -564,7 +567,6 @@ DELIMITER ;
 -- Estructura de tabla para la tabla `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `user` varchar(30) NOT NULL,
@@ -586,7 +588,6 @@ CREATE TABLE `users` (
 -- Estructura de tabla para la tabla `users_roles`
 --
 
-DROP TABLE IF EXISTS `users_roles`;
 CREATE TABLE `users_roles` (
   `id` int(11) NOT NULL,
   `role` varchar(50) NOT NULL,
@@ -599,7 +600,6 @@ CREATE TABLE `users_roles` (
 -- Estructura de tabla para la tabla `usuario_servicio`
 --
 
-DROP TABLE IF EXISTS `usuario_servicio`;
 CREATE TABLE `usuario_servicio` (
   `id` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,

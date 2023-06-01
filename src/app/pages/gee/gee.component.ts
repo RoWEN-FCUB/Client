@@ -157,6 +157,7 @@ export class GeeComponent implements OnInit {
     this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', user: this.user, operacion_anterior: op_anterior, existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE, horario_diurno: this.service.horario_diurno}}).onClose.subscribe((nuevas_operaciones: any[]) => {
       if(nuevas_operaciones) {
         this.geeService.saveGEERecord(nuevas_operaciones).subscribe(() => {
+          this.getGRecords();
           this.getCardsRecords();
           this.getTanks();
           this.actualizar_existencia_combustible();
@@ -212,7 +213,7 @@ export class GeeComponent implements OnInit {
       newCrecord.sfinal_litros = null;
       newCrecord.sinicial_litros = null;
       if(this.card_records.length > 0) {
-        newCrecord.sinicial_pesos = this.card_records[this.card_records.length - 1].sfinal_pesos;
+        newCrecord.sinicial_pesos = this.card_records[0].sfinal_pesos;
       } else {
         newCrecord.sinicial_pesos = 0;
       }
@@ -252,6 +253,7 @@ export class GeeComponent implements OnInit {
             title: 'Operación eliminada correctamente.',
           } as SweetAlertOptions);
           this.getCardsRecords();
+          this.getTanks();
         });
       }
     });

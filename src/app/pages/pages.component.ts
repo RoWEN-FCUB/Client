@@ -54,7 +54,7 @@ export class PagesComponent implements OnInit {
           },
         );
       }
-      this.accessChecker.isGranted('view', 'delivers').subscribe(granted => {
+      /*this.accessChecker.isGranted('view', 'delivers').subscribe(granted => {
         if (granted) {
           this.menu.push(
             {
@@ -64,7 +64,7 @@ export class PagesComponent implements OnInit {
             },
           );
         }
-      });
+      });*/
       this.accessChecker.isGranted('view', 'tasks').subscribe(granted => {
         if (granted) {
           this.menu.push(
@@ -108,7 +108,7 @@ export class PagesComponent implements OnInit {
             },
           );
         }
-      });
+      });/*
       this.accessChecker.isGranted('view', 'comercial').subscribe(granted => {
         if (granted) {
           this.menu.push(
@@ -119,7 +119,7 @@ export class PagesComponent implements OnInit {
             },
           );
         }
-      });
+      });*/
       this.accessChecker.isGranted('view', 'admin_menu').subscribe( granted => {
         if (granted) {
           this.menu.push(

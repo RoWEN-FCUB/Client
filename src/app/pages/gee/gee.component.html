@@ -37,7 +37,7 @@
               </tr>
             </thead>
             <tbody>          
-              <tr *ngFor="let grecord of grecords | paginate: config; let i = index">
+              <tr *ngFor="let grecord of grecords | paginate: config; let i = index; first as isFirst">
                 <td>{{grecord.D}}</td>
                 <td>{{grecord.M}}</td>
                 <td>{{grecord.A}}</td>
@@ -52,8 +52,8 @@
                 <td>{{grecord.combustible_existencia}}</td>
                 <td>{{grecord.observaciones}}</td>
                 <td>
-                  <nb-icon (click)="openEditGRecord(grecord)" class="icon_cursor" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar operación" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
-                  <nb-icon (click)="deleteGEERecord(grecord, true)" class="icon_cursor" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar operación" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
+                  <nb-icon *ngIf="isFirst" (click)="openEditGRecord(grecord)" class="icon_cursor" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar operación" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                  <nb-icon *ngIf="isFirst" (click)="deleteGEERecord(grecord, true)" class="icon_cursor" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar operación" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
                 </td>
               </tr>
             </tbody>
