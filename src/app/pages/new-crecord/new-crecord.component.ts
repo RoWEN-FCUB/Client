@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
 import { CRecord } from '../../models/CRecord';
 
@@ -11,14 +11,30 @@ import { CRecord } from '../../models/CRecord';
 export class NewCrecordComponent {
   newCardRecordForm: UntypedFormGroup;
   newCRecord: CRecord = {};
+  saldo: number = 0;
 
   constructor(private fb: UntypedFormBuilder, protected dialogRef: NbDialogRef<any>) {
     this.newCardRecordForm = this.fb.group({
       fecha: ['', [Validators.required]],
       tipo: ['', [Validators.required]],
-      saldo: ['', [Validators.pattern(/^(?!0\d)\d*(\.\d+)?(?:[1-9]0|0)?$/), Validators.required]],
+      saldo: ['', [Validators.pattern(/^(?!0\d)\d*(\.\d+)?(?:[1-9]0|0)?$/), Validators.required, this.saldoIncorrecto()]],
       observ: [''],
     });
+  }
+
+  saldoIncorrecto(): ValidatorFn {
+    return (control:AbstractControl) : ValidationErrors | null => {
+        const value = control.value;
+        if (!value) {
+            return null;
+        }
+        const invalido = Number(value) === 0 || (Number(value) > this.saldo && this.newCardRecordForm.get('tipo').value === 'Extraccion');
+        return invalido ? {saldoIncorrecto:true}: null;
+    }
+  }
+
+  onTypeChange() {
+    this.newCardRecordForm.controls['saldo'].updateValueAndValidity();
   }
 
   onSubmit() {

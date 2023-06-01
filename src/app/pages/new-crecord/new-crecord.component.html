@@ -15,7 +15,7 @@
                 <div class="col">
                     <div class="form-group mb-3">
                         <label for="tipo" class="form-label">Tipo de Operación:</label>
-                        <nb-select id="tipo" formControlName="tipo" fullWidth placeholder="----" [status]="newCardRecordForm.controls.tipo.valid ? 'success' : (newCardRecordForm.controls.tipo.pristine ? 'info' : 'danger')">                            
+                        <nb-select (selectedChange)="onTypeChange()" id="tipo" formControlName="tipo" fullWidth placeholder="----" [status]="newCardRecordForm.controls.tipo.valid ? 'success' : (newCardRecordForm.controls.tipo.pristine ? 'info' : 'danger')">                            
                             <nb-option value="Carga">Carga</nb-option>
                             <nb-option value="Extraccion">Extracción</nb-option>
                         </nb-select>
@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col">
                     <div class="form-group mb-3">
-                        <label for="saldo" class="form-label">Saldo:</label>
+                        <label for="saldo" class="form-label">Saldo: {{saldo}}</label>
                         <input nbInput type="text" id="saldo" formControlName="saldo" class="form-control" [status]="newCardRecordForm.controls.saldo.valid ? 'success' : (newCardRecordForm.controls.saldo.pristine ? 'info' : 'danger')">
                     </div>
                 </div>
