@@ -5,9 +5,9 @@
             <div class="col">
                 <div class="form-group mb-3">
                     <label>Fecha:</label>
-                    <input [status]="fecha_status" [(ngModel)]="fecha" type="text" [nbDatepicker]="datepicker" nbInput fullWidth placeholder="Fecha de operación" class="form-control" aria-describedby="dateHelp">
-                    <small id="dateHelp" class="form-text text-muted">Fecha en la que se raliza la operación.</small>   
-                    <nb-datepicker #datepicker (dateChange)="onDateChange()"></nb-datepicker>   
+                    <input [formControl]="fecha" [owlDateTime]="dp" (dateTimeChange)="onDateChange()" [owlDateTimeTrigger]="dp" [status]="fecha_status" type="text" nbInput fullWidth placeholder="Fecha de operación" class="form-control" aria-describedby="dateHelp">
+                    <owl-date-time #dp [pickerType]="'calendar'"></owl-date-time>
+                    <small id="dateHelp" class="form-text text-muted">Fecha en la que se raliza la operación.</small> 
                 </div>
             </div>
             <div class="col">

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
+import { FType } from '../../models/FType';
 
 @Component({
   selector: 'fuel-price',
@@ -9,30 +10,28 @@ import { NbDialogRef } from '@nebular/theme';
 })
 export class FuelPriceComponent {
   newPriceForm: UntypedFormGroup;
-  fuelPrices: any = {
-    precio_dregular: 0,
-    precio_gregular: 0,
-  };
+  fuels: FType[] = [];
   precio_anterior: number = 0;
 
   constructor(private fb: UntypedFormBuilder, protected dialogRef: NbDialogRef<any>) {
     this.newPriceForm = this.fb.group({
-      fuelType: ['', Validators.required],
+      fuelType: [this.fuels[0], Validators.required],
       nuevo_precio: ['', [Validators.pattern(/^(?!0\d)\d*(\.\d+)?(?:[1-9]0|0)?$/), Validators.required]],
     });
   }
 
   onSubmit() {
     // Lógica para enviar los datos al servidor
-    this.dialogRef.close({fuelType: this.newPriceForm.controls.fuelType.value, prevPrice: this.precio_anterior, newPrice: this.newPriceForm.controls.nuevo_precio.value});
+    const new_fuel: FType = {
+      id: this.newPriceForm.controls.fuelType.value.id,
+      tipo_combustible: this.newPriceForm.controls.fuelType.value.tipo_combustible,
+      precio: Number(this.newPriceForm.controls.nuevo_precio.value),
+    };
+    this.dialogRef.close({fuel: new_fuel, prevprice: this.precio_anterior});
   }
 
   onSelectedFuelChange(fuelType: string) {
-    if (fuelType === 'Diesel Regular') {
-      this.precio_anterior = this.fuelPrices.precio_dregular;
-    } else if (fuelType === 'Gasolina') {
-      this.precio_anterior = this.fuelPrices.precio_gregular;
-    }
+    this.precio_anterior = this.newPriceForm.controls.fuelType.value.precio;
   }
 
   ngOnInit(): void {

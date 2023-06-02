@@ -7,6 +7,7 @@ import { GeeService } from '../../services/gee.service';
 import { NewGeeComponent } from '../new-gee/new-gee.component';
 import { FuelPriceComponent } from '../fuel-price/fuel-price.component';
 import { AdminFcardComponent } from '../admin-fcard/admin-fcard.component';
+import { FType } from '../../models/FType';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -16,10 +17,7 @@ import { AdminFcardComponent } from '../admin-fcard/admin-fcard.component';
 })
 export class AdminGeeComponent implements OnInit {
   gees: GEE[];
-  fuelPrices: any = {
-    precio_dregular: 0,
-    precio_gregular: 0,
-  };
+  fuels: FType[] = [];
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: ''};
   Toast = Swal.mixin({
     toast: true,
@@ -36,8 +34,8 @@ export class AdminGeeComponent implements OnInit {
       this.user = token.getPayload();
     });
     this.getGEEs();
-    this.geeService.getFuelPrices().subscribe(res => {
-      this.fuelPrices = res;
+    this.geeService.getFuelTypes().subscribe((res: FType[]) => {
+      this.fuels = res;
     });
   }
 
@@ -60,19 +58,19 @@ export class AdminGeeComponent implements OnInit {
   }
 
   openChangePrice() {
-    this.dialogService.open(FuelPriceComponent, {context: {fuelPrices: this.fuelPrices}}).onClose.subscribe(res => {
+    //console.log(this.fuels);
+    this.dialogService.open(FuelPriceComponent, {context: {fuels: this.fuels}}).onClose.subscribe(res => {
       if (res) {
         console.log(res);
         const datos = {
-          prevPrice: res.prevPrice,
-          newPrice: res.newPrice,
-          fuelType: res.fuelType,
+          fuel: res.fuel,
           id_usuario: this.user.id,
+          prevprice: res.prevprice,
         }
         this.geeService.changeFuelPrice(datos).subscribe(res => {
           this.Toast.fire({
             icon:'success',
-            title: 'Precio actualizado correctamente. Se adicionó un nuevo registro para cada tarjeta de ' + datos.fuelType,
+            title: 'Precio actualizado correctamente. Se adicionó un nuevo registro para cada tarjeta de ' + datos.fuel.tipo_combustible,
           } as SweetAlertOptions);
         });
       }

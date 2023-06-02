@@ -15,7 +15,7 @@ export class NewFuelCardComponent implements OnInit {
     id_gee: 0,
     numero: '',
     saldo: 0,
-    tipo_combustible: ''
+    tipo_combustible: -1,
   }; 		// new card to be added to the form.
   id_gee: number;		// id of the gee in the database.
 

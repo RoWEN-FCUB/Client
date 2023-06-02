@@ -148,11 +148,12 @@ export class GeeComponent implements OnInit {
   }
 
   openNewGRecord() {
+    console.log(this.existencia_combustible_total);
     let op_anterior: GRecord;
     if (this.grecords.length > 0) {
       op_anterior = this.grecords[0];
     } else {
-      op_anterior = null;
+      op_anterior = {};
     }
     this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', user: this.user, operacion_anterior: op_anterior, existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE, horario_diurno: this.service.horario_diurno}}).onClose.subscribe((nuevas_operaciones: any[]) => {
       if(nuevas_operaciones) {
@@ -222,12 +223,18 @@ export class GeeComponent implements OnInit {
         } else {
           newCrecord.sinicial_pesos = 0;
         }
+        newCrecord.sinicial_litros = this.round(newCrecord.sinicial_pesos / this.selectedCard.precio_combustible, 2);
         if(newCrecord.recarga_pesos) {
           newCrecord.saldo_pesos = newCrecord.sinicial_pesos + newCrecord.recarga_pesos;
+          newCrecord.saldo_litros = this.round(newCrecord.saldo_pesos / this.selectedCard.precio_combustible, 2);
           newCrecord.sfinal_pesos = newCrecord.saldo_pesos;
+          newCrecord.sfinal_litros = this.round(newCrecord.sfinal_pesos / this.selectedCard.precio_combustible, 2);
+          newCrecord.recarga_litros = this.round(newCrecord.recarga_pesos / this.selectedCard.precio_combustible, 2);
         }
         if(newCrecord.consumo_pesos) {
           newCrecord.sfinal_pesos = newCrecord.sinicial_pesos - newCrecord.consumo_pesos;
+          newCrecord.sfinal_litros = this.round(newCrecord.sfinal_pesos / this.selectedCard.precio_combustible, 2);
+          newCrecord.consumo_litros = this.round(newCrecord.consumo_pesos / this.selectedCard.precio_combustible, 2);
         }
         this.geeService.saveFCardRecord(newCrecord).subscribe(() => {
           this.Toast.fire({
@@ -239,6 +246,11 @@ export class GeeComponent implements OnInit {
         });
       }
     });
+  }
+
+  round(numb: number, precision: number) {
+    const exp: number = Math.pow(10, precision);
+    return Math.round( ( numb + Number.EPSILON ) * exp ) / exp;
   }
 
   deleteCardRecord(cardRecord: CRecord){

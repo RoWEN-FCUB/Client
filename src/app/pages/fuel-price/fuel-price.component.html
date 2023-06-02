@@ -7,8 +7,7 @@
                     <div class="form-group mb-3">
                         <label for="fuelType" class="form-label">Tipo de combustible:</label>
                         <nb-select (selectedChange)="onSelectedFuelChange($event)" id="fuelType" formControlName="fuelType" fullWidth placeholder="----" [status]="newPriceForm.controls.fuelType.valid ? 'success' : (newPriceForm.controls.fuelType.pristine ? 'info' : 'danger')">                            
-                            <nb-option value="Diesel Regular">Diesel Regular</nb-option>
-                            <nb-option value="Gasolina">Gasolina</nb-option>
+                            <nb-option *ngFor="let fuel of fuels" [value]="fuel">{{fuel.tipo_combustible}}</nb-option>
                         </nb-select>
                     </div>
                 </div>

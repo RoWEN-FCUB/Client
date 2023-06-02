@@ -6,7 +6,7 @@
         <nb-select (selectedChange)="onChangeGee($event)" *ngIf="gees.length > 1" status="info" class="ms-2" [(ngModel)]="selectedGEE">
           <nb-option *ngFor="let gee of gees" [value]="gee">{{gee.idgee}}</nb-option>
         </nb-select>
-        <button [disabled]="geeTank.length === 0" (click)="openNewGRecord()" class="ms-2" nbTooltip="Agregar una operación" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
+        <button [disabled]="(geeTank.length === 0 || (geeTank.length > 0 && geeTank[0].existencia === 0))" (click)="openNewGRecord()" class="ms-2" nbTooltip="Agregar una operación" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
         <button class="ms-2" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
         <button class="ms-2" (click)="openFuelCard()" nbTooltip="Asociar tarjeta de combustible" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="credit-card-outline"></nb-icon>Asociar tarjeta</button>
       </nb-card-header>
@@ -52,7 +52,7 @@
                 <td>{{grecord.combustible_existencia}}</td>
                 <td>{{grecord.observaciones}}</td>
                 <td>
-                  <nb-icon *ngIf="isFirst" (click)="openEditGRecord(grecord)" class="icon_cursor" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar operación" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
+                  <!--<nb-icon *ngIf="isFirst" (click)="openEditGRecord(grecord)" class="icon_cursor" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar operación" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>-->
                   <nb-icon *ngIf="isFirst" (click)="deleteGEERecord(grecord, true)" class="icon_cursor" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar operación" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
                 </td>
               </tr>
@@ -84,7 +84,8 @@
             </tr>
             <tr>
               <th colspan="3">Tarjeta No.: {{selectedCard.numero}}</th>
-              <th colspan="5">Tipo de combustible: {{selectedCard.tipo_combustible}}</th>
+              <th colspan="4">Tipo de combustible: {{selectedCard.tipo_combustible}}</th>
+              <th>Saldo: {{selectedCard.saldo}}</th>
             </tr>
             <tr>
               <th rowspan="2" class="text_to_middle">Fecha</th>

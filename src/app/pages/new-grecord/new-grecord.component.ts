@@ -20,7 +20,7 @@ export class NewGrecordComponent implements OnInit {
   horametro_inicial_status: string = 'info';
   horametro_final_status: string = 'info';
   hora = new UntypedFormControl([]);
-  fecha;
+  fecha = new UntypedFormControl([]);
   operacion_anterior: GRecord = {};
   horas_trabajadas: number = 0; // diferencia entre hora inicial y final
   diferencia_horametro: number = 0; // diferencia entre horametros
@@ -50,7 +50,7 @@ export class NewGrecordComponent implements OnInit {
 
   ngOnInit(): void {
     // console.log(this.operacion_anterior);
-    if (this.operacion_anterior.id) {
+    if (this.operacion_anterior) {
       this.nueva_operacion.horametro_inicial = this.operacion_anterior.horametro_final;
       this.horametro_inicial_status = 'success';
     }
@@ -58,7 +58,7 @@ export class NewGrecordComponent implements OnInit {
       this.nueva_operacion.id_gee = this.gee.id;
     }
     if (this.nueva_operacion.id) {
-      this.fecha = moment(this.nueva_operacion.A + '-' + this.nueva_operacion.M + '-' + this.nueva_operacion.D, 'YYYY-MM-DD').toDate();
+      this.fecha.value.push(moment(this.nueva_operacion.A + '-' + this.nueva_operacion.M + '-' + this.nueva_operacion.D, 'YYYY-MM-DD').toDate());
       // this.hora = new UntypedFormControl([moment(this.nueva_operacion.hora_inicial, 'HH:mm:ss'), moment(this.nueva_operacion.hora_final, 'HH:mm:ss')]);
       this.hora.value.push(moment.parseZone(this.nueva_operacion.hora_inicial, 'HH:mm:ss').local(true).format());
       this.hora.value.push(moment.parseZone(this.nueva_operacion.hora_final, 'HH:mm:ss').local(true).format());
@@ -351,9 +351,10 @@ export class NewGrecordComponent implements OnInit {
 
   onDateChange() {
     this.fecha_status = 'success';
-    this.nueva_operacion.A = moment(this.fecha).get('year').toString().substring(2);
-    this.nueva_operacion.M = (moment(this.fecha).get('month') + 1).toString();
-    this.nueva_operacion.D = moment(this.fecha).date().toString();
+    //console.log(this.fecha.value);
+    this.nueva_operacion.A = moment(this.fecha.value).get('year').toString().substring(2);
+    this.nueva_operacion.M = (moment(this.fecha.value).get('month') + 1).toString();
+    this.nueva_operacion.D = moment(this.fecha.value).date().toString();
   }
 
   onTypeChange() {

@@ -17,8 +17,8 @@ export class GeeService {
     return this.http.get(ipserver + 'gee/list/', {responseType: 'json'});
   }
 
-  getFuelPrices() {
-    return this.http.get(ipserver + 'gee/fuelPrices/', {responseType: 'json'});
+  getFuelTypes() {
+    return this.http.get(ipserver + 'gee/fuelTypes/', {responseType: 'json'});
   }
 
   listGEEsByUser(id: number) {
