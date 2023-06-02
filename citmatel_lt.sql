@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-06-2023 a las 17:17:48
+-- Tiempo de generación: 02-06-2023 a las 23:11:13
 -- Versión del servidor: 10.4.11-MariaDB
 -- Versión de PHP: 7.4.3
 
@@ -489,7 +489,7 @@ CREATE TABLE `tarjetas` (
   `id_gee` int(11) NOT NULL,
   `numero` varchar(20) NOT NULL,
   `saldo` decimal(10,2) NOT NULL,
-  `tipo_combustible` varchar(20) NOT NULL
+  `tipo_combustible` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -521,28 +521,6 @@ CREATE TABLE `tarjetas_registro` (
 -- Disparadores `tarjetas_registro`
 --
 DELIMITER $$
-CREATE TRIGGER `actualizar_litros` BEFORE INSERT ON `tarjetas_registro` FOR EACH ROW BEGIN
-SELECT tipo_combustible, id_gee INTO @tipo_combustible, @id_gee FROM tarjetas WHERE id = NEW.id_tarjeta;
-SELECT precio_dregular, precio_gregular INTO @precio_dregular, @precio_gregular FROM configuracion LIMIT 1;
-IF @tipo_combustible = 'Diesel Regular' THEN
-SET @precio_combustible = @precio_dregular;
-END iF;
-IF @tipo_combustible = 'Gasolina Regular' THEN
-SET @precio_combustible = @precio_gregular;
-END iF;
-SET NEW.sinicial_litros = ROUND(NEW.sinicial_pesos / @precio_combustible, 2);
-SET NEW.sfinal_litros = ROUND(NEW.sfinal_pesos / @precio_combustible, 2);
-IF NEW.recarga_pesos IS NOT NULL THEN
-SET NEW.recarga_litros = ROUND(NEW.recarga_pesos / @precio_combustible, 2);
-SET NEW.saldo_litros = ROUND(NEW.saldo_pesos / @precio_combustible, 2);
-END IF;
-IF NEW.consumo_pesos IS NOT NULL THEN
-SET NEW.consumo_litros = ROUND(NEW.consumo_pesos / @precio_combustible, 2);
-END IF;
-END
-$$
-DELIMITER ;
-DELIMITER $$
 CREATE TRIGGER `actualizar_saldo_tarjeta` BEFORE INSERT ON `tarjetas_registro` FOR EACH ROW BEGIN
 UPDATE tarjetas SET saldo = NEW.sfinal_pesos WHERE id = NEW.id_tarjeta;
 END
@@ -550,7 +528,9 @@ $$
 DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `actualizar_tanque` AFTER INSERT ON `tarjetas_registro` FOR EACH ROW BEGIN
+IF NEW.consumo_litros IS NOT NULL THEN
 INSERT INTO gee_tanque (id_gee, id_operacion, fecha, entrada, id_usuario) VALUES (NEW.id_gee, NEW.id, NEW.fecha, NEW.consumo_litros, NEW.id_usuario);
+END IF;
 END
 $$
 DELIMITER ;
@@ -560,6 +540,18 @@ DELETE FROM gee_tanque WHERE id_operacion = OLD.id;
 END
 $$
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipos_combustibles`
+--
+
+CREATE TABLE `tipos_combustibles` (
+  `id` int(11) NOT NULL,
+  `tipo_combustible` varchar(200) NOT NULL,
+  `precio` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -756,6 +748,12 @@ ALTER TABLE `tarjetas_registro`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `tipos_combustibles`
+--
+ALTER TABLE `tipos_combustibles`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `users`
 --
 ALTER TABLE `users`
@@ -919,6 +917,12 @@ ALTER TABLE `tarjetas`
 -- AUTO_INCREMENT de la tabla `tarjetas_registro`
 --
 ALTER TABLE `tarjetas_registro`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `tipos_combustibles`
+--
+ALTER TABLE `tipos_combustibles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
