@@ -6,4 +6,5 @@ export interface FCard {
     saldo?: number;
     tipo_combustible?: number;
     precio_combustible?: number;
+    nombre_combustible?: string;
 }

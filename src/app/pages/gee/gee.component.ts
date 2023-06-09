@@ -59,20 +59,23 @@ export class GeeComponent implements OnInit {
   constructor(private geeService: GeeService, private authService: NbAuthService, private dialogService: NbDialogService,
      private eService: EserviceService) { }
 
-  ngOnInit(): void {
-    const usr = this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
+  async ngOnInit() {
+    this.authService.getToken().subscribe((token: NbAuthJWTToken) => {
       this.user = token.getPayload();
-      this.geeService.listGEEsByUser(this.user.id).subscribe((res: GEE[]) => {
+      this.geeService.listGEEsByUser(this.user.id).subscribe(async (res: GEE[]) => {
         this.gees = res;
         if (this.gees.length > 0) {
           this.selectedGEE = this.gees[0];
           this.eService.getOne(this.selectedGEE.id_serv).subscribe((serv: EService) => {
             this.service = serv;
           });
-          this.getGRecords();
-          this.getCards();
-          this.getTanks();
-          this.actualizar_existencia_combustible();
+          await this.getGRecords().then(async res=> {
+            await this.getCardsRecords().then(async res => {
+              await this.getTanks().then(async res => {
+                this.actualizar_existencia_combustible();
+              });
+            });
+          });
         }
       });
     });
@@ -94,49 +97,99 @@ export class GeeComponent implements OnInit {
   }
 
   actualizar_existencia_combustible() {
-    this.geeService.getGEEFuelExistence(this.selectedGEE.id).subscribe((res: any) => {
+    /*this.geeService.getGEEFuelExistence(this.selectedGEE.id).subscribe((res: any) => {
       this.existencia_combustible_total = res.existencia;
       // console.log(this.existencia_combustible_total);
-    });
+    });*/
+    this.existencia_combustible_total = 0;
+    //console.log(this.cards);
+    //console.log(this.geeTank);
+    for (let i = 0; i < this.cards.length; i++) {
+      this.existencia_combustible_total += this.round(this.cards[i].saldo / this.cards[i].precio_combustible , 2);
+    }
+    if (this.geeTank.length > 0) {
+      this.existencia_combustible_total += this.geeTank[0].existencia;
+    }
+    this.existencia_combustible_total = this.round(this.existencia_combustible_total, 2);
+    console.log(this.existencia_combustible_total);
   }
 
-  getGRecords() {
-    this.geeService.listGEERecords(this.selectedGEE.id, this.config.currentPage, this.config.itemsPerPage).subscribe((res: {records: GRecord[], total_items: number}) => {
+  async getGRecords() :Promise<any> {
+    //console.log(1);
+    const resp: any = await this.geeService.listGEERecords(this.selectedGEE.id, this.config.currentPage, this.config.itemsPerPage).then((res: {records: GRecord[], total_items: number}) => {
+      //console.log(2);
       this.grecords = res.records;
       this.config.totalItems = res.total_items;
     });
+    return resp;
+    /*this.geeService.listGEERecords(this.selectedGEE.id, this.config.currentPage, this.config.itemsPerPage).subscribe((res: {records: GRecord[], total_items: number}) => {
+      console.log(2);
+      this.grecords = res.records;
+      this.config.totalItems = res.total_items;
+    });*/
   }
 
-  getCardsRecords() {
-    this.geeService.listCardsRecords(this.selectedCard.id, this.config2.currentPage, this.config2.itemsPerPage).subscribe((res: {records: CRecord[], total_items: number}) => {
+  async getCardsRecords() :Promise<any> {
+    const resp: any = await this.geeService.listCardsRecords(this.selectedCard.id, this.config2.currentPage, this.config2.itemsPerPage).then((res: {records: CRecord[], total_items: number}) => {
       this.card_records = res.records;
       this.config2.totalItems = res.total_items;
     });
+    return resp;
+    /*
+    this.geeService.listCardsRecords(this.selectedCard.id, this.config2.currentPage, this.config2.itemsPerPage).subscribe((res: {records: CRecord[], total_items: number}) => {
+      this.card_records = res.records;
+      this.config2.totalItems = res.total_items;
+    });*/
   }
 
-  getCards() {
+  async getCards() :Promise<any> {
+    //console.log(3);
+    const resp: any = await this.geeService.listCardsByGEE(this.selectedGEE.id).then(async (cards: FCard[]) => {
+      //console.log(4);
+      this.cards = cards;
+      if (this.cards.length > 0) {
+        this.selectedCard = this.cards[0];
+        await this.getCardsRecords();
+      }
+    });
+    return resp;
+    /*
     this.geeService.listCardsByGEE(this.selectedGEE.id).subscribe((cards: FCard[]) => {
+      console.log(4);
       this.cards = cards;
       if (this.cards.length > 0) {
         this.selectedCard = this.cards[0];
         this.getCardsRecords();
       }
-    });
+    });*/
   }
 
-  getTanks() {
-    this.geeService.listTanksByGEE(this.selectedGEE.id, this.config3.currentPage, this.config3.itemsPerPage).subscribe((res: {records: GeeTank[], total_items: number}) => {
+  async getTanks() :Promise<any>{
+    //console.log(5);
+    const resp: any = await this.geeService.listTanksByGEE(this.selectedGEE.id, this.config3.currentPage, this.config3.itemsPerPage).then((res: {records: GeeTank[], total_items: number}) => {
+      //console.log(6);
       this.geeTank = res.records;
       this.config3.totalItems = res.total_items;
       // console.log(this.geeTank);
     });
+    return resp;
+    /*
+    this.geeService.listTanksByGEE(this.selectedGEE.id, this.config3.currentPage, this.config3.itemsPerPage).subscribe((res: {records: GeeTank[], total_items: number}) => {
+      console.log(6);
+      this.geeTank = res.records;
+      this.config3.totalItems = res.total_items;
+      // console.log(this.geeTank);
+    });*/
   }
 
-  onChangeGee(selected: GEE) {
-    this.getGRecords();
-    this.getCards();
-    this.getTanks();
-    this.actualizar_existencia_combustible();
+  async onChangeGee(selected: GEE) {
+    await this.getGRecords().then(async res=> {
+      await this.getCardsRecords().then(async res => {
+        await this.getTanks().then(async res => {
+          this.actualizar_existencia_combustible();
+        });
+      });
+    });
     this.eService.getOne(this.selectedGEE.id_serv).subscribe((serv: EService) => {
       this.service = serv;
     });
@@ -157,11 +210,14 @@ export class GeeComponent implements OnInit {
     }
     this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', user: this.user, operacion_anterior: op_anterior, existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE, horario_diurno: this.service.horario_diurno}}).onClose.subscribe((nuevas_operaciones: any[]) => {
       if(nuevas_operaciones) {
-        this.geeService.saveGEERecord(nuevas_operaciones).subscribe(() => {
-          this.getGRecords();
-          this.getCardsRecords();
-          this.getTanks();
-          this.actualizar_existencia_combustible();
+        this.geeService.saveGEERecord(nuevas_operaciones).subscribe(async () => {
+          await this.getGRecords().then(async res=> {
+            await this.getCardsRecords().then(async res => {
+              await this.getTanks().then(async res => {
+                this.actualizar_existencia_combustible();
+              });
+            });
+          });
           this.Toast.fire({
             icon: 'success',
             title: 'Registro creado correctamente.',
@@ -176,10 +232,12 @@ export class GeeComponent implements OnInit {
       if (nuevas_operaciones) {
         if(nuevas_operaciones.length > 1) {
           this.deleteGEERecord(geeRecord);
-          this.geeService.saveGEERecord(nuevas_operaciones).subscribe(() => {
-            this.getCardsRecords();
-            this.getTanks();
-            this.actualizar_existencia_combustible();
+          this.geeService.saveGEERecord(nuevas_operaciones).subscribe(async () => {
+            await this.getCardsRecords().then(async res => {
+              await this.getTanks().then(async res => {
+                this.actualizar_existencia_combustible();
+              });
+            });
           });
         } else if (nuevas_operaciones.length === 1) {
   
@@ -192,12 +250,14 @@ export class GeeComponent implements OnInit {
     this.dialogService.open(NewFuelCardComponent, {context: {id_gee: this.selectedGEE.id}}).onClose.subscribe((newCard: FCard) => {
       if(newCard) {
         newCard.id_usuario = this.user.id;
-        this.geeService.saveFCard(newCard).subscribe(() => {
+        this.geeService.saveFCard(newCard).subscribe(async () => {
           this.Toast.fire({
             icon: 'success',
             title: 'Tarjeta asociada correctamente.',
           } as SweetAlertOptions);
-          this.getCards();
+          await this.getCards().then(res => {
+            this.actualizar_existencia_combustible();
+          });
         });
       }
     });
@@ -236,13 +296,16 @@ export class GeeComponent implements OnInit {
           newCrecord.sfinal_litros = this.round(newCrecord.sfinal_pesos / this.selectedCard.precio_combustible, 2);
           newCrecord.consumo_litros = this.round(newCrecord.consumo_pesos / this.selectedCard.precio_combustible, 2);
         }
-        this.geeService.saveFCardRecord(newCrecord).subscribe(() => {
+        this.geeService.saveFCardRecord(newCrecord).subscribe(async () => {
           this.Toast.fire({
             icon:'success',
             title: 'Registro guardado correctamente.',
           } as SweetAlertOptions);
-          this.getCardsRecords();
-          this.getTanks();
+          await this.getCardsRecords().then(async res => {
+            await this.getTanks().then(async res => {
+              this.actualizar_existencia_combustible();
+            });
+          });                    
         });
       }
     });
@@ -265,13 +328,16 @@ export class GeeComponent implements OnInit {
       cancelButtonText: 'No',
     } as SweetAlertOptions).then((result) => {
       if (result.value) {
-        this.geeService.deleteCardRecord(cardRecord.id).subscribe(() => {
+        this.geeService.deleteCardRecord(cardRecord.id).subscribe(async () => {
           this.Toast.fire({
             icon:'success',
             title: 'Operación eliminada correctamente.',
           } as SweetAlertOptions);
-          this.getCardsRecords();
-          this.getTanks();
+          await this.getCardsRecords().then(async res => {
+            await this.getTanks().then(async res => {
+              this.actualizar_existencia_combustible();
+            });
+          });
         });
       }
     });
@@ -290,13 +356,16 @@ export class GeeComponent implements OnInit {
         cancelButtonText: 'No',
       } as SweetAlertOptions).then((result) => {
         if (result.value) {
-          this.geeService.deleteGEERecord(geeRecord.id).subscribe(() => {
+          this.geeService.deleteGEERecord(geeRecord.id).subscribe(async () => {
             this.Toast.fire({
               icon:'success',
               title: 'Operación eliminada correctamente.',
             } as SweetAlertOptions);
-            this.getGRecords();
-            this.getTanks();
+            await this.getGRecords().then(async result => {
+              await this.getTanks().then(async result => {
+                this.actualizar_existencia_combustible();
+              });
+            });
           });
         }
       });

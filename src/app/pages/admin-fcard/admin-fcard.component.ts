@@ -16,17 +16,20 @@ export class AdminFcardComponent {
 
   constructor(private geeService: GeeService, protected dialogRef: NbDialogRef<any>) {}
 
-  ngOnInit(): void {
-    this.listCards();
+  async ngOnInit(): Promise<void> {
+    await this.listCards();
   }
 
-  listCards() {
+  async listCards() :Promise<FCard[]> {
     //get a list of all cards from geeService
-    this.geeService.listCardsByGEE(this.gee.id).subscribe(
+    const data: any = await this.geeService.listCardsByGEE(this.gee.id);
+    this.cards = data;
+    return data;
+    /*this.geeService.listCardsByGEE(this.gee.id).subscribe(
       (data: FCard[]) => {
         this.cards = data;
       }
-    );
+    );*/
   }
 
   deleteCard(card: FCard) {
