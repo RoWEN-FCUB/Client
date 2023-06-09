@@ -20,10 +20,11 @@ export class AdminFcardComponent {
     await this.listCards();
   }
 
-  async listCards() :Promise<FCard[]> {
+  async listCards() :Promise<any> {
     //get a list of all cards from geeService
-    const data: any = await this.geeService.listCardsByGEE(this.gee.id);
-    this.cards = data;
+    const data: any = await this.geeService.listCardsByGEE(this.gee.id).then((data: FCard[]) => {
+      this.cards = data;
+    });    
     return data;
     /*this.geeService.listCardsByGEE(this.gee.id).subscribe(
       (data: FCard[]) => {
