@@ -70,7 +70,7 @@ export class GeeComponent implements OnInit {
             this.service = serv;
           });
           await this.getGRecords().then(async res=> {
-            await this.getCardsRecords().then(async res => {
+            await this.getCards().then(async res => {
               await this.getTanks().then(async res => {
                 this.actualizar_existencia_combustible();
               });
@@ -111,7 +111,7 @@ export class GeeComponent implements OnInit {
       this.existencia_combustible_total += this.geeTank[0].existencia;
     }
     this.existencia_combustible_total = this.round(this.existencia_combustible_total, 2);
-    console.log(this.existencia_combustible_total);
+    //console.log(this.existencia_combustible_total);
   }
 
   async getGRecords() :Promise<any> {
@@ -184,7 +184,7 @@ export class GeeComponent implements OnInit {
 
   async onChangeGee(selected: GEE) {
     await this.getGRecords().then(async res=> {
-      await this.getCardsRecords().then(async res => {
+      await this.getCards().then(async res => {
         await this.getTanks().then(async res => {
           this.actualizar_existencia_combustible();
         });
@@ -201,7 +201,7 @@ export class GeeComponent implements OnInit {
   }
 
   openNewGRecord() {
-    console.log(this.existencia_combustible_total);
+    //console.log(this.existencia_combustible_total);
     let op_anterior: GRecord;
     if (this.grecords.length > 0) {
       op_anterior = this.grecords[0];
@@ -212,7 +212,7 @@ export class GeeComponent implements OnInit {
       if(nuevas_operaciones) {
         this.geeService.saveGEERecord(nuevas_operaciones).subscribe(async () => {
           await this.getGRecords().then(async res=> {
-            await this.getCardsRecords().then(async res => {
+            await this.getCards().then(async res => {
               await this.getTanks().then(async res => {
                 this.actualizar_existencia_combustible();
               });
@@ -233,7 +233,7 @@ export class GeeComponent implements OnInit {
         if(nuevas_operaciones.length > 1) {
           this.deleteGEERecord(geeRecord);
           this.geeService.saveGEERecord(nuevas_operaciones).subscribe(async () => {
-            await this.getCardsRecords().then(async res => {
+            await this.getCards().then(async res => {
               await this.getTanks().then(async res => {
                 this.actualizar_existencia_combustible();
               });
@@ -301,7 +301,7 @@ export class GeeComponent implements OnInit {
             icon:'success',
             title: 'Registro guardado correctamente.',
           } as SweetAlertOptions);
-          await this.getCardsRecords().then(async res => {
+          await this.getCards().then(async res => {
             await this.getTanks().then(async res => {
               this.actualizar_existencia_combustible();
             });
@@ -333,7 +333,7 @@ export class GeeComponent implements OnInit {
             icon:'success',
             title: 'Operación eliminada correctamente.',
           } as SweetAlertOptions);
-          await this.getCardsRecords().then(async res => {
+          await this.getCards().then(async res => {
             await this.getTanks().then(async res => {
               this.actualizar_existencia_combustible();
             });

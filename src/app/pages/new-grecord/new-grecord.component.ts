@@ -16,10 +16,12 @@ export class NewGrecordComponent implements OnInit {
   title: string = '';
   fecha_status: string = 'info';
   tipo_status: string = 'info';
-  hora_status: string = 'info';
+  hora_inicial_status: string = 'info';
+  hora_final_status: string = 'info';
   horametro_inicial_status: string = 'info';
   horametro_final_status: string = 'info';
-  hora = new UntypedFormControl([]);
+  hora_inicial = new UntypedFormControl([]);
+  hora_final = new UntypedFormControl([]);
   fecha = new UntypedFormControl([]);
   operacion_anterior: GRecord = {};
   horas_trabajadas: number = 0; // diferencia entre hora inicial y final
@@ -60,8 +62,8 @@ export class NewGrecordComponent implements OnInit {
     if (this.nueva_operacion.id) {
       this.fecha.value.push(moment(this.nueva_operacion.A + '-' + this.nueva_operacion.M + '-' + this.nueva_operacion.D, 'YYYY-MM-DD').toDate());
       // this.hora = new UntypedFormControl([moment(this.nueva_operacion.hora_inicial, 'HH:mm:ss'), moment(this.nueva_operacion.hora_final, 'HH:mm:ss')]);
-      this.hora.value.push(moment.parseZone(this.nueva_operacion.hora_inicial, 'HH:mm:ss').local(true).format());
-      this.hora.value.push(moment.parseZone(this.nueva_operacion.hora_final, 'HH:mm:ss').local(true).format());
+      this.hora_inicial.value.push(moment.parseZone(this.nueva_operacion.hora_inicial, 'HH:mm:ss').local(true).format());
+      this.hora_final.value.push(moment.parseZone(this.nueva_operacion.hora_final, 'HH:mm:ss').local(true).format());
       //console.log(this.hora);
     }
   }
@@ -91,12 +93,18 @@ export class NewGrecordComponent implements OnInit {
         title: 'Debe seleccionar el tipo de operación.',
       } as SweetAlertOptions);
       this.tipo_status = 'danger';
-     } else if (this.hora_status != 'success' && !this.hora) {
+     } else if (this.hora_inicial_status != 'success' && !this.hora_inicial) {
       Toast.fire({
         icon: 'error',
-        title: 'Debe establecer la hora de la operación.',
+        title: 'Debe establecer la hora inicial de la operación.',
       } as SweetAlertOptions);
-      this.hora_status = 'danger';
+      this.hora_inicial_status = 'danger';
+     } else if (this.hora_final_status != 'success' && !this.hora_final) {
+      Toast.fire({
+        icon: 'error',
+        title: 'Debe establecer la hora final de la operación.',
+      } as SweetAlertOptions);
+      this.hora_final_status = 'danger';
      } else if (this.horametro_inicial_status != 'success' && !this.nueva_operacion.horametro_inicial) {
       Toast.fire({
         icon: 'error',
@@ -362,17 +370,25 @@ export class NewGrecordComponent implements OnInit {
   }
 
   onTimeChange() {
-    //console.log(this.hora.value);
-    if (this.hora.value.length === 2) {
-      this.nueva_operacion.hora_inicial = {hours: this.hora.value[0].getHours(), minutes: this.hora.value[0].getMinutes()};
-      this.nueva_operacion.hora_final = {hours: this.hora.value[1].getHours(), minutes: this.hora.value[1].getMinutes()};
-      this.horas_trabajadas = this.round((moment(this.hora.value[1]).diff(moment(this.hora.value[0]), 'minutes') / 60), 1);
-      this.hora_status = 'success';
-      if (this.diferencia_horametro !== this.horas_trabajadas) {
+    //console.log(this.hora_inicial.value);
+    //console.log(this.hora_final.value);
+    if (this.hora_inicial.value instanceof Date) {
+      this.nueva_operacion.hora_inicial = {hours: moment(this.hora_inicial.value).hours(), minutes: moment(this.hora_inicial.value).minutes()};
+      this.hora_inicial_status = 'success';
+    }
+    if (this.hora_final.value instanceof Date) {
+      this.nueva_operacion.hora_final = {hours: moment(this.hora_final.value).hours(), minutes: moment(this.hora_final.value).minutes()};
+      this.hora_final_status = 'success';
+    }
+    if (this.hora_inicial.value instanceof Date && this.hora_final.value instanceof Date) {
+      this.horas_trabajadas = this.round((moment(this.hora_final.value).diff(moment(this.hora_inicial.value), 'minutes') / 60), 1);      
+      if (this.diferencia_horametro !== this.horas_trabajadas || this.diferencia_horametro === 0) {
         this.horametro_final_status = 'danger';
       } else {
         this.horametro_final_status = 'success';
       }
+    } else {
+      this.horas_trabajadas = 0;
     }
   }
 
@@ -385,6 +401,8 @@ export class NewGrecordComponent implements OnInit {
       } else {
         this.horametro_final_status = 'success';
       }
+    } else {
+      this.horametro_final_status = 'danger';
     }
   }
   

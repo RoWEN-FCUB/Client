@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-06-2023 a las 23:11:13
+-- Tiempo de generación: 12-06-2023 a las 22:05:18
 -- Versión del servidor: 10.4.11-MariaDB
 -- Versión de PHP: 7.4.3
 
@@ -523,6 +523,13 @@ CREATE TABLE `tarjetas_registro` (
 DELIMITER $$
 CREATE TRIGGER `actualizar_saldo_tarjeta` BEFORE INSERT ON `tarjetas_registro` FOR EACH ROW BEGIN
 UPDATE tarjetas SET saldo = NEW.sfinal_pesos WHERE id = NEW.id_tarjeta;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `actualizar_saldo_tarjeta2` AFTER DELETE ON `tarjetas_registro` FOR EACH ROW BEGIN
+SELECT sfinal_pesos INTO @saldo FROM tarjetas_registro WHERE id_tarjeta = OLD.id_tarjeta ORDER BY ID DESC LIMIT 1;
+UPDATE tarjetas SET saldo = @saldo WHERE id = OLD.id_tarjeta;
 END
 $$
 DELIMITER ;

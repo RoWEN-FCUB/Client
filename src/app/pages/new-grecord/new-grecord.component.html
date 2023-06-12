@@ -34,12 +34,22 @@
         <div class="row">
             <div class="col">
                 <div class="form-group mb-3">
-                    <label>Horario: {{horas_trabajadas}}</label>
-                    <input [owlDateTime]="dh" (dateTimeChange)="onTimeChange()" selectMode="range" [owlDateTimeTrigger]="dh" nbInput [status]="hora_status" class="form-control" [formControl]="hora">
-                    <owl-date-time hour12Timer="false" #dh [pickerType]="'timer'"></owl-date-time>
-                    <small id="timeHelp" class="form-text text-muted">Horario en el que se realizó la operación.</small> 
+                    <label>Horario inicial</label>
+                    <input [owlDateTime]="dh1" (dateTimeChange)="onTimeChange()" [owlDateTimeTrigger]="dh1" nbInput [status]="hora_inicial_status" class="form-control" [formControl]="hora_inicial">
+                    <owl-date-time hour12Timer="false" #dh1 [pickerType]="'timer'"></owl-date-time>
+                    <small id="time1Help" class="form-text text-muted">Horario inicial de la operación.</small> 
                 </div>
             </div>
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label>Horario final: {{horas_trabajadas}}</label>
+                    <input [owlDateTime]="dh2" (dateTimeChange)="onTimeChange()" [owlDateTimeTrigger]="dh2" nbInput [status]="hora_final_status" class="form-control" [formControl]="hora_final">
+                    <owl-date-time hour12Timer="false" #dh2 [pickerType]="'timer'"></owl-date-time>
+                    <small id="time2Help" class="form-text text-muted">Horario final de la operación.</small> 
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col">
                 <div class="form-group mb-3">
                     <label>Horámetro inicial:</label>
@@ -47,8 +57,6 @@
                     <small id="hiniHelp" class="form-text text-muted">Lectura inicial del horámetro.</small>
                 </div>
             </div>
-        </div>
-        <div class="row">
             <div class="col">
                 <div class="form-group mb-3">
                     <label>Horámetro final: {{diferencia_horametro}}</label>
@@ -56,10 +64,12 @@
                     <small id="hfiniHelp" class="form-text text-muted">Lectura final del horámetro.</small>
                 </div>
             </div>
+        </div>
+        <div class="row">
             <div class="col">
                 <div class="form-group mb-3">
                     <label>Observaciones:</label>
-                    <textarea [(ngModel)]="nueva_operacion.observaciones" cols="5" rows="4" fullWidth nbInput status="info" class="form-control" aria-describedby="obsHelp" placeholder="Observación"></textarea>
+                    <textarea [(ngModel)]="nueva_operacion.observaciones" cols="5" rows="2" fullWidth nbInput status="info" class="form-control" aria-describedby="obsHelp" placeholder="Observación"></textarea>
                     <small id="obsHelp" class="form-text text-muted">Observaciones de la nueva operación.</small>
                 </div>
             </div>
