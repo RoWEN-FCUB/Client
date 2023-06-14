@@ -52,7 +52,7 @@
                 <td>{{grecord.combustible_existencia}}</td>
                 <td>{{grecord.observaciones}}</td>
                 <td>
-                  <!--<nb-icon *ngIf="isFirst" (click)="openEditGRecord(grecord)" class="icon_cursor" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar operación" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>-->
+                  <nb-icon *ngIf="isFirst" (click)="openEditGRecord(grecord)" class="icon_cursor" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar operación" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
                   <nb-icon *ngIf="isFirst" (click)="deleteGEERecord(grecord, true)" class="icon_cursor" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar operación" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon>
                 </td>
               </tr>
@@ -127,7 +127,7 @@
     <nb-card fullwidth accent="info">
       <nb-card-header>
         Registro del tanque de combustible
-        <button class="ms-2" nbTooltip="Ajustar la existencia de combustible en tanque." nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="droplet-outline"></nb-icon>Ajustar</button>
+        <button class="ms-2" (click)="ajustarExistencia()" nbTooltip="Ajustar la existencia de combustible en tanque." nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="droplet-outline"></nb-icon>Ajustar</button>
       </nb-card-header>
       <nb-card-body>
         <table class="table table-striped">

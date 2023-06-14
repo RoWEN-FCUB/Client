@@ -13,6 +13,7 @@ import { GEE } from '../../models/GEE';
 import { GeeTank } from '../../models/GeeTank';
 import { EService } from '../../models/EService';
 import { EserviceService } from '../../services/eservice.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'gee',
@@ -79,6 +80,10 @@ export class GeeComponent implements OnInit {
         }
       });
     });
+  }
+
+  async ajustarExistencia() {
+    
   }
 
   pageChanged(event) {
@@ -228,20 +233,22 @@ export class GeeComponent implements OnInit {
   }
 
   openEditGRecord(geeRecord: GRecord) {
-    this.dialogService.open(NewGrecordComponent, {context: {title: 'Nueva operación', user: this.user, nueva_operacion: Object.assign({}, geeRecord), existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE, horario_diurno: this.service.horario_diurno}}).onClose.subscribe((nuevas_operaciones: any[]) => {
+    this.dialogService.open(NewGrecordComponent, {context: {title: 'Editar operación', user: this.user, nueva_operacion: Object.assign({}, geeRecord), existencia_combustible: this.existencia_combustible_total, gee: this.selectedGEE, horario_diurno: this.service.horario_diurno}}).onClose.subscribe(async (nuevas_operaciones: any[]) => {
       if (nuevas_operaciones) {
-        if(nuevas_operaciones.length > 1) {
-          this.deleteGEERecord(geeRecord);
-          this.geeService.saveGEERecord(nuevas_operaciones).subscribe(async () => {
+        await this.deleteGEERecord(geeRecord);
+        this.geeService.saveGEERecord(nuevas_operaciones).subscribe(async () => {
+          await this.getGRecords().then(async res=> {
             await this.getCards().then(async res => {
               await this.getTanks().then(async res => {
                 this.actualizar_existencia_combustible();
               });
             });
           });
-        } else if (nuevas_operaciones.length === 1) {
-  
-        }
+          this.Toast.fire({
+            icon: 'success',
+            title: 'Registro actualizado correctamente.',
+          } as SweetAlertOptions);
+        });
       }
     });
   }
@@ -316,7 +323,7 @@ export class GeeComponent implements OnInit {
     return Math.round( ( numb + Number.EPSILON ) * exp ) / exp;
   }
 
-  deleteCardRecord(cardRecord: CRecord){
+  deleteCardRecord(cardRecord: CRecord) {
     Swal.fire({
       title: 'Confirma que desea eliminar la operación?',
       text: 'Se eliminarán todos sus datos del sistema.',
@@ -343,7 +350,7 @@ export class GeeComponent implements OnInit {
     });
   }
 
-  deleteGEERecord(geeRecord: GRecord, showMessage?: boolean){
+  async deleteGEERecord(geeRecord: GRecord, showMessage?: boolean) : Promise<any> {
     if (showMessage) {
       Swal.fire({
         title: 'Confirma que desea eliminar la operación?',
@@ -364,13 +371,15 @@ export class GeeComponent implements OnInit {
             await this.getGRecords().then(async result => {
               await this.getTanks().then(async result => {
                 this.actualizar_existencia_combustible();
+                return null;
               });
             });
           });
         }
+        return null;
       });
     } else {
-      this.geeService.deleteGEERecord(geeRecord.id).subscribe();
+      return await firstValueFrom(this.geeService.deleteGEERecord(geeRecord.id));
     }
   }
 

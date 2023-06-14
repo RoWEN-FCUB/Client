@@ -20,9 +20,9 @@ export class NewGrecordComponent implements OnInit {
   hora_final_status: string = 'info';
   horametro_inicial_status: string = 'info';
   horametro_final_status: string = 'info';
-  hora_inicial = new UntypedFormControl([]);
-  hora_final = new UntypedFormControl([]);
-  fecha = new UntypedFormControl([]);
+  hora_inicial = new UntypedFormControl('');
+  hora_final = new UntypedFormControl('');
+  fecha = new UntypedFormControl('');
   operacion_anterior: GRecord = {};
   horas_trabajadas: number = 0; // diferencia entre hora inicial y final
   diferencia_horametro: number = 0; // diferencia entre horametros
@@ -51,8 +51,7 @@ export class NewGrecordComponent implements OnInit {
   constructor(protected dialogRef: NbDialogRef<any>) { }
 
   ngOnInit(): void {
-    // console.log(this.operacion_anterior);
-    if (this.operacion_anterior) {
+    if (this.operacion_anterior.id) {
       this.nueva_operacion.horametro_inicial = this.operacion_anterior.horametro_final;
       this.horametro_inicial_status = 'success';
     }
@@ -60,12 +59,21 @@ export class NewGrecordComponent implements OnInit {
       this.nueva_operacion.id_gee = this.gee.id;
     }
     if (this.nueva_operacion.id) {
-      this.fecha.value.push(moment(this.nueva_operacion.A + '-' + this.nueva_operacion.M + '-' + this.nueva_operacion.D, 'YYYY-MM-DD').toDate());
+      this.existencia_combustible += this.nueva_operacion.combustible_consumido;
+      this.fecha = new UntypedFormControl(moment(this.nueva_operacion.A + '-' + this.nueva_operacion.M + '-' + this.nueva_operacion.D, 'YYYY-MM-DD').toDate());
+      //this.fecha.value.push(moment(this.nueva_operacion.A + '-' + this.nueva_operacion.M + '-' + this.nueva_operacion.D, 'YYYY-MM-DD').toDate());
       // this.hora = new UntypedFormControl([moment(this.nueva_operacion.hora_inicial, 'HH:mm:ss'), moment(this.nueva_operacion.hora_final, 'HH:mm:ss')]);
-      this.hora_inicial.value.push(moment.parseZone(this.nueva_operacion.hora_inicial, 'HH:mm:ss').local(true).format());
-      this.hora_final.value.push(moment.parseZone(this.nueva_operacion.hora_final, 'HH:mm:ss').local(true).format());
+      this.hora_inicial = new UntypedFormControl(moment.parseZone(this.nueva_operacion.hora_inicial, 'HH:mm:ss').local(true).format());
+      //this.hora_inicial.value.push(moment.parseZone(this.nueva_operacion.hora_inicial, 'HH:mm:ss').local(true).format());
+      this.hora_final = new UntypedFormControl(moment.parseZone(this.nueva_operacion.hora_final, 'HH:mm:ss').local(true).format());
+      //this.hora_final.value.push(moment.parseZone(this.nueva_operacion.hora_final, 'HH:mm:ss').local(true).format());
       //console.log(this.hora);
+      this.nueva_operacion.hora_inicial = {hours: moment(this.hora_inicial.value).hours(), minutes: moment(this.hora_inicial.value).minutes()};
+      this.nueva_operacion.hora_final = {hours: moment(this.hora_final.value).hours(), minutes: moment(this.hora_final.value).minutes()};
+      this.horas_trabajadas = this.nueva_operacion.tiempo_trabajado;
+      this.diferencia_horametro = this.horas_trabajadas;
     }
+    //console.log(this.nueva_operacion);
   }
 
   close() {
@@ -127,6 +135,7 @@ export class NewGrecordComponent implements OnInit {
       hinicial.minutes = (parseInt(horas[0].split(':')[1], 10)); //minutes from 00 to 59.
       hfinal.hours = (parseInt(horas[1].split(':')[0], 10)); //hours from 00 to 23. 00 = 00
       hfinal.minutes = (parseInt(horas[1].split(':')[1], 10)); //minutes from 00 to 59.
+      //this.onTimeChange();
       const ohi = moment(this.nueva_operacion.hora_inicial).set('seconds', 0); //operacion horario inicial
       const ohf = moment(this.nueva_operacion.hora_final).set('seconds', 0); //operacion horario final
       if (this.nueva_operacion.tipo === 'PS' || this.nueva_operacion.tipo === 'LS') { //operaciones sin carga
@@ -172,7 +181,7 @@ export class NewGrecordComponent implements OnInit {
                 energia_generada: 0,
                 combustible_consumido: 0,
                 combustible_existencia: 0,                
-                observaciones: '',
+                observaciones: this.nueva_operacion.observaciones,
               };
               n_op1.horametro_final = Number(n_op1.horametro_inicial + n_op1.tiempo_trabajado);
               n_op1.energia_generada = n_op1.tiempo_trabajado * this.gee.dl;
@@ -195,7 +204,7 @@ export class NewGrecordComponent implements OnInit {
                 energia_generada: 0,
                 combustible_consumido: 0,
                 combustible_existencia: 0,
-                observaciones: '',
+                observaciones: this.nueva_operacion.observaciones,
               };
               n_op2.horametro_final = Number(n_op2.horametro_inicial + n_op2.tiempo_trabajado);
               n_op2.energia_generada = n_op2.tiempo_trabajado * this.gee.dl;
@@ -220,7 +229,7 @@ export class NewGrecordComponent implements OnInit {
                 energia_generada: 0,
                 combustible_consumido: 0,
                 combustible_existencia: 0,
-                observaciones: '',
+                observaciones: this.nueva_operacion.observaciones,
               };
               n_op1.horametro_final = Number(n_op1.horametro_inicial + n_op1.tiempo_trabajado);
               n_op1.energia_generada = n_op1.tiempo_trabajado * this.gee.dl;
@@ -243,7 +252,7 @@ export class NewGrecordComponent implements OnInit {
                 energia_generada: 0,
                 combustible_consumido: 0,
                 combustible_existencia: 0,
-                observaciones: '',
+                observaciones: this.nueva_operacion.observaciones,
               };
               n_op2.horametro_final = Number(n_op2.horametro_inicial + n_op2.tiempo_trabajado);
               n_op2.energia_generada = n_op2.tiempo_trabajado * this.gee.dl;
@@ -266,7 +275,7 @@ export class NewGrecordComponent implements OnInit {
                 energia_generada: 0,
                 combustible_consumido: 0,
                 combustible_existencia: 0,
-                observaciones: '',
+                observaciones: this.nueva_operacion.observaciones,
               };
               n_op3.horametro_final = Number(n_op3.horametro_inicial + n_op3.tiempo_trabajado);
               n_op3.energia_generada = n_op3.tiempo_trabajado * this.gee.dl;
@@ -279,6 +288,7 @@ export class NewGrecordComponent implements OnInit {
         } else if (ohi.isSameOrAfter(hinicial, 'minutes') && ohi.isBefore(hfinal, 'minutes')) { //operacion comienza dentro del horario laboral
           if (ohf.isSameOrBefore(hfinal, 'minutes')) {
             //caso 4 la operacion es dentro del horario laboral
+            delete this.nueva_operacion.id;
             this.nueva_operacion.id_usuario = this.user.id;
             this.nueva_operacion.id_gee = this.gee.id;
             this.nueva_operacion.combustible_consumido = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargad, 2);  //guarda el combustible consumido de la operación
@@ -306,7 +316,7 @@ export class NewGrecordComponent implements OnInit {
               energia_generada: 0,
               combustible_consumido: 0,
               combustible_existencia: 0,
-              observaciones: '',
+              observaciones: this.nueva_operacion.observaciones,
             };
             n_op1.horametro_final = Number(n_op1.horametro_inicial + n_op1.tiempo_trabajado);
             n_op1.energia_generada = n_op1.tiempo_trabajado * this.gee.dl;
@@ -329,7 +339,7 @@ export class NewGrecordComponent implements OnInit {
               energia_generada: 0,
               combustible_consumido: 0,
               combustible_existencia: 0,
-              observaciones: '',
+              observaciones: this.nueva_operacion.observaciones,
             };
             n_op2.horametro_final = Number(n_op2.horametro_inicial + n_op2.tiempo_trabajado);
             n_op2.energia_generada = n_op2.tiempo_trabajado * this.gee.dl;
@@ -352,7 +362,7 @@ export class NewGrecordComponent implements OnInit {
           nuevas_operaciones.push(Object.values(this.nueva_operacion)); //guarda la nueva operación
         }
       }
-      console.log(nuevas_operaciones); //imprime la lista de operaciones nuevas
+      //console.log(nuevas_operaciones); //imprime la lista de operaciones nuevas
       this.dialogRef.close(nuevas_operaciones);
      }
   }
