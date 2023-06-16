@@ -67,6 +67,10 @@ export class GeeService {
     return this.http.post(ipserver + 'gee/changeFuelPrice', data);
   }
 
+  adjustFuelExistence(data: any) {
+    return this.http.post(ipserver + 'gee/adjustFTankExistence', data);
+  }
+
   updateGEE(newGEE: GEE) {
     return this.http.put(ipserver + 'gee/' + newGEE.id, newGEE);
   }

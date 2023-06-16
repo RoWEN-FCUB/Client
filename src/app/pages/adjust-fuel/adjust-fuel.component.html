@@ -1,0 +1,29 @@
+<form [formGroup]="newCardRecordForm">
+    <nb-card>
+        <nb-card-header><div class="text-center">Ajustar existencia de combustible</div></nb-card-header>
+        <nb-card-body>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-3">
+                        <label for="existencia" class="form-label">Existencia</label>
+                        <input nbInput type="text" id="existencia" formControlName="existencia" class="form-control" [status]="newCardRecordForm.controls.existencia.valid ? 'success' : (newCardRecordForm.controls.existencia.pristine ? 'info' : 'danger')">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-3">
+                        <label for="observ" class="form-label">Observación:</label>
+                        <textarea id="observ" formControlName="observ" class="form-control" cols="30" rows="3" fullWidth nbInput [status]="'info'" class="form-control" [status]="newCardRecordForm.controls.observ.valid ? 'success' : (newCardRecordForm.controls.observ.pristine ? 'info' : 'danger')"></textarea>
+                    </div>
+                </div>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <div class="form-group" style="float: right;margin-top: 5px">
+                <button (click)="onSubmit()" [disabled]="newCardRecordForm.invalid" nbButton hero status="success" shape="semi-round" size="small">Guardar</button>
+                <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+            </div>
+        </nb-card-footer>
+    </nb-card>
+</form>

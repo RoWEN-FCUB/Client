@@ -127,7 +127,7 @@
     <nb-card fullwidth accent="info">
       <nb-card-header>
         Registro del tanque de combustible
-        <button class="ms-2" (click)="ajustarExistencia()" nbTooltip="Ajustar la existencia de combustible en tanque." nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="droplet-outline"></nb-icon>Ajustar</button>
+        <button class="ms-2" [disabled]="geeTank.length === 0" (click)="ajustarExistencia()" nbTooltip="Ajustar la existencia de combustible en tanque." nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="droplet-outline"></nb-icon>Ajustar</button>
       </nb-card-header>
       <nb-card-body>
         <table class="table table-striped">

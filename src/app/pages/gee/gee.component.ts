@@ -14,6 +14,7 @@ import { GeeTank } from '../../models/GeeTank';
 import { EService } from '../../models/EService';
 import { EserviceService } from '../../services/eservice.service';
 import { firstValueFrom } from 'rxjs';
+import { AdjustFuelComponent } from '../adjust-fuel/adjust-fuel.component';
 
 @Component({
   selector: 'gee',
@@ -83,7 +84,19 @@ export class GeeComponent implements OnInit {
   }
 
   async ajustarExistencia() {
-    
+    this.dialogService.open(AdjustFuelComponent, {context: {tank: Object.assign({}, this.geeTank[0])}}).onClose.subscribe((res: GeeTank) => {
+      res.id_usuario = this.user.id;
+      delete res.id;
+      this.geeService.adjustFuelExistence(res).subscribe(async resp => {
+        this.Toast.fire({
+          icon: 'success',
+          title: 'Registro creado correctamente.',
+        } as SweetAlertOptions);
+        await this.getTanks().then(async res => {
+          this.actualizar_existencia_combustible();
+        });
+      });
+    });
   }
 
   pageChanged(event) {
