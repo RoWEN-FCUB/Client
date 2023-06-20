@@ -15,6 +15,10 @@ import { EService } from '../../models/EService';
 import { EserviceService } from '../../services/eservice.service';
 import { firstValueFrom } from 'rxjs';
 import { AdjustFuelComponent } from '../adjust-fuel/adjust-fuel.component';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import * as moment from 'moment';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'gee',
@@ -81,6 +85,70 @@ export class GeeComponent implements OnInit {
         }
       });
     });
+  }
+
+  exportGEERecord() {
+    let table_to_print: any = [
+      [{text: 'D', rowSpan: 2}, {text: 'M', rowSpan: 2}, {text: 'A', rowSpan: 2}, {text: 'TIPO', rowSpan: 2}, {text: 'HORA', colSpan: 2, alignment: 'center'}, {text: ''},
+      {text: 'HORAMETRO', colSpan: 2, alignment: 'center'}, {text: ''}, {text: 'TIEMPO TRABAJADO', rowSpan: 2}, {text: 'ENERGIA GENERADA', rowSpan: 2}, {text: 'COMBUSTIBLE', colSpan: 2, alignment: 'center'}, {text: ''},
+      {text: 'OBSERVACIONES', rowSpan: 2}, {text: 'FIRMA DEL SUPERVISOR', rowSpan: 2}
+      ], 
+      ['', '', '', '', {text:'INICIAL'}, {text:'FINAL'}, {text:'INICIAL'}, {text:'FINAL'}, {text:''}, {text:''}, {text:'CONSUMIDO'}, {text:'EXISTENCIA'}, {text:''}, {text:''}]
+    ];
+    for(let i = this.grecords.length - 1; i > -1; i--) {
+      const newrow =  [{text: this.grecords[i].D}, {text:this.grecords[i].M}, {text:this.grecords[i].A}, {text:this.grecords[i].tipo}, {text: String(this.grecords[i].hora_inicial).substring(0,5)},
+        {text: String(this.grecords[i].hora_final).substring(0,5)}, {text:this.grecords[i].horametro_inicial}, {text:this.grecords[i].horametro_final}, {text:this.grecords[i].tiempo_trabajado},
+        {text:this.grecords[i].energia_generada}, {text:this.grecords[i].combustible_consumido}, {text:this.grecords[i].combustible_existencia},
+        {text:this.grecords[i].observaciones}, {text:''}
+      ];
+      table_to_print.push(newrow);
+    }
+    const docDefinition = {
+      info: {
+        title: 'Registro de operaciones del ' + this.selectedGEE.idgee
+      },
+      footer: function(currentPage, pageCount) {
+        return {
+          text: 'Página ' + currentPage.toString() + ' de ' + pageCount,
+          alignment: 'right',
+          margin: [2, 2, 5, 2],
+          fontSize: 10,
+        };
+      },
+      pageSize: 'LETTER',
+      pageOrientation: 'landscape',
+      content: [
+        {
+          text: 'REGISTRO DE OPERACIONES', fontSize: 15, width: 'auto', alignment: 'center', bold: true,
+        },
+        {
+          text: 'DATOS DEL GEE', fontSize: 15, width: 'auto', alignment: 'center', bold: true,
+        },
+        {
+          columns: [
+            {columns: [{text: 'PROVINCIA: ', width: 'auto'}, {text: this.selectedGEE.provincia, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}, {columns: [{text: 'MUNICIPIO: ', width: 'auto'}, {text: this.selectedGEE.municipio, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'},
+            {columns: [{text: 'ORGANISMO: ', width: 'auto'}, {text: this.selectedGEE.oace, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}, {columns: [{text: 'EMPRESA: ', width: 'auto'}, {text: this.selectedGEE.empresa, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}
+          ],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {columns: [{text: 'ENTIDAD U OBJETIVO: ', width: '*'}, {text: this.selectedGEE.servicio, decoration: 'underline', width: '*'}], columnGap: 5, width: 'auto'}, {columns: [{text: 'MARCA: ', width: 'auto'}, {text: this.selectedGEE.marca, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'},
+            {columns: [{text: 'KVA: ', width: 'auto'}, {text: this.selectedGEE.kva, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}, {columns: [{text: 'IDGEE: ', width: 'auto'}, {text: this.selectedGEE.idgee, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}
+          ],
+          columnGap: 10
+        },
+        {
+          table: {
+            headerRows: 2,
+            body: table_to_print,
+            fontSize: 12,
+          }
+        }
+      ],
+      pageMargins: [15, 15, 15, 5],
+    };
+    pdfMake.createPdf(docDefinition).download('Registro de operaciones del ' + this.selectedGEE.idgee);
   }
 
   async ajustarExistencia() {
