@@ -87,7 +87,7 @@ export class GeeComponent implements OnInit {
     });
   }
 
-  exportGEERecord() {
+  exportGEERecords() {
     let table_to_print: any = [
       [{text: 'D', rowSpan: 2}, {text: 'M', rowSpan: 2}, {text: 'A', rowSpan: 2}, {text: 'TIPO', rowSpan: 2}, {text: 'HORA', colSpan: 2, alignment: 'center'}, {text: ''},
       {text: 'HORAMETRO', colSpan: 2, alignment: 'center'}, {text: ''}, {text: 'TIEMPO TRABAJADO', rowSpan: 2}, {text: 'ENERGIA GENERADA', rowSpan: 2}, {text: 'COMBUSTIBLE', colSpan: 2, alignment: 'center'}, {text: ''},
@@ -149,6 +149,53 @@ export class GeeComponent implements OnInit {
       pageMargins: [15, 15, 15, 5],
     };
     pdfMake.createPdf(docDefinition).download('Registro de operaciones del ' + this.selectedGEE.idgee);
+  }
+
+  exportCardRecords(){
+    let table_to_print: any = [
+      [{text: 'CONTROL COMBUSTIBLE GEE', alignment: 'center', bold: true, colSpan: 6}, '', '', '', '', ''],
+      [{text: [{text: 'Empresa: '}, {text: this.selectedGEE.servicio, decoration: 'underline'}], colSpan: 4}, '', '', '', {text: [{text: 'Organismo: '}, {text: this.selectedGEE.oace, decoration: 'underline'}], colSpan: 2}, ''],
+      [{text: 'CONTROL DE TARJETAS MAGNÉTICAS DE COMBUSTIBLE', colSpan: 6, width: 'auto', alignment: 'center', bold: true,}, '', '', '', '', ''],
+      [{text: [{text: 'Tarjeta No.: '}, {text: this.selectedCard.numero, decoration: 'underline', width: '*'}], colSpan: 3}, '','', {text: [{text: 'Tipo de combustible: ', width: '*'}, {text: this.selectedCard.nombre_combustible, decoration: 'underline', width: '*'}], colSpan: 3}, '', ''],
+      [{text: 'Fecha', alignment: 'center'}, {text: 'Saldo Inicial Pesos/Litros', alignment: 'center'}, {text: 'Recarga Pesos/Litros', alignment: 'center'}, {text: 'Saldo Pesos/Litros', alignment: 'center'}, {text: 'Consumo Pesos/Litros', alignment: 'center'}, {text: 'Saldo Final Pesos/Litros', alignment: 'center'}]
+    ];
+    for(let i = this.card_records.length - 1; i > -1; i--) {
+      const newrow =  [
+        moment(this.card_records[i].fecha).utc().format('DD-MM-yyyy'),
+        this.card_records[i].sinicial_pesos ? this.card_records[i].sinicial_pesos + '/' + this.card_records[i].sinicial_litros : {text:'--', alignment: 'center'},
+        this.card_records[i].recarga_pesos ? this.card_records[i].recarga_pesos + '/' + this.card_records[i].recarga_litros : {text:'--', alignment: 'center'},
+        this.card_records[i].saldo_pesos ? this.card_records[i].saldo_pesos + '/' + this.card_records[i].saldo_litros : {text:'--', alignment: 'center'},
+        this.card_records[i].consumo_pesos ? this.card_records[i].consumo_pesos + '/' + this.card_records[i].consumo_litros : {text:'--', alignment: 'center'},
+        this.card_records[i].sfinal_pesos ? this.card_records[i].sfinal_pesos + '/' + this.card_records[i].sfinal_litros: {text:'--', alignment: 'center'},
+      ];
+      table_to_print.push(newrow);
+    }
+    const docDefinition = {
+      info: {
+        title: 'Registro de operaciones de la tarjeta ' + this.selectedCard.numero
+      },
+      footer: function(currentPage, pageCount) {
+        return {
+          text: 'Página ' + currentPage.toString() + ' de ' + pageCount,
+          alignment: 'right',
+          margin: [2, 2, 5, 2],
+          fontSize: 10,
+        };
+      },
+      pageSize: 'LETTER',
+      //pageOrientation: 'landscape',
+      content: [        
+        {
+          table: {
+            headerRows: 2,
+            body: table_to_print,
+            fontSize: 12,
+          }
+        }
+      ],
+      pageMargins: [15, 15, 15, 5],
+    };
+    pdfMake.createPdf(docDefinition).download('Registro de operaciones de la tarjeta ' + this.selectedCard.numero);
   }
 
   async ajustarExistencia() {

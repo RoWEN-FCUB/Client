@@ -7,7 +7,7 @@
           <nb-option *ngFor="let gee of gees" [value]="gee">{{gee.idgee}}</nb-option>
         </nb-select>
         <button [disabled]="(geeTank.length === 0 || (geeTank.length > 0 && geeTank[0].existencia === 0))" (click)="openNewGRecord()" class="ms-2" nbTooltip="Agregar una operación" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
-        <button class="ms-2" (click)="exportGEERecord()" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
+        <button class="ms-2" (click)="exportGEERecords()" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
         <button class="ms-2" (click)="openFuelCard()" nbTooltip="Asociar tarjeta de combustible" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="credit-card-outline"></nb-icon>Asociar tarjeta</button>
       </nb-card-header>
       <nb-card-body>
@@ -74,6 +74,7 @@
           </nb-select>
         </span>
         <button class="ms-2" (click)="openCRecord()" nbTooltip="Agregar una operación" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
+        <button class="ms-2" (click)="exportCardRecords()" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
       </nb-card-header>
       <nb-card-body>
         <table class="table table-striped">
@@ -127,7 +128,7 @@
     <nb-card fullwidth accent="info">
       <nb-card-header>
         Registro del tanque de combustible
-        <button class="ms-2" [disabled]="geeTank.length === 0" (click)="ajustarExistencia()" nbTooltip="Ajustar la existencia de combustible en tanque." nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="droplet-outline"></nb-icon>Ajustar</button>
+        <button class="ms-2" (click)="ajustarExistencia()" nbTooltip="Ajustar la existencia de combustible en tanque." nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="droplet-outline"></nb-icon>Ajustar</button>
       </nb-card-header>
       <nb-card-body>
         <table class="table table-striped">
