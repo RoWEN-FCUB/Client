@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { GeeService } from '../../services/gee.service';
 import { GRecord } from '../../models/GRecord';
@@ -61,6 +61,7 @@ export class GeeComponent implements OnInit {
     currentPage: 1,
     totalItems: 0,
   };
+  @ViewChild('rangodias', {static: false}) rangodias: ElementRef;
 
   constructor(private geeService: GeeService, private authService: NbAuthService, private dialogService: NbDialogService,
      private eService: EserviceService) { }
@@ -87,7 +88,7 @@ export class GeeComponent implements OnInit {
     });
   }
 
-  exportGEERecords() {
+  exportGEERecords(records: GRecord[]) {
     let table_to_print: any = [
       [{text: 'D', rowSpan: 2}, {text: 'M', rowSpan: 2}, {text: 'A', rowSpan: 2}, {text: 'TIPO', rowSpan: 2}, {text: 'HORA', colSpan: 2, alignment: 'center'}, {text: ''},
       {text: 'HORAMETRO', colSpan: 2, alignment: 'center'}, {text: ''}, {text: 'TIEMPO TRABAJADO', rowSpan: 2}, {text: 'ENERGIA GENERADA', rowSpan: 2}, {text: 'COMBUSTIBLE', colSpan: 2, alignment: 'center'}, {text: ''},
@@ -95,11 +96,11 @@ export class GeeComponent implements OnInit {
       ], 
       ['', '', '', '', {text:'INICIAL'}, {text:'FINAL'}, {text:'INICIAL'}, {text:'FINAL'}, {text:''}, {text:''}, {text:'CONSUMIDO'}, {text:'EXISTENCIA'}, {text:''}, {text:''}]
     ];
-    for(let i = this.grecords.length - 1; i > -1; i--) {
-      const newrow =  [{text: this.grecords[i].D}, {text:this.grecords[i].M}, {text:this.grecords[i].A}, {text:this.grecords[i].tipo}, {text: String(this.grecords[i].hora_inicial).substring(0,5)},
-        {text: String(this.grecords[i].hora_final).substring(0,5)}, {text:this.grecords[i].horametro_inicial}, {text:this.grecords[i].horametro_final}, {text:this.grecords[i].tiempo_trabajado},
-        {text:this.grecords[i].energia_generada}, {text:this.grecords[i].combustible_consumido}, {text:this.grecords[i].combustible_existencia},
-        {text:this.grecords[i].observaciones}, {text:''}
+    for(let i = 0; i < records.length; i++) {
+      const newrow: any =  [{text: records[i].D}, {text:records[i].M}, {text:records[i].A}, {text:records[i].tipo}, {text: String(records[i].hora_inicial).substring(0,5)},
+        {text:String(records[i].hora_final).substring(0,5)}, {text:records[i].horametro_inicial}, {text:records[i].horametro_final}, {text:records[i].tiempo_trabajado},
+        {text:records[i].energia_generada}, {text:records[i].combustible_consumido}, {text:records[i].combustible_existencia},
+        {text:records[i].observaciones}, {text:''}
       ];
       table_to_print.push(newrow);
     }
@@ -196,6 +197,26 @@ export class GeeComponent implements OnInit {
       pageMargins: [15, 15, 15, 5],
     };
     pdfMake.createPdf(docDefinition).download('Registro de operaciones de la tarjeta ' + this.selectedCard.numero);
+  }
+
+  clickShowRange() {
+    const picked_range: HTMLElement = this.rangodias.nativeElement;
+    picked_range.click();
+  }
+
+  cambiarRango(e) {
+    if (e.start && e.end) {
+     this.geeService.listGEERecordsByDate(this.selectedGEE.id, moment(e.start).format('yyyy-MM-DD'), moment(e.end).format('yyyy-MM-DD')).subscribe((records:  GRecord[]) => {
+        if(records.length > 0) {
+          this.exportGEERecords(records);
+        } else {
+          this.Toast.fire({
+            icon: 'error',
+            title: 'El período seleccionado no tiene operaciones registradas.',
+          } as SweetAlertOptions);
+        }
+      });
+    }
   }
 
   async ajustarExistencia() {

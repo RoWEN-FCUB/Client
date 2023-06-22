@@ -30,10 +30,9 @@ export class GeeService {
     return await firstValueFrom(this.http.get(ipserver + 'gee/listGEERecords/' + id + '&' + page + '&' + limit, {responseType: 'json'}));
   }
 
-  /*
-  getGEEFuelExistence(id: number) {
-    return this.http.get(ipserver + 'gee/getTotalExistence/' + id, {responseType: 'json'});
-  }*/
+  listGEERecordsByDate(id: number, fecha_inicial: string, fecha_final: string) {
+    return this.http.get(ipserver + 'gee/listGEERecordsByDate/' + id + '&' + fecha_inicial + '&' + fecha_final, {responseType: 'json'});
+  }
 
   async listCardsByGEE(id_gee: number) {
     return await firstValueFrom(this.http.get(ipserver + 'gee/listCardsByGEE/' + id_gee, {responseType: 'json'}));

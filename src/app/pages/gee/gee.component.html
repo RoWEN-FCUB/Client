@@ -7,8 +7,10 @@
           <nb-option *ngFor="let gee of gees" [value]="gee">{{gee.idgee}}</nb-option>
         </nb-select>
         <button [disabled]="(geeTank.length === 0 || (geeTank.length > 0 && geeTank[0].existencia === 0))" (click)="openNewGRecord()" class="ms-2" nbTooltip="Agregar una operación" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
-        <button class="ms-2" (click)="exportGEERecords()" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
-        <button class="ms-2" (click)="openFuelCard()" nbTooltip="Asociar tarjeta de combustible" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="credit-card-outline"></nb-icon>Asociar tarjeta</button>
+        <button class="ms-2" (click)="openFuelCard()" nbTooltip="Asociar tarjeta de combustible" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="credit-card-outline"></nb-icon>Asociar</button>
+        <button class="ms-2" (click)="clickShowRange()" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
+        <input size="1" style="visibility: hidden !important; background-color:transparent !important;border:none !important;" id="rangodias" #rangodias type="text" [nbDatepicker]="diaspicker">
+        <nb-rangepicker #diaspicker (rangeChange)="cambiarRango($event)"></nb-rangepicker>        
       </nb-card-header>
       <nb-card-body>
         <div class='table-responsive'>
