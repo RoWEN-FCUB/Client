@@ -220,18 +220,27 @@ export class GeeComponent implements OnInit {
   }
 
   async ajustarExistencia() {
-    this.dialogService.open(AdjustFuelComponent, {context: {tank: Object.assign({}, this.geeTank[0])}}).onClose.subscribe((res: GeeTank) => {
-      res.id_usuario = this.user.id;
-      delete res.id;
-      this.geeService.adjustFuelExistence(res).subscribe(async resp => {
-        this.Toast.fire({
-          icon: 'success',
-          title: 'Registro creado correctamente.',
-        } as SweetAlertOptions);
-        await this.getTanks().then(async res => {
-          this.actualizar_existencia_combustible();
+    let tank: GeeTank = {};
+    if (this.geeTank.length > 0) {
+      tank = this.geeTank[0];
+    } else {
+      tank.id_gee = this.selectedGEE.id;
+      tank.existencia = 0;
+    }
+    this.dialogService.open(AdjustFuelComponent, {context: {tank: Object.assign({}, tank)}}).onClose.subscribe((res: GeeTank) => {
+      if(res) {
+        res.id_usuario = this.user.id;
+        delete res.id;
+        this.geeService.adjustFuelExistence(res).subscribe(async resp => {
+          this.Toast.fire({
+            icon: 'success',
+            title: 'Registro creado correctamente.',
+          } as SweetAlertOptions);
+          await this.getTanks().then(async res => {
+            this.actualizar_existencia_combustible();
+          });
         });
-      });
+      }
     });
   }
 

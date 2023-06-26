@@ -2,7 +2,7 @@
   <nb-tab tabIcon="charging-outline" tabTitle="GEE" id="Tab1" name="Tab1" #Tab1>
     <nb-card fullwidth accent="info">
       <nb-card-header>
-        Registro de operaciones del Grupo Electrónico de Emergencia
+        Registro de operaciones del Grupo Electrónico de Emergencia {{selectedGEE ? selectedGEE.idgee : ''}}
         <nb-select (selectedChange)="onChangeGee($event)" *ngIf="gees.length > 1" status="info" class="ms-2" [(ngModel)]="selectedGEE">
           <nb-option *ngFor="let gee of gees" [value]="gee">{{gee.idgee}}</nb-option>
         </nb-select>

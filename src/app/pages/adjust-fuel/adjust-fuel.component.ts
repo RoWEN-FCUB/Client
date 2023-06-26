@@ -10,7 +10,9 @@ import { GeeTank } from '../../models/GeeTank';
 })
 export class AdjustFuelComponent {
   newCardRecordForm: UntypedFormGroup;
-  tank: GeeTank = {};
+  tank: GeeTank = {
+    existencia: 0,
+  };
 
   constructor(private fb: UntypedFormBuilder, protected dialogRef: NbDialogRef<any>) {
     this.newCardRecordForm = this.fb.group({
