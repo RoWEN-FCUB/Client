@@ -47,6 +47,20 @@ export class NewGrecordComponent implements OnInit {
   existencia_combustible: number = 0;
   gee: GEE = {};
   user = {id: 0};
+  tipo_operacion = [
+    {value: 'IA', describe: 'Operación por Interrupción o Avería en el servicio eléctrico.'},
+    {value: 'PS', describe: 'Operación sin carga para dar mantenimiento a las baterías.'},
+    {value: 'PM', describe: 'Prueba de Puesta en Marcha de 4 horas con carga.'},
+    {value: 'LD', describe: 'Operación de Liberación de Demanda por Orden de la DGE UNE.'},
+    {value: 'SS', describe: 'Operación de Sincronización al SEN por Orden del DNC.'},
+    {value: 'GA', describe: 'Operación de los GEE que se encuentran aislados del SEN.'},
+    {value: 'RI', describe: 'Operación por Resumen de Operaciones por Interrupción.'},
+    {value: 'RP', describe: 'Operación por Resumen de Operaciones por Pruebas.'},
+    {value: 'IU', describe: 'Operación ocurrida por trabajos de rehabilitación de líneas.'},
+    {value: 'PC', describe: 'Operación realizada con carga para comprobar los parámetros del GEE.'},
+    {value: 'LC', describe: 'Prueba del litro con carga.'},
+    {value: 'LS', describe: 'Prueba del litro sin carga.'},
+  ];
 
   constructor(protected dialogRef: NbDialogRef<any>) { }
 

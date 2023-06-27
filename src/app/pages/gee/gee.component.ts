@@ -45,19 +45,19 @@ export class GeeComponent implements OnInit {
   existencia_combustible_total: number = 0;
   config = {
     id: 'grecords',
-    itemsPerPage: 3,
+    itemsPerPage: 10,
     currentPage: 1,
     totalItems: 0,
   };
   config2 = {
     id: 'crecords',
-    itemsPerPage: 3,
+    itemsPerPage: 10,
     currentPage: 1,
     totalItems: 0,
   };
   config3 = {
     id: 'trecords',
-    itemsPerPage: 3,
+    itemsPerPage: 10,
     currentPage: 1,
     totalItems: 0,
   };
@@ -260,13 +260,7 @@ export class GeeComponent implements OnInit {
   }
 
   actualizar_existencia_combustible() {
-    /*this.geeService.getGEEFuelExistence(this.selectedGEE.id).subscribe((res: any) => {
-      this.existencia_combustible_total = res.existencia;
-      // console.log(this.existencia_combustible_total);
-    });*/
     this.existencia_combustible_total = 0;
-    //console.log(this.cards);
-    //console.log(this.geeTank);
     for (let i = 0; i < this.cards.length; i++) {
       this.existencia_combustible_total += this.round(this.cards[i].saldo / this.cards[i].precio_combustible , 2);
     }
@@ -274,22 +268,14 @@ export class GeeComponent implements OnInit {
       this.existencia_combustible_total += this.geeTank[0].existencia;
     }
     this.existencia_combustible_total = this.round(this.existencia_combustible_total, 2);
-    //console.log(this.existencia_combustible_total);
   }
 
   async getGRecords() :Promise<any> {
-    //console.log(1);
     const resp: any = await this.geeService.listGEERecords(this.selectedGEE.id, this.config.currentPage, this.config.itemsPerPage).then((res: {records: GRecord[], total_items: number}) => {
-      //console.log(2);
-      this.grecords = res.records;
+     this.grecords = res.records;
       this.config.totalItems = res.total_items;
     });
     return resp;
-    /*this.geeService.listGEERecords(this.selectedGEE.id, this.config.currentPage, this.config.itemsPerPage).subscribe((res: {records: GRecord[], total_items: number}) => {
-      console.log(2);
-      this.grecords = res.records;
-      this.config.totalItems = res.total_items;
-    });*/
   }
 
   async getCardsRecords() :Promise<any> {
@@ -298,51 +284,35 @@ export class GeeComponent implements OnInit {
       this.config2.totalItems = res.total_items;
     });
     return resp;
-    /*
-    this.geeService.listCardsRecords(this.selectedCard.id, this.config2.currentPage, this.config2.itemsPerPage).subscribe((res: {records: CRecord[], total_items: number}) => {
-      this.card_records = res.records;
-      this.config2.totalItems = res.total_items;
-    });*/
   }
 
   async getCards() :Promise<any> {
-    //console.log(3);
     const resp: any = await this.geeService.listCardsByGEE(this.selectedGEE.id).then(async (cards: FCard[]) => {
-      //console.log(4);
       this.cards = cards;
-      if (this.cards.length > 0) {
-        this.selectedCard = this.cards[0];
+      if (!this.selectedCard.id) {
+        if (this.cards.length > 0) {
+          this.selectedCard = this.cards[0];
+          await this.getCardsRecords();
+        }
+      } else {
+        for (let i = 0; i < this.cards.length; i++) {
+          if (this.cards[i].id === this.selectedCard.id) {
+            this.selectedCard = this.cards[i];
+            break;
+          }
+        }
         await this.getCardsRecords();
       }
     });
     return resp;
-    /*
-    this.geeService.listCardsByGEE(this.selectedGEE.id).subscribe((cards: FCard[]) => {
-      console.log(4);
-      this.cards = cards;
-      if (this.cards.length > 0) {
-        this.selectedCard = this.cards[0];
-        this.getCardsRecords();
-      }
-    });*/
   }
 
   async getTanks() :Promise<any>{
-    //console.log(5);
     const resp: any = await this.geeService.listTanksByGEE(this.selectedGEE.id, this.config3.currentPage, this.config3.itemsPerPage).then((res: {records: GeeTank[], total_items: number}) => {
-      //console.log(6);
-      this.geeTank = res.records;
+     this.geeTank = res.records;
       this.config3.totalItems = res.total_items;
-      // console.log(this.geeTank);
     });
     return resp;
-    /*
-    this.geeService.listTanksByGEE(this.selectedGEE.id, this.config3.currentPage, this.config3.itemsPerPage).subscribe((res: {records: GeeTank[], total_items: number}) => {
-      console.log(6);
-      this.geeTank = res.records;
-      this.config3.totalItems = res.total_items;
-      // console.log(this.geeTank);
-    });*/
   }
 
   async onChangeGee(selected: GEE) {
@@ -364,7 +334,6 @@ export class GeeComponent implements OnInit {
   }
 
   openNewGRecord() {
-    //console.log(this.existencia_combustible_total);
     let op_anterior: GRecord;
     if (this.grecords.length > 0) {
       op_anterior = this.grecords[0];
@@ -429,10 +398,7 @@ export class GeeComponent implements OnInit {
   }
 
   openCRecord() {
-    let saldo: number = 0;
-    if (this.card_records.length > 0) {
-      saldo = this.card_records[0].sfinal_pesos;
-    }
+    const saldo: number = this.selectedCard.saldo;
     this.dialogService.open(NewCrecordComponent, {context: {saldo: saldo}}).onClose.subscribe((newCrecord: CRecord) => {
       if(newCrecord) {
         newCrecord.id_gee = this.selectedGEE.id;
@@ -443,11 +409,7 @@ export class GeeComponent implements OnInit {
         newCrecord.saldo_litros = null;
         newCrecord.sfinal_litros = null;
         newCrecord.sinicial_litros = null;
-        if(this.card_records.length > 0) {
-          newCrecord.sinicial_pesos = this.card_records[0].sfinal_pesos;
-        } else {
-          newCrecord.sinicial_pesos = 0;
-        }
+        newCrecord.sinicial_pesos = this.selectedCard.saldo;
         newCrecord.sinicial_litros = this.round(newCrecord.sinicial_pesos / this.selectedCard.precio_combustible, 2);
         if(newCrecord.recarga_pesos) {
           newCrecord.saldo_pesos = newCrecord.sinicial_pesos + newCrecord.recarga_pesos;

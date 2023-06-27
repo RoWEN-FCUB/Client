@@ -75,11 +75,11 @@
             <nb-option *ngFor="let card of cards" [value]="card">{{card.numero}}</nb-option>
           </nb-select>
         </span>
-        <button class="ms-2" (click)="openCRecord()" nbTooltip="Agregar una operación" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
-        <button class="ms-2" (click)="exportCardRecords()" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
+        <button class="ms-2" [disabled]="!selectedCard.id" (click)="openCRecord()" nbTooltip="Agregar una operación" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="plus-outline"></nb-icon>Nueva</button>
+        <button class="ms-2" [disabled]="!selectedCard.id" (click)="exportCardRecords()" nbTooltip="Exportar a PDF" nbButton hero status="success" shape="semi-round"size="small"><nb-icon icon="file-text-outline"></nb-icon>Exportar</button>
       </nb-card-header>
       <nb-card-body>
-        <table class="table table-striped">
+        <table class="table table-striped" *ngIf="selectedCard.id">
           <thead>
             <tr>
               <th colspan="4">Empresa: {{selectedGEE.empresa + ' ' + selectedGEE.servicio}}</th>

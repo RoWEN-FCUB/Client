@@ -14,18 +14,7 @@
                 <div class="form-group mb-3">
                     <label>Tipo:</label>
                     <nb-select (selectedChange)="onTypeChange()" fullWidth aria-describedby="tipoHelp" [status]="tipo_status" [(ngModel)]="nueva_operacion.tipo">
-                        <nb-option value="IA" nbTooltip="Operación por Interrupción o Avería en el servicio eléctrico.">IA</nb-option>
-                        <nb-option value="PS" nbTooltip="Operación sin carga para dar mantenimiento a las baterías.">PS</nb-option>
-                        <nb-option value="PM" nbTooltip="Prueba de Puesta en Marcha de 4 horas con carga.">PM</nb-option>
-                        <nb-option value="LD" nbTooltip="Operación de Liberación de Demanda por Orden de la DGE UNE.">LD</nb-option>
-                        <nb-option value="SS" nbTooltip="Operación de Sincronización al SEN por Orden del DNC.">SS</nb-option>
-                        <nb-option value="GA" nbTooltip="Operación de los GEE que se encuentran aislados del SEN.">GA</nb-option>
-                        <nb-option value="RI" nbTooltip="Operación por Resumen de Operaciones por Interrupción.">RI</nb-option>
-                        <nb-option value="RP" nbTooltip="Operación por Resumen de Operaciones por Pruebas.">RP</nb-option>
-                        <nb-option value="IU" nbTooltip="Operación ocurrida por trabajos de rehabilitación de líneas.">IU</nb-option>
-                        <nb-option value="PC" nbTooltip="Operación realizada con carga para comprobar los parámetros del GEE.">PC</nb-option>
-                        <nb-option value="LC" nbTooltip="Prueba del litro con carga.">LC</nb-option>
-                        <nb-option value="LS" nbTooltip="Prueba del litro sin carga.">LS</nb-option>
+                        <nb-option *ngFor="let tipo of tipo_operacion" [value]="tipo.value" >{{tipo.value}}</nb-option>
                     </nb-select>
                     <small id="tipoHelp" class="form-text text-muted">Tipo de operación.</small> 
                 </div>

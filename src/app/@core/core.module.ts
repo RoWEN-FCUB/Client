@@ -11,7 +11,7 @@ import { throwIfAlreadyLoaded } from './module-import-guard';
 // import { MockDataModule } from './mock/mock-data.module';
 import { RoleProvider } from './role.provider';
 import ipserver from '../ipserver';
-import { HttpResponse } from '@angular/common/http';
+// import { HttpResponse } from '@angular/common/http';
 
 const socialLinks = [
   {
