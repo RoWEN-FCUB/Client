@@ -89,13 +89,9 @@ export const NB_CORE_PROVIDERS = [
   }).providers,
 
   NbSecurityModule.forRoot({
-    accessControl: {
-      guest: {
-        view: ['dashboard'],
-      },
+    accessControl: {      
       user: {
-        parent: 'guest',
-        view: ['profile', 'tasks', 'notifications', 'delivers'], /*
+        view: ['dashboard', 'profile', 'tasks', 'notifications', 'delivers'], /*
         create: '*',
         edit: '*',
         remove: '*',*/

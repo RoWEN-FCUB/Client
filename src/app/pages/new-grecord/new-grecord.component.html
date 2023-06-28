@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col">
                 <div class="form-group mb-3">
-                    <label>Horario inicial</label>
+                    <label>Horario inicial:</label>
                     <input [owlDateTime]="dh1" (dateTimeChange)="onTimeChange()" [owlDateTimeTrigger]="dh1" nbInput [status]="hora_inicial_status" class="form-control" [formControl]="hora_inicial">
                     <owl-date-time hour12Timer="false" #dh1 [pickerType]="'timer'"></owl-date-time>
                     <small id="time1Help" class="form-text text-muted">Horario inicial de la operación.</small> 
@@ -31,7 +31,7 @@
             </div>
             <div class="col">
                 <div class="form-group mb-3">
-                    <label>Horario final: {{horas_trabajadas}}</label>
+                    <label>Horario final:</label>
                     <input [owlDateTime]="dh2" (dateTimeChange)="onTimeChange()" [owlDateTimeTrigger]="dh2" nbInput [status]="hora_final_status" class="form-control" [formControl]="hora_final">
                     <owl-date-time hour12Timer="false" #dh2 [pickerType]="'timer'"></owl-date-time>
                     <small id="time2Help" class="form-text text-muted">Horario final de la operación.</small> 
@@ -48,7 +48,7 @@
             </div>
             <div class="col">
                 <div class="form-group mb-3">
-                    <label>Horámetro final: {{diferencia_horametro}}</label>
+                    <label>Horámetro final:</label>
                     <input nbInput (input)="onHorametroFinalChange()" class="form-control" [status]="horametro_final_status" [(ngModel)]="nueva_operacion.horametro_final">
                     <small id="hfiniHelp" class="form-text text-muted">Lectura final del horámetro.</small>
                 </div>

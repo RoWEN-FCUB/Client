@@ -103,40 +103,46 @@ export class NewGrecordComponent implements OnInit {
       timerProgressBar: true,
       timer: 3000,
     });
-     if (this.fecha_status != 'success' && !this.fecha) {
+     if (this.fecha_status != 'success' || !this.fecha) {
       Toast.fire({
         icon: 'error',
         title: 'Debe establecer la fecha de la operación.',
       } as SweetAlertOptions);
       this.fecha_status = 'danger';
-     } else if (this.tipo_status != 'success' && !this.nueva_operacion.tipo) {
+     } else if (this.tipo_status != 'success' || !this.nueva_operacion.tipo) {
       Toast.fire({
         icon: 'error',
         title: 'Debe seleccionar el tipo de operación.',
       } as SweetAlertOptions);
       this.tipo_status = 'danger';
-     } else if (this.hora_inicial_status != 'success' && !this.hora_inicial) {
+     } else if (this.hora_inicial_status != 'success' || !this.hora_inicial) {
       Toast.fire({
         icon: 'error',
         title: 'Debe establecer la hora inicial de la operación.',
       } as SweetAlertOptions);
       this.hora_inicial_status = 'danger';
-     } else if (this.hora_final_status != 'success' && !this.hora_final) {
+     } else if (this.hora_final_status != 'success' || !this.hora_final) {
       Toast.fire({
         icon: 'error',
         title: 'Debe establecer la hora final de la operación.',
       } as SweetAlertOptions);
       this.hora_final_status = 'danger';
-     } else if (this.horametro_inicial_status != 'success' && !this.nueva_operacion.horametro_inicial) {
+     } else if (this.horametro_inicial_status != 'success' || !this.nueva_operacion.horametro_inicial) {
       Toast.fire({
         icon: 'error',
         title: 'Debe establecer el horámetro inicial de la operación.',
       } as SweetAlertOptions);
       this.horametro_inicial_status = 'danger';
-     } else if (this.horametro_final_status != 'success' && !this.nueva_operacion.horametro_final) {
+     } else if (this.horametro_final_status != 'success' || !this.nueva_operacion.horametro_final) {
       Toast.fire({
         icon: 'error',
         title: 'Debe establecer el horámetro final de la operación.',
+      } as SweetAlertOptions);
+      this.horametro_final_status = 'danger';
+     } else if (this.horas_trabajadas !== this.diferencia_horametro) {
+      Toast.fire({
+        icon: 'error',
+        title: 'El tiempo trabajado no coincide con la diferencia de horámetros.',
       } as SweetAlertOptions);
       this.horametro_final_status = 'danger';
      } else {

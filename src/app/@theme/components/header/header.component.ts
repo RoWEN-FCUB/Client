@@ -72,14 +72,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.company = res;
         });
         try {
-          fetch(ipserver + 'public/' + this.user.picture, { method: 'HEAD' }).then(res => {
+          fetch(ipserver + 'public/' + this.user.picture, { method: 'HEAD', headers: {Authentication: 'Bearer ' + token}}).then(res => {
               if (res.ok) {
                   this.userpicture = ipserver + 'public/' + this.user.picture
               } else {
                   this.userpicture = 'assets/avatars/empty.png';
               }
           });
-        } catch (error){}
+        } catch (error){
+          console.log(error);
+        }
         this.notificationService.searchNewNotifications(this.user.id);
         this.notificationService.getNotifications().subscribe((res) => {
           if (this.updating_notif) {

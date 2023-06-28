@@ -17,7 +17,7 @@ export class RoleProvider implements NbRoleProvider {
       if (token.isValid()) {
         result = token.getPayload()['role'];
       } else {
-        result = 'guest';
+        result = null;
       }
     });
     // return observableOf(result);

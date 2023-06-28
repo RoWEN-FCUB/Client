@@ -22,13 +22,16 @@ const routes: Routes = [{
   component: PagesComponent,
   children: [
     {
-      path: 'dashboard',
+      path: '',
       component: DashboardComponent,
+      canActivate: [RoleGuard],
+      data: {role: ['user', 'tec', 'energy', 'comercial', 'admin']},
     },
     {
-      path: '',
-      redirectTo: '/dashboard',
-      pathMatch: 'full',
+      path: 'dashboard',
+      component: DashboardComponent,
+      canActivate: [RoleGuard],
+      data: {role: ['user', 'tec', 'energy', 'comercial', 'admin']},
     },
     {
       path: 'editProfile',
