@@ -47,7 +47,7 @@
     "@ng-bootstrap/ng-bootstrap": "14.1.0",
     "@ngtools/webpack": "15.2.4",
     "@schematics/angular": "^15.2.5",
-    "@swimlane/ngx-charts": "^20.1.2",
+    "@swimlane/ngx-charts": "^20.4.1",
     "@types/xlsx-populate": "git+https://github.com/JanLoebel/types-xlsx-populate.git",
     "angular-svg-icon": "^15.0.0",
     "angular-user-idle": "4.0.0",
