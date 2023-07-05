@@ -46,12 +46,12 @@
                 <td>{{grecord.tipo}}</td>
                 <td>{{grecord.hora_inicial | shortTime}}</td>
                 <td>{{grecord.hora_final  | shortTime}}</td>
-                <td>{{grecord.horametro_inicial}}</td>
-                <td>{{grecord.horametro_final}}</td>
-                <td>{{grecord.tiempo_trabajado}}</td>
-                <td>{{grecord.energia_generada}}</td>
-                <td>{{grecord.combustible_consumido}}</td>
-                <td>{{grecord.combustible_existencia}}</td>
+                <td align="right" style="padding-right: 15%;">{{grecord.horametro_inicial.toFixed(1)}}</td>
+                <td align="right" style="padding-right: 15%;">{{grecord.horametro_final.toFixed(1)}}</td>
+                <td align="right" style="padding-right: 5%;">{{grecord.tiempo_trabajado.toFixed(1)}}</td>
+                <td align="right" style="padding-right: 5%;">{{grecord.energia_generada.toFixed(2)}}</td>
+                <td align="right" style="padding-right: 5%;">{{grecord.combustible_consumido.toFixed(2)}}</td>
+                <td align="right" style="padding-right: 5%;">{{grecord.combustible_existencia.toFixed(2)}}</td>
                 <td>{{grecord.observaciones}}</td>
                 <td>
                   <nb-icon *ngIf="isFirst" (click)="openEditGRecord(grecord)" class="icon_cursor" icon="edit-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Modificar operación" nbTooltipIcon="edit-outline" nbTooltipStatus="info"></nb-icon>
@@ -91,31 +91,31 @@
               <th>Saldo: {{selectedCard.saldo}}</th>
             </tr>
             <tr>
-              <th rowspan="2" class="text_to_middle">Fecha</th>
-              <th>Saldo Inicial</th>
-              <th>Recarga</th>
-              <th>Saldo</th>
-              <th>Consumo</th>
-              <th>Saldo Final</th>
+              <th class="text_to_middle" rowspan="2">Fecha</th>
+              <th class="text_to_middle">Saldo Inicial</th>
+              <th class="text_to_middle">Recarga</th>
+              <th class="text_to_middle">Saldo</th>
+              <th class="text_to_middle">Consumo</th>
+              <th class="text_to_middle">Saldo Final</th>
               <th rowspan="2" class="text_to_middle">Observ.</th>
               <th rowspan="2"></th>
             </tr>
             <tr>
-              <th>Pesos/Litros</th>
-              <th>Pesos/Litros</th>
-              <th>Pesos/Litros</th>
-              <th>Pesos/Litros</th>
-              <th>Pesos/Litros</th>
+              <th class="text_to_middle">Pesos/Litros</th>
+              <th class="text_to_middle">Pesos/Litros</th>
+              <th class="text_to_middle">Pesos/Litros</th>
+              <th class="text_to_middle">Pesos/Litros</th>
+              <th class="text_to_middle">Pesos/Litros</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let card_record of card_records | paginate: config2; let i = index; first as isFirst">
               <td>{{card_record.fecha | date:'dd-MM-yyyy':'UTC'}}</td>
-              <td>{{card_record.sinicial_pesos ? card_record.sinicial_pesos + '/' + card_record.sinicial_litros : '--'}}</td>
-              <td>{{card_record.recarga_pesos ? card_record.recarga_pesos + '/' + card_record.recarga_litros : '--'}}</td>
-              <td>{{card_record.saldo_pesos ? card_record.saldo_pesos + '/' + card_record.saldo_litros : '--'}}</td>
-              <td>{{card_record.consumo_pesos ? card_record.consumo_pesos + '/' + card_record.consumo_litros : '--'}}</td>
-              <td>{{card_record.sfinal_pesos ? card_record.sfinal_pesos + '/' + card_record.sfinal_litros : '--'}}</td>
+              <td align="center">{{card_record.sinicial_pesos ? card_record.sinicial_pesos.toFixed(2) + ' / ' + card_record.sinicial_litros.toFixed(2) : '--'}}</td>
+              <td align="center">{{card_record.recarga_pesos ? card_record.recarga_pesos.toFixed(2) + ' / ' + card_record.recarga_litros.toFixed(2) : '--'}}</td>
+              <td align="center">{{card_record.saldo_pesos ? card_record.saldo_pesos.toFixed(2) + ' / ' + card_record.saldo_litros.toFixed(2) : '--'}}</td>
+              <td align="center">{{card_record.consumo_pesos ? card_record.consumo_pesos.toFixed(2) + ' / ' + card_record.consumo_litros.toFixed(2) : '--'}}</td>
+              <td align="center">{{card_record.sfinal_pesos ? card_record.sfinal_pesos.toFixed(2) + ' / ' + card_record.sfinal_litros : '--'}}</td>
               <td><span *ngIf="card_record.observacion" nbTooltip="{{card_record.observacion}}">***</span></td>
               <td><nb-icon (click)="deleteCardRecord(card_record)" *ngIf="isFirst" class="icon_cursor" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar operación" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon></td>
             </tr>

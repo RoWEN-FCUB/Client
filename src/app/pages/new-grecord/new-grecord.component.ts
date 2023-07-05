@@ -6,6 +6,7 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { GRecord } from '../../models/GRecord';
 import { GEE } from '../../models/GEE';
 import { Time } from '@angular/common';
+import NP from 'number-precision';
 
 @Component({
   selector: 'new-grecord',
@@ -161,11 +162,11 @@ export class NewGrecordComponent implements OnInit {
       if (this.nueva_operacion.tipo === 'PS' || this.nueva_operacion.tipo === 'LS') { //operaciones sin carga
         this.nueva_operacion.id_usuario = this.user.id;
         this.nueva_operacion.id_gee = this.gee.id;
-        this.nueva_operacion.combustible_consumido = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.ic_scarga, 2);  //guarda el combustible consumido de la operación
-        this.nueva_operacion.energia_generada = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.dl, 2); //round to 2 decimals
+        this.nueva_operacion.combustible_consumido = NP.round(this.nueva_operacion.tiempo_trabajado * this.gee.ic_scarga, 2);  //guarda el combustible consumido de la operación
+        this.nueva_operacion.energia_generada = 0;
         this.nueva_operacion.horametro_inicial = Number(this.nueva_operacion.horametro_inicial); //convertir a numero
         this.nueva_operacion.horametro_final = Number(this.nueva_operacion.horametro_final); //convertir a numero
-        this.nueva_operacion.combustible_existencia = this.round(this.existencia_combustible - this.nueva_operacion.combustible_consumido, 2); //combustible existencia
+        this.nueva_operacion.combustible_existencia = NP.round(this.existencia_combustible - this.nueva_operacion.combustible_consumido, 2); //combustible existencia
         this.nueva_operacion.hora_inicial = {hours: ohi.get('hours'), minutes: ohi.get('minutes')};
         this.nueva_operacion.hora_final = {hours: ohf.get('hours'), minutes: ohf.get('minutes')};
         nuevas_operaciones.push(Object.values(this.nueva_operacion)); //guarda la nueva operación
@@ -176,10 +177,10 @@ export class NewGrecordComponent implements OnInit {
             this.nueva_operacion.id_usuario = this.user.id;
             this.nueva_operacion.id_gee = this.gee.id;
             this.nueva_operacion.combustible_consumido = this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargan, 2; //combustible consumido fuera del horario laboral
-            this.nueva_operacion.energia_generada = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.dl, 2); //round to 2 decimals
+            this.nueva_operacion.energia_generada = NP.round(this.nueva_operacion.tiempo_trabajado * this.gee.dl, 2); //round to 2 decimals
             this.nueva_operacion.horametro_inicial = Number(this.nueva_operacion.horametro_inicial); //convertir a numero
             this.nueva_operacion.horametro_final = Number(this.nueva_operacion.horametro_final); //convertir a numero
-            this.nueva_operacion.combustible_existencia = this.round(this.existencia_combustible - this.nueva_operacion.combustible_consumido, 2); //combustible existencia
+            this.nueva_operacion.combustible_existencia = NP.round(this.existencia_combustible - this.nueva_operacion.combustible_consumido, 2); //combustible existencia
             this.nueva_operacion.hora_inicial = {hours: ohi.get('hours'), minutes: ohi.get('minutes')};
             this.nueva_operacion.hora_final = {hours: ohf.get('hours'), minutes: ohf.get('minutes')};
             nuevas_operaciones.push(Object.values(this.nueva_operacion)); //guarda la nueva operación
@@ -197,7 +198,7 @@ export class NewGrecordComponent implements OnInit {
                 hora_final: {hours: hinicial.hours, minutes: hinicial.minutes},
                 horametro_inicial: 	Number(this.nueva_operacion.horametro_inicial), 	//horas, minutos y segundos
                 horametro_final: 0,
-                tiempo_trabajado: this.round(moment(hinicial).diff(ohi, 'minutes') / 60, 2),
+                tiempo_trabajado: NP.round(moment(hinicial).diff(ohi, 'minutes') / 60, 2),
                 energia_generada: 0,
                 combustible_consumido: 0,
                 combustible_existencia: 0,                
@@ -206,7 +207,7 @@ export class NewGrecordComponent implements OnInit {
               n_op1.horametro_final = Number(n_op1.horametro_inicial + n_op1.tiempo_trabajado);
               n_op1.energia_generada = n_op1.tiempo_trabajado * this.gee.dl;
               n_op1.combustible_consumido = n_op1.tiempo_trabajado * this.gee.ic_ccargan;
-              n_op1.combustible_existencia = this.round(this.existencia_combustible - n_op1.combustible_consumido, 2);
+              n_op1.combustible_existencia = NP.round(this.existencia_combustible - n_op1.combustible_consumido, 2);
               this.existencia_combustible -= n_op1.combustible_consumido; //resta combustible consumido a existencia combustible actual
               nuevas_operaciones.push(Object.values(n_op1)); //guarda la nueva operación
               let n_op2: GRecord = {
@@ -220,7 +221,7 @@ export class NewGrecordComponent implements OnInit {
                 hora_final: {hours: ohf.get('hours'), minutes: ohf.get('minutes')},
                 horametro_inicial: 	n_op1.horametro_final, 	//horas, minutos y segundos
                 horametro_final: 0,
-                tiempo_trabajado: this.round(ohf.diff(moment(hinicial), 'minutes') / 60, 2),
+                tiempo_trabajado: NP.round(ohf.diff(moment(hinicial), 'minutes') / 60, 2),
                 energia_generada: 0,
                 combustible_consumido: 0,
                 combustible_existencia: 0,
@@ -229,7 +230,7 @@ export class NewGrecordComponent implements OnInit {
               n_op2.horametro_final = Number(n_op2.horametro_inicial + n_op2.tiempo_trabajado);
               n_op2.energia_generada = n_op2.tiempo_trabajado * this.gee.dl;
               n_op2.combustible_consumido = n_op2.tiempo_trabajado * this.gee.ic_ccargad;
-              n_op2.combustible_existencia = this.round(this.existencia_combustible - n_op2.combustible_consumido, 2);
+              n_op2.combustible_existencia = NP.round(this.existencia_combustible - n_op2.combustible_consumido, 2);
               this.existencia_combustible -= n_op2.combustible_consumido; //resta combustible consumido a existencia combustible actual
               nuevas_operaciones.push(Object.values(n_op2)); //guarda la nueva operación 
             } else {
@@ -245,7 +246,7 @@ export class NewGrecordComponent implements OnInit {
                 hora_final: {hours: hinicial.hours, minutes: hinicial.minutes},
                 horametro_inicial: 	Number(this.nueva_operacion.horametro_inicial), 	//horas, minutos y segundos
                 horametro_final: 0,
-                tiempo_trabajado: this.round(moment(hinicial).diff(ohi, 'minutes') / 60, 2),
+                tiempo_trabajado: NP.round(moment(hinicial).diff(ohi, 'minutes') / 60, 2),
                 energia_generada: 0,
                 combustible_consumido: 0,
                 combustible_existencia: 0,
@@ -254,7 +255,7 @@ export class NewGrecordComponent implements OnInit {
               n_op1.horametro_final = Number(n_op1.horametro_inicial + n_op1.tiempo_trabajado);
               n_op1.energia_generada = n_op1.tiempo_trabajado * this.gee.dl;
               n_op1.combustible_consumido = n_op1.tiempo_trabajado * this.gee.ic_ccargan;
-              n_op1.combustible_existencia = this.round(this.existencia_combustible - n_op1.combustible_consumido, 2);
+              n_op1.combustible_existencia = NP.round(this.existencia_combustible - n_op1.combustible_consumido, 2);
               this.existencia_combustible -= n_op1.combustible_consumido; //resta combustible consumido a existencia combustible actual
               nuevas_operaciones.push(Object.values(n_op1)); //guarda la nueva operación
               let n_op2: GRecord = {
@@ -268,7 +269,7 @@ export class NewGrecordComponent implements OnInit {
                 hora_final: {hours: hfinal.hours, minutes: hfinal.minutes},
                 horametro_inicial: 	n_op1.horametro_final, 	//horas, minutos y segundos
                 horametro_final: 0,
-                tiempo_trabajado: this.round(moment(hfinal).diff(moment(hinicial), 'minutes') / 60, 2),
+                tiempo_trabajado: NP.round(moment(hfinal).diff(moment(hinicial), 'minutes') / 60, 2),
                 energia_generada: 0,
                 combustible_consumido: 0,
                 combustible_existencia: 0,
@@ -277,7 +278,7 @@ export class NewGrecordComponent implements OnInit {
               n_op2.horametro_final = Number(n_op2.horametro_inicial + n_op2.tiempo_trabajado);
               n_op2.energia_generada = n_op2.tiempo_trabajado * this.gee.dl;
               n_op2.combustible_consumido = n_op2.tiempo_trabajado * this.gee.ic_ccargad;
-              n_op2.combustible_existencia = this.round(this.existencia_combustible - n_op2.combustible_consumido, 2);
+              n_op2.combustible_existencia = NP.round(this.existencia_combustible - n_op2.combustible_consumido, 2);
               this.existencia_combustible -= n_op2.combustible_consumido; //resta combustible consumido a existencia combustible actual
               nuevas_operaciones.push(Object.values(n_op2)); //guarda la nueva operación 
               let n_op3: GRecord = {
@@ -291,7 +292,7 @@ export class NewGrecordComponent implements OnInit {
                 hora_final: {hours: ohf.get('hours'), minutes: ohf.get('minutes')},
                 horametro_inicial: 	n_op2.horametro_final, 	//horas, minutos y segundos
                 horametro_final: 0,
-                tiempo_trabajado: this.round(ohf.diff(moment(hfinal), 'minutes') / 60, 2),
+                tiempo_trabajado: NP.round(ohf.diff(moment(hfinal), 'minutes') / 60, 2),
                 energia_generada: 0,
                 combustible_consumido: 0,
                 combustible_existencia: 0,
@@ -300,7 +301,7 @@ export class NewGrecordComponent implements OnInit {
               n_op3.horametro_final = Number(n_op3.horametro_inicial + n_op3.tiempo_trabajado);
               n_op3.energia_generada = n_op3.tiempo_trabajado * this.gee.dl;
               n_op3.combustible_consumido = n_op3.tiempo_trabajado * this.gee.ic_ccargan;
-              n_op3.combustible_existencia = this.round(this.existencia_combustible - n_op3.combustible_consumido, 2);
+              n_op3.combustible_existencia = NP.round(this.existencia_combustible - n_op3.combustible_consumido, 2);
               this.existencia_combustible -= n_op3.combustible_consumido; //resta combustible consumido a existencia combustible actual
               nuevas_operaciones.push(Object.values(n_op3)); //guarda la nueva operación              
             }
@@ -311,11 +312,11 @@ export class NewGrecordComponent implements OnInit {
             delete this.nueva_operacion.id;
             this.nueva_operacion.id_usuario = this.user.id;
             this.nueva_operacion.id_gee = this.gee.id;
-            this.nueva_operacion.combustible_consumido = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargad, 2);  //guarda el combustible consumido de la operación
-            this.nueva_operacion.energia_generada = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.dl, 2); //round to 2 decimals
+            this.nueva_operacion.combustible_consumido = NP.round(this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargad, 2);  //guarda el combustible consumido de la operación
+            this.nueva_operacion.energia_generada = NP.round(this.nueva_operacion.tiempo_trabajado * this.gee.dl, 2); //round to 2 decimals
             this.nueva_operacion.horametro_inicial = Number(this.nueva_operacion.horametro_inicial); //convertir a numero
             this.nueva_operacion.horametro_final = Number(this.nueva_operacion.horametro_final); //convertir a numero
-            this.nueva_operacion.combustible_existencia = this.round(this.existencia_combustible - this.nueva_operacion.combustible_consumido, 2); //combustible existencia
+            this.nueva_operacion.combustible_existencia = NP.round(this.existencia_combustible - this.nueva_operacion.combustible_consumido, 2); //combustible existencia
             this.nueva_operacion.hora_inicial = {hours: ohi.get('hours'), minutes: ohi.get('minutes')};
             this.nueva_operacion.hora_final = {hours: ohf.get('hours'), minutes: ohf.get('minutes')};
             nuevas_operaciones.push(Object.values(this.nueva_operacion)); //guarda la nueva operación
@@ -332,7 +333,7 @@ export class NewGrecordComponent implements OnInit {
               hora_final: {hours: hfinal.hours, minutes: hfinal.minutes},
               horametro_inicial: 	Number(this.nueva_operacion.horametro_inicial), 	//horas, minutos y segundos
               horametro_final: 0,
-              tiempo_trabajado: this.round(moment(hfinal).diff(ohi, 'minutes') / 60, 2),
+              tiempo_trabajado: NP.round(moment(hfinal).diff(ohi, 'minutes') / 60, 2),
               energia_generada: 0,
               combustible_consumido: 0,
               combustible_existencia: 0,
@@ -341,7 +342,7 @@ export class NewGrecordComponent implements OnInit {
             n_op1.horametro_final = Number(n_op1.horametro_inicial + n_op1.tiempo_trabajado);
             n_op1.energia_generada = n_op1.tiempo_trabajado * this.gee.dl;
             n_op1.combustible_consumido = n_op1.tiempo_trabajado * this.gee.ic_ccargad;
-            n_op1.combustible_existencia = this.round(this.existencia_combustible - n_op1.combustible_consumido,2 );
+            n_op1.combustible_existencia = NP.round(this.existencia_combustible - n_op1.combustible_consumido,2 );
             this.existencia_combustible -= n_op1.combustible_consumido; //resta combustible consumido a existencia combustible actual
             nuevas_operaciones.push(Object.values(n_op1)); //guarda la nueva operación
             let n_op2: GRecord = {
@@ -355,7 +356,7 @@ export class NewGrecordComponent implements OnInit {
               hora_final: {hours: ohf.get('hours'), minutes: ohf.get('minutes')},
               horametro_inicial: 	n_op1.horametro_final, 	//horas, minutos y segundos
               horametro_final: 0,
-              tiempo_trabajado: this.round(ohf.diff(moment(hfinal), 'minutes') / 60, 2),
+              tiempo_trabajado: NP.round(ohf.diff(moment(hfinal), 'minutes') / 60, 2),
               energia_generada: 0,
               combustible_consumido: 0,
               combustible_existencia: 0,
@@ -364,7 +365,7 @@ export class NewGrecordComponent implements OnInit {
             n_op2.horametro_final = Number(n_op2.horametro_inicial + n_op2.tiempo_trabajado);
             n_op2.energia_generada = n_op2.tiempo_trabajado * this.gee.dl;
             n_op2.combustible_consumido = n_op2.tiempo_trabajado * this.gee.ic_ccargan;
-            n_op2.combustible_existencia = this.round(this.existencia_combustible - n_op2.combustible_consumido, 2);
+            n_op2.combustible_existencia = NP.round(this.existencia_combustible - n_op2.combustible_consumido, 2);
             this.existencia_combustible -= n_op2.combustible_consumido; //resta combustible consumido a existencia combustible actual
             nuevas_operaciones.push(Object.values(n_op2)); //guarda la nueva operación 
           }
@@ -373,10 +374,10 @@ export class NewGrecordComponent implements OnInit {
           this.nueva_operacion.id_usuario = this.user.id;
           this.nueva_operacion.id_gee = this.gee.id;
           this.nueva_operacion.combustible_consumido = this.nueva_operacion.tiempo_trabajado * this.gee.ic_ccargan, 2; //combustible consumido fuera del horario laboral
-          this.nueva_operacion.energia_generada = this.round(this.nueva_operacion.tiempo_trabajado * this.gee.dl, 2); //round to 2 decimals
+          this.nueva_operacion.energia_generada = NP.round(this.nueva_operacion.tiempo_trabajado * this.gee.dl, 2); //round to 2 decimals
           this.nueva_operacion.horametro_inicial = Number(this.nueva_operacion.horametro_inicial); //convertir a numero
           this.nueva_operacion.horametro_final = Number(this.nueva_operacion.horametro_final); //convertir a numero
-          this.nueva_operacion.combustible_existencia = this.round(this.existencia_combustible - this.nueva_operacion.combustible_consumido, 2); //combustible existencia
+          this.nueva_operacion.combustible_existencia = NP.round(this.existencia_combustible - this.nueva_operacion.combustible_consumido, 2); //combustible existencia
           this.nueva_operacion.hora_inicial = {hours: ohi.get('hours'), minutes: ohi.get('minutes')};
           this.nueva_operacion.hora_final = {hours: ohf.get('hours'), minutes: ohf.get('minutes')};
           nuevas_operaciones.push(Object.values(this.nueva_operacion)); //guarda la nueva operación
@@ -411,7 +412,7 @@ export class NewGrecordComponent implements OnInit {
       this.hora_final_status = 'success';
     }
     if (this.hora_inicial.value instanceof Date && this.hora_final.value instanceof Date) {
-      this.horas_trabajadas = this.round((moment(this.hora_final.value).diff(moment(this.hora_inicial.value), 'minutes') / 60), 1);      
+      this.horas_trabajadas = NP.round((moment(this.hora_final.value).diff(moment(this.hora_inicial.value), 'minutes') / 60), 1);      
       if (this.diferencia_horametro !== this.horas_trabajadas || this.diferencia_horametro === 0) {
         this.horametro_final_status = 'danger';
       } else {
@@ -425,7 +426,7 @@ export class NewGrecordComponent implements OnInit {
   onHorametroFinalChange() {
     if (Number(this.nueva_operacion.horametro_final) && Number(this.nueva_operacion.horametro_inicial)) {
       // tslint:disable-next-line: max-line-length
-      this.diferencia_horametro = this.round(Number(this.nueva_operacion.horametro_final) - Number(this.nueva_operacion.horametro_inicial), 1);
+      this.diferencia_horametro = NP.round(Number(this.nueva_operacion.horametro_final) - Number(this.nueva_operacion.horametro_inicial), 1);
       if (this.diferencia_horametro !== this.horas_trabajadas) {
         this.horametro_final_status = 'danger';
       } else {
@@ -436,10 +437,13 @@ export class NewGrecordComponent implements OnInit {
     }
   }
   
-  round(numb: number, precision: number) {
-    const exp: number = Math.pow(10, precision);
+  /*round(numb: number, precision: number) {
+    /*const exp: number = Math.pow(10, precision);
     return Math.round( ( numb + Number.EPSILON ) * exp ) / exp;
-  }
+    const result = Number(numb.toFixed(precision));
+    console.log(result);
+    return result;
+  }*/
 
   convertUTCDateToLocalDate(date) {
     const newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);

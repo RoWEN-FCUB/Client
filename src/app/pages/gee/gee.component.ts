@@ -19,6 +19,7 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as moment from 'moment';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import NP from 'number-precision';
 
 @Component({
   selector: 'gee',
@@ -96,14 +97,22 @@ export class GeeComponent implements OnInit {
       ], 
       ['', '', '', '', {text:'INICIAL'}, {text:'FINAL'}, {text:'INICIAL'}, {text:'FINAL'}, {text:''}, {text:''}, {text:'CONSUMIDO'}, {text:'EXISTENCIA'}, {text:''}, {text:''}]
     ];
+    let energia_generada: number = 0;
+    let combustible_consumido: number = 0;
+    let tiempo_trabajado: number = 0;
     for(let i = 0; i < records.length; i++) {
       const newrow: any =  [{text: records[i].D}, {text:records[i].M}, {text:records[i].A}, {text:records[i].tipo}, {text: String(records[i].hora_inicial).substring(0,5)},
-        {text:String(records[i].hora_final).substring(0,5)}, {text:records[i].horametro_inicial}, {text:records[i].horametro_final}, {text:records[i].tiempo_trabajado},
-        {text:records[i].energia_generada}, {text:records[i].combustible_consumido}, {text:records[i].combustible_existencia},
+        {text:String(records[i].hora_final).substring(0,5)}, {text:records[i].horametro_inicial.toFixed(1), alignment: 'right'}, {text:records[i].horametro_final.toFixed(1), alignment: 'right'}, {text:records[i].tiempo_trabajado.toFixed(1), alignment: 'right'},
+        {text:records[i].energia_generada.toFixed(2), alignment: 'right'}, {text:records[i].combustible_consumido.toFixed(2), alignment: 'right'}, {text:records[i].combustible_existencia.toFixed(2), alignment: 'right'},
         {text:records[i].observaciones}, {text:''}
       ];
+      energia_generada += records[i].energia_generada;
+      combustible_consumido += records[i].combustible_consumido;
+      tiempo_trabajado += records[i].tiempo_trabajado;
       table_to_print.push(newrow);
     }
+    const total: any =  [{text: 'T', bold: true}, '', '', '', '','', '', '', {text: tiempo_trabajado.toFixed(1), alignment: 'right', bold: true}, {text: energia_generada.toFixed(2), alignment: 'right', bold: true}, {text: combustible_consumido.toFixed(2), alignment: 'right', bold: true}, '','', ''];
+    table_to_print.push(total);
     const docDefinition = {
       info: {
         title: 'Registro de operaciones del ' + this.selectedGEE.idgee
@@ -160,17 +169,29 @@ export class GeeComponent implements OnInit {
       [{text: [{text: 'Tarjeta No.: '}, {text: this.selectedCard.numero, decoration: 'underline', width: '*'}], colSpan: 3}, '','', {text: [{text: 'Tipo de combustible: ', width: '*'}, {text: this.selectedCard.nombre_combustible, decoration: 'underline', width: '*'}], colSpan: 3}, '', ''],
       [{text: 'Fecha', alignment: 'center'}, {text: 'Saldo Inicial Pesos/Litros', alignment: 'center'}, {text: 'Recarga Pesos/Litros', alignment: 'center'}, {text: 'Saldo Pesos/Litros', alignment: 'center'}, {text: 'Consumo Pesos/Litros', alignment: 'center'}, {text: 'Saldo Final Pesos/Litros', alignment: 'center'}]
     ];
+    let recarga_saldo: number = 0;
+    let recarga_litros: number = 0;
+    let consumo_saldo: number = 0;
+    let consumo_litros: number = 0;
     for(let i = this.card_records.length - 1; i > -1; i--) {
       const newrow =  [
         moment(this.card_records[i].fecha).utc().format('DD-MM-yyyy'),
-        this.card_records[i].sinicial_pesos ? this.card_records[i].sinicial_pesos + '/' + this.card_records[i].sinicial_litros : {text:'--', alignment: 'center'},
-        this.card_records[i].recarga_pesos ? this.card_records[i].recarga_pesos + '/' + this.card_records[i].recarga_litros : {text:'--', alignment: 'center'},
-        this.card_records[i].saldo_pesos ? this.card_records[i].saldo_pesos + '/' + this.card_records[i].saldo_litros : {text:'--', alignment: 'center'},
-        this.card_records[i].consumo_pesos ? this.card_records[i].consumo_pesos + '/' + this.card_records[i].consumo_litros : {text:'--', alignment: 'center'},
-        this.card_records[i].sfinal_pesos ? this.card_records[i].sfinal_pesos + '/' + this.card_records[i].sfinal_litros: {text:'--', alignment: 'center'},
+        this.card_records[i].sinicial_pesos ? {text: this.card_records[i].sinicial_pesos + ' / ' + this.card_records[i].sinicial_litros, alignment: 'center'} : {text:'--', alignment: 'center'},
+        this.card_records[i].recarga_pesos ? {text: this.card_records[i].recarga_pesos + ' / ' + this.card_records[i].recarga_litros, alignment: 'center'} : {text:'--', alignment: 'center'},
+        this.card_records[i].saldo_pesos ? {text: this.card_records[i].saldo_pesos + ' / ' + this.card_records[i].saldo_litros, alignment: 'center'} : {text:'--', alignment: 'center'},
+        this.card_records[i].consumo_pesos ? {text: this.card_records[i].consumo_pesos + ' / ' + this.card_records[i].consumo_litros, alignment: 'center'} : {text:'--', alignment: 'center'},
+        this.card_records[i].sfinal_pesos ? {text: this.card_records[i].sfinal_pesos + ' / ' + this.card_records[i].sfinal_litros, alignment: 'center'} : {text:'--', alignment: 'center'},
       ];
+      recarga_saldo += this.card_records[i].recarga_pesos;
+      recarga_litros += this.card_records[i].recarga_litros;
+      consumo_saldo += this.card_records[i].consumo_pesos;
+      consumo_litros += this.card_records[i].consumo_litros;
       table_to_print.push(newrow);
     }
+    const newrow =  [
+      {text: 'T', bold: true},'', {text: recarga_saldo + ' / ' + recarga_litros, bold: true, alignment: 'center'},'', {text: consumo_saldo + ' / ' + consumo_litros, bold: true, alignment: 'center'},''
+    ];
+    table_to_print.push(newrow);
     const docDefinition = {
       info: {
         title: 'Registro de operaciones de la tarjeta ' + this.selectedCard.numero
@@ -262,12 +283,12 @@ export class GeeComponent implements OnInit {
   actualizar_existencia_combustible() {
     this.existencia_combustible_total = 0;
     for (let i = 0; i < this.cards.length; i++) {
-      this.existencia_combustible_total += this.round(this.cards[i].saldo / this.cards[i].precio_combustible , 2);
+      this.existencia_combustible_total += NP.round(this.cards[i].saldo / this.cards[i].precio_combustible , 2);
     }
     if (this.geeTank.length > 0) {
       this.existencia_combustible_total += this.geeTank[0].existencia;
     }
-    this.existencia_combustible_total = this.round(this.existencia_combustible_total, 2);
+    this.existencia_combustible_total = NP.round(this.existencia_combustible_total, 2);
   }
 
   async getGRecords() :Promise<any> {
@@ -410,18 +431,18 @@ export class GeeComponent implements OnInit {
         newCrecord.sfinal_litros = null;
         newCrecord.sinicial_litros = null;
         newCrecord.sinicial_pesos = this.selectedCard.saldo;
-        newCrecord.sinicial_litros = this.round(newCrecord.sinicial_pesos / this.selectedCard.precio_combustible, 2);
+        newCrecord.sinicial_litros = NP.round(newCrecord.sinicial_pesos / this.selectedCard.precio_combustible, 2);
         if(newCrecord.recarga_pesos) {
           newCrecord.saldo_pesos = newCrecord.sinicial_pesos + newCrecord.recarga_pesos;
-          newCrecord.saldo_litros = this.round(newCrecord.saldo_pesos / this.selectedCard.precio_combustible, 2);
+          newCrecord.saldo_litros = NP.round(newCrecord.saldo_pesos / this.selectedCard.precio_combustible, 2);
           newCrecord.sfinal_pesos = newCrecord.saldo_pesos;
-          newCrecord.sfinal_litros = this.round(newCrecord.sfinal_pesos / this.selectedCard.precio_combustible, 2);
-          newCrecord.recarga_litros = this.round(newCrecord.recarga_pesos / this.selectedCard.precio_combustible, 2);
+          newCrecord.sfinal_litros = NP.round(newCrecord.sfinal_pesos / this.selectedCard.precio_combustible, 2);
+          newCrecord.recarga_litros = NP.round(newCrecord.recarga_pesos / this.selectedCard.precio_combustible, 2);
         }
         if(newCrecord.consumo_pesos) {
           newCrecord.sfinal_pesos = newCrecord.sinicial_pesos - newCrecord.consumo_pesos;
-          newCrecord.sfinal_litros = this.round(newCrecord.sfinal_pesos / this.selectedCard.precio_combustible, 2);
-          newCrecord.consumo_litros = this.round(newCrecord.consumo_pesos / this.selectedCard.precio_combustible, 2);
+          newCrecord.sfinal_litros = NP.round(newCrecord.sfinal_pesos / this.selectedCard.precio_combustible, 2);
+          newCrecord.consumo_litros = NP.round(newCrecord.consumo_pesos / this.selectedCard.precio_combustible, 2);
         }
         this.geeService.saveFCardRecord(newCrecord).subscribe(async () => {
           this.Toast.fire({
@@ -438,10 +459,10 @@ export class GeeComponent implements OnInit {
     });
   }
 
-  round(numb: number, precision: number) {
+  /*round(numb: number, precision: number) {
     const exp: number = Math.pow(10, precision);
     return Math.round( ( numb + Number.EPSILON ) * exp ) / exp;
-  }
+  }*/
 
   deleteCardRecord(cardRecord: CRecord) {
     Swal.fire({
