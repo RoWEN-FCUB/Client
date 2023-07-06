@@ -63,6 +63,7 @@ export class GeeComponent implements OnInit {
     totalItems: 0,
   };
   @ViewChild('rangodias', {static: false}) rangodias: ElementRef;
+  @ViewChild('rangodias2', {static: false}) rangodias2: ElementRef;
 
   constructor(private geeService: GeeService, private authService: NbAuthService, private dialogService: NbDialogService,
      private eService: EserviceService) { }
@@ -161,7 +162,7 @@ export class GeeComponent implements OnInit {
     pdfMake.createPdf(docDefinition).download('Registro de operaciones del ' + this.selectedGEE.idgee);
   }
 
-  exportCardRecords(){
+  exportCardRecords(records: CRecord[]){
     let table_to_print: any = [
       [{text: 'CONTROL COMBUSTIBLE GEE', alignment: 'center', bold: true, colSpan: 6}, '', '', '', '', ''],
       [{text: [{text: 'Empresa: '}, {text: this.selectedGEE.servicio, decoration: 'underline'}], colSpan: 4}, '', '', '', {text: [{text: 'Organismo: '}, {text: this.selectedGEE.oace, decoration: 'underline'}], colSpan: 2}, ''],
@@ -173,23 +174,23 @@ export class GeeComponent implements OnInit {
     let recarga_litros: number = 0;
     let consumo_saldo: number = 0;
     let consumo_litros: number = 0;
-    for(let i = this.card_records.length - 1; i > -1; i--) {
+    for(let i = 0; i < records.length; i++) {
       const newrow =  [
-        moment(this.card_records[i].fecha).utc().format('DD-MM-yyyy'),
-        this.card_records[i].sinicial_pesos ? {text: this.card_records[i].sinicial_pesos + ' / ' + this.card_records[i].sinicial_litros, alignment: 'center'} : {text:'--', alignment: 'center'},
-        this.card_records[i].recarga_pesos ? {text: this.card_records[i].recarga_pesos + ' / ' + this.card_records[i].recarga_litros, alignment: 'center'} : {text:'--', alignment: 'center'},
-        this.card_records[i].saldo_pesos ? {text: this.card_records[i].saldo_pesos + ' / ' + this.card_records[i].saldo_litros, alignment: 'center'} : {text:'--', alignment: 'center'},
-        this.card_records[i].consumo_pesos ? {text: this.card_records[i].consumo_pesos + ' / ' + this.card_records[i].consumo_litros, alignment: 'center'} : {text:'--', alignment: 'center'},
-        this.card_records[i].sfinal_pesos ? {text: this.card_records[i].sfinal_pesos + ' / ' + this.card_records[i].sfinal_litros, alignment: 'center'} : {text:'--', alignment: 'center'},
+        moment(records[i].fecha).utc().format('DD-MM-yyyy'),
+        records[i].sinicial_pesos ? {text: records[i].sinicial_pesos.toFixed(2) + ' / ' + records[i].sinicial_litros.toFixed(2), alignment: 'center'} : {text:'--', alignment: 'center'},
+        records[i].recarga_pesos ? {text: records[i].recarga_pesos.toFixed(2) + ' / ' + records[i].recarga_litros.toFixed(2), alignment: 'center'} : {text:'--', alignment: 'center'},
+        records[i].saldo_pesos ? {text: records[i].saldo_pesos.toFixed(2) + ' / ' + records[i].saldo_litros.toFixed(2), alignment: 'center'} : {text:'--', alignment: 'center'},
+        records[i].consumo_pesos ? {text: records[i].consumo_pesos.toFixed(2) + ' / ' + records[i].consumo_litros.toFixed(2), alignment: 'center'} : {text:'--', alignment: 'center'},
+        records[i].sfinal_pesos ? {text: records[i].sfinal_pesos.toFixed(2) + ' / ' + records[i].sfinal_litros.toFixed(2), alignment: 'center'} : {text:'--', alignment: 'center'},
       ];
-      recarga_saldo += this.card_records[i].recarga_pesos;
-      recarga_litros += this.card_records[i].recarga_litros;
-      consumo_saldo += this.card_records[i].consumo_pesos;
-      consumo_litros += this.card_records[i].consumo_litros;
+      recarga_saldo += records[i].recarga_pesos;
+      recarga_litros += records[i].recarga_litros;
+      consumo_saldo += records[i].consumo_pesos;
+      consumo_litros += records[i].consumo_litros;
       table_to_print.push(newrow);
     }
     const newrow =  [
-      {text: 'T', bold: true},'', {text: recarga_saldo + ' / ' + recarga_litros, bold: true, alignment: 'center'},'', {text: consumo_saldo + ' / ' + consumo_litros, bold: true, alignment: 'center'},''
+      {text: 'T', bold: true},'', {text: recarga_saldo.toFixed(2) + ' / ' + recarga_litros.toFixed(2), bold: true, alignment: 'center'},'', {text: consumo_saldo.toFixed(2) + ' / ' + consumo_litros.toFixed(2), bold: true, alignment: 'center'},''
     ];
     table_to_print.push(newrow);
     const docDefinition = {
@@ -225,18 +226,62 @@ export class GeeComponent implements OnInit {
     picked_range.click();
   }
 
-  cambiarRango(e) {
+  clickShowRange2() {
+    const picked_range2: HTMLElement = this.rangodias2.nativeElement;
+    picked_range2.click();
+  }
+
+  cambiarRango(e) { //Exportar operaciones del GEE
     if (e.start && e.end) {
-     this.geeService.listGEERecordsByDate(this.selectedGEE.id, moment(e.start).format('yyyy-MM-DD'), moment(e.end).format('yyyy-MM-DD')).subscribe((records:  GRecord[]) => {
-        if(records.length > 0) {
-          this.exportGEERecords(records);
-        } else {
-          this.Toast.fire({
-            icon: 'error',
-            title: 'El período seleccionado no tiene operaciones registradas.',
-          } as SweetAlertOptions);
-        }
-      });
+      Swal.fire({
+        title: 'Exportar operaciones',
+        text: 'Se exportarán todas las operaciones entre el ' + moment(e.start).format('DD/MM/yyyy') + ' y el ' + moment(e.end).format('DD/MM/yyyy'),
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar­',
+        cancelButtonText: 'Cancelar',
+      } as SweetAlertOptions).then((result) => {
+        if (result.value) {
+          this.geeService.listGEERecordsByDate(this.selectedGEE.id, moment(e.start).format('yyyy-MM-DD'), moment(e.end).format('yyyy-MM-DD')).subscribe((records:  GRecord[]) => {
+            if(records.length > 0) {
+              this.exportGEERecords(records);
+            } else {
+              this.Toast.fire({
+                icon: 'error',
+                title: 'El período seleccionado no tiene operaciones registradas.',
+              } as SweetAlertOptions);
+            }
+          });
+        }});
+    }
+  }
+
+  cambiarRango2(e) { //Exportar operaciones de las tarjetas
+    if (e.start && e.end) {
+      Swal.fire({
+        title: 'Exportar operaciones',
+        text: 'Se exportarán todas las operaciones entre el ' + moment(e.start).format('DD/MM/yyyy') + ' y el ' + moment(e.end).format('DD/MM/yyyy'),
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar­',
+        cancelButtonText: 'Cancelar',
+      } as SweetAlertOptions).then((result) => {
+        if (result.value) {
+          this.geeService.listCardsRecordsByDate(this.selectedCard.id, moment(e.start).format('yyyy-MM-DD'), moment(e.end).format('yyyy-MM-DD')).subscribe((records: CRecord[]) => {
+            if(records.length > 0) {
+              this.exportCardRecords(records);
+            } else {
+              this.Toast.fire({
+                icon: 'error',
+                title: 'El período seleccionado no tiene operaciones registradas.',
+              } as SweetAlertOptions);
+            }
+          });
+        }});
     }
   }
 

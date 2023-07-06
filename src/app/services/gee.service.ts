@@ -34,6 +34,10 @@ export class GeeService {
     return this.http.get(ipserver + 'gee/listGEERecordsByDate/' + id + '&' + fecha_inicial + '&' + fecha_final, {responseType: 'json'});
   }
 
+  listCardsRecordsByDate(id_card: number, fecha_inicial: string, fecha_final: string) {
+    return this.http.get(ipserver + 'gee/listCardsRecordsByDate/' + id_card + '&' + fecha_inicial + '&' + fecha_final, {responseType: 'json'});
+  }
+
   async listCardsByGEE(id_gee: number) {
     return await firstValueFrom(this.http.get(ipserver + 'gee/listCardsByGEE/' + id_gee, {responseType: 'json'}));
   }
