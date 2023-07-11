@@ -462,14 +462,17 @@ export class TaskWeekComponent implements OnInit {
         // tslint:disable-next-line: max-line-length
         text: 'Se crearán nuevas tareas desde el ' + moment(e.start).locale('es').format('LL') + ' hasta el ' + moment(e.end).locale('es').format('LL'),
         icon: 'warning',
+        input: 'checkbox',
+        inputPlaceholder: 'Incluir fines de semana.',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Sí­',
         cancelButtonText: 'No',
       } as SweetAlertOptions).then((result) => {
-        if (result.value) {
-          this.taskService.copyTask({id: this.tasks[this.tarea_a_repetir].id, startD: this.convertUTCDateToLocalDate(e.start), endD: this.convertUTCDateToLocalDate(e.end)}).subscribe(res => {
+        console.log(result);
+        if (result.isConfirmed) {
+          this.taskService.copyTask({id: this.tasks[this.tarea_a_repetir].id, startD: this.convertUTCDateToLocalDate(e.start), endD: this.convertUTCDateToLocalDate(e.end), weekend: result.value}).subscribe(res => {
             const Toast = Swal.mixin({
               toast: true,
               position: 'top-end',
