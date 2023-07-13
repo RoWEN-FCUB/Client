@@ -18,6 +18,7 @@ import { ActivatedRoute } from '@angular/router';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { UntypedFormControl } from '@angular/forms';
+import { CalendarComponent } from '../calendar/calendar.component'
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 @Component({
   // tslint:disable-next-line: component-selector
@@ -455,42 +456,6 @@ export class TaskWeekComponent implements OnInit {
     }
   }
 
-  copytask(e) {
-    if (e.start && e.end) {
-      Swal.fire({
-        title: 'Confirma que desea repetir la tarea "' + this.tasks[this.tarea_a_repetir].resumen + '"?',
-        // tslint:disable-next-line: max-line-length
-        text: 'Se crearán nuevas tareas desde el ' + moment(e.start).locale('es').format('LL') + ' hasta el ' + moment(e.end).locale('es').format('LL'),
-        icon: 'warning',
-        input: 'checkbox',
-        inputPlaceholder: 'Incluir fines de semana.',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí­',
-        cancelButtonText: 'No',
-      } as SweetAlertOptions).then((result) => {
-        console.log(result);
-        if (result.isConfirmed) {
-          this.taskService.copyTask({id: this.tasks[this.tarea_a_repetir].id, startD: this.convertUTCDateToLocalDate(e.start), endD: this.convertUTCDateToLocalDate(e.end), weekend: result.value}).subscribe(res => {
-            const Toast = Swal.mixin({
-              toast: true,
-              position: 'top-end',
-              showConfirmButton: false,
-              timerProgressBar: true,
-              timer: 3000,
-            });
-            Toast.fire({
-              icon: 'success',
-              title: 'Tarea copiada.',
-            } as SweetAlertOptions);
-            this.getTaskinRange();
-          });
-        }
-      });
-    }
-  }
-
   openNew(fecha_i?: Date) {
     // tslint:disable-next-line: max-line-length
     this.dialogService.open(NewTaskComponent, {context: {subordinados: this.subordinados, id_creador: this.user.id, id_usuario: this.usuario_a_mostrar, fecha: new UntypedFormControl(fecha_i)}}).onClose.subscribe(
@@ -713,7 +678,25 @@ export class TaskWeekComponent implements OnInit {
     }
     this.tarea_a_repetir = id;
     const picked_range: HTMLElement = this.range.nativeElement;
-    picked_range.click();
+    //picked_range.click();
+    this.dialogService.open(CalendarComponent).onClose.subscribe((dates: Date[]) => {
+      if(dates && dates.length > 0) {
+        this.taskService.copyTask({id: this.tasks[this.tarea_a_repetir].id, dates: dates}).subscribe(res => {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 3000,
+          });
+          Toast.fire({
+            icon: 'success',
+            title: 'Tarea copiada.',
+          } as SweetAlertOptions);
+          this.getTaskinRange();
+        });
+      }
+    });
   }
 
   posponer(event) {// cambiarle la fecha a la tarea

@@ -65,8 +65,6 @@
                       <nb-icon *ngIf="(task.estado==='Pendiente' && task.validada) || user.role==='admin'" (click)="clickposponer(task.id)" [owlDateTimeTrigger]="dt" icon="clock-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Posponer tarea" nbTooltipIcon="clock-outline" nbTooltipStatus="info"></nb-icon>
                       <input type="hidden" style="visibility: hidden" [owlDateTime]="dt" (dateTimeChange)="posponer($event)">      
                       <owl-date-time hour12Timer="true" #dt></owl-date-time>
-                      <input id="range" #range type="hidden" [nbDatepicker]="rangepicker" style="visibility: hidden">
-                      <nb-rangepicker #rangepicker (rangeChange)="copytask($event)"></nb-rangepicker>
                       <nb-icon (click)="clickrepetir(task.id)" icon="copy-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Repetir tarea" nbTooltipIcon="clock-outline" nbTooltipStatus="info"></nb-icon>
                       <nb-icon *ngIf="subordinados.length > 0" (click)="openSelectSubs(task.id)" icon="person-done-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Asignar también a otro usuario" nbTooltipIcon="person-done-outline" nbTooltipStatus="info"></nb-icon>
                       <nb-icon *ngIf="(task.estado==='Pendiente' && task.validada) || user.role==='admin'" (click)="setTaskState(task.id,'Cancelada')" icon="close-circle-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Cancelar tarea" nbTooltipIcon="close-outline" nbTooltipStatus="warning"></nb-icon>

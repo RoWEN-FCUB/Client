@@ -99,6 +99,9 @@ import { QuartetsPipe } from './pipes/quartets.pipe';
 import { FuelPriceComponent } from './pages/fuel-price/fuel-price.component';
 import { AdminFcardComponent } from './pages/admin-fcard/admin-fcard.component';
 import { AdjustFuelComponent } from './pages/adjust-fuel/adjust-fuel.component';
+import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
+import { CalendarComponent } from './pages/calendar/calendar.component'
+
 // import { ShortTimePipe } from './pipes/short-time.pipe';
 
 // here is the default text string
@@ -171,7 +174,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
         LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
         UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent,
         WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent,
-        QuartetsPipe, NewCrecordComponent, FuelPriceComponent, AdminFcardComponent, AdjustFuelComponent
+        QuartetsPipe, NewCrecordComponent, FuelPriceComponent, AdminFcardComponent, AdjustFuelComponent, CalendarComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [
@@ -221,6 +224,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
             // or after 30 seconds (whichever comes first).
             registrationStrategy: 'registerWhenStable:30000',
         }),
+        DateInputsModule,
     ],
     providers: [
         {
@@ -243,7 +247,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
         NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent,
         NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent, WpartsComponent,
         NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent, NewCrecordComponent,
-        FuelPriceComponent, AdminFcardComponent, AdjustFuelComponent
+        FuelPriceComponent, AdminFcardComponent, AdjustFuelComponent, CalendarComponent
     ],
     bootstrap: [AppComponent]
 })

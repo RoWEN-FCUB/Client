@@ -1,4 +1,4 @@
-import { Injectable, NgModule } from '@angular/core';
+import { Injectable, LOCALE_ID, NgModule } from '@angular/core';
 // tslint:disable-next-line: max-line-length
 import { NbAutocompleteModule, NbCheckboxModule, NbBadgeModule, NbAccordionModule, NbIconModule , NbActionsModule, NbTooltipModule, NbPopoverModule, NbMenuModule, NbCardModule, NbInputModule, NbSelectModule, NbButtonModule, NbDialogModule, NbTabsetModule, NbDatepickerModule, NbLayoutModule, NbToggleModule, NbFormFieldModule } from '@nebular/theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -51,6 +51,7 @@ import { DeliversComponent } from './delivers/delivers.component';
 // import { NewServiceComponent } from './new-service/new-service.component';
 import { WebcamModule } from 'ngx-webcam';
 import { AdminGeeComponent } from './admin-gee/admin-gee.component';
+// import { CalendarComponent } from './calendar/calendar.component';
 // import { AdjustFuelComponent } from './adjust-fuel/adjust-fuel.component';
 // import { AdminFcardComponent } from './admin-fcard/admin-fcard.component';
 // import { FuelPriceComponent } from './fuel-price/fuel-price.component';
@@ -58,6 +59,9 @@ import { AdminGeeComponent } from './admin-gee/admin-gee.component';
 // import { NewFuelCardComponent } from './new-fuel-card/new-fuel-card.component';
 // import { NewGrecordComponent } from './new-grecord/new-grecord.component';
 // import { NewGeeComponent } from './new-gee/new-gee.component';
+import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
+import { IntlModule } from "@progress/kendo-angular-intl";
+import "@progress/kendo-angular-intl/locales/es/all";
 
 @Injectable()
 export class DefaultIntl extends OwlDateTimeIntl {
@@ -156,7 +160,9 @@ export class DefaultIntl extends OwlDateTimeIntl {
     FontAwesomeModule,
     NbAutocompleteModule,
     // NgxScrollTopModule,
-    WebcamModule,    
+    WebcamModule,
+    DateInputsModule,
+    IntlModule
   ],
   declarations: [
     PagesComponent,
@@ -178,6 +184,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
     // tslint:disable-next-line: max-line-length
     ShortSerialPipe, ShortNamePipe, EnergyComponent, GeeComponent, AdminCompanyComponent, AdminServiceComponent, ComercialComponent, DeliversComponent, AdminGeeComponent,
     ShortTimePipe,
+    // CalendarComponent,
     // AdjustFuelComponent,
     // AdminFcardComponent,
     // FuelPriceComponent,
@@ -200,6 +207,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
   providers: [
     {provide: OWL_DATE_TIME_LOCALE, useValue: 'es'},
     {provide: OwlDateTimeIntl, useClass: DefaultIntl},
+    { provide: LOCALE_ID, useValue: "es-ES" },
   ],
 })
 export class PagesModule {

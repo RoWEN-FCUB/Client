@@ -1,0 +1,20 @@
+<nb-card accent="info">
+    <nb-card-body>
+        <div class="row">
+            <div class="form-group mb-3">
+                <kendo-calendar selection="multiple" [disabledDates]="disabledDates" (valueChange)="onDateSelect($event)"><kendo-datepicker-messages today="Hoy" toggle="Cambiar calendario"></kendo-datepicker-messages></kendo-calendar>
+            </div>            
+        </div>
+        <div class="row">
+            <div class="form-group mb-3">
+                <nb-checkbox (checkedChange)="weekends_change($event)">Incluir fines de semana</nb-checkbox>
+            </div>
+        </div>
+    </nb-card-body>
+    <nb-card-footer>
+        <div class="form-group" style="float: right;margin-top: 5px">
+            <button (click)="save()" nbButton hero status="success" shape="semi-round" size="small">Copiar</button>
+            <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+        </div>
+    </nb-card-footer>    
+</nb-card>
