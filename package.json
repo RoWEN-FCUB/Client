@@ -87,7 +87,7 @@
     "style-loader": "^3.3.2",
     "sweetalert2": "^11.7.3",
     "tinymce": "^6.4.1",
-    "tslib": "^2.5.0",
+    "tslib": "^2.6.0",
     "typeface-exo": "1.1.13",
     "web-animations-js": "^2.3.2",
     "zone.js": "^0.13.0",
