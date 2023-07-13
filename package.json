@@ -71,7 +71,7 @@
     "nebular-icons": "1.1.0",
     "ngx-device-detector": "^5.0.1",
     "ngx-echarts": "^15.0.3",
-    "ngx-material-timepicker": "^5.5.3",
+    "ngx-material-timepicker": "^13.1.1",
     "ngx-pagination": "^6.0.3",
     "ngx-scrolltop": "5.1.0",
     "ngx-webcam": "^0.4.1",
