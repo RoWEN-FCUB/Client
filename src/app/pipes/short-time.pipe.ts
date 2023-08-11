@@ -7,6 +7,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class ShortTimePipe implements PipeTransform {
 
   transform(value: string): string {
+    if(value == null || value == undefined || value == '') {return '--';}
     return value.substring(0, 5);
   }
 

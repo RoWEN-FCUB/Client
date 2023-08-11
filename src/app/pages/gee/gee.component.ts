@@ -118,37 +118,43 @@ export class GeeComponent implements OnInit {
       info: {
         title: 'Registro de operaciones del ' + this.selectedGEE.idgee
       },
+      header: {
+        alignment: 'center',
+        margin: [15, 10, 15, 10],
+        stack: [
+          {
+            text: 'REGISTRO DE OPERACIONES', fontSize: 15, width: 'auto', alignment: 'center', bold: true,
+          },
+          {
+            text: 'DATOS DEL GEE', fontSize: 15, width: 'auto', alignment: 'center', bold: true,
+          },
+          {
+            columns: [
+              {columns: [{text: 'PROVINCIA: ', width: 'auto'}, {text: this.selectedGEE.provincia, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}, {columns: [{text: 'MUNICIPIO: ', width: 'auto'}, {text: this.selectedGEE.municipio, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'},
+              {columns: [{text: 'ORGANISMO: ', width: 'auto'}, {text: this.selectedGEE.oace, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}, {columns: [{text: 'EMPRESA: ', width: 'auto'}, {text: this.selectedGEE.empresa, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}
+            ],
+            columnGap: 10
+          },
+          {
+            columns: [
+              {columns: [{text: 'ENTIDAD U OBJETIVO: ', width: '*'}, {text: this.selectedGEE.servicio, decoration: 'underline', width: '*'}], columnGap: 5, width: 'auto'}, {columns: [{text: 'MARCA: ', width: 'auto'}, {text: this.selectedGEE.marca, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'},
+              {columns: [{text: 'KVA: ', width: 'auto'}, {text: this.selectedGEE.kva, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}, {columns: [{text: 'IDGEE: ', width: 'auto'}, {text: this.selectedGEE.idgee, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}
+            ],
+            columnGap: 10
+          },
+        ],
+      },
       footer: function(currentPage, pageCount) {
         return {
           text: 'Página ' + currentPage.toString() + ' de ' + pageCount,
           alignment: 'right',
-          margin: [2, 2, 5, 2],
+          margin: [2, 2, 5, 7],
           fontSize: 10,
         };
       },
       pageSize: 'LETTER',
       pageOrientation: 'landscape',
       content: [
-        {
-          text: 'REGISTRO DE OPERACIONES', fontSize: 15, width: 'auto', alignment: 'center', bold: true,
-        },
-        {
-          text: 'DATOS DEL GEE', fontSize: 15, width: 'auto', alignment: 'center', bold: true,
-        },
-        {
-          columns: [
-            {columns: [{text: 'PROVINCIA: ', width: 'auto'}, {text: this.selectedGEE.provincia, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}, {columns: [{text: 'MUNICIPIO: ', width: 'auto'}, {text: this.selectedGEE.municipio, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'},
-            {columns: [{text: 'ORGANISMO: ', width: 'auto'}, {text: this.selectedGEE.oace, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}, {columns: [{text: 'EMPRESA: ', width: 'auto'}, {text: this.selectedGEE.empresa, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}
-          ],
-          columnGap: 10
-        },
-        {
-          columns: [
-            {columns: [{text: 'ENTIDAD U OBJETIVO: ', width: '*'}, {text: this.selectedGEE.servicio, decoration: 'underline', width: '*'}], columnGap: 5, width: 'auto'}, {columns: [{text: 'MARCA: ', width: 'auto'}, {text: this.selectedGEE.marca, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'},
-            {columns: [{text: 'KVA: ', width: 'auto'}, {text: this.selectedGEE.kva, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}, {columns: [{text: 'IDGEE: ', width: 'auto'}, {text: this.selectedGEE.idgee, decoration: 'underline', width: '*'}], columnGap: 5, width: '*'}
-          ],
-          columnGap: 10
-        },
         {
           table: {
             headerRows: 2,
@@ -157,7 +163,7 @@ export class GeeComponent implements OnInit {
           }
         }
       ],
-      pageMargins: [15, 15, 15, 5],
+      pageMargins: [15, 80, 15, 25],
     };
     pdfMake.createPdf(docDefinition).download('Registro de operaciones del ' + this.selectedGEE.idgee);
   }

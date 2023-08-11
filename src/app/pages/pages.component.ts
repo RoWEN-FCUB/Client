@@ -65,6 +65,17 @@ export class PagesComponent implements OnInit {
           );
         }
       });*/
+      this.accessChecker.isGranted('view', 'visitors').subscribe(granted => {
+        if (granted) {
+          this.menu.push(
+            {
+              title: 'Visitantes',
+              icon: 'book-open-outline',
+              link: '/pages/visitors',
+            },
+          );
+        }
+      });
       this.accessChecker.isGranted('view', 'tasks').subscribe(granted => {
         if (granted) {
           this.menu.push(

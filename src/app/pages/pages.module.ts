@@ -49,7 +49,6 @@ import { DeliversComponent } from './delivers/delivers.component';
 // import { WpartsComponent } from './wparts/wparts.component';
 // import { AdminUserServicesComponent } from './admin-user-services/admin-user-services.component';
 // import { NewServiceComponent } from './new-service/new-service.component';
-import { WebcamModule } from 'ngx-webcam';
 import { AdminGeeComponent } from './admin-gee/admin-gee.component';
 // import { CalendarComponent } from './calendar/calendar.component';
 // import { AdjustFuelComponent } from './adjust-fuel/adjust-fuel.component';
@@ -62,6 +61,8 @@ import { AdminGeeComponent } from './admin-gee/admin-gee.component';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { IntlModule } from "@progress/kendo-angular-intl";
 import "@progress/kendo-angular-intl/locales/es/all";
+import { VisitorsComponent } from './visitors/visitors.component';
+// import { ScanQRComponent } from './scan-qr/scan-qr.component';
 
 @Injectable()
 export class DefaultIntl extends OwlDateTimeIntl {
@@ -160,7 +161,6 @@ export class DefaultIntl extends OwlDateTimeIntl {
     FontAwesomeModule,
     NbAutocompleteModule,
     // NgxScrollTopModule,
-    WebcamModule,
     DateInputsModule,
     IntlModule
   ],
@@ -184,6 +184,8 @@ export class DefaultIntl extends OwlDateTimeIntl {
     // tslint:disable-next-line: max-line-length
     ShortSerialPipe, ShortNamePipe, EnergyComponent, GeeComponent, AdminCompanyComponent, AdminServiceComponent, ComercialComponent, DeliversComponent, AdminGeeComponent,
     ShortTimePipe,
+    VisitorsComponent,
+    // ScanQRComponent,
     // CalendarComponent,
     // AdjustFuelComponent,
     // AdminFcardComponent,

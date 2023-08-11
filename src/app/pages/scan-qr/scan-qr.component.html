@@ -1,0 +1,23 @@
+<nb-card>
+    <nb-card-header><div class="text-center">Escanear código QR del Carnet de Identidad</div></nb-card-header>
+    <nb-card-body>
+        <select #selectList (change)="selectCamera(selectList.value)">
+            <option *ngFor="let camera of cameras" value={{camera.label}}>
+                {{ camera.label }}
+            </option>
+        </select>
+          
+        <zxing-scanner style="width: 500px;"
+        [enable]="scannerEnabled"
+        [device]="myDevice"
+        (camerasFound)="camerasFoundHandler($event)"
+        (scanSuccess)="scanSuccessHandler($event)"
+        ></zxing-scanner>
+        <p *ngFor="let result of results">{{result}}</p>
+    </nb-card-body>
+    <nb-card-footer>
+        <div class="form-group" style="float: right;margin-top: 5px">            
+            <button (click)="close()" style="margin-left: 10px" nbButton hero status="danger" shape="semi-round" size="small">Cancelar</button>
+        </div>
+    </nb-card-footer>
+</nb-card>

@@ -100,7 +100,9 @@ import { FuelPriceComponent } from './pages/fuel-price/fuel-price.component';
 import { AdminFcardComponent } from './pages/admin-fcard/admin-fcard.component';
 import { AdjustFuelComponent } from './pages/adjust-fuel/adjust-fuel.component';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
-import { CalendarComponent } from './pages/calendar/calendar.component'
+import { CalendarComponent } from './pages/calendar/calendar.component';
+import { ScanQRComponent } from './pages/scan-qr/scan-qr.component';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 // import { ShortTimePipe } from './pipes/short-time.pipe';
 
@@ -174,7 +176,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
         LoginComponent, LogoutComponent, NewUserComponent, SelectSubsComponent, NewWRecordComponent,
         UpdtWRecordComponent, EnergyPlansComponent, NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent,
         WpartsComponent, NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent,
-        QuartetsPipe, NewCrecordComponent, FuelPriceComponent, AdminFcardComponent, AdjustFuelComponent, CalendarComponent
+        QuartetsPipe, NewCrecordComponent, FuelPriceComponent, AdminFcardComponent, AdjustFuelComponent, CalendarComponent, ScanQRComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [
@@ -225,6 +227,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
             registrationStrategy: 'registerWhenStable:30000',
         }),
         DateInputsModule,
+        ZXingScannerModule,
     ],
     providers: [
         {
@@ -247,7 +250,7 @@ export class DefaultIntl extends OwlDateTimeIntl {
         NewWRecordComponent, UpdtWRecordComponent, NewErecordComponent, EnergyPlansComponent,
         NewCompanyComponent, NewServiceComponent, AdminUserServicesComponent, WpartsComponent,
         NewCproductComponent, NewCproviderComponent, NewCreceiptComponent, NewGeeComponent, NewGrecordComponent, NewFuelCardComponent, NewCrecordComponent,
-        FuelPriceComponent, AdminFcardComponent, AdjustFuelComponent, CalendarComponent
+        FuelPriceComponent, AdminFcardComponent, AdjustFuelComponent, CalendarComponent, ScanQRComponent
     ],
     bootstrap: [AppComponent]
 })

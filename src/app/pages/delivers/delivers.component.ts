@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
+//import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { DeliverService } from '../../services/deliver.service';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
@@ -13,7 +13,7 @@ import ipserver from '../../ipserver';
   styleUrls: ['./delivers.component.scss'],
 })
 export class DeliversComponent {
-  public webcamImage: WebcamImage = null;
+  //public webcamImage: WebcamImage = null;
   private trigger: Subject<void> = new Subject<void>();
   public valeStatus = 'info';
   public videoWidth: Number;
@@ -82,25 +82,25 @@ export class DeliversComponent {
      this.videoWidth = 225;
    }
 
-   handleImage(webcamImage: WebcamImage): void {
+   /*handleImage(webcamImage: WebcamImage): void {
     // console.info('Saved webcam image', webcamImage);
     this.webcamImage = webcamImage;
-   }
+   }*/
 
    public get triggerObservable(): Observable<void> {
     return this.trigger.asObservable();
    }
 
-   public handleInitError(error: WebcamInitError): void {
+   /*public handleInitError(error: WebcamInitError): void {
      if (error.mediaStreamError && error.mediaStreamError.name === 'NotAllowedError') {
        console.warn('Camera access was not allowed by user!');
      }
-   }
+   }*/
 
    deleteImage(): void {
     this.valeStatus = 'info';
     this.modname = 'Registrar vale';
-    this.webcamImage = null;
+    //this.webcamImage = null;
     this.code = '';
     Object.keys(this.deliver).forEach(function(index) {
       this.deliver[index] = '';
@@ -124,7 +124,7 @@ export class DeliversComponent {
       timerProgressBar: true,
       timer: 3000,
     });
-    if (this.valeStatus === 'success') {
+    /*if (this.valeStatus === 'success') {
       this.deliverService.saveDeliver({code: this.code, img: this.webcamImage.imageAsBase64, id_user: this.user.id}).subscribe(res => {
         Toast.fire({
           icon: 'success',
@@ -146,7 +146,7 @@ export class DeliversComponent {
       title: 'Debe escribir el código del vale.',
     } as SweetAlertOptions);
     this.valeStatus = 'danger';
-    }
+    }*/
    }
 
 }

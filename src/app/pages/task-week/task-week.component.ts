@@ -32,7 +32,6 @@ export class TaskWeekComponent implements OnInit {
   @Input() dia_fin: Date;
   rango_dias: Date[]; // dias que se encuentran entre el dia inicio y dia fin
   tareas_por_dias: TaskByDay[];
-  @ViewChild('range', {static: false}) range: ElementRef;
   @ViewChild('rangodias', {static: false}) rangodias: ElementRef;
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: ''};
   tasks: Task[] = []; // lista de tareas
@@ -83,7 +82,12 @@ export class TaskWeekComponent implements OnInit {
             color = '#b0a9a9';
           }
           if (this.tareas_por_dias[i * 7 + j].day) {
-            let dsemana = moment(this.tareas_por_dias[i * 7 + j].day).locale('es').format('dddd D').toLocaleUpperCase();
+            let dsemana: string = '';
+            if (j > 4) {
+              dsemana = moment(this.tareas_por_dias[i * 7 + j].day).locale('es').format('dd D').toLocaleUpperCase();  
+            } else {
+              dsemana = moment(this.tareas_por_dias[i * 7 + j].day).locale('es').format('dddd D').toLocaleUpperCase();
+            }
             day = {
               table: {
                 // headerRows: 1,
@@ -677,8 +681,6 @@ export class TaskWeekComponent implements OnInit {
       }
     }
     this.tarea_a_repetir = id;
-    const picked_range: HTMLElement = this.range.nativeElement;
-    //picked_range.click();
     this.dialogService.open(CalendarComponent).onClose.subscribe((dates: Date[]) => {
       if(dates && dates.length > 0) {
         this.taskService.copyTask({id: this.tasks[this.tarea_a_repetir].id, dates: dates}).subscribe(res => {
