@@ -18,8 +18,16 @@ export class VisitorsService {
     return this.http.get(ipserver + 'visitors/one/' + ci, {responseType: 'json'});
   }
 
+  getVNames(id_serv: number) {
+    return this.http.get(ipserver + 'visitors/names/' + id_serv, {responseType: 'json'});
+  }
+
   saveVisitor(newVisitor: Visitor) {
     return this.http.post(ipserver + 'visitors', newVisitor);
+  }
+
+  updateVisitor(newVisitor: Visitor) {
+    return this.http.put(ipserver + 'visitors/' + newVisitor.id, newVisitor);
   }
 
   delete(id: number) {

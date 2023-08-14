@@ -4,15 +4,29 @@
         <form [formGroup]="newVisitorRecordForm">
           <fa-icon style="cursor: pointer" (click)="openQR()" class="me-1" [icon]="['far', 'id-card']" nbTooltip="Escanear Código QR del CI" nbTooltipStatus="info"></fa-icon>
           <div class="input-group">
-              <input nbInput fieldSize="tiny" type="text" placeholder="Nombre(s) y Apellidos"  id="nombre" formControlName="nombre" class="form-control" [status]="newVisitorRecordForm.controls.nombre.valid ? 'success' : (newVisitorRecordForm.controls.nombre.pristine ? 'info' : 'danger')">
+              <input nbInput fieldSize="tiny" (input)="nameChange()" [nbAutocomplete]="autoNames" type="text" placeholder="Nombre(s) y Apellidos"  id="nombre" #nombre formControlName="nombre" class="form-control" [status]="newVisitorRecordForm.controls.nombre.valid ? 'success' : (newVisitorRecordForm.controls.nombre.pristine ? 'info' : 'danger')">
+              <nb-autocomplete #autoNames (selectedChange)="onNameSelectionChange($event)">
+                <nb-option *ngFor="let visitor of filteredVisitors$ | async" [value]="visitor.nombre" style="cursor: auto;">
+                  <div style="cursor: auto;" class="w-100">
+                    <div style="float: left; font-size: 12px;" (click)="complete(visitor)">{{ visitor.nombre }}</div>                    
+                  </div>
+                </nb-option>
+              </nb-autocomplete>
               <input nbInput fieldSize="tiny" type="text" placeholder="Organismo"  id="organismo" formControlName="organismo" class="form-control" [status]="newVisitorRecordForm.controls.organismo.valid ? 'success' : (newVisitorRecordForm.controls.organismo.pristine ? 'info' : 'danger')">
-              <input nbInput fieldSize="tiny" type="text" placeholder="CI"  id="ci" formControlName="ci" class="form-control" [status]="newVisitorRecordForm.controls.ci.valid ? 'success' : (newVisitorRecordForm.controls.ci.pristine ? 'info' : 'danger')">
+              <input nbInput fieldSize="tiny" (input)="ciChange()" [nbAutocomplete]="autoCIs" type="text" placeholder="CI" maxlength="11"  id="ci" formControlName="ci" class="form-control" [status]="newVisitorRecordForm.controls.ci.valid ? 'success' : (newVisitorRecordForm.controls.ci.pristine ? 'info' : 'danger')">
+              <nb-autocomplete #autoCIs (selectedChange)="onCISelectionChange($event)">
+                <nb-option *ngFor="let visitor of filteredVisitors$ | async" [value]="visitor.ci" style="cursor: auto;">
+                  <div style="cursor: auto;" class="w-100">
+                    <div style="float: left; font-size: 12px;" (click)="complete(visitor)">{{ visitor.ci }}</div>                    
+                  </div>
+                </nb-option>
+              </nb-autocomplete>
               <input nbInput fieldSize="tiny" type="text" placeholder="Departamento"  id="departamento" formControlName="departamento" class="form-control" [status]="newVisitorRecordForm.controls.departamento.valid ? 'success' : (newVisitorRecordForm.controls.departamento.pristine ? 'info' : 'danger')">
-              <input nbInput fieldSize="tiny" type="text" placeholder="Fecha" [owlDateTime]="dp" (dateTimeChange)="onDateChange()" [owlDateTimeTrigger]="dp"  id="fecha" formControlName="fecha" class="form-control" [status]="newVisitorRecordForm.controls.fecha.valid ? 'success' : (newVisitorRecordForm.controls.fecha.pristine ? 'info' : 'danger')">
+              <input nbInput fieldSize="tiny" type="text" placeholder="Fecha" [owlDateTime]="dp" [owlDateTimeTrigger]="dp"  id="fecha" formControlName="fecha" class="form-control" [status]="newVisitorRecordForm.controls.fecha.valid ? 'success' : (newVisitorRecordForm.controls.fecha.pristine ? 'info' : 'danger')">
               <owl-date-time #dp [pickerType]="'calendar'"></owl-date-time>
               <input nbInput [owlDateTime]="dh1" [owlDateTimeTrigger]="dh1" fieldSize="tiny" type="text" placeholder="Hora de entrada"  id="hora_entrada" formControlName="hora_entrada" class="form-control" [status]="newVisitorRecordForm.controls.hora_entrada.valid ? 'success' : (newVisitorRecordForm.controls.hora_entrada.pristine ? 'info' : 'danger')">
               <owl-date-time hour12Timer="false" #dh1 [pickerType]="'timer'"></owl-date-time>
-              <input nbInput [owlDateTime]="dh2" [owlDateTimeTrigger]="dh2" fieldSize="tiny" type="text" placeholder="Hora de salida"  id="hora_salida" formControlName="hora_salida" class="form-control" [status]="newVisitorRecordForm.controls.hora_salida.valid ? 'success' : (newVisitorRecordForm.controls.hora_salida.pristine ? 'info' : 'danger')">
+              <input nbInput [owlDateTime]="dh2" (dateTimeChange)="onDateChange()" [owlDateTimeTrigger]="dh2" fieldSize="tiny" type="text" placeholder="Hora de salida"  id="hora_salida" #hora_salida formControlName="hora_salida" class="form-control" [status]="newVisitorRecordForm.controls.hora_salida.valid ? 'success' : (newVisitorRecordForm.controls.hora_salida.pristine ? 'info' : 'danger')">
               <owl-date-time hour12Timer="false" #dh2 [pickerType]="'timer'"></owl-date-time>
               <div class="input-group-append">                  
                 <button (click)="saveVisitor()" nbTooltip="Agregar nuevo visitante" nbButton hero status="success" size="small"><nb-icon icon="plus-outline"></nb-icon></button>
@@ -47,7 +61,7 @@
                 <td>{{visitor.nombre_autoriza}}</td>
                 <td>{{visitor.fecha | date:'dd-MM-yyyy':'UTC'}}</td>
                 <td>{{visitor.hora_entrada | shortTime}}</td>
-                <td>{{visitor.hora_salida | shortTime}}</td>
+                <td [style]="!visitor.hora_salida ? 'cursor: pointer' : ''" (click)="clickShowExitHour(visitor)">{{visitor.hora_salida | shortTime}}</td>
                 <td><fa-icon style="cursor: pointer" [icon]="['far', 'trash-alt']" *ngIf="user.role==='admin'" (click)="deleteVisitor(visitor.id)" nbTooltip="Eliminar registro" nbTooltipStatus="danger"></fa-icon></td>
             </tr>
           </tbody>

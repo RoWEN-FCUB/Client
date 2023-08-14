@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { NbDialogService } from '@nebular/theme';
@@ -12,6 +12,7 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faIdCard, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 import { ScanQRComponent } from '../scan-qr/scan-qr.component';
 import * as moment from 'moment';
+import { map, Observable, of } from 'rxjs';
 
 
 @Component({
@@ -25,8 +26,12 @@ export class VisitorsComponent {
   service: EService = {};
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0, id_serv: 0, ci: ''};
   vrecords: Visitor[] = [];
+  vnames: Visitor[] = [];
   newVisitorRecordForm: UntypedFormGroup;
   newVisitor: Visitor = {};
+  @ViewChild('hora_salida', {static: false}) hora_salida: ElementRef;
+  @ViewChild('nombre', {static: false}) nombre: ElementRef;
+  filteredVisitors$: Observable<Visitor[]>;
 
   constructor(private eserviceService: EserviceService,
     private authService: NbAuthService,
@@ -65,16 +70,83 @@ export class VisitorsComponent {
     });
   }
 
+  clickShowExitHour(selectedVisitor: Visitor) {
+    if (!selectedVisitor.hora_salida) {
+      const picked_date: HTMLElement = this.hora_salida.nativeElement;
+      this.newVisitor = selectedVisitor;
+      picked_date.click();
+    }
+  }
+
   getVisitors() {
     this.visitorsService.getVRecords(this.config.currentPage, this.user.id_serv).subscribe((res: {vrecords: Visitor[], total: number}) => {
       //console.log(res);
       this.config.totalItems = res.total;
       this.vrecords = res.vrecords;
     });
+    this.visitorsService.getVNames(this.user.id_serv).subscribe((res: Visitor[]) => {
+      this.vnames = res;
+      this.filteredVisitors$ = of(this.vnames);
+    });
+  }
+
+  onNameSelectionChange($event) {
+    if ($event) {
+      this.nameChange();
+      //setTimeout(() => this.nombre.nativeElement.focus(), 0);
+    }
+  }
+
+  onCISelectionChange($event) {
+    if ($event) {
+      this.nameChange();
+      //setTimeout(() => this.nombre.nativeElement.focus(), 0);
+    }
+  }
+
+  nameChange() {
+    this.filteredVisitors$ = this.getFilteredNamesOptions(this.newVisitorRecordForm.controls.nombre.value);
+  }
+
+  ciChange() {
+    this.filteredVisitors$ = this.getFilteredCIsOptions(this.newVisitorRecordForm.controls.ci.value);
+  }
+
+  filterNames(value: string): Visitor[] {
+    const filterValue = value.toLowerCase();
+    return this.vnames.filter(optionValue => optionValue.nombre.toLowerCase().includes(filterValue));
+  }
+
+  filterCIs(value: string): Visitor[] {
+    const filterValue = value.toLowerCase();
+    return this.vnames.filter(optionValue => optionValue.ci.toLowerCase().includes(filterValue));
+  }
+
+  getFilteredNamesOptions(value: string): Observable<Visitor[]> {
+    return of(value).pipe(
+      map(filterString => this.filterNames(filterString)),
+    );
+  }
+
+  getFilteredCIsOptions(value: string): Observable<Visitor[]> {
+    return of(value).pipe(
+      map(filterString => this.filterCIs(filterString)),
+    );
+  }
+
+  complete(visitor: Visitor) {
+    this.newVisitorRecordForm.reset();
+    this.newVisitorRecordForm.controls.nombre.setValue(visitor.nombre);
+    this.newVisitorRecordForm.controls.organismo.setValue(visitor.organismo);
+    this.newVisitorRecordForm.controls.ci.setValue(visitor.ci);
+    this.newVisitorRecordForm.controls.departamento.setValue(visitor.departamento);
+    this.newVisitorRecordForm.controls.fecha.setValue(new Date());
+    this.newVisitorRecordForm.controls.hora_entrada.setValue(new Date());
   }
 
   pageChanged(event) {
     this.config.currentPage = event;
+    this.getVisitors();
   }
 
   openQR() {
@@ -107,7 +179,14 @@ export class VisitorsComponent {
   }
 
   onDateChange() {
-
+    this.newVisitor.hora_salida = this.newVisitorRecordForm.controls.hora_salida.value;
+    if (this.newVisitor.hora_salida instanceof Date && this.newVisitor.id) {      
+      this.newVisitor.hora_salida = {hours: moment(this.newVisitor.hora_salida).hours(), minutes: moment(this.newVisitor.hora_salida).minutes()};
+      this.visitorsService.updateVisitor(this.newVisitor).subscribe(result => {
+        this.getVisitors();
+        this.clearForm();
+      });
+    }
   }
 
   saveVisitor() {
