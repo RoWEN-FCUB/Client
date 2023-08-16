@@ -14,6 +14,10 @@ export class VisitorsService {
     return this.http.get(ipserver + 'visitors/records/' + page + '&' + id_serv, {responseType: 'json'});
   }
 
+  filterVisitors(page: number, id_serv: number, visitor: Visitor) {
+    return this.http.post(ipserver + 'visitors/filter/' + page + '&' + id_serv, visitor);
+  }
+
   getVRecord(ci: number) {
     return this.http.get(ipserver + 'visitors/one/' + ci, {responseType: 'json'});
   }

@@ -5,6 +5,7 @@ import { NbDialogService } from '@nebular/theme';
 import { Company } from '../../models/Company';
 import { EService } from '../../models/EService';
 import { Visitor } from '../../models/Visitor';
+import { Department } from '../../models/Department';
 import { CompanyService } from '../../services/company.service';
 import { EserviceService } from '../../services/eservice.service';
 import { VisitorsService } from '../../services/visitors.service';
@@ -27,6 +28,7 @@ export class VisitorsComponent {
   user = {name: '', picture: '', id: 0, role: '', fullname: '', position: '', supname: '', supposition: '', id_emp: 0, id_serv: 0, ci: ''};
   vrecords: Visitor[] = [];
   vnames: Visitor[] = [];
+  departments: Department[] = [];
   newVisitorRecordForm: UntypedFormGroup;
   newVisitor: Visitor = {};
   @ViewChild('hora_salida', {static: false}) hora_salida: ElementRef;
@@ -65,6 +67,9 @@ export class VisitorsComponent {
       });
       this.eserviceService.getOne(this.user.id_serv).subscribe((serv: EService) => {
         this.service = serv;
+      });
+      this.eserviceService.getDeparments(this.user.id_serv).subscribe((departments: Department[]) => {
+        this.departments = departments;
       });
       this.getVisitors();
     });
@@ -189,6 +194,38 @@ export class VisitorsComponent {
     }
   }
 
+
+  filterVisitors() {
+    const formValue = this.newVisitorRecordForm.value;const mapped = Object.values(formValue).map(value => !!value);
+    const hasValues = mapped.some(value => value);
+    if (!hasValues) {
+      this.getVisitors();
+    } else {
+      this.newVisitor.nombre = this.newVisitorRecordForm.controls.nombre.value;
+      this.newVisitor.ci = this.newVisitorRecordForm.controls.ci.value;
+      this.newVisitor.fecha = this.newVisitorRecordForm.controls.fecha.value;
+      this.newVisitor.hora_entrada = this.newVisitorRecordForm.controls.hora_entrada.value;
+      this.newVisitor.hora_salida = this.newVisitorRecordForm.controls.hora_salida.value;
+      this.newVisitor.departamento = this.newVisitorRecordForm.controls.departamento.value;
+      this.newVisitor.autoriza = this.user.id;
+      this.newVisitor.id_servicio = this.user.id_serv;
+      this.newVisitor.organismo = this.newVisitorRecordForm.controls.organismo.value;
+      if (this.newVisitor.hora_entrada instanceof Date) {
+        this.newVisitor.hora_entrada = {hours: moment(this.newVisitor.hora_entrada).hours(), minutes: moment(this.newVisitor.hora_entrada).minutes()};
+      }
+      if (this.newVisitor.hora_salida instanceof Date) {
+        this.newVisitor.hora_salida = {hours: moment(this.newVisitor.hora_salida).hours(), minutes: moment(this.newVisitor.hora_salida).minutes()};
+      } else {
+        this.newVisitor.hora_salida = null;
+      }
+      this.visitorsService.filterVisitors(this.config.currentPage, this.user.id_serv, this.newVisitor).subscribe((res: {vrecords: Visitor[], total: number}) => {
+        //console.log(res);
+        this.config.totalItems = res.total;
+        this.vrecords = res.vrecords;
+      });
+    }
+  }
+
   saveVisitor() {
     this.newVisitor.nombre = this.newVisitorRecordForm.controls.nombre.value;
     this.newVisitor.ci = this.newVisitorRecordForm.controls.ci.value;
@@ -229,6 +266,7 @@ export class VisitorsComponent {
   clearForm() {
     this.newVisitorRecordForm.reset();
     this.newVisitor = {};
+    this.getVisitors();
   }
 
 }

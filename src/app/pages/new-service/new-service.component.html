@@ -195,6 +195,30 @@
                     </div>
                 </div>
             </nb-tab>
+            <nb-tab [disabled]="newService.id < 0" tabTitle="Departamentos" id="Tab3" name="Tab3" #Tab3>
+                <form [formGroup]="newDepartmentRecordForm">
+                    <div class="input-group">
+                        <input nbInput type="text" placeholder="Nombre"  id="nombre" #nombre formControlName="nombre" class="form-control" [status]="newDepartmentRecordForm.controls.nombre.valid ? 'success' : (newDepartmentRecordForm.controls.nombre.pristine ? 'info' : 'danger')">
+                        <div class="input-group-append">
+                            <button [disabled]="!newDepartmentRecordForm.valid" (click)="newDepartment()" nbTooltip="Agregar nuevo departamento" nbButton hero status="success"><nb-icon icon="plus-outline"></nb-icon></button>
+                        </div>
+                    </div>
+                </form>
+                <table id="tablePreview" class="table table-hover table-borderless table-striped table-sm">
+                    <thead>
+                        <tr>
+                          <th>Departamento</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>          
+                        <tr *ngFor="let deps of deparments">
+                            <td>{{deps.nombre}}</td>
+                            <td align="right"><nb-icon (click)="deleteDepartment(deps.id)" style="cursor: pointer" icon="trash-2-outline" [options]="{animation:{type: 'zoom'}}" nbTooltip="Eliminar departamento" nbTooltipIcon="trash-2-outline" nbTooltipStatus="danger"></nb-icon></td>
+                        </tr>
+                      </tbody>
+                </table>
+            </nb-tab>
         </nb-tabset>
     </nb-card-body>
     <nb-card-footer>

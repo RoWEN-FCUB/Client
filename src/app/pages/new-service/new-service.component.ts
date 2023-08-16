@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NbDialogRef, NbTabComponent, NbTabsetComponent } from '@nebular/theme';
 import { EService } from '../../models/EService';
 import { Company } from '../../models/Company';
+import { Department } from '../../models/Department';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { EserviceService } from '../../services/eservice.service';
-import { UntypedFormControl } from '@angular/forms';
-
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'new-service',
@@ -14,8 +14,9 @@ import { UntypedFormControl } from '@angular/forms';
 })
 
 export class NewServiceComponent implements OnInit {
-
+  newDepartmentRecordForm: UntypedFormGroup;
   companies: Company[];
+  deparments: Department[];
   newService: EService = {
     nombre: '',
     id_emp: -1,
@@ -116,8 +117,13 @@ export class NewServiceComponent implements OnInit {
   @ViewChild('tabset') tabsetEl: NbTabsetComponent;
   @ViewChild('Tab1') Tab1El: NbTabComponent;
   @ViewChild('Tab2') Tab2El: NbTabComponent;
+  @ViewChild('Tab3') Tab3El: NbTabComponent;
 
-  constructor(protected dialogRef: NbDialogRef<any>, private eserviceService: EserviceService) { }
+  constructor(protected dialogRef: NbDialogRef<any>, private eserviceService: EserviceService, private fb: UntypedFormBuilder,) {
+    this.newDepartmentRecordForm = this.fb.group({
+      nombre: ['', [Validators.required]],
+    });
+  }
 
   ngOnInit(): void {
     this.empresa_seleccionada = this.newService.id_emp;
@@ -145,7 +151,14 @@ export class NewServiceComponent implements OnInit {
       hfinal.setHours(parseInt(horas[1].split(':')[0], 10)); //hours from 00 to 23. 00 = 00
       hfinal.setMinutes(parseInt(horas[1].split(':')[1], 10)); //minutes from 00 to 59.
       this.horario_diurno.setValue([hinicial, hfinal]);
+      this.getDepartments();
     }
+  }
+
+  getDepartments() {
+    this.eserviceService.getDeparments(this.newService.id).subscribe((deps: Department[]) => {
+      this.deparments = deps;
+    });
   }
 
   onTimeChange() {
@@ -450,6 +463,24 @@ export class NewServiceComponent implements OnInit {
       this.tabsetEl.selectTab(this.Tab1El);
     } else {
       this.save();
+    }
+  }
+
+  deleteDepartment(id: number) {
+    this.eserviceService.deleteDeparment(id).subscribe(() => {
+      this.getDepartments();
+    });
+  }
+
+  newDepartment() {
+    if (this.newDepartmentRecordForm.valid) {
+      const newDepartmentRecord: Department = {
+        id_serv: this.newService.id,
+        nombre: this.newDepartmentRecordForm.controls.nombre.value,
+      };
+      this.eserviceService.saveDeparments(newDepartmentRecord).subscribe(() => {
+        this.getDepartments();
+      });
     }
   }
 
