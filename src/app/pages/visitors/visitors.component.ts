@@ -165,6 +165,7 @@ export class VisitorsComponent {
        this.visitorsService.getVRecord(result.CI).subscribe((res: Visitor) => {
         if (res) {
           this.newVisitorRecordForm.controls.organismo.setValue(res.organismo);
+          console.log(res);
           this.newVisitorRecordForm.controls.departamento.setValue(res.departamento);
         }
        });
