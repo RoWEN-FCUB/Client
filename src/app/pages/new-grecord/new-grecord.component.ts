@@ -76,6 +76,10 @@ export class NewGrecordComponent implements OnInit {
     if (this.nueva_operacion.id) {
       this.existencia_combustible += this.nueva_operacion.combustible_consumido;
       this.fecha = new UntypedFormControl(moment(this.nueva_operacion.A + '-' + this.nueva_operacion.M + '-' + this.nueva_operacion.D, 'YYYY-MM-DD').toDate());
+      this.fecha_status = 'success';
+      this.horametro_inicial_status = 'success';
+      this.horametro_final_status = 'success';
+      this.tipo_status = 'success';
       //this.fecha.value.push(moment(this.nueva_operacion.A + '-' + this.nueva_operacion.M + '-' + this.nueva_operacion.D, 'YYYY-MM-DD').toDate());
       // this.hora = new UntypedFormControl([moment(this.nueva_operacion.hora_inicial, 'HH:mm:ss'), moment(this.nueva_operacion.hora_final, 'HH:mm:ss')]);
       this.hora_inicial = new UntypedFormControl(moment.parseZone(this.nueva_operacion.hora_inicial, 'HH:mm:ss').local(true).format());
@@ -85,6 +89,8 @@ export class NewGrecordComponent implements OnInit {
       //console.log(this.hora);
       this.nueva_operacion.hora_inicial = {hours: moment(this.hora_inicial.value).hours(), minutes: moment(this.hora_inicial.value).minutes()};
       this.nueva_operacion.hora_final = {hours: moment(this.hora_final.value).hours(), minutes: moment(this.hora_final.value).minutes()};
+      this.hora_inicial_status = 'success';
+      this.hora_final_status = 'success';
       this.horas_trabajadas = this.nueva_operacion.tiempo_trabajado;
       this.diferencia_horametro = this.horas_trabajadas;
     }
@@ -201,7 +207,7 @@ export class NewGrecordComponent implements OnInit {
                 tiempo_trabajado: NP.round(moment(hinicial).diff(ohi, 'minutes') / 60, 2),
                 energia_generada: 0,
                 combustible_consumido: 0,
-                combustible_existencia: 0,                
+                combustible_existencia: 0,
                 observaciones: this.nueva_operacion.observaciones,
               };
               n_op1.horametro_final = Number(n_op1.horametro_inicial + n_op1.tiempo_trabajado);
@@ -232,7 +238,7 @@ export class NewGrecordComponent implements OnInit {
               n_op2.combustible_consumido = n_op2.tiempo_trabajado * this.gee.ic_ccargad;
               n_op2.combustible_existencia = NP.round(this.existencia_combustible - n_op2.combustible_consumido, 2);
               this.existencia_combustible -= n_op2.combustible_consumido; //resta combustible consumido a existencia combustible actual
-              nuevas_operaciones.push(Object.values(n_op2)); //guarda la nueva operación 
+              nuevas_operaciones.push(Object.values(n_op2)); //guarda la nueva operación
             } else {
               //caso 3 la operacion empieza antes del hrario laboral y termina despues del mismo
               let n_op1: GRecord = {
@@ -280,7 +286,7 @@ export class NewGrecordComponent implements OnInit {
               n_op2.combustible_consumido = n_op2.tiempo_trabajado * this.gee.ic_ccargad;
               n_op2.combustible_existencia = NP.round(this.existencia_combustible - n_op2.combustible_consumido, 2);
               this.existencia_combustible -= n_op2.combustible_consumido; //resta combustible consumido a existencia combustible actual
-              nuevas_operaciones.push(Object.values(n_op2)); //guarda la nueva operación 
+              nuevas_operaciones.push(Object.values(n_op2)); //guarda la nueva operación
               let n_op3: GRecord = {
                 id_gee: this.gee.id,
                 id_usuario: this.user.id,
@@ -303,7 +309,7 @@ export class NewGrecordComponent implements OnInit {
               n_op3.combustible_consumido = n_op3.tiempo_trabajado * this.gee.ic_ccargan;
               n_op3.combustible_existencia = NP.round(this.existencia_combustible - n_op3.combustible_consumido, 2);
               this.existencia_combustible -= n_op3.combustible_consumido; //resta combustible consumido a existencia combustible actual
-              nuevas_operaciones.push(Object.values(n_op3)); //guarda la nueva operación              
+              nuevas_operaciones.push(Object.values(n_op3)); //guarda la nueva operación
             }
           }
         } else if (ohi.isSameOrAfter(hinicial, 'minutes') && ohi.isBefore(hfinal, 'minutes')) { //operacion comienza dentro del horario laboral
@@ -367,7 +373,7 @@ export class NewGrecordComponent implements OnInit {
             n_op2.combustible_consumido = n_op2.tiempo_trabajado * this.gee.ic_ccargan;
             n_op2.combustible_existencia = NP.round(this.existencia_combustible - n_op2.combustible_consumido, 2);
             this.existencia_combustible -= n_op2.combustible_consumido; //resta combustible consumido a existencia combustible actual
-            nuevas_operaciones.push(Object.values(n_op2)); //guarda la nueva operación 
+            nuevas_operaciones.push(Object.values(n_op2)); //guarda la nueva operación
           }
         } else {
           //caso 6 la operacion es despues del horario laboral
@@ -409,10 +415,17 @@ export class NewGrecordComponent implements OnInit {
     }
     if (this.hora_final.value instanceof Date) {
       this.nueva_operacion.hora_final = {hours: moment(this.hora_final.value).hours(), minutes: moment(this.hora_final.value).minutes()};
-      this.hora_final_status = 'success';
+      const mins = (moment(this.hora_final.value).seconds(0).diff(moment(this.hora_inicial.value).seconds(0), 'minutes'));
+      //console.log(mins + ' -- ' + mins % 6);
+      if (mins % 6 === 0) {
+        this.hora_final_status = 'success';
+      } else {
+        this.hora_final_status = 'danger';
+      }
     }
     if (this.hora_inicial.value instanceof Date && this.hora_final.value instanceof Date) {
-      this.horas_trabajadas = NP.round((moment(this.hora_final.value).diff(moment(this.hora_inicial.value), 'minutes') / 60), 1);      
+      this.horas_trabajadas = NP.round((moment(this.hora_final.value).seconds(0).diff(moment(this.hora_inicial.value).seconds(0), 'minutes') / 60), 2);
+      //console.log(this.horas_trabajadas);
       if (this.diferencia_horametro !== this.horas_trabajadas || this.diferencia_horametro === 0) {
         this.horametro_final_status = 'danger';
       } else {
@@ -424,9 +437,11 @@ export class NewGrecordComponent implements OnInit {
   }
 
   onHorametroFinalChange() {
-    if (Number(this.nueva_operacion.horametro_final) && Number(this.nueva_operacion.horametro_inicial)) {
+    const regexp = new RegExp(/^[1-9]{1}[0-9]*\.[0-9]{1}$/);
+    if (Number(this.nueva_operacion.horametro_final) && Number(this.nueva_operacion.horametro_inicial) && regexp.test(String(this.nueva_operacion.horametro_final))) {
       // tslint:disable-next-line: max-line-length
       this.diferencia_horametro = NP.round(Number(this.nueva_operacion.horametro_final) - Number(this.nueva_operacion.horametro_inicial), 1);
+      console.log(this.diferencia_horametro);
       if (this.diferencia_horametro !== this.horas_trabajadas) {
         this.horametro_final_status = 'danger';
       } else {
@@ -436,7 +451,7 @@ export class NewGrecordComponent implements OnInit {
       this.horametro_final_status = 'danger';
     }
   }
-  
+
   /*round(numb: number, precision: number) {
     /*const exp: number = Math.pow(10, precision);
     return Math.round( ( numb + Number.EPSILON ) * exp ) / exp;
