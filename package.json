@@ -121,7 +121,7 @@
     "@angular/router": "^15.2.5",
     "@angular/service-worker": "^15.2.5",
     "@babel/core": "^7.21.4",
-    "@compodoc/compodoc": "^1.1.19",
+    "@compodoc/compodoc": "^1.1.23",
     "@fortawesome/fontawesome-free": "^6.4.0",
     "@juggle/resize-observer": "^3.4.0",
     "@popperjs/core": "^2.11.7",
